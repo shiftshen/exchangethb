@@ -1,0 +1,42 @@
+version: '3.9'
+services:
+  web:
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+  worker:
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "npm install && npx tsx worker/index.ts"
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: exchangethb
+      POSTGRES_USER: exchangethb
+      POSTGRES_PASSWORD: exchangethb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+volumes:
+  postgres_data:

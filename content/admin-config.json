@@ -1,0 +1,53 @@
+{
+  "affiliateLinks": {
+    "binance-th": {
+      "status": "official_only",
+      "officialUrl": "https://www.binance.th/en",
+      "trackingUrl": "",
+      "disclosure": {
+        "th": "ลิงก์นี้อาจเปลี่ยนตามกติกาของแพลตฟอร์มล่าสุด",
+        "en": "This link may change based on the platform’s latest rules.",
+        "zh": "该链接可能随平台最新规则调整。"
+      }
+    },
+    "bitkub": {
+      "status": "official_only",
+      "officialUrl": "https://www.bitkub.com",
+      "trackingUrl": "",
+      "disclosure": {
+        "th": "ลิงก์ทางการหรือโปรโมชันอาจอัปเดตได้",
+        "en": "Official or campaign links may be updated.",
+        "zh": "官方或活动链接可能更新。"
+      }
+    },
+    "upbit-thailand": {
+      "status": "official_only",
+      "officialUrl": "https://th.upbit.com",
+      "trackingUrl": "",
+      "disclosure": {
+        "th": "ใช้ลิงก์ทางการเป็นค่าเริ่มต้น",
+        "en": "Official link used by default.",
+        "zh": "默认使用官方链接。"
+      }
+    },
+    "orbix": {
+      "status": "campaign_only",
+      "officialUrl": "https://www.orbixtrade.com",
+      "trackingUrl": "",
+      "disclosure": {
+        "th": "หากแคมเปญหมดอายุ ระบบจะแสดงลิงก์ทางการแทน",
+        "en": "Expired campaigns fall back to the official link.",
+        "zh": "活动过期后将回退到官方链接。"
+      }
+    }
+  },
+  "feeOverrides": {
+    "binance-th:BTC:tradingFeePct": 0.25,
+    "bitkub:BTC:tradingFeePct": 0.25,
+    "upbit-thailand:BTC:tradingFeePct": 0.25,
+    "orbix:BTC:tradingFeePct": 0.20
+  },
+  "legal": {
+    "updatedAt": "2026-03-08T00:00:00+07:00"
+  }
+}

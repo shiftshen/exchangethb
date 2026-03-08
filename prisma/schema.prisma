@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AffiliateStatus {
+  reward_available
+  campaign_only
+  official_only
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Exchange {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  license     String
+  summaryTh   String
+  summaryEn   String
+  summaryZh   String
+  lastUpdated DateTime
+}
+
+model CashProvider {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  summaryTh String
+  summaryEn String
+  summaryZh String
+}
+
+model AffiliateLink {
+  id          String          @id @default(cuid())
+  targetSlug  String
+  status      AffiliateStatus
+  officialUrl String
+  trackingUrl String?
+  startAt     DateTime?
+  endAt       DateTime?
+}
+
+model AdminAuditLog {
+  id         String   @id @default(cuid())
+  adminEmail String
+  action     String
+  target     String
+  payload    Json
+  createdAt  DateTime @default(now())
+}

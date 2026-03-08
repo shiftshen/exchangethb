@@ -1,0 +1,9 @@
+.next/
+node_modules/
+.env
+.env.local
+package-lock.json
+npm-debug.log*
+tsconfig.tsbuildinfo
+content/cash-scrape-cache.json
+.DS_Store
