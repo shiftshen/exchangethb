@@ -1,6 +1,7 @@
-export const gaMeasurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || 'G-EXCHANGETHB';
+export const gaMeasurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID;
 
 export function gaScript() {
+  if (!gaMeasurementId) return '';
   return `
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);} 

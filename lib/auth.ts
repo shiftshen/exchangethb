@@ -56,6 +56,7 @@ function verifyScryptHash(password: string, encodedHash: string) {
 export function verifyAdminPassword(password: string) {
   const hash = process.env.ADMIN_PASSWORD_HASH;
   if (hash && verifyScryptHash(password, hash)) return true;
-  const fallback = process.env.ADMIN_PASSWORD || 'changeme';
+  const fallback = process.env.ADMIN_PASSWORD;
+  if (!fallback) return false;
   return safeEqualText(password, fallback);
 }

@@ -57,8 +57,8 @@ export default async function LocaleLayout({ children, params }: { children: Rea
       <SiteHeader locale={locale} />
       <main className="container-shell py-10">{children}</main>
       <SiteFooter locale={locale} />
-      <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`} strategy="afterInteractive" />
-      <Script id="ga4-init" strategy="afterInteractive">{gaScript()}</Script>
+      {gaMeasurementId ? <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`} strategy="afterInteractive" /> : null}
+      {gaMeasurementId ? <Script id="ga4-init" strategy="afterInteractive">{gaScript()}</Script> : null}
     </>
   );
 }

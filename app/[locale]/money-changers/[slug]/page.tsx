@@ -113,7 +113,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
       <Section title={c.rates} description={c.ratesDesc}>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {rates.map((rate) => {
-            const branch = branches[0];
+            const branch = 'branchId' in rate ? branches.find((entry) => entry.id === rate.branchId) : null;
             const label = 'providerSlug' in rate ? `${rate.currency} · ${rate.denomination}` : `${rate.currency}`;
             return <div key={`${label}-${rate.observedAt}`} className="card p-5"><p className="text-sm text-stone-500">{branch?.name || provider.name}</p><p className="mt-2 text-2xl font-semibold">{label}</p><p className="mt-1 text-lg">{c.buy} {rate.buyRate}</p><p className="mt-1 text-sm text-stone-500">{c.observed} {new Date(rate.observedAt).toLocaleString()}</p></div>;
           })}
