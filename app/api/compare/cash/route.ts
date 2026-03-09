@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { z } from 'zod';
+import { fail, ok } from '@/lib/api-response';
 import { compareCash } from '@/lib/compare';
 
 const schema = z.object({
@@ -11,7 +12,13 @@ const schema = z.object({
 export async function GET(request: NextRequest) {
   const parsed = schema.safeParse(Object.fromEntries(request.nextUrl.searchParams.entries()));
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+    return fail('bad_request', 400, undefined, parsed.error.flatten());
   }
-  return NextResponse.json({ data: await compareCash(parsed.data) });
+  try {
+    const data = await compareCash(parsed.data);
+    return ok(data);
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : 'unknown';
+    return fail('compare_cash_failed', 500, undefined, detail);
+  }
 }

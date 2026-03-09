@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { TrackButton } from '@/components/track-button';
+import { TrackLink } from '@/components/track-link';
 import { compareCashLive } from '@/lib/cash-live';
 import { CurrencyCode, Locale } from '@/lib/types';
 import { localeAlternates, withLocalePath } from '@/lib/seo';
@@ -97,7 +99,7 @@ export default async function CashPage({ params, searchParams }: { params: Promi
               <label className="text-sm text-stone-500">{c.distance}</label>
               <input type="number" name="maxDistanceKm" defaultValue={10} className="mt-2 w-full rounded-2xl border border-stone-300 bg-white px-4 py-3" />
             </div>
-            <button className="rounded-full bg-brand-700 px-5 py-3 font-medium text-white">{c.submit}</button>
+            <TrackButton type="submit" eventName="cash_compare_submit" eventParams={{ currency, amount }} className="rounded-full bg-brand-700 px-5 py-3 font-medium text-white">{c.submit}</TrackButton>
           </form>
           <div className="grid gap-4">
             {results.bestRate ? <div className="card border-brand-100 bg-brand-50/60 p-6"><Pill>{c.bestRate}</Pill><h2 className="mt-4 text-3xl font-semibold">{results.bestRate.provider}</h2><p className="mt-2 text-stone-600">{results.bestRate.branchName} · {results.bestRate.area}</p><p className="mt-2 text-sm text-stone-500">{c.denomination} {results.bestRate.denomination}</p><p className="mt-4 text-2xl font-semibold">≈ {results.bestRate.estimatedThb.toLocaleString()} THB</p></div> : null}
@@ -121,7 +123,7 @@ export default async function CashPage({ params, searchParams }: { params: Promi
                   <td className="px-5 py-4">{row.buyRate}</td>
                   <td className="px-5 py-4">{row.estimatedThb.toLocaleString()}</td>
                   <td className="px-5 py-4">{row.distanceKm} km</td>
-                  <td className="px-5 py-4"><Link href={`/${locale}/money-changers/${row.providerSlug}`} className="font-medium text-brand-700">{c.detail}</Link></td>
+                  <td className="px-5 py-4"><TrackLink href={`/${locale}/money-changers/${row.providerSlug}`} eventName="cash_result_click" eventParams={{ provider: row.providerSlug }} className="font-medium text-brand-700">{c.detail}</TrackLink></td>
                 </tr>
               ))}
             </tbody>

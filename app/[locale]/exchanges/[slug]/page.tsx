@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
 import { exchanges } from '@/data/site';
 import { exchangeAdapters } from '@/lib/adapters/exchanges';
+import { TrackAnchor } from '@/components/track-link';
+import { resolveAffiliateLink } from '@/lib/affiliate';
+import { readAdminConfig } from '@/lib/content-store';
 import { describeMarketSource } from '@/lib/market-data';
 import { t } from '@/lib/i18n';
 import { Locale } from '@/lib/types';
@@ -12,11 +15,14 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
   if (!exchange) notFound();
 
   const adapter = exchangeAdapters.find((item) => item.slug === slug);
-  const [health, snapshots] = adapter ? await Promise.all([adapter.checkHealth(), adapter.fetchSnapshots('BTC')]) : [null, []];
+  const [health, snapshots, config] = adapter
+    ? await Promise.all([adapter.checkHealth(), adapter.fetchSnapshots('BTC'), readAdminConfig()])
+    : [null, [], await readAdminConfig()];
   const latestSnapshot = snapshots[0];
   const source = latestSnapshot ? describeMarketSource(latestSnapshot) : null;
   const score = Object.values(exchange.score).reduce((sum, value) => sum + value, 0);
-  const outboundUrl = exchange.affiliate.trackingUrl || exchange.affiliate.officialUrl;
+  const affiliate = resolveAffiliateLink(config.affiliateLinks[exchange.slug] || exchange.affiliate);
+  const outboundUrl = affiliate.outboundUrl;
 
   return (
     <div className="space-y-12">
@@ -51,8 +57,9 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
               <p>Last reviewed: {new Date(exchange.lastUpdated).toLocaleString()}</p>
               <p>Latest market update: {latestSnapshot ? new Date(latestSnapshot.lastUpdated).toLocaleString() : 'N/A'}</p>
             </div>
-            <a href={outboundUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex rounded-full bg-brand-700 px-5 py-3 font-medium text-white">Open official / tracked link</a>
-            <p className="mt-3 text-xs text-stone-500">{t(exchange.affiliate.disclosure, locale)}</p>
+            <TrackAnchor href={outboundUrl} target="_blank" rel="noreferrer" eventName="affiliate_click" eventParams={{ exchange: exchange.slug, status: affiliate.effectiveStatus }} className="mt-6 inline-flex rounded-full bg-brand-700 px-5 py-3 font-medium text-white">Open official / tracked link</TrackAnchor>
+            <p className="mt-3 text-xs text-stone-500">{t(affiliate.disclosure, locale)}</p>
+            <p className="mt-1 text-xs text-stone-500">Affiliate status: {affiliate.effectiveStatus}</p>
           </div>
         </div>
       </Section>

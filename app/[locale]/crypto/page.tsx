@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { TrackButton } from '@/components/track-button';
+import { TrackLink } from '@/components/track-link';
 import { compareCrypto } from '@/lib/compare';
 import { CryptoSymbol, Locale } from '@/lib/types';
 import { localeAlternates, withLocalePath } from '@/lib/seo';
@@ -123,7 +125,7 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
               <label className="text-sm text-stone-500">{c.amount} ({symbol})</label>
               <input type="number" name="amount" defaultValue={amount} step="0.01" className="mt-2 w-full rounded-2xl border border-stone-300 bg-white px-4 py-3" />
             </div>
-            <button className="rounded-full bg-brand-700 px-5 py-3 font-medium text-white">{c.compare}</button>
+            <TrackButton type="submit" eventName="crypto_compare_submit" eventParams={{ symbol, side }} className="rounded-full bg-brand-700 px-5 py-3 font-medium text-white">{c.compare}</TrackButton>
           </form>
           {best ? (
             <div className="card border-brand-100 bg-brand-50/60 p-6">
@@ -171,7 +173,7 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
                   <td className="px-5 py-4">{row.liquidityGap.toFixed(6)}</td>
                   <td className="px-5 py-4"><div>{row.freshness}</div>{row.fallbackReason ? <div className="mt-1 text-xs text-amber-700">{row.fallbackReason}</div> : null}</td>
                   <td className="px-5 py-4">{new Date(row.updatedAt).toLocaleString()}</td>
-                  <td className="px-5 py-4"><Link href={`/${locale}/exchanges/${row.slug}`} className="font-medium text-brand-700">{c.detail}</Link></td>
+                  <td className="px-5 py-4"><TrackLink href={`/${locale}/exchanges/${row.slug}`} eventName="crypto_result_click" eventParams={{ exchange: row.slug }} className="font-medium text-brand-700">{c.detail}</TrackLink></td>
                 </tr>
               ))}
             </tbody>

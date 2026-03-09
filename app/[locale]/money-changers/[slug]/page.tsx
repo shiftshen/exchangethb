@@ -3,6 +3,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { cashBranches, cashProviders, cashRates } from '@/data/site';
 import { t } from '@/lib/i18n';
+import { TrackAnchor } from '@/components/track-link';
 import { Locale } from '@/lib/types';
 import { Pill, Section } from '@/components/ui';
 
@@ -81,7 +82,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
           <div className="card p-6">
             <Pill>{c.coverage}</Pill>
             <p className="mt-4 text-stone-600">{c.coverageBody.replace('{count}', String(branches.length))}</p>
-            <a href={provider.officialUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex rounded-full bg-brand-700 px-5 py-3 font-medium text-white">{c.official}</a>
+            <TrackAnchor href={provider.officialUrl} target="_blank" rel="noreferrer" eventName="affiliate_click" eventParams={{ provider: provider.slug, status: provider.affiliate.status }} className="mt-6 inline-flex rounded-full bg-brand-700 px-5 py-3 font-medium text-white">{c.official}</TrackAnchor>
             <p className="mt-3 text-xs text-stone-500">{t(provider.affiliate.disclosure, locale)}</p>
             <div className="mt-6 rounded-2xl bg-stone-50 p-4 text-sm text-stone-600">
               <p className="font-semibold text-ink">{c.scraper}</p>
@@ -99,7 +100,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
                       <p className="font-semibold">{branch.name}</p>
                       <p className="text-sm text-stone-500">{branch.address}</p>
                     </div>
-                    <a href={branch.mapsUrl} target="_blank" rel="noreferrer" className="text-sm font-medium text-brand-700">{c.maps}</a>
+                    <TrackAnchor href={branch.mapsUrl} target="_blank" rel="noreferrer" eventName="map_click" eventParams={{ provider: provider.slug, branch: branch.id }} className="text-sm font-medium text-brand-700">{c.maps}</TrackAnchor>
                   </div>
                   <p className="mt-3 text-sm text-stone-600">{branch.hours} · {branch.distanceKm} km</p>
                 </div>

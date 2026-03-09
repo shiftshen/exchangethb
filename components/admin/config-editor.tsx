@@ -1,11 +1,14 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { trackEvent } from '@/lib/analytics-client';
 
 type AffiliateLink = {
   status: 'reward_available' | 'campaign_only' | 'official_only';
   officialUrl: string;
   trackingUrl?: string;
+  startAt?: string;
+  endAt?: string;
   disclosure: { th: string; en: string; zh: string };
 };
 
@@ -26,22 +29,26 @@ export function ConfigEditor({ initialConfig, initialCachePreview }: { initialCo
   async function save() {
     setSaving(true);
     setMessage('');
+    trackEvent('admin_config_save_attempt');
     const response = await fetch('/api/admin/config', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ ...config, legal: { updatedAt: new Date().toISOString() } }),
     });
     setSaving(false);
+    trackEvent('admin_config_save_result', { ok: response.ok });
     setMessage(response.ok ? 'Saved.' : 'Save failed.');
   }
 
   async function refreshCash() {
     setSaving(true);
     setMessage('');
+    trackEvent('admin_cash_refresh_attempt');
     const response = await fetch('/api/admin/scrape-cash', { method: 'POST' });
     const data = await response.json().catch(() => null);
     if (data?.data) setCachePreview(JSON.stringify(data.data, null, 2));
     setSaving(false);
+    trackEvent('admin_cash_refresh_result', { ok: response.ok });
     setMessage(response.ok ? 'Cash scrape refreshed.' : 'Cash scrape failed.');
   }
 
@@ -65,8 +72,11 @@ export function ConfigEditor({ initialConfig, initialCachePreview }: { initialCo
             <div className="grid gap-3 md:grid-cols-2">
               <input className="rounded-xl border border-stone-300 px-3 py-2 text-sm" value={link.officialUrl} onChange={(event) => setConfig({ ...config, affiliateLinks: { ...config.affiliateLinks, [slug]: { ...link, officialUrl: event.target.value } } })} />
               <input className="rounded-xl border border-stone-300 px-3 py-2 text-sm" placeholder="Tracking URL" value={link.trackingUrl || ''} onChange={(event) => setConfig({ ...config, affiliateLinks: { ...config.affiliateLinks, [slug]: { ...link, trackingUrl: event.target.value } } })} />
+              <input className="rounded-xl border border-stone-300 px-3 py-2 text-sm" placeholder="Campaign start (ISO)" value={link.startAt || ''} onChange={(event) => setConfig({ ...config, affiliateLinks: { ...config.affiliateLinks, [slug]: { ...link, startAt: event.target.value } } })} />
+              <input className="rounded-xl border border-stone-300 px-3 py-2 text-sm" placeholder="Campaign end (ISO)" value={link.endAt || ''} onChange={(event) => setConfig({ ...config, affiliateLinks: { ...config.affiliateLinks, [slug]: { ...link, endAt: event.target.value } } })} />
               <input className="rounded-xl border border-stone-300 px-3 py-2 text-sm" value={link.disclosure.en} onChange={(event) => setConfig({ ...config, affiliateLinks: { ...config.affiliateLinks, [slug]: { ...link, disclosure: { ...link.disclosure, en: event.target.value } } } })} />
               <input className="rounded-xl border border-stone-300 px-3 py-2 text-sm" value={link.disclosure.th} onChange={(event) => setConfig({ ...config, affiliateLinks: { ...config.affiliateLinks, [slug]: { ...link, disclosure: { ...link.disclosure, th: event.target.value } } } })} />
+              <input className="rounded-xl border border-stone-300 px-3 py-2 text-sm" value={link.disclosure.zh} onChange={(event) => setConfig({ ...config, affiliateLinks: { ...config.affiliateLinks, [slug]: { ...link, disclosure: { ...link.disclosure, zh: event.target.value } } } })} />
             </div>
           </div>
         ))}

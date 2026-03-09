@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { cashProviders, exchanges } from '@/data/site';
+import { TrackLink } from '@/components/track-link';
 import { t } from '@/lib/i18n';
 import { Locale } from '@/lib/types';
 import { localeAlternates, withLocalePath } from '@/lib/seo';
@@ -134,8 +135,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             <p className="max-w-2xl text-lg text-stone-600">{c.heroBody}</p>
           </div>
           <div className="flex flex-wrap gap-4">
-            <Link href={`/${locale}/crypto`} className="rounded-full bg-brand-700 px-6 py-3 font-medium text-white hover:bg-brand-800">{c.primary}</Link>
-            <Link href={`/${locale}/cash`} className="rounded-full border border-stone-300 px-6 py-3 font-medium text-stone-700 hover:border-brand-200 hover:text-brand-700">{c.secondary}</Link>
+            <TrackLink href={`/${locale}/crypto`} eventName="homepage_cta_click" eventParams={{ target: 'crypto' }} className="rounded-full bg-brand-700 px-6 py-3 font-medium text-white hover:bg-brand-800">{c.primary}</TrackLink>
+            <TrackLink href={`/${locale}/cash`} eventName="homepage_cta_click" eventParams={{ target: 'cash' }} className="rounded-full border border-stone-300 px-6 py-3 font-medium text-stone-700 hover:border-brand-200 hover:text-brand-700">{c.secondary}</TrackLink>
           </div>
           <p className="text-sm text-stone-500">{c.trust}</p>
         </div>
@@ -149,16 +150,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
       <Section title={c.quickTitle} description={c.quickDescription}>
         <div className="grid gap-6 md:grid-cols-2">
-          <Link href={`/${locale}/crypto`} className="card space-y-4 p-6 hover:border-brand-300">
+          <TrackLink href={`/${locale}/crypto`} eventName="homepage_route_click" eventParams={{ route: 'crypto' }} className="card space-y-4 p-6 hover:border-brand-300">
             <Pill>Crypto → THB</Pill>
             <h3 className="text-2xl font-semibold">{c.cryptoCardTitle}</h3>
             <p className="text-stone-600">{c.cryptoCardBody}</p>
-          </Link>
-          <Link href={`/${locale}/cash`} className="card space-y-4 p-6 hover:border-brand-300">
+          </TrackLink>
+          <TrackLink href={`/${locale}/cash`} eventName="homepage_route_click" eventParams={{ route: 'cash' }} className="card space-y-4 p-6 hover:border-brand-300">
             <Pill>Cash / FX → THB</Pill>
             <h3 className="text-2xl font-semibold">{c.cashCardTitle}</h3>
             <p className="text-stone-600">{c.cashCardBody}</p>
-          </Link>
+          </TrackLink>
         </div>
       </Section>
 

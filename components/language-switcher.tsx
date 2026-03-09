@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { trackEvent } from '@/lib/analytics-client';
 import { Locale } from '@/lib/types';
 
 export function LanguageSwitcher({ locale }: { locale: Locale }) {
@@ -16,6 +17,7 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
         <Link
           key={option}
           href={`/${option}${suffix}`}
+          onClick={() => trackEvent('language_switch', { from: locale, to: option, path: suffix || '/' })}
           className={`rounded-full px-3 py-1.5 ${option === locale ? 'bg-brand-700 text-white' : 'text-stone-600 hover:bg-stone-100'}`}
         >
           {option.toUpperCase()}

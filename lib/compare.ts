@@ -1,4 +1,5 @@
 import { cashBranches, cashProviders, cashRates, exchanges } from '@/data/site';
+import { resolveAffiliateLink } from '@/lib/affiliate';
 import { describeMarketSource, getLiveMarketSnapshots } from '@/lib/market-data';
 import { readAdminConfig } from '@/lib/content-store';
 import { CryptoSymbol, CurrencyCode, ExchangeRecord, Locale } from '@/lib/types';
@@ -42,6 +43,7 @@ export async function compareCrypto(input: {
     const estimatedReceive = input.side === 'buy' ? depth.filled - networkFee : depth.gross - tradingFee - thbWithdraw;
     const totalCost = input.side === 'buy' ? depth.gross + tradingFee : tradingFee + thbWithdraw;
     const source = describeMarketSource(snapshot);
+    const effectiveAffiliate = resolveAffiliateLink(adminConfig.affiliateLinks[exchange.slug] || exchange.affiliate);
     return {
       exchange: exchange.name,
       slug: exchange.slug,
@@ -53,7 +55,9 @@ export async function compareCrypto(input: {
       networkFee,
       thbWithdraw,
       license: exchange.license,
-      affiliate: adminConfig.affiliateLinks[exchange.slug] || exchange.affiliate,
+      affiliate: effectiveAffiliate,
+      affiliateStatus: effectiveAffiliate.effectiveStatus,
+      affiliateDowngraded: effectiveAffiliate.downgraded,
       updatedAt: snapshot.lastUpdated,
       source: source.label,
       live: source.live,

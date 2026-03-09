@@ -6,7 +6,7 @@ export type CryptoSymbol = 'BTC' | 'ETH' | 'USDT' | 'XRP' | 'DOGE' | 'SOL';
 
 export interface CopyGroup { th: string; en: string; zh: string; }
 export interface NavItem { href: string; label: CopyGroup; }
-export interface AffiliateLink { status: AffiliateStatus; trackingUrl?: string; officialUrl: string; disclosure: CopyGroup; }
+export interface AffiliateLink { status: AffiliateStatus; trackingUrl?: string; officialUrl: string; disclosure: CopyGroup; startAt?: string; endAt?: string; }
 export interface ExchangeFee { tradingFeePct: number; thbWithdraw: number; networks: Record<string, number>; }
 export interface ExchangeScore { compliance: number; feeTransparency: number; apiQuality: number; thbFriendliness: number; executionQuality: number; operations: number; }
 export interface ExchangeRecord {

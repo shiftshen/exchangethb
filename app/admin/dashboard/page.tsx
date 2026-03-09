@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { redirect } from 'next/navigation';
+import { readAuditLog } from '@/lib/audit-log';
 import { getAdminSession } from '@/lib/auth';
 import { readAdminConfig } from '@/lib/content-store';
 import { getAdapterHealth } from '@/lib/market-data';
@@ -28,7 +29,7 @@ async function getCachePreview() {
 export default async function AdminDashboardPage() {
   const session = await getAdminSession();
   if (!session) redirect('/admin/login');
-  const [config, health, cachePreview] = await Promise.all([readAdminConfig(), getAdapterHealth(), getCachePreview()]);
+  const [config, health, cachePreview, auditLogs] = await Promise.all([readAdminConfig(), getAdapterHealth(), getCachePreview(), readAuditLog(12)]);
 
   return (
     <main className="container-shell space-y-8 py-10">
@@ -65,6 +66,31 @@ export default async function AdminDashboardPage() {
         <p className="mt-2 text-sm text-stone-600">Edit outbound link policy, trading fee overrides, and refresh cash scrapers from one place.</p>
         <div className="mt-6">
           <ConfigEditor initialConfig={config} initialCachePreview={cachePreview} />
+        </div>
+      </div>
+
+      <div className="card p-6">
+        <h2 className="text-xl font-semibold">Recent audit logs</h2>
+        <div className="mt-4 overflow-hidden rounded-2xl border border-stone-200">
+          <table className="min-w-full text-left text-sm">
+            <thead className="bg-stone-50 text-stone-500">
+              <tr>
+                {['Time', 'Actor', 'Action', 'Target', 'IP'].map((head) => <th key={head} className="px-4 py-3 font-medium">{head}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {auditLogs.map((row) => (
+                <tr key={`${row.at}-${row.action}-${row.actor}`} className="border-t border-stone-100">
+                  <td className="px-4 py-3">{new Date(row.at).toLocaleString()}</td>
+                  <td className="px-4 py-3">{row.actor}</td>
+                  <td className="px-4 py-3">{row.action}</td>
+                  <td className="px-4 py-3">{row.target}</td>
+                  <td className="px-4 py-3">{row.ip || '-'}</td>
+                </tr>
+              ))}
+              {!auditLogs.length ? <tr><td colSpan={5} className="px-4 py-6 text-center text-stone-500">No audit records yet.</td></tr> : null}
+            </tbody>
+          </table>
         </div>
       </div>
     </main>
