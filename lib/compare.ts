@@ -1,5 +1,5 @@
 import { cashBranches, cashProviders, cashRates, exchanges } from '@/data/site';
-import { getLiveMarketSnapshots } from '@/lib/market-data';
+import { describeMarketSource, getLiveMarketSnapshots } from '@/lib/market-data';
 import { readAdminConfig } from '@/lib/content-store';
 import { CryptoSymbol, CurrencyCode, ExchangeRecord, Locale } from '@/lib/types';
 
@@ -41,6 +41,7 @@ export async function compareCrypto(input: {
     const thbWithdraw = input.withdrawThb ? exchange.fee.thbWithdraw : 0;
     const estimatedReceive = input.side === 'buy' ? depth.filled - networkFee : depth.gross - tradingFee - thbWithdraw;
     const totalCost = input.side === 'buy' ? depth.gross + tradingFee : tradingFee + thbWithdraw;
+    const source = describeMarketSource(snapshot);
     return {
       exchange: exchange.name,
       slug: exchange.slug,
@@ -54,7 +55,10 @@ export async function compareCrypto(input: {
       license: exchange.license,
       affiliate: adminConfig.affiliateLinks[exchange.slug] || exchange.affiliate,
       updatedAt: snapshot.lastUpdated,
-      source: snapshot.exchange === 'binance-th' || snapshot.exchange === 'bitkub' ? 'Official API + rules engine' : 'Reviewed fallback dataset',
+      source: source.label,
+      live: source.live,
+      freshness: source.freshness,
+      fallbackReason: source.fallbackReason,
     };
   }).sort((a, b) => b.estimatedReceive - a.estimatedReceive);
 }

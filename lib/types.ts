@@ -29,6 +29,8 @@ export interface MarketSnapshot {
   asks: OrderLevel[];
   bids: OrderLevel[];
   lastUpdated: string;
+  source?: 'live' | 'fallback';
+  fallbackReason?: string;
 }
 export interface CashBranch {
   id: string;

@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { Locale } from '@/lib/types';
 
 const footerCopy = {
-  th: { note: 'ข้อมูลทั้งหมดมีไว้เพื่อการเปรียบเทียบและการอ้างอิงเท่านั้น', rights: 'ExchangeTHB. สงวนลิขสิทธิ์ทุกประการ' },
-  en: { note: 'All information is for comparison and reference only.', rights: 'ExchangeTHB. All rights reserved.' },
-  zh: { note: '所有信息仅供比较与参考使用。', rights: 'ExchangeTHB 版权所有。' },
+  th: { note: 'ข้อมูลทั้งหมดมีไว้เพื่อการเปรียบเทียบและการอ้างอิงเท่านั้น', rights: 'ExchangeTHB. สงวนลิขสิทธิ์ทุกประการ', methodology: 'วิธีการ', disclaimer: 'ข้อจำกัดความรับผิดชอบ', privacy: 'นโยบายความเป็นส่วนตัว', affiliate: 'การเปิดเผยลิงก์แนะนำ' },
+  en: { note: 'All information is for comparison and reference only.', rights: 'ExchangeTHB. All rights reserved.', methodology: 'Methodology', disclaimer: 'Disclaimer', privacy: 'Privacy Policy', affiliate: 'Affiliate Disclosure' },
+  zh: { note: '所有信息仅供比较与参考使用。', rights: 'ExchangeTHB 版权所有。', methodology: '方法论', disclaimer: '免责声明', privacy: '隐私政策', affiliate: '联盟披露' },
 };
 
 export function SiteFooter({ locale }: { locale: Locale }) {
@@ -17,9 +17,10 @@ export function SiteFooter({ locale }: { locale: Locale }) {
           <p className="mt-1">{copy.rights}</p>
         </div>
         <div className="flex gap-4">
-          <Link href={`/${locale}/legal/methodology`}>Methodology</Link>
-          <Link href={`/${locale}/legal/disclaimer`}>Disclaimer</Link>
-          <Link href={`/${locale}/legal/privacy-policy`}>Privacy Policy</Link>
+          <Link href={`/${locale}/legal/methodology`}>{copy.methodology}</Link>
+          <Link href={`/${locale}/legal/disclaimer`}>{copy.disclaimer}</Link>
+          <Link href={`/${locale}/legal/privacy-policy`}>{copy.privacy}</Link>
+          <Link href={`/${locale}/legal/affiliate-disclosure`}>{copy.affiliate}</Link>
         </div>
       </div>
     </footer>

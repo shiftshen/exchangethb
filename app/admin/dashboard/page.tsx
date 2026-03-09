@@ -43,9 +43,11 @@ export default async function AdminDashboardPage() {
         </form>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-5">
         <div className="card p-5"><p className="text-sm text-stone-500">Binance adapter</p><p className="mt-2 text-2xl font-semibold">{health.binance ? 'Live' : 'Fallback'}</p></div>
         <div className="card p-5"><p className="text-sm text-stone-500">Bitkub adapter</p><p className="mt-2 text-2xl font-semibold">{health.bitkub ? 'Live' : 'Fallback'}</p></div>
+        <div className="card p-5"><p className="text-sm text-stone-500">Upbit Thailand adapter</p><p className="mt-2 text-2xl font-semibold">{health.upbitThailand ? 'Live' : 'Fallback'}</p></div>
+        <div className="card p-5"><p className="text-sm text-stone-500">Orbix adapter</p><p className="mt-2 text-2xl font-semibold">{health.orbix ? 'Live' : 'Fallback'}</p></div>
         <div className="card p-5"><p className="text-sm text-stone-500">Fallback-only state</p><p className="mt-2 text-2xl font-semibold">{health.fallbackOnly ? 'Yes' : 'No'}</p></div>
       </div>
 

@@ -2,10 +2,11 @@
 
 ## What is already done
 - Multilingual public site is implemented with Thai default and EN / 中文 switching.
-- Crypto comparison now prefers live public market depth from Binance TH and Bitkub, with reviewed fallback data for other venues.
-- Cash comparison, legal pages, exchange detail pages, and admin shell are implemented.
-- Admin login is protected by email/password via secure cookie session.
+- Crypto comparison now reads live public market depth from Binance TH, Bitkub, Upbit Thailand, and Orbix, then falls back to reviewed snapshots if any source is unavailable.
+- Cash comparison, legal pages, exchange detail pages, money changer pages, and admin shell are implemented.
+- Admin login is protected by email/password via secure cookie session and signed session token.
 - Docker, Prisma schema, worker scaffold, env template, and VPS-oriented deployment files are included.
+- SEO baseline includes locale alternates, Open Graph/Twitter metadata, robots.txt, sitemap.xml, and web manifest.
 
 ## What you only need to provide at the end
 - Domain DNS target for `exchangethb.com`
@@ -27,12 +28,44 @@
 ## Deploy steps
 1. Copy project to VPS
 2. Copy `.env.example` to `.env` and fill production values
-3. Run `docker compose up -d --build`
-4. Put Nginx in front of port `3000`
-5. Issue HTTPS certificate for `exchangethb.com`
-6. Verify `/api/admin/health`, `/th`, `/en`, `/zh`, `/admin/login`
+3. Run `docker compose down --remove-orphans`
+4. Run `docker compose up -d --build`
+5. Run `docker compose ps` and confirm `web`, `worker`, `postgres`, `redis` are healthy
+6. Run worker once with `npm run worker` inside the web container if initial cache is empty
+7. Put Nginx in front of port `3000`
+8. Issue HTTPS certificate for `exchangethb.com`
+9. Verify `/api/admin/health`, `/th`, `/en`, `/zh`, `/admin/login`, `/sitemap.xml`, `/robots.txt`
+
+## Nginx and HTTPS notes
+- Reverse proxy traffic from `443` to `http://127.0.0.1:3000`.
+- Force redirect from `http://` to `https://`.
+- Set `client_max_body_size` to a practical value for admin payloads.
+- Enable gzip/brotli and cache headers for static assets.
+- Use Let's Encrypt auto-renewal and monitor certificate expiry.
+
+## Backup and recovery
+- Back up `content/admin-config.json`, `content/cash-scrape-cache.json`, `content/admin-audit-log.json`, `content/scrape-review-queue.json` at least daily.
+- Back up PostgreSQL and Redis volumes if enabled in production.
+- Keep at least one off-host backup copy.
+- Recovery order: restore `.env` → restore content JSON files → restore DB/Redis volumes → restart compose stack.
+
+## Health check and monitoring
+- Public checks: `/th`, `/en`, `/zh`, `/api/compare/crypto`, `/api/compare/cash`.
+- Admin checks: `/admin/login`, `/api/admin/health`.
+- Add process monitoring and restart policy for Docker services.
+- Set alerts for repeated scraper failures and fallback-only adapter state.
+
+## Go-live checklist
+- Confirm `ADMIN_EMAIL=admin@exchangethb.com`.
+- Rotate `ADMIN_PASSWORD` and `ADMIN_SESSION_SECRET`.
+- Validate GA4 events and language switching.
+- Validate live/fallback/freshness labels on crypto and cash flows.
+- Confirm legal pages in all three locales.
+- Confirm sitemap/robots are publicly reachable.
+- Capture final screenshots for home, crypto, cash, exchange detail, money changer detail, admin login.
 
 ## Immediate post-deploy tasks
-- Replace fallback exchange adapters for Upbit Thailand / Orbix when confirmed official endpoints are available.
-- Replace seed cash rates with official scrapers or reviewed manual ingestion.
 - Load your final campaign / referral links into `content/admin-config.json` or the admin config API.
+- Review fallback reasons in admin health and keep reviewed snapshots fresh.
+- Keep SIA in fallback/manual review mode until stable official source reliability is confirmed.
+- Schedule recurring worker execution for cache refresh.

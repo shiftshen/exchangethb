@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
 import { exchanges } from '@/data/site';
+import { exchangeAdapters } from '@/lib/adapters/exchanges';
+import { describeMarketSource } from '@/lib/market-data';
 import { t } from '@/lib/i18n';
 import { Locale } from '@/lib/types';
 import { Pill, Section } from '@/components/ui';
@@ -9,6 +11,10 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
   const exchange = exchanges.find((item) => item.slug === slug);
   if (!exchange) notFound();
 
+  const adapter = exchangeAdapters.find((item) => item.slug === slug);
+  const [health, snapshots] = adapter ? await Promise.all([adapter.checkHealth(), adapter.fetchSnapshots('BTC')]) : [null, []];
+  const latestSnapshot = snapshots[0];
+  const source = latestSnapshot ? describeMarketSource(latestSnapshot) : null;
   const score = Object.values(exchange.score).reduce((sum, value) => sum + value, 0);
   const outboundUrl = exchange.affiliate.trackingUrl || exchange.affiliate.officialUrl;
 
@@ -18,9 +24,15 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="card space-y-5 p-6">
             <Pill>{exchange.license}</Pill>
+            <div className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold ${source?.live ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+              {source?.live ? 'Live market adapter' : 'Fallback snapshot mode'}
+            </div>
             <div>
               <p className="text-sm text-stone-500">Editorial score</p>
               <p className="mt-2 text-4xl font-semibold">{score}/100</p>
+            </div>
+            <div className="rounded-2xl bg-stone-50 p-4 text-sm text-stone-700">
+              {health?.note || 'No adapter health note available.'}
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               {exchange.strengths.map((item) => <div key={item.en} className="rounded-2xl bg-brand-50 p-4 text-sm text-brand-800">{t(item, locale)}</div>)}
@@ -33,7 +45,11 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
               <p>Trading fee: {exchange.fee.tradingFeePct}%</p>
               <p>THB withdrawal fee: {exchange.fee.thbWithdraw} THB</p>
               <p>Supported launch pairs: {exchange.pairs.join(', ')}</p>
+              <p>Source layer: {source?.label || 'Reviewed fallback dataset'}</p>
+              <p>Freshness: {source?.freshness || 'Fallback snapshot'}</p>
+              {source?.fallbackReason ? <p>Fallback reason: {source.fallbackReason}</p> : null}
               <p>Last reviewed: {new Date(exchange.lastUpdated).toLocaleString()}</p>
+              <p>Latest market update: {latestSnapshot ? new Date(latestSnapshot.lastUpdated).toLocaleString() : 'N/A'}</p>
             </div>
             <a href={outboundUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex rounded-full bg-brand-700 px-5 py-3 font-medium text-white">Open official / tracked link</a>
             <p className="mt-3 text-xs text-stone-500">{t(exchange.affiliate.disclosure, locale)}</p>
