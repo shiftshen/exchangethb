@@ -137,11 +137,64 @@ export async function scrapeSuperrichThailand(): Promise<ScrapeResult> {
   }
 }
 
+export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
+  const observedAt = new Date().toISOString();
+  try {
+    const tokenResponse = await fetch('https://www.superrich1965.com/spr/front/exchange-rate/oauth2/callback', {
+      headers: { 'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0' },
+      cache: 'no-store',
+    });
+    if (!tokenResponse.ok) {
+      return {
+        provider: 'superrich-1965',
+        ok: false,
+        observedAt,
+        notes: [`OAuth callback unavailable: ${tokenResponse.status}`],
+      };
+    }
+    const tokenPayload = await tokenResponse.json() as { accessToken?: string };
+    const token = tokenPayload.accessToken;
+    if (!token) {
+      return {
+        provider: 'superrich-1965',
+        ok: false,
+        observedAt,
+        notes: ['OAuth callback did not return accessToken.'],
+      };
+    }
+    const rateResponse = await fetch('https://www.superrich1965.com/api/exchange-rate-service/v1/external-app-exchange-rate/get', {
+      headers: {
+        'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0',
+        authorization: `Bearer ${token}`,
+      },
+      cache: 'no-store',
+    });
+    if (!rateResponse.ok) {
+      return {
+        provider: 'superrich-1965',
+        ok: false,
+        observedAt,
+        notes: [
+          `OAuth token issued, but official rate endpoint rejected request: ${rateResponse.status}.`,
+          'Endpoint appears to require gateway-level signed authorization unavailable to public scraper runtime.',
+        ],
+      };
+    }
+    return {
+      provider: 'superrich-1965',
+      ok: false,
+      observedAt,
+      notes: ['Official endpoint accepted but payload format is not yet mapped; fallback remains active.'],
+    };
+  } catch (error) {
+    return { provider: 'superrich-1965', ok: false, observedAt, notes: [error instanceof Error ? error.message : 'Unknown scrape error'] };
+  }
+}
+
 export async function runCashScrapers(): Promise<ScrapeResult[]> {
-  const results = await Promise.all([scrapeVasu(), scrapeRatchada(), scrapeSuperrichThailand()]);
+  const results = await Promise.all([scrapeVasu(), scrapeRatchada(), scrapeSuperrichThailand(), scrapeSuperrich1965()]);
   return [
     ...results,
-    { provider: 'superrich-1965', ok: false, observedAt: new Date().toISOString(), notes: ['Official page confirmed reachable; structured parser pending branch-specific source discovery.'] },
     { provider: 'sia', ok: false, observedAt: new Date().toISOString(), notes: ['Public website has certificate mismatch; keep official/manual review fallback for now.'] },
   ];
 }

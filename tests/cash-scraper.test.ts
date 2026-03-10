@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { scrapeSuperrichThailand } from '@/lib/scrapers/cash';
+import { scrapeSuperrich1965, scrapeSuperrichThailand } from '@/lib/scrapers/cash';
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -35,5 +35,25 @@ describe('scrapeSuperrichThailand', () => {
     expect(result.provider).toBe('superrich-thailand');
     expect((result.rates || []).length).toBe(2);
     expect(result.notes[0]).toContain('Parsed');
+  });
+});
+
+describe('scrapeSuperrich1965', () => {
+  it('reports gateway-signed authorization restriction when direct endpoint is rejected', async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ accessToken: 'test-token' }),
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 403,
+      });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await scrapeSuperrich1965();
+    expect(result.ok).toBe(false);
+    expect(result.provider).toBe('superrich-1965');
+    expect(result.notes.some((note) => note.includes('403'))).toBe(true);
   });
 });
