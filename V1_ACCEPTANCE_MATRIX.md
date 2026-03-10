@@ -50,3 +50,5 @@
 - Deployment handoff: `DEPLOYMENT_HANDOFF.md`
 - Chinese production runbook: `RELEASE_RUNBOOK_CN.md`
 - Chinese operations SOP: `OPS_SOP_CN.md`
+- Production input template: `PROD_INPUT_TEMPLATE_CN.md`
+- Go-live checklist: `GO_LIVE_CHECKLIST_CN.md`
