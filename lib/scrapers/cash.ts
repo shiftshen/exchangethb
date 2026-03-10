@@ -72,6 +72,33 @@ async function fetchHtml(url: string) {
   return response.text();
 }
 
+function extractSuperrichThailandRates(payload: unknown): ScrapedCashRate[] {
+  const observedAt = new Date().toISOString();
+  const supported = new Set<CurrencyCode>(['USD', 'CNY', 'EUR', 'JPY', 'GBP']);
+  const rows = (payload as { data?: { exchangeRate?: Array<{ cUnit?: string; rate?: Array<{ cBuying?: number; cSelling?: number; denom?: string; dateTime?: string }> }> } })?.data?.exchangeRate;
+  if (!Array.isArray(rows)) return [];
+  const output: ScrapedCashRate[] = [];
+  for (const row of rows) {
+    const currency = row.cUnit as CurrencyCode;
+    if (!supported.has(currency)) continue;
+    for (const rate of row.rate || []) {
+      const buyRate = Number(rate.cBuying);
+      const sellRate = Number(rate.cSelling);
+      if (!Number.isFinite(buyRate) || !Number.isFinite(sellRate) || buyRate <= 0 || sellRate <= 0) continue;
+      output.push({
+        providerSlug: 'superrich-thailand',
+        currency,
+        denomination: String(rate.denom || 'notes').replace(/\s+/g, ' ').trim() || 'notes',
+        buyRate,
+        sellRate,
+        observedAt: typeof rate.dateTime === 'string' ? new Date(rate.dateTime).toISOString() : observedAt,
+        sourceUrl: 'https://www.superrichthailand.com/api/v1/rates',
+      });
+    }
+  }
+  return output;
+}
+
 export async function scrapeVasu(): Promise<ScrapeResult> {
   try {
     const html = await fetchHtml('https://www.vasuexchange.com/');
@@ -92,12 +119,29 @@ export async function scrapeRatchada(): Promise<ScrapeResult> {
   }
 }
 
+export async function scrapeSuperrichThailand(): Promise<ScrapeResult> {
+  try {
+    const response = await fetch('https://www.superrichthailand.com/api/v1/rates', {
+      headers: {
+        'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0',
+        authorization: 'Basic c3VwZXJyaWNoVGg6aFRoY2lycmVwdXM=',
+      },
+      cache: 'no-store',
+    });
+    if (!response.ok) throw new Error(`Failed https://www.superrichthailand.com/api/v1/rates: ${response.status}`);
+    const payload = await response.json();
+    const rates = extractSuperrichThailandRates(payload);
+    return { provider: 'superrich-thailand', ok: rates.length > 0, observedAt: new Date().toISOString(), notes: [`Parsed ${rates.length} structured rate rows from official API.`], rates };
+  } catch (error) {
+    return { provider: 'superrich-thailand', ok: false, observedAt: new Date().toISOString(), notes: [error instanceof Error ? error.message : 'Unknown scrape error'] };
+  }
+}
+
 export async function runCashScrapers(): Promise<ScrapeResult[]> {
-  const results = await Promise.all([scrapeVasu(), scrapeRatchada()]);
+  const results = await Promise.all([scrapeVasu(), scrapeRatchada(), scrapeSuperrichThailand()]);
   return [
     ...results,
     { provider: 'superrich-1965', ok: false, observedAt: new Date().toISOString(), notes: ['Official page confirmed reachable; structured parser pending branch-specific source discovery.'] },
-    { provider: 'superrich-thailand', ok: false, observedAt: new Date().toISOString(), notes: ['Official page confirmed reachable; parser pending app/API source mapping.'] },
     { provider: 'sia', ok: false, observedAt: new Date().toISOString(), notes: ['Public website has certificate mismatch; keep official/manual review fallback for now.'] },
   ];
 }

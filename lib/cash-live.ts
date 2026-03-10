@@ -58,8 +58,28 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
     };
   }).filter((row) => row.distanceKm <= (input.maxDistanceKm || Infinity));
 
+  const expectedProviderSlugs = new Set(staticRows.map((rate) => cashBranches.find((entry) => entry.id === rate.branchId)!.providerSlug));
+  const presentProviderSlugs = new Set(hydrated.map((row) => row.providerSlug));
+  const missingProviders = [...expectedProviderSlugs].filter((slug) => !presentProviderSlugs.has(slug));
+  const staticBaselineMap = new Map(staticRows.map((rate) => {
+    const branch = cashBranches.find((entry) => entry.id === rate.branchId)!;
+    return [`${branch.providerSlug}:${rate.denomination}`, rate.buyRate] as const;
+  }));
+  const anomalies = hydrated
+    .filter((row) => row.live)
+    .map((row) => {
+      const baseline = staticBaselineMap.get(`${row.providerSlug}:${row.denomination}`);
+      if (!baseline || baseline <= 0) return null;
+      const deviationPct = Math.abs((row.buyRate - baseline) / baseline) * 100;
+      if (deviationPct < 8) return null;
+      return `${row.providerSlug} ${row.denomination} deviation ${deviationPct.toFixed(2)}%`;
+    })
+    .filter((item): item is string => Boolean(item));
+
   const bestRate = [...hydrated].sort((a, b) => b.buyRate - a.buyRate);
   const nearestGood = [...hydrated].sort((a, b) => (a.distanceKm * 0.7 - a.buyRate * 0.3) - (b.distanceKm * 0.7 - b.buyRate * 0.3));
+  const liveHydratedRows = hydrated.filter((row) => row.live);
+  const fallbackHydratedRows = hydrated.filter((row) => !row.live);
 
   return {
     bestRate: bestRate[0] || null,
@@ -67,5 +87,14 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
     all: input.prioritizeNearest ? nearestGood : bestRate,
     source: liveRows.length ? 'Official scraping with fallback completion' : 'Reviewed fallback dataset',
     cacheGeneratedAt: cache.generatedAt,
+    quality: {
+      liveRows: liveHydratedRows.length,
+      fallbackRows: fallbackHydratedRows.length,
+      liveProviderCount: new Set(liveHydratedRows.map((row) => row.providerSlug)).size,
+      fallbackProviderCount: new Set(fallbackHydratedRows.map((row) => row.providerSlug)).size,
+      missingProviders,
+      anomalyCount: anomalies.length,
+      anomalies: anomalies.slice(0, 5),
+    },
   };
 }

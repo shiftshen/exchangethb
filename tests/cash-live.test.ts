@@ -37,5 +37,8 @@ describe('compareCashLive merge strategy', () => {
     expect(providerSet.has('superrich-1965')).toBe(true);
     expect(providerSet.has('ratchada')).toBe(true);
     expect(result.source).toBe('Official scraping with fallback completion');
+    expect(result.quality.liveRows).toBeGreaterThan(0);
+    expect(result.quality.fallbackRows).toBeGreaterThan(0);
+    expect(Array.isArray(result.quality.missingProviders)).toBe(true);
   });
 });

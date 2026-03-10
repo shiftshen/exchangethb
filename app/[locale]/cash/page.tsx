@@ -21,6 +21,11 @@ const copy = {
     nearest: 'ตัวเลือกใกล้และยอมรับได้',
     denomination: 'ชนิดธนบัตร',
     source: 'แหล่งข้อมูล',
+    quality: 'คุณภาพข้อมูล',
+    sourceMix: 'สัดส่วนแหล่งข้อมูล',
+    anomaly: 'รายการผิดปกติ',
+    missing: 'ผู้ให้บริการที่ยังขาด',
+    updatedAt: 'อัปเดตแคช',
     table: 'ตารางสาขา',
     tableDescription: 'เรตทั้งหมดเป็นค่าประมาณจากหน้า official และผ่านการตรวจทานก่อนแสดงผล',
     provider: 'แบรนด์',
@@ -41,6 +46,11 @@ const copy = {
     nearest: 'Nearest Good Option',
     denomination: 'Denomination',
     source: 'Source',
+    quality: 'Data quality',
+    sourceMix: 'Source mix',
+    anomaly: 'Anomalies',
+    missing: 'Missing providers',
+    updatedAt: 'Cache updated',
     table: 'Branch table',
     tableDescription: 'Rates are estimated from official public pages and reviewed before publishing.',
     provider: 'Provider',
@@ -61,6 +71,11 @@ const copy = {
     nearest: '最近可接受选项',
     denomination: '面额',
     source: '来源',
+    quality: '数据质量',
+    sourceMix: '来源占比',
+    anomaly: '异常项',
+    missing: '缺失品牌',
+    updatedAt: '缓存更新时间',
     table: '门店列表',
     tableDescription: '汇率为基于官方公开页面的估算值，并在发布前经过审核。',
     provider: '品牌',
@@ -104,6 +119,13 @@ export default async function CashPage({ params, searchParams }: { params: Promi
           <div className="grid gap-4">
             {results.bestRate ? <div className="card border-brand-100 bg-brand-50/60 p-6"><Pill>{c.bestRate}</Pill><h2 className="mt-4 text-3xl font-semibold">{results.bestRate.provider}</h2><p className="mt-2 text-stone-600">{results.bestRate.branchName} · {results.bestRate.area}</p><p className="mt-2 text-sm text-stone-500">{c.denomination} {results.bestRate.denomination}</p><p className="mt-4 text-2xl font-semibold">≈ {results.bestRate.estimatedThb.toLocaleString()} THB</p></div> : null}
             {results.nearestGood ? <div className="card p-6"><Pill>{c.nearest}</Pill><h3 className="mt-4 text-2xl font-semibold">{results.nearestGood.provider}</h3><p className="mt-2 text-stone-600">{results.nearestGood.distanceKm} km · {results.nearestGood.hours}</p><p className="mt-2 text-sm text-stone-500">{c.source}: {results.source}</p></div> : null}
+            <div className="card p-6">
+              <Pill>{c.quality}</Pill>
+              <p className="mt-4 text-sm text-stone-600">{c.sourceMix}: {results.quality.liveRows} live / {results.quality.fallbackRows} fallback</p>
+              <p className="mt-2 text-sm text-stone-600">{c.missing}: {results.quality.missingProviders.length ? results.quality.missingProviders.join(', ') : '-'}</p>
+              <p className="mt-2 text-sm text-stone-600">{c.anomaly}: {results.quality.anomalyCount}</p>
+              <p className="mt-2 text-sm text-stone-500">{c.updatedAt}: {results.cacheGeneratedAt ? new Date(results.cacheGeneratedAt).toLocaleString() : '-'}</p>
+            </div>
           </div>
         </div>
       </Section>
