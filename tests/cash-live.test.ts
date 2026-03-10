@@ -40,5 +40,8 @@ describe('compareCashLive merge strategy', () => {
     expect(result.quality.liveRows).toBeGreaterThan(0);
     expect(result.quality.fallbackRows).toBeGreaterThan(0);
     expect(Array.isArray(result.quality.missingProviders)).toBe(true);
+    const healthMap = new Map(result.quality.providerHealth.map((item) => [item.providerSlug, item.status]));
+    expect(healthMap.get('vasu')).toBe('healthy');
+    expect(healthMap.get('superrich-1965')).toBe('degraded');
   });
 });

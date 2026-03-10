@@ -55,6 +55,9 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
       ? cashBranches.find((entry) => entry.id === rate.branchId)!
       : cashBranches.find((entry) => entry.providerSlug === providerSlug)!;
     const observedAt = rate.observedAt;
+    const sourceType = 'providerSlug' in rate
+      ? (rate.sourceKind === 'hybrid' ? 'hybrid' : 'live')
+      : 'fallback';
     return {
       provider: provider.name,
       providerSlug: provider.slug,
@@ -71,6 +74,7 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
       observedAt,
       live: 'providerSlug' in rate && rate.sourceKind !== 'hybrid',
       denomination: rate.denomination,
+      sourceType,
     };
   }).filter((row) => row.distanceKm <= (input.maxDistanceKm || Infinity));
 
@@ -96,6 +100,23 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
   const nearestGood = [...hydrated].sort((a, b) => (a.distanceKm * 0.7 - a.buyRate * 0.3) - (b.distanceKm * 0.7 - b.buyRate * 0.3));
   const liveHydratedRows = hydrated.filter((row) => row.live);
   const fallbackHydratedRows = hydrated.filter((row) => !row.live);
+  const providerUniverse = new Set<string>([
+    ...expectedProviderSlugs,
+    ...hydrated.map((row) => row.providerSlug),
+  ]);
+  const providerHealth = [...providerUniverse].map((providerSlug) => {
+    const rows = hydrated.filter((row) => row.providerSlug === providerSlug);
+    const hasLive = rows.some((row) => row.sourceType === 'live');
+    const hasHybrid = rows.some((row) => row.sourceType === 'hybrid');
+    const hasFallback = rows.some((row) => row.sourceType === 'fallback');
+    const status = hasLive
+      ? (cacheStale ? 'degraded' : 'healthy')
+      : (hasHybrid || hasFallback ? 'degraded' : 'down');
+    const reason = hasLive
+      ? (cacheStale ? 'live_stale' : 'live_fresh')
+      : (hasHybrid ? 'hybrid_feed' : (hasFallback ? 'fallback_dataset' : 'missing'));
+    return { providerSlug, status, reason };
+  });
 
   return {
     bestRate: bestRate[0] || null,
@@ -113,6 +134,7 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
       liveProviderCount: new Set(liveHydratedRows.map((row) => row.providerSlug)).size,
       fallbackProviderCount: new Set(fallbackHydratedRows.map((row) => row.providerSlug)).size,
       missingProviders,
+      providerHealth,
       anomalyCount: anomalies.length,
       anomalies: anomalies.slice(0, 5),
     },
