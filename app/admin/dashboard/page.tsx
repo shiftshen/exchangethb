@@ -1,6 +1,5 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { readAuditLog } from '@/lib/audit-log';
 import { getAdminSession } from '@/lib/auth';
@@ -8,6 +7,7 @@ import { readAdminConfig } from '@/lib/content-store';
 import { getAdapterHealth } from '@/lib/market-data';
 import { compareCashLive } from '@/lib/cash-live';
 import { ConfigEditor } from '@/components/admin/config-editor';
+import { AlertScopeFilters, DashboardFilterBootstrap, HealthStatusFilters } from '@/components/admin/dashboard-filters';
 
 const modules = [
   ['Data source monitor', 'Track exchange APIs, scraper freshness, failures, and alert state.'],
@@ -63,17 +63,10 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
   const criticalOnly = query.critical === '1';
   const filteredProviderHealth = cashCompare.quality.providerHealth.filter((item) => statusFilter === 'all' || item.status === statusFilter);
   const filteredAlerts = cashAlerts.filter((alert) => !criticalOnly || alert.critical);
-  const filterHref = (nextStatus: string, nextCritical: boolean) => {
-    const params = new URLSearchParams();
-    if (nextStatus !== 'all') params.set('status', nextStatus);
-    if (nextCritical) params.set('critical', '1');
-    const q = params.toString();
-    return q ? `/admin/dashboard?${q}` : '/admin/dashboard';
-  };
-  const filterClass = (active: boolean) => active ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700';
 
   return (
     <main className="container-shell space-y-8 py-10">
+      <DashboardFilterBootstrap statusFilter={statusFilter} criticalOnly={criticalOnly} />
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-2">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-600">Dashboard</p>
@@ -96,13 +89,7 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
       <div className="card p-6">
         <h2 className="text-xl font-semibold">Cash provider health</h2>
         <p className="mt-2 text-sm text-stone-600">Provider grading from compare pipeline: healthy/degraded/down with reason code.</p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {['all', 'healthy', 'degraded', 'down'].map((status) => (
-            <Link key={status} href={filterHref(status, criticalOnly)} className={`rounded-full px-3 py-1 text-xs font-medium ${filterClass(statusFilter === status)}`}>
-              {status}
-            </Link>
-          ))}
-        </div>
+        <HealthStatusFilters statusFilter={statusFilter} criticalOnly={criticalOnly} />
         <div className="mt-4 flex flex-wrap gap-2">
           {filteredProviderHealth.map((item) => (
             <span key={item.providerSlug} className={`rounded-full px-3 py-1 text-xs font-medium ${statusClass(item.status)}`}>
@@ -116,10 +103,7 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
       <div className="card p-6">
         <h2 className="text-xl font-semibold">Cash scrape alerts</h2>
         <p className="mt-2 text-sm text-stone-600">Latest notes from cached scraper results. Use this for degraded/down triage.</p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Link href={filterHref(statusFilter, false)} className={`rounded-full px-3 py-1 text-xs font-medium ${filterClass(!criticalOnly)}`}>all alerts</Link>
-          <Link href={filterHref(statusFilter, true)} className={`rounded-full px-3 py-1 text-xs font-medium ${filterClass(criticalOnly)}`}>critical only</Link>
-        </div>
+        <AlertScopeFilters statusFilter={statusFilter} criticalOnly={criticalOnly} />
         <div className="mt-4 space-y-2">
           {filteredAlerts.map((alert, index) => (
             <div key={`${alert.provider}-${index}`} className={`rounded-xl border px-4 py-3 text-sm ${alert.critical ? 'border-rose-200 bg-rose-50 text-rose-700' : 'border-amber-200 bg-amber-50 text-amber-700'}`}>
