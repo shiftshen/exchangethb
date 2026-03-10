@@ -32,6 +32,7 @@ const copy = {
     tableDescription: 'ผลลัพธ์ทั้งหมดเป็นค่าประมาณและสามารถกดดูรายละเอียดแพลตฟอร์มได้',
     platform: 'แพลตฟอร์ม',
     fees: 'ค่าธรรมเนียม',
+    fill: 'อัตราการ成交',
     gap: 'ช่องว่างสภาพคล่อง',
     action: 'การดำเนินการ',
     detail: 'ดูรายละเอียด',
@@ -59,6 +60,7 @@ const copy = {
     tableDescription: 'Every result is labeled as estimated and linked to the official platform page.',
     platform: 'Platform',
     fees: 'Fees',
+    fill: 'Fill ratio',
     gap: 'Liquidity gap',
     action: 'Action',
     detail: 'View detail',
@@ -86,6 +88,7 @@ const copy = {
     tableDescription: '所有结果均标注为估算值，并可进入平台详情页。',
     platform: '平台',
     fees: '费用',
+    fill: '成交率',
     gap: '流动性缺口',
     action: '操作',
     detail: '查看详情',
@@ -140,6 +143,7 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
                 <div><p className="text-sm text-stone-500">{c.receive}</p><p className="mt-1 text-2xl font-semibold">{best.estimatedReceive.toFixed(6)} {side === 'buy' ? symbol : 'THB'}</p></div>
                 <div><p className="text-sm text-stone-500">{c.totalCost}</p><p className="mt-1 text-2xl font-semibold">{best.estimatedTotalCost.toLocaleString()}</p></div>
                 <div><p className="text-sm text-stone-500">{c.avgPrice}</p><p className="mt-1 text-lg font-semibold">{best.averagePrice.toLocaleString()}</p></div>
+                <div><p className="text-sm text-stone-500">{c.fill}</p><p className="mt-1 text-lg font-semibold">{(best.fillRatio * 100).toFixed(2)}%</p></div>
                 <div><p className="text-sm text-stone-500">{c.freshness}</p><p className="mt-1 text-lg font-semibold">{best.freshness}</p></div>
                 <div><p className="text-sm text-stone-500">{c.source}</p><p className="mt-1 text-lg font-semibold">{best.source}</p></div>
                 <div><p className="text-sm text-stone-500">{c.updated}</p><p className="mt-1 text-lg font-semibold">{new Date(best.updatedAt).toLocaleString()}</p></div>
@@ -155,7 +159,7 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
           <table className="min-w-full text-left text-sm">
             <thead className="bg-stone-50 text-stone-500">
               <tr>
-                {[c.platform, c.receive, c.fees, c.gap, c.freshness, c.updated, c.action].map((head) => <th key={head} className="px-5 py-4 font-medium">{head}</th>)}
+                {[c.platform, c.receive, c.fees, c.fill, c.gap, c.freshness, c.updated, c.action].map((head) => <th key={head} className="px-5 py-4 font-medium">{head}</th>)}
               </tr>
             </thead>
             <tbody>
@@ -170,6 +174,7 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
                   </td>
                   <td className="px-5 py-4">{row.estimatedReceive.toFixed(6)} {side === 'buy' ? symbol : 'THB'}</td>
                   <td className="px-5 py-4">Trade {row.tradingFee.toFixed(2)} / Network {row.networkFee}</td>
+                  <td className="px-5 py-4">{(row.fillRatio * 100).toFixed(2)}%</td>
                   <td className="px-5 py-4">{row.liquidityGap.toFixed(6)}</td>
                   <td className="px-5 py-4"><div>{row.freshness}</div>{row.fallbackReason ? <div className="mt-1 text-xs text-amber-700">{row.fallbackReason}</div> : null}</td>
                   <td className="px-5 py-4">{new Date(row.updatedAt).toLocaleString()}</td>

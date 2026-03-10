@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { fail, ok } from '@/lib/api-response';
-import { compareCash } from '@/lib/compare';
+import { compareCashLive } from '@/lib/cash-live';
 
 const schema = z.object({
   currency: z.enum(['USD', 'CNY', 'EUR', 'JPY', 'GBP']).default('USD'),
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     return fail('bad_request', 400, undefined, parsed.error.flatten());
   }
   try {
-    const data = await compareCash(parsed.data);
+    const data = await compareCashLive(parsed.data);
     return ok(data);
   } catch (error) {
     const detail = error instanceof Error ? error.message : 'unknown';

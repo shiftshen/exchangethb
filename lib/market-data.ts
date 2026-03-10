@@ -25,7 +25,7 @@ type ExchangeLiveFetcher = {
 async function fetchBinance(symbol: string): Promise<MarketSnapshot | null> {
   const pair = BINANCE_SYMBOL_MAP[symbol];
   if (!pair) return null;
-  const response = await fetch(`https://api.binance.th/api/v1/depth?symbol=${pair}&limit=20`, { next: { revalidate: 15 } });
+  const response = await fetch(`https://api.binance.th/api/v1/depth?symbol=${pair}&limit=100`, { next: { revalidate: 15 } });
   if (!response.ok) return null;
   const data = await response.json();
   return {
@@ -41,7 +41,7 @@ async function fetchBinance(symbol: string): Promise<MarketSnapshot | null> {
 async function fetchBitkub(symbol: string): Promise<MarketSnapshot | null> {
   const pair = BITKUB_SYMBOL_MAP[symbol];
   if (!pair) return null;
-  const response = await fetch(`https://api.bitkub.com/api/market/books?sym=${pair}&lmt=20`, { next: { revalidate: 15 } });
+  const response = await fetch(`https://api.bitkub.com/api/market/books?sym=${pair}&lmt=100`, { next: { revalidate: 15 } });
   if (!response.ok) return null;
   const data = await response.json();
   if (data.error !== 0 || !data.result) return null;

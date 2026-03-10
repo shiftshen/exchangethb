@@ -35,6 +35,7 @@ export async function compareCrypto(input: {
     const book = input.side === 'buy' ? snapshot.asks : snapshot.bids;
     const coinAmount = input.quoteMode === 'coin' ? input.amount : input.amount / book[0].price;
     const depth = estimateFromOrderbook(book, coinAmount);
+    const fillRatio = coinAmount > 0 ? depth.filled / coinAmount : 0;
     const feeOverrideKey = `${exchange.slug}:${input.symbol}:tradingFeePct`;
     const effectiveTradingFeePct = adminConfig.feeOverrides[feeOverrideKey] ?? exchange.fee.tradingFeePct;
     const tradingFee = depth.gross * (effectiveTradingFeePct / 100);
@@ -50,6 +51,9 @@ export async function compareCrypto(input: {
       estimatedReceive,
       estimatedTotalCost: totalCost,
       averagePrice: depth.averagePrice,
+      requestedAmount: coinAmount,
+      filledAmount: depth.filled,
+      fillRatio,
       liquidityGap: depth.liquidityGap,
       tradingFee,
       networkFee,
@@ -64,7 +68,11 @@ export async function compareCrypto(input: {
       freshness: source.freshness,
       fallbackReason: source.fallbackReason,
     };
-  }).sort((a, b) => b.estimatedReceive - a.estimatedReceive);
+  }).sort((a, b) => {
+    if (b.fillRatio !== a.fillRatio) return b.fillRatio - a.fillRatio;
+    if (input.side === 'buy') return a.estimatedTotalCost - b.estimatedTotalCost;
+    return b.estimatedReceive - a.estimatedReceive;
+  });
 }
 
 export async function compareCash(input: { currency: CurrencyCode; amount: number; prioritizeNearest?: boolean; maxDistanceKm?: number; locale?: Locale; }) {

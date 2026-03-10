@@ -25,11 +25,19 @@ export async function refreshCashScrapeCache() {
 export async function compareCashLive(input: { currency: CurrencyCode; amount: number; prioritizeNearest?: boolean; maxDistanceKm?: number; locale?: Locale; }) {
   const cache = await readCache();
   const liveRows = cache.results.flatMap((result) => result.rates || []).filter((rate) => rate.currency === input.currency);
+  const staticRows = cashRates.filter((rate) => rate.currency === input.currency);
+  const liveProviderSlugs = new Set(liveRows.map((rate) => rate.providerSlug));
+  const mergedRows = [
+    ...liveRows,
+    ...staticRows.filter((rate) => !liveProviderSlugs.has(cashBranches.find((entry) => entry.id === rate.branchId)!.providerSlug)),
+  ];
 
-  const hydrated = (liveRows.length ? liveRows : cashRates.filter((rate) => rate.currency === input.currency)).map((rate) => {
+  const hydrated = mergedRows.map((rate) => {
     const providerSlug = 'providerSlug' in rate ? rate.providerSlug : cashBranches.find((entry) => entry.id === rate.branchId)!.providerSlug;
     const provider = cashProviders.find((entry) => entry.slug === providerSlug)!;
-    const branch = cashBranches.find((entry) => entry.providerSlug === providerSlug) || cashBranches.find((entry) => entry.id === ('branchId' in rate ? rate.branchId : ''))!;
+    const branch = 'branchId' in rate
+      ? cashBranches.find((entry) => entry.id === rate.branchId)!
+      : cashBranches.find((entry) => entry.providerSlug === providerSlug)!;
     const observedAt = rate.observedAt;
     return {
       provider: provider.name,
@@ -57,7 +65,7 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
     bestRate: bestRate[0] || null,
     nearestGood: nearestGood[0] || null,
     all: input.prioritizeNearest ? nearestGood : bestRate,
-    source: liveRows.length ? 'Official website scraping + cache review' : 'Reviewed fallback dataset',
+    source: liveRows.length ? 'Official scraping with fallback completion' : 'Reviewed fallback dataset',
     cacheGeneratedAt: cache.generatedAt,
   };
 }
