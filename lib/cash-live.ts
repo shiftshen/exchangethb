@@ -53,7 +53,7 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
       officialUrl: provider.officialUrl,
       disclosure: provider.affiliate.disclosure,
       observedAt,
-      live: 'providerSlug' in rate,
+      live: 'providerSlug' in rate && rate.sourceKind !== 'hybrid',
       denomination: rate.denomination,
     };
   }).filter((row) => row.distanceKm <= (input.maxDistanceKm || Infinity));

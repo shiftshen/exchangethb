@@ -39,21 +39,48 @@ describe('scrapeSuperrichThailand', () => {
 });
 
 describe('scrapeSuperrich1965', () => {
-  it('reports gateway-signed authorization restriction when direct endpoint is rejected', async () => {
+  it('parses hybrid rows from guest booking feed', async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ accessToken: 'test-token' }),
+        json: async () => ({ data: 'guest-token' }),
       })
       .mockResolvedValueOnce({
-        ok: false,
-        status: 403,
+        ok: true,
+        json: async () => ({
+          data: {
+            content: [
+              { dynLastUpdate: '2026-03-10 18:00:00' },
+            ],
+          },
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          data: {
+            content: [
+              {
+                rateUpdateDate: 1773142000000,
+                currencyList: [
+                  {
+                    currencyCode: 'USD',
+                    denominationList: [
+                      { denom: '100', sell: '36.70' },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        }),
       });
     vi.stubGlobal('fetch', fetchMock);
 
     const result = await scrapeSuperrich1965();
-    expect(result.ok).toBe(false);
+    expect(result.ok).toBe(true);
     expect(result.provider).toBe('superrich-1965');
-    expect(result.notes.some((note) => note.includes('403'))).toBe(true);
+    expect((result.rates || []).length).toBeGreaterThan(0);
+    expect(result.notes[0]).toContain('Parsed');
   });
 });

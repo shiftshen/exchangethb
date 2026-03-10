@@ -1,3 +1,4 @@
+import { cashBranches, cashRates } from '@/data/site';
 import { CurrencyCode } from '@/lib/types';
 
 export interface ScrapedCashRate {
@@ -8,6 +9,7 @@ export interface ScrapedCashRate {
   sellRate: number;
   observedAt: string;
   sourceUrl: string;
+  sourceKind?: 'live' | 'hybrid';
 }
 
 export interface ScrapeResult {
@@ -93,6 +95,7 @@ function extractSuperrichThailandRates(payload: unknown): ScrapedCashRate[] {
         sellRate,
         observedAt: typeof rate.dateTime === 'string' ? new Date(rate.dateTime).toISOString() : observedAt,
         sourceUrl: 'https://www.superrichthailand.com/api/v1/rates',
+        sourceKind: 'live',
       });
     }
   }
@@ -139,52 +142,133 @@ export async function scrapeSuperrichThailand(): Promise<ScrapeResult> {
 
 export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
   const observedAt = new Date().toISOString();
+  const supported = new Set<CurrencyCode>(['USD', 'CNY', 'EUR', 'JPY', 'GBP']);
+  const normalizeDenomination = (value: string) => value.replace(/\s+/g, '').replace(/–/g, '-').toUpperCase();
   try {
-    const tokenResponse = await fetch('https://www.superrich1965.com/spr/front/exchange-rate/oauth2/callback', {
+    const guestTokenResponse = await fetch('https://superrichrate2.ztidev.com/superRich/getGuestToken', {
       headers: { 'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0' },
       cache: 'no-store',
     });
-    if (!tokenResponse.ok) {
+    if (!guestTokenResponse.ok) {
       return {
         provider: 'superrich-1965',
         ok: false,
         observedAt,
-        notes: [`OAuth callback unavailable: ${tokenResponse.status}`],
+        notes: [`Guest token endpoint unavailable: ${guestTokenResponse.status}`],
       };
     }
-    const tokenPayload = await tokenResponse.json() as { accessToken?: string };
-    const token = tokenPayload.accessToken;
+    const guestTokenPayload = await guestTokenResponse.json() as { data?: string };
+    const token = guestTokenPayload.data;
     if (!token) {
       return {
         provider: 'superrich-1965',
         ok: false,
         observedAt,
-        notes: ['OAuth callback did not return accessToken.'],
+        notes: ['Guest token endpoint returned empty token.'],
       };
     }
-    const rateResponse = await fetch('https://www.superrich1965.com/api/exchange-rate-service/v1/external-app-exchange-rate/get', {
+    const locationsResponse = await fetch('https://superrichrate2.ztidev.com/superRich/getLocationsRate?isBooking=0&page=0&sizeContents=100', {
       headers: {
         'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0',
-        authorization: `Bearer ${token}`,
+        token,
       },
       cache: 'no-store',
     });
-    if (!rateResponse.ok) {
+    const bookingsResponse = await fetch('https://superrichrate2.ztidev.com/superRich/getBooking?page=0&sizeContents=120', {
+      headers: {
+        'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0',
+        token,
+      },
+      cache: 'no-store',
+    });
+    if (!locationsResponse.ok || !bookingsResponse.ok) {
       return {
         provider: 'superrich-1965',
         ok: false,
         observedAt,
         notes: [
-          `OAuth token issued, but official rate endpoint rejected request: ${rateResponse.status}.`,
-          'Endpoint appears to require gateway-level signed authorization unavailable to public scraper runtime.',
+          `Guest feed request failed: locations ${locationsResponse.status}, bookings ${bookingsResponse.status}.`,
+          'Superrich-1965 keeps public booking feed available but can still block some requests by account state.',
         ],
       };
     }
+    const locationsPayload = await locationsResponse.json() as { data?: { content?: Array<{ dynLastUpdate?: string }> } };
+    const bookingsPayload = await bookingsResponse.json() as { data?: { content?: Array<{ rateUpdateDate?: number; updateDate?: number; createDate?: number; currencyList?: Array<{ currencyCode?: string; denominationList?: Array<{ denom?: string; sell?: string }> }> }> } };
+    const fallbackRows = cashRates
+      .filter((rate) => {
+        const branch = cashBranches.find((entry) => entry.id === rate.branchId);
+        return branch?.providerSlug === 'superrich-1965' && supported.has(rate.currency);
+      })
+      .map((rate) => {
+        const branch = cashBranches.find((entry) => entry.id === rate.branchId)!;
+        return {
+          currency: rate.currency,
+          denomination: rate.denomination,
+          normalizedDenomination: normalizeDenomination(rate.denomination),
+          buyRate: rate.buyRate,
+          branchId: branch.id,
+        };
+      });
+    const fallbackMap = new Map(fallbackRows.map((row) => [`${row.currency}:${row.normalizedDenomination}`, row]));
+    const fallbackByCurrency = new Map<CurrencyCode, (typeof fallbackRows)[number]>();
+    for (const row of fallbackRows) {
+      const existing = fallbackByCurrency.get(row.currency);
+      if (!existing || row.buyRate > existing.buyRate) fallbackByCurrency.set(row.currency, row);
+    }
+    const latestSellMap = new Map<string, { sellRate: number; timestamp: number; denomination: string; currency: CurrencyCode }>();
+    for (const booking of bookingsPayload.data?.content || []) {
+      const timestamp = Number(booking.rateUpdateDate || booking.updateDate || booking.createDate || Date.now());
+      for (const currencyRow of booking.currencyList || []) {
+        const currency = currencyRow.currencyCode as CurrencyCode;
+        if (!supported.has(currency)) continue;
+        for (const denomRow of currencyRow.denominationList || []) {
+          const denomination = String(denomRow.denom || '').trim();
+          const normalizedDenomination = normalizeDenomination(denomination);
+          const sellRate = Number(denomRow.sell);
+          if (!normalizedDenomination || !Number.isFinite(sellRate) || sellRate <= 0) continue;
+          const key = `${currency}:${normalizedDenomination}`;
+          const previous = latestSellMap.get(key);
+          if (!previous || timestamp > previous.timestamp) {
+            latestSellMap.set(key, { sellRate, timestamp, denomination, currency });
+          }
+        }
+      }
+    }
+    const mergedRows = new Map<string, ScrapedCashRate & { __ts: number }>();
+    for (const [key, sell] of latestSellMap.entries()) {
+      const fallback = fallbackMap.get(key) || fallbackByCurrency.get(sell.currency);
+      if (!fallback) continue;
+      const rowKey = `${fallback.currency}:${fallback.denomination}`;
+      const candidate: ScrapedCashRate & { __ts: number } = {
+        providerSlug: 'superrich-1965',
+        currency: fallback.currency,
+        denomination: fallback.denomination,
+        buyRate: fallback.buyRate,
+        sellRate: sell.sellRate,
+        observedAt: new Date(sell.timestamp).toISOString(),
+        sourceUrl: 'https://superrichrate2.ztidev.com/superRich/getBooking (guest feed)',
+        sourceKind: 'hybrid',
+        __ts: sell.timestamp,
+      };
+      const existing = mergedRows.get(rowKey);
+      if (!existing || candidate.__ts > existing.__ts) mergedRows.set(rowKey, candidate);
+    }
+    const rates = [...mergedRows.values()].map(({ __ts, ...row }) => row);
+    const latestDynUpdate = (locationsPayload.data?.content || [])
+      .map((row) => row.dynLastUpdate)
+      .filter((value): value is string => Boolean(value))
+      .sort()
+      .pop();
     return {
       provider: 'superrich-1965',
-      ok: false,
+      ok: rates.length > 0,
       observedAt,
-      notes: ['Official endpoint accepted but payload format is not yet mapped; fallback remains active.'],
+      notes: [
+        `Parsed ${rates.length} hybrid rows from official guest booking feed.`,
+        'Buy side still follows verified fallback table; live feed currently exposes sell-side only.',
+        latestDynUpdate ? `Latest branch rate update marker: ${latestDynUpdate}` : 'No branch update marker in guest feed.',
+      ],
+      rates,
     };
   } catch (error) {
     return { provider: 'superrich-1965', ok: false, observedAt, notes: [error instanceof Error ? error.message : 'Unknown scrape error'] };
