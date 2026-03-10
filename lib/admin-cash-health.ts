@@ -35,6 +35,9 @@ export interface AdminCashHealthRow {
   reasons: string[];
   currencies: CurrencyCode[];
   observedAt: string | null;
+  trend: 'improving' | 'stable' | 'worsening';
+  trendReason: string;
+  alertCount: number;
 }
 
 export interface AdminCashAlert {
@@ -79,8 +82,12 @@ export async function getAdminCashHealth(options?: { range?: string }) {
     cacheJson = {};
   }
   const providerObservedAtMap = new Map<string, string>();
+  const providerAlertCountMap = new Map<string, number>();
+  const criticalProviderSet = new Set<string>();
   for (const item of cacheJson.results || []) {
     if (item.provider && item.observedAt) providerObservedAtMap.set(item.provider, item.observedAt);
+    if (item.provider) providerAlertCountMap.set(item.provider, (providerAlertCountMap.get(item.provider) || 0) + (item.notes?.length || 0));
+    if (item.provider && item.ok === false) criticalProviderSet.add(item.provider);
   }
   const alerts = (cacheJson.results || []).flatMap((item) => {
     const notes = item.notes || [];
@@ -91,13 +98,32 @@ export async function getAdminCashHealth(options?: { range?: string }) {
     return notes.map((note) => ({ provider: item.provider || 'unknown', message: note, critical: item.ok === false, observedAt }));
   });
   const providerHealth: AdminCashHealthRow[] = providerHealthBase
-    .map((item) => ({ ...item, observedAt: providerObservedAtMap.get(item.providerSlug) || null }))
+    .map((item) => {
+      const observedAt = providerObservedAtMap.get(item.providerSlug) || null;
+      const alertCount = providerAlertCountMap.get(item.providerSlug) || 0;
+      const observedAtTs = observedAt ? Date.parse(observedAt) : NaN;
+      const freshWithinHour = Number.isFinite(observedAtTs) && Date.now() - observedAtTs <= 60 * 60 * 1000;
+      const trend: AdminCashHealthRow['trend'] = criticalProviderSet.has(item.providerSlug)
+        ? 'worsening'
+        : (item.status === 'healthy' && freshWithinHour ? 'improving' : 'stable');
+      const trendReason = criticalProviderSet.has(item.providerSlug)
+        ? 'critical_scrape_failure'
+        : (item.status === 'healthy' && freshWithinHour ? 'fresh_healthy_snapshot' : 'no_regression_signal');
+      return {
+        ...item,
+        observedAt,
+        trend,
+        trendReason,
+        alertCount,
+      };
+    })
     .filter((item) => {
       if (cutoffMs === null) return true;
       if (!item.observedAt) return false;
       const ts = Date.parse(item.observedAt);
       return Number.isFinite(ts) && ts >= cutoffMs;
-    });
+    })
+    .sort((a, b) => statusScore(b.status) - statusScore(a.status) || b.alertCount - a.alertCount || a.providerSlug.localeCompare(b.providerSlug));
   const filteredAlerts = alerts.filter((item) => {
     if (cutoffMs === null) return true;
     if (!item.observedAt) return false;

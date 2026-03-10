@@ -1,7 +1,7 @@
 import { getAdminSession } from '@/lib/auth';
 import { getAdminCashHealth } from '@/lib/admin-cash-health';
 
-const exportFields = ['type', 'provider', 'status', 'severity', 'reasons', 'currencies', 'observedAt', 'message'] as const;
+const exportFields = ['type', 'provider', 'status', 'trend', 'trendReason', 'alertCount', 'severity', 'reasons', 'currencies', 'observedAt', 'message'] as const;
 
 function escapeCsv(value: string) {
   if (value.includes(',') || value.includes('"') || value.includes('\n')) {
@@ -29,6 +29,9 @@ export async function GET(request: Request) {
     type: 'provider_health',
     provider: item.providerSlug,
     status: item.status,
+    trend: item.trend,
+    trendReason: item.trendReason,
+    alertCount: String(item.alertCount),
     severity: '',
     reasons: item.reasons.join('|'),
     currencies: item.currencies.join('|'),
@@ -39,6 +42,9 @@ export async function GET(request: Request) {
     type: 'alert',
     provider: item.provider,
     status: '',
+    trend: '',
+    trendReason: '',
+    alertCount: '',
     severity: item.critical ? 'critical' : 'warning',
     reasons: '',
     currencies: '',

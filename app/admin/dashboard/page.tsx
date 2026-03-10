@@ -140,7 +140,7 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
         </div>
       </div>
 
-      <div className="card p-6">
+      <div id="audit-logs" className="card p-6">
         <h2 className="text-xl font-semibold">Recent audit logs</h2>
         <div className="mt-4 overflow-hidden rounded-2xl border border-stone-200">
           <table className="min-w-full text-left text-sm">

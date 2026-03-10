@@ -5,12 +5,18 @@ import { getAdminCashHealth } from '@/lib/admin-cash-health';
 
 const pageSize = 10;
 const ranges = ['1h', '24h', '7d', 'all'] as const;
-const exportFields = ['type', 'provider', 'status', 'severity', 'reasons', 'currencies', 'observedAt', 'message'] as const;
+const exportFields = ['type', 'provider', 'status', 'trend', 'trendReason', 'alertCount', 'severity', 'reasons', 'currencies', 'observedAt', 'message'] as const;
 
 function statusClass(status: string) {
   if (status === 'healthy') return 'bg-emerald-100 text-emerald-700';
   if (status === 'degraded') return 'bg-amber-100 text-amber-700';
   return 'bg-rose-100 text-rose-700';
+}
+
+function trendClass(trend: string) {
+  if (trend === 'improving') return 'bg-emerald-100 text-emerald-700';
+  if (trend === 'worsening') return 'bg-rose-100 text-rose-700';
+  return 'bg-stone-100 text-stone-700';
 }
 
 function buildHref(status: string, criticalOnly: boolean, page: number, range: string, fields: string[]) {
@@ -71,6 +77,7 @@ export default async function AdminCashHealthPage({ searchParams }: { searchPara
         </div>
         <div className="flex gap-2">
           <Link href="/admin/dashboard" className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">Back dashboard</Link>
+          <Link href="/admin/dashboard#audit-logs" className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">View audit logs</Link>
           <Link href={exportHref} className="rounded-full bg-brand-700 px-4 py-2 text-sm font-medium text-white">Export CSV</Link>
         </div>
       </div>
@@ -79,6 +86,7 @@ export default async function AdminCashHealthPage({ searchParams }: { searchPara
         <div className="card p-5"><p className="text-sm text-stone-500">Providers tracked</p><p className="mt-2 text-2xl font-semibold">{data.providerHealth.length}</p></div>
         <div className="card p-5"><p className="text-sm text-stone-500">Active alerts</p><p className="mt-2 text-2xl font-semibold">{alerts.length}</p></div>
         <div className="card p-5"><p className="text-sm text-stone-500">Cache freshness</p><p className="mt-2 text-2xl font-semibold">{data.anyCacheStale ? 'Stale' : 'Fresh'}</p><p className="mt-1 text-xs text-stone-500">Updated {data.generatedAt ? new Date(data.generatedAt).toLocaleString() : '-'}</p></div>
+        <div className="card p-5"><p className="text-sm text-stone-500">Trend signal</p><p className="mt-2 text-2xl font-semibold">{providerRows.filter((row) => row.trend === 'worsening').length} worsening</p></div>
       </div>
 
       <div className="card p-6">
@@ -101,8 +109,11 @@ export default async function AdminCashHealthPage({ searchParams }: { searchPara
           {providerRows.map((row) => (
             <div key={row.providerSlug} className="rounded-xl border border-stone-200 px-4 py-3 text-sm">
               <span className={`rounded-full px-2 py-1 text-xs font-medium ${statusClass(row.status)}`}>{row.status}</span>
+              <span className={`ml-2 rounded-full px-2 py-1 text-xs font-medium ${trendClass(row.trend)}`}>{row.trend}</span>
               <span className="ml-2 font-semibold">{row.providerSlug}</span>
               <span className="ml-2 text-stone-600">reasons: {row.reasons.join(', ')}</span>
+              <span className="ml-2 text-stone-600">trendReason: {row.trendReason}</span>
+              <span className="ml-2 text-stone-600">alerts: {row.alertCount}</span>
               <span className="ml-2 text-stone-600">currencies: {row.currencies.join(', ')}</span>
               <span className="ml-2 text-stone-600">observed: {row.observedAt ? new Date(row.observedAt).toLocaleString() : '-'}</span>
             </div>
