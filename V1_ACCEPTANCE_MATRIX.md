@@ -45,3 +45,8 @@
 - Final legal copy sign-off.
 - Analytics/Search Console property binding and ownership verification.
 - Operational backup/restore execution record in production environment.
+
+## 8. Operations Docs Delivered
+- Deployment handoff: `DEPLOYMENT_HANDOFF.md`
+- Chinese production runbook: `RELEASE_RUNBOOK_CN.md`
+- Chinese operations SOP: `OPS_SOP_CN.md`
