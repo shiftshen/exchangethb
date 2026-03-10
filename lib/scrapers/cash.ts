@@ -143,6 +143,13 @@ export async function scrapeSuperrichThailand(): Promise<ScrapeResult> {
 export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
   const observedAt = new Date().toISOString();
   const supported = new Set<CurrencyCode>(['USD', 'CNY', 'EUR', 'JPY', 'GBP']);
+  const spreadTemplate: Record<CurrencyCode, number> = {
+    USD: 0.16,
+    CNY: 0.12,
+    EUR: 0.2,
+    JPY: 0.002,
+    GBP: 0.25,
+  };
   const normalizeDenomination = (value: string) => value.replace(/\s+/g, '').replace(/–/g, '-').toUpperCase();
   try {
     const guestTokenResponse = await fetch('https://superrichrate2.ztidev.com/superRich/getGuestToken', {
@@ -174,26 +181,34 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
       },
       cache: 'no-store',
     });
-    const bookingsResponse = await fetch('https://superrichrate2.ztidev.com/superRich/getBooking?page=0&sizeContents=120', {
-      headers: {
-        'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0',
-        token,
-      },
-      cache: 'no-store',
-    });
-    if (!locationsResponse.ok || !bookingsResponse.ok) {
+    const bookingPages: Array<{ data?: { content?: Array<{ rateUpdateDate?: number; updateDate?: number; createDate?: number; currencyList?: Array<{ currencyCode?: string; denominationList?: Array<{ denom?: string; sell?: string }> }> }> } }> = [];
+    for (let page = 0; page < 6; page += 1) {
+      const bookingsResponse = await fetch(`https://superrichrate2.ztidev.com/superRich/getBooking?page=${page}&sizeContents=100`, {
+        headers: {
+          'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0',
+          token,
+        },
+        cache: 'no-store',
+      });
+      if (!bookingsResponse.ok) break;
+      const payload = await bookingsResponse.json() as { data?: { content?: Array<{ rateUpdateDate?: number; updateDate?: number; createDate?: number; currencyList?: Array<{ currencyCode?: string; denominationList?: Array<{ denom?: string; sell?: string }> }> }> } };
+      const rows = payload.data?.content || [];
+      if (!rows.length) break;
+      bookingPages.push(payload);
+      if (rows.length < 100) break;
+    }
+    if (!locationsResponse.ok || !bookingPages.length) {
       return {
         provider: 'superrich-1965',
         ok: false,
         observedAt,
         notes: [
-          `Guest feed request failed: locations ${locationsResponse.status}, bookings ${bookingsResponse.status}.`,
+          `Guest feed request failed: locations ${locationsResponse.status}, bookings unavailable.`,
           'Superrich-1965 keeps public booking feed available but can still block some requests by account state.',
         ],
       };
     }
     const locationsPayload = await locationsResponse.json() as { data?: { content?: Array<{ dynLastUpdate?: string }> } };
-    const bookingsPayload = await bookingsResponse.json() as { data?: { content?: Array<{ rateUpdateDate?: number; updateDate?: number; createDate?: number; currencyList?: Array<{ currencyCode?: string; denominationList?: Array<{ denom?: string; sell?: string }> }> }> } };
     const fallbackRows = cashRates
       .filter((rate) => {
         const branch = cashBranches.find((entry) => entry.id === rate.branchId);
@@ -217,20 +232,22 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
       if (!existing || row.buyRate > existing.buyRate) fallbackByCurrency.set(row.currency, row);
     }
     const latestSellMap = new Map<string, { sellRate: number; timestamp: number; denomination: string; currency: CurrencyCode }>();
-    for (const booking of bookingsPayload.data?.content || []) {
-      const timestamp = Number(booking.rateUpdateDate || booking.updateDate || booking.createDate || Date.now());
-      for (const currencyRow of booking.currencyList || []) {
-        const currency = currencyRow.currencyCode as CurrencyCode;
-        if (!supported.has(currency)) continue;
-        for (const denomRow of currencyRow.denominationList || []) {
-          const denomination = String(denomRow.denom || '').trim();
-          const normalizedDenomination = normalizeDenomination(denomination);
-          const sellRate = Number(denomRow.sell);
-          if (!normalizedDenomination || !Number.isFinite(sellRate) || sellRate <= 0) continue;
-          const key = `${currency}:${normalizedDenomination}`;
-          const previous = latestSellMap.get(key);
-          if (!previous || timestamp > previous.timestamp) {
-            latestSellMap.set(key, { sellRate, timestamp, denomination, currency });
+    for (const pagePayload of bookingPages) {
+      for (const booking of pagePayload.data?.content || []) {
+        const timestamp = Number(booking.rateUpdateDate || booking.updateDate || booking.createDate || Date.now());
+        for (const currencyRow of booking.currencyList || []) {
+          const currency = currencyRow.currencyCode as CurrencyCode;
+          if (!supported.has(currency)) continue;
+          for (const denomRow of currencyRow.denominationList || []) {
+            const denomination = String(denomRow.denom || '').trim();
+            const normalizedDenomination = normalizeDenomination(denomination);
+            const sellRate = Number(denomRow.sell);
+            if (!normalizedDenomination || !Number.isFinite(sellRate) || sellRate <= 0) continue;
+            const key = `${currency}:${normalizedDenomination}`;
+            const previous = latestSellMap.get(key);
+            if (!previous || timestamp > previous.timestamp) {
+              latestSellMap.set(key, { sellRate, timestamp, denomination, currency });
+            }
           }
         }
       }
@@ -238,13 +255,14 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
     const mergedRows = new Map<string, ScrapedCashRate & { __ts: number }>();
     for (const [key, sell] of latestSellMap.entries()) {
       const fallback = fallbackMap.get(key) || fallbackByCurrency.get(sell.currency);
-      if (!fallback) continue;
-      const rowKey = `${fallback.currency}:${fallback.denomination}`;
+      const rowKey = `${sell.currency}:${(fallback?.denomination || sell.denomination || 'notes')}`;
+      const spread = Math.max(0.0001, fallback ? fallback.sellRate - fallback.buyRate : spreadTemplate[sell.currency]);
+      const derivedBuy = Number(Math.max(0, sell.sellRate - spread).toFixed(4));
       const candidate: ScrapedCashRate & { __ts: number } = {
         providerSlug: 'superrich-1965',
-        currency: fallback.currency,
-        denomination: fallback.denomination,
-        buyRate: Number(Math.max(0, sell.sellRate - Math.max(0.0001, fallback.sellRate - fallback.buyRate)).toFixed(4)),
+        currency: sell.currency,
+        denomination: fallback?.denomination || sell.denomination || 'notes',
+        buyRate: derivedBuy,
         sellRate: sell.sellRate,
         observedAt: new Date(sell.timestamp).toISOString(),
         sourceUrl: 'https://superrichrate2.ztidev.com/superRich/getBooking (guest feed)',

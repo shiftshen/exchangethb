@@ -69,6 +69,12 @@ describe('scrapeSuperrich1965', () => {
                       { denom: '100', sell: '36.70' },
                     ],
                   },
+                  {
+                    currencyCode: 'EUR',
+                    denominationList: [
+                      { denom: '500-100', sell: '39.40' },
+                    ],
+                  },
                 ],
               },
             ],
@@ -80,7 +86,8 @@ describe('scrapeSuperrich1965', () => {
     const result = await scrapeSuperrich1965();
     expect(result.ok).toBe(true);
     expect(result.provider).toBe('superrich-1965');
-    expect((result.rates || []).length).toBeGreaterThan(0);
+    expect((result.rates || []).length).toBeGreaterThan(1);
+    expect(new Set((result.rates || []).map((rate) => rate.currency)).has('EUR')).toBe(true);
     expect((result.rates || [])[0].sourceKind).toBe('hybrid');
     expect((result.rates || [])[0].buyRate).toBeLessThan((result.rates || [])[0].sellRate);
     expect(result.notes[0]).toContain('Parsed');

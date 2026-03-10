@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 vi.mock('fs', () => ({
   promises: {
     readFile: vi.fn(async () => JSON.stringify({
-      generatedAt: '2026-03-10T00:00:00.000Z',
+      generatedAt: new Date().toISOString(),
       results: [
         {
           provider: 'vasu',
