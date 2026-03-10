@@ -5,6 +5,7 @@ import { readAuditLog } from '@/lib/audit-log';
 import { getAdminSession } from '@/lib/auth';
 import { readAdminConfig } from '@/lib/content-store';
 import { getAdapterHealth } from '@/lib/market-data';
+import { compareCashLive } from '@/lib/cash-live';
 import { ConfigEditor } from '@/components/admin/config-editor';
 
 const modules = [
@@ -29,7 +30,32 @@ async function getCachePreview() {
 export default async function AdminDashboardPage() {
   const session = await getAdminSession();
   if (!session) redirect('/admin/login');
-  const [config, health, cachePreview, auditLogs] = await Promise.all([readAdminConfig(), getAdapterHealth(), getCachePreview(), readAuditLog(12)]);
+  const [config, health, cachePreview, auditLogs, cashCompare] = await Promise.all([
+    readAdminConfig(),
+    getAdapterHealth(),
+    getCachePreview(),
+    readAuditLog(12),
+    compareCashLive({ currency: 'USD', amount: 1000, maxDistanceKm: 100 }),
+  ]);
+  const cacheJson = (() => {
+    try {
+      return JSON.parse(cachePreview) as { generatedAt?: string; results?: Array<{ provider?: string; ok?: boolean; notes?: string[] }> };
+    } catch {
+      return { generatedAt: null, results: [] };
+    }
+  })();
+  const cashAlerts = (cacheJson.results || []).flatMap((item) => {
+    const notes = item.notes || [];
+    if (!notes.length) {
+      return item.ok === false ? [{ provider: item.provider || 'unknown', message: 'scrape_failed_without_notes', critical: true }] : [];
+    }
+    return notes.map((note) => ({ provider: item.provider || 'unknown', message: note, critical: item.ok === false }));
+  }).slice(0, 12);
+  const statusClass = (status: string) => {
+    if (status === 'healthy') return 'bg-emerald-100 text-emerald-700';
+    if (status === 'degraded') return 'bg-amber-100 text-amber-700';
+    return 'bg-rose-100 text-rose-700';
+  };
 
   return (
     <main className="container-shell space-y-8 py-10">
@@ -50,6 +76,31 @@ export default async function AdminDashboardPage() {
         <div className="card p-5"><p className="text-sm text-stone-500">Upbit Thailand adapter</p><p className="mt-2 text-2xl font-semibold">{health.upbitThailand ? 'Live' : 'Fallback'}</p></div>
         <div className="card p-5"><p className="text-sm text-stone-500">Orbix adapter</p><p className="mt-2 text-2xl font-semibold">{health.orbix ? 'Live' : 'Fallback'}</p></div>
         <div className="card p-5"><p className="text-sm text-stone-500">Fallback-only state</p><p className="mt-2 text-2xl font-semibold">{health.fallbackOnly ? 'Yes' : 'No'}</p></div>
+      </div>
+
+      <div className="card p-6">
+        <h2 className="text-xl font-semibold">Cash provider health</h2>
+        <p className="mt-2 text-sm text-stone-600">Provider grading from compare pipeline: healthy/degraded/down with reason code.</p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {cashCompare.quality.providerHealth.map((item) => (
+            <span key={item.providerSlug} className={`rounded-full px-3 py-1 text-xs font-medium ${statusClass(item.status)}`}>
+              {item.providerSlug}: {item.status} ({item.reason})
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="card p-6">
+        <h2 className="text-xl font-semibold">Cash scrape alerts</h2>
+        <p className="mt-2 text-sm text-stone-600">Latest notes from cached scraper results. Use this for degraded/down triage.</p>
+        <div className="mt-4 space-y-2">
+          {cashAlerts.map((alert, index) => (
+            <div key={`${alert.provider}-${index}`} className={`rounded-xl border px-4 py-3 text-sm ${alert.critical ? 'border-rose-200 bg-rose-50 text-rose-700' : 'border-amber-200 bg-amber-50 text-amber-700'}`}>
+              <span className="font-semibold">{alert.provider}</span> · {alert.message}
+            </div>
+          ))}
+          {!cashAlerts.length ? <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">No active cash scrape alerts.</div> : null}
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">

@@ -25,6 +25,10 @@ const copy = {
     sourceMix: 'สัดส่วนแหล่งข้อมูล',
     anomaly: 'รายการผิดปกติ',
     missing: 'ผู้ให้บริการที่ยังขาด',
+    providerHealth: 'สุขภาพผู้ให้บริการ',
+    healthy: 'ปกติ',
+    degraded: 'ลดระดับ',
+    down: 'ล้มเหลว',
     updatedAt: 'อัปเดตแคช',
     table: 'ตารางสาขา',
     tableDescription: 'เรตทั้งหมดเป็นค่าประมาณจากหน้า official และผ่านการตรวจทานก่อนแสดงผล',
@@ -50,6 +54,10 @@ const copy = {
     sourceMix: 'Source mix',
     anomaly: 'Anomalies',
     missing: 'Missing providers',
+    providerHealth: 'Provider health',
+    healthy: 'Healthy',
+    degraded: 'Degraded',
+    down: 'Down',
     updatedAt: 'Cache updated',
     table: 'Branch table',
     tableDescription: 'Rates are estimated from official public pages and reviewed before publishing.',
@@ -75,6 +83,10 @@ const copy = {
     sourceMix: '来源占比',
     anomaly: '异常项',
     missing: '缺失品牌',
+    providerHealth: '供应商健康度',
+    healthy: '正常',
+    degraded: '降级',
+    down: '故障',
     updatedAt: '缓存更新时间',
     table: '门店列表',
     tableDescription: '汇率为基于官方公开页面的估算值，并在发布前经过审核。',
@@ -94,6 +106,16 @@ export default async function CashPage({ params, searchParams }: { params: Promi
   const amount = Number(query.amount || 1000);
   const results = await compareCashLive({ currency, amount, maxDistanceKm: Number(query.maxDistanceKm || 10) });
   const c = copy[locale];
+  const statusLabel = (status: string) => {
+    if (status === 'healthy') return c.healthy;
+    if (status === 'degraded') return c.degraded;
+    return c.down;
+  };
+  const statusClass = (status: string) => {
+    if (status === 'healthy') return 'bg-emerald-100 text-emerald-700';
+    if (status === 'degraded') return 'bg-amber-100 text-amber-700';
+    return 'bg-rose-100 text-rose-700';
+  };
 
   return (
     <div className="space-y-12">
@@ -124,6 +146,13 @@ export default async function CashPage({ params, searchParams }: { params: Promi
               <p className="mt-4 text-sm text-stone-600">{c.sourceMix}: {results.quality.liveRows} live / {results.quality.fallbackRows} fallback</p>
               <p className="mt-2 text-sm text-stone-600">{c.missing}: {results.quality.missingProviders.length ? results.quality.missingProviders.join(', ') : '-'}</p>
               <p className="mt-2 text-sm text-stone-600">{c.anomaly}: {results.quality.anomalyCount}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {results.quality.providerHealth?.map((item) => (
+                  <span key={item.providerSlug} className={`rounded-full px-3 py-1 text-xs font-medium ${statusClass(item.status)}`}>
+                    {item.providerSlug}: {statusLabel(item.status)} ({item.reason})
+                  </span>
+                ))}
+              </div>
               <p className="mt-2 text-sm text-stone-500">{c.updatedAt}: {results.cacheGeneratedAt ? new Date(results.cacheGeneratedAt).toLocaleString() : '-'}</p>
             </div>
           </div>
