@@ -23,6 +23,7 @@ ExchangeTHB is a launch-ready multilingual comparison site for finding better pa
 4. Refresh cached cash data with `npm run worker`
 5. Start development with `npm run dev`
 6. Or use `docker compose up`
+7. For one-shot cache refresh in Docker, run `docker compose --profile worker run --rm worker`
 
 ## Production notes
 - Replace file-backed config with PostgreSQL persistence when moving to multi-admin production.

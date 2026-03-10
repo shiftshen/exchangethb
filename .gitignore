@@ -6,4 +6,5 @@ package-lock.json
 npm-debug.log*
 tsconfig.tsbuildinfo
 content/cash-scrape-cache.json
+content/admin-audit-log.json
 .DS_Store

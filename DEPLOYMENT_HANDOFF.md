@@ -69,3 +69,4 @@
 - Review fallback reasons in admin health and keep reviewed snapshots fresh.
 - Keep SIA in fallback/manual review mode until stable official source reliability is confirmed.
 - Schedule recurring worker execution for cache refresh.
+- If your worker runtime does not preinstall devDependencies, run it through `npx -y tsx worker/index.ts` to avoid interactive prompts.

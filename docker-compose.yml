@@ -1,9 +1,8 @@
-version: '3.9'
 services:
   web:
     image: node:20-alpine
     working_dir: /app
-    command: sh -c "npm install && npm run build && npm run start"
+    command: sh -c "npm install --include=dev && npm run build && npm run start"
     ports:
       - "3000:3000"
     volumes:
@@ -22,7 +21,7 @@ services:
   worker:
     image: node:20-alpine
     working_dir: /app
-    command: sh -c "npm install && npx tsx worker/index.ts"
+    command: sh -c "npm install --include=dev && npx -y tsx worker/index.ts"
     volumes:
       - ./:/app
     env_file:
