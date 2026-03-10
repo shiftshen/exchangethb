@@ -76,10 +76,25 @@ export async function compareCrypto(input: {
 }
 
 export async function compareCash(input: { currency: CurrencyCode; amount: number; prioritizeNearest?: boolean; maxDistanceKm?: number; locale?: Locale; }) {
+  const adminConfig = await readAdminConfig();
+  const effectiveBranches = cashBranches
+    .map((branch) => {
+      const override = adminConfig.branchOverrides[branch.id] || {};
+      return {
+        ...branch,
+        name: override.name || branch.name,
+        address: override.address || branch.address,
+        hours: override.hours || branch.hours,
+        mapsUrl: override.mapsUrl || branch.mapsUrl,
+        isVisible: override.isVisible ?? true,
+      };
+    })
+    .filter((branch) => branch.isVisible);
   const results = cashRates
     .filter((rate) => rate.currency === input.currency)
     .map((rate) => {
-      const branch = cashBranches.find((entry) => entry.id === rate.branchId)!;
+      const branch = effectiveBranches.find((entry) => entry.id === rate.branchId);
+      if (!branch) return null;
       const provider = cashProviders.find((entry) => entry.slug === branch.providerSlug)!;
       return {
         provider: provider.name,
@@ -95,8 +110,9 @@ export async function compareCash(input: { currency: CurrencyCode; amount: numbe
         officialUrl: provider.officialUrl,
         disclosure: provider.affiliate.disclosure,
         observedAt: rate.observedAt,
-      };
+      } as const;
     })
+    .filter((row): row is NonNullable<typeof row> => Boolean(row))
     .filter((row) => row.distanceKm <= (input.maxDistanceKm || Infinity));
 
   const bestRate = [...results].sort((a, b) => b.buyRate - a.buyRate);

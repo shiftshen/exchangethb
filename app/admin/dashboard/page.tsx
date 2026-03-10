@@ -11,14 +11,14 @@ import { ConfigEditor } from '@/components/admin/config-editor';
 import { AlertScopeFilters, DashboardFilterBootstrap, HealthStatusFilters } from '@/components/admin/dashboard-filters';
 
 const modules = [
-  ['Data source monitor', 'Track exchange APIs, scraper freshness, failures, and alert state.'],
-  ['Rules and fees', 'Edit trading fees, THB withdrawals, network fees, and disclosure notes.'],
-  ['Affiliate links', 'Manage official, campaign, and reward-available states with validity windows.'],
-  ['Exchange scores', 'Update editorial scoring dimensions, tags, and recommendation status.'],
-  ['Branch manager', 'Maintain branches, hours, coordinates, display state, and Maps links.'],
-  ['Scrape review', 'Hide anomalies, keep last valid rates, and recover reviewed values.'],
-  ['SEO and legal', 'Publish route pages, FAQs, methodology, disclaimer, and privacy updates.'],
-  ['Audit log', 'Review admin changes, click events, and operational notes.'],
+  { title: 'Data source monitor', body: 'Track exchange APIs, scraper freshness, failures, and alert state.', href: '/admin/cash-health' },
+  { title: 'Rules and fees', body: 'Edit trading fees, THB withdrawals, network fees, and disclosure notes.', href: '/admin/dashboard' },
+  { title: 'Affiliate links', body: 'Manage official, campaign, and reward-available states with validity windows.', href: '/admin/dashboard' },
+  { title: 'Exchange scores', body: 'Update editorial scoring dimensions, tags, and recommendation status.', href: '/admin/exchange-profiles' },
+  { title: 'Branch manager', body: 'Maintain branches, hours, coordinates, display state, and Maps links.', href: '/admin/branch-manager' },
+  { title: 'Scrape review', body: 'Hide anomalies, keep last valid rates, and recover reviewed values.', href: '/admin/scrape-review' },
+  { title: 'SEO and legal', body: 'Publish route pages, FAQs, methodology, disclaimer, and privacy updates.', href: '/admin/dashboard' },
+  { title: 'Audit log', body: 'Review admin changes, click events, and operational notes.', href: '/admin/audit' },
 ];
 
 async function getCachePreview() {
@@ -42,7 +42,7 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
   ]);
   const cacheJson = (() => {
     try {
-      return JSON.parse(cachePreview) as { generatedAt?: string; results?: Array<{ provider?: string; ok?: boolean; notes?: string[] }> };
+      return JSON.parse(cachePreview) as { generatedAt?: string; results?: Array<{ provider?: string; ok?: boolean; notes?: string[]; observedAt?: string }> };
     } catch {
       return { generatedAt: null, results: [] };
     }
@@ -123,11 +123,42 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
         </div>
       </div>
 
+      <div className="card p-6">
+        <h2 className="text-xl font-semibold">Data source monitor</h2>
+        <p className="mt-2 text-sm text-stone-600">Last success time, error count, and alert state for cash providers.</p>
+        <div className="mt-4 overflow-hidden rounded-2xl border border-stone-200">
+          <table className="min-w-full text-left text-sm">
+            <thead className="bg-stone-50 text-stone-500">
+              <tr>
+                {['Provider', 'Status', 'Last success', 'Error count', 'Alert state'].map((head) => <th key={head} className="px-4 py-3 font-medium">{head}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {(cacheJson.results || []).map((item, index) => {
+                const errors = item.ok ? 0 : Math.max(1, (item.notes || []).length);
+                const state = item.ok ? 'normal' : 'alert';
+                return (
+                  <tr key={`${item.provider || 'unknown'}-${index}`} className="border-t border-stone-100">
+                    <td className="px-4 py-3">{item.provider || 'unknown'}</td>
+                    <td className="px-4 py-3">{item.ok ? 'ok' : 'failed'}</td>
+                    <td className="px-4 py-3">{item.observedAt ? new Date(item.observedAt).toLocaleString() : '-'}</td>
+                    <td className="px-4 py-3">{errors}</td>
+                    <td className="px-4 py-3">{state}</td>
+                  </tr>
+                );
+              })}
+              {!(cacheJson.results || []).length ? <tr><td colSpan={5} className="px-4 py-6 text-center text-stone-500">No monitor records yet.</td></tr> : null}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {modules.map(([title, body]) => (
-          <div key={title} className="card p-5">
-            <h2 className="text-lg font-semibold">{title}</h2>
-            <p className="mt-3 text-sm text-stone-600">{body}</p>
+        {modules.map((item) => (
+          <div key={item.title} className="card p-5">
+            <h2 className="text-lg font-semibold">{item.title}</h2>
+            <p className="mt-3 text-sm text-stone-600">{item.body}</p>
+            <Link href={item.href} className="mt-4 inline-flex rounded-full border border-stone-300 px-3 py-1 text-sm font-medium">Open</Link>
           </div>
         ))}
       </div>
@@ -141,7 +172,10 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
       </div>
 
       <div id="audit-logs" className="card p-6">
-        <h2 className="text-xl font-semibold">Recent audit logs</h2>
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-xl font-semibold">Recent audit logs</h2>
+          <Link href="/admin/audit" className="rounded-full border border-stone-300 px-3 py-1 text-sm font-medium">Open full logs</Link>
+        </div>
         <div className="mt-4 overflow-hidden rounded-2xl border border-stone-200">
           <table className="min-w-full text-left text-sm">
             <thead className="bg-stone-50 text-stone-500">

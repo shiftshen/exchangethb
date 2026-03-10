@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { cashBranches, cashProviders, cashRates } from '@/data/site';
+import { readAdminConfig } from '@/lib/content-store';
 import { t } from '@/lib/i18n';
 import { TrackAnchor } from '@/components/track-link';
 import { Locale } from '@/lib/types';
@@ -65,8 +66,24 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
   const { locale, slug } = await params;
   const provider = cashProviders.find((item) => item.slug === slug);
   if (!provider) notFound();
+  const config = await readAdminConfig();
+  const reviewMode = config.scrapeReview.providerModes[slug] || 'auto';
+  const reviewNote = config.scrapeReview.reviewNotes[slug] || '';
+  const effectiveBranches = cashBranches
+    .map((branch) => {
+      const override = config.branchOverrides[branch.id] || {};
+      return {
+        ...branch,
+        name: override.name || branch.name,
+        address: override.address || branch.address,
+        hours: override.hours || branch.hours,
+        mapsUrl: override.mapsUrl || branch.mapsUrl,
+        isVisible: override.isVisible ?? true,
+      };
+    })
+    .filter((branch) => branch.isVisible);
 
-  const branches = cashBranches.filter((branch) => branch.providerSlug === slug);
+  const branches = effectiveBranches.filter((branch) => branch.providerSlug === slug);
   const cache = await getScrapeCache();
   const scrape = cache.results.find((item) => item.provider === slug || item.provider === provider.slug);
   const liveRates = (scrape?.rates || []).filter((rate) => rate.providerSlug === slug);
@@ -88,6 +105,8 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
               <p className="font-semibold text-ink">{c.scraper}</p>
               <p className="mt-2">{scrape?.ok ? c.live : c.fallback}</p>
               {scrape?.notes?.map((note) => <p key={note} className="mt-1">- {note}</p>)}
+              <p className="mt-2">mode: {reviewMode}</p>
+              {reviewNote ? <p className="mt-1">note: {reviewNote}</p> : null}
             </div>
           </div>
           <div className="card p-6">

@@ -47,6 +47,50 @@
     "upbit-thailand:BTC:tradingFeePct": 0.25,
     "orbix:BTC:tradingFeePct": 0.20
   },
+  "exchangeProfiles": {
+    "binance-th": {
+      "recommended": true,
+      "tags": [],
+      "riskNote": ""
+    },
+    "bitkub": {
+      "recommended": true,
+      "tags": [],
+      "riskNote": ""
+    },
+    "upbit-thailand": {
+      "recommended": true,
+      "tags": [],
+      "riskNote": ""
+    },
+    "orbix": {
+      "recommended": true,
+      "tags": [],
+      "riskNote": ""
+    }
+  },
+  "branchOverrides": {
+    "sr1965-asok": {
+      "isVisible": true
+    },
+    "sr-th-pratunam": {
+      "isVisible": true
+    },
+    "vasu-main": {
+      "isVisible": true
+    },
+    "sia-silom": {
+      "isVisible": true
+    },
+    "ratchada-main": {
+      "isVisible": true
+    }
+  },
+  "scrapeReview": {
+    "hiddenAlerts": [],
+    "providerModes": {},
+    "reviewNotes": {}
+  },
   "legal": {
     "updatedAt": "2026-03-08T00:00:00+07:00"
   }

@@ -20,6 +20,7 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
     : [null, [], await readAdminConfig()];
   const latestSnapshot = snapshots[0];
   const source = latestSnapshot ? describeMarketSource(latestSnapshot) : null;
+  const profile = config.exchangeProfiles[exchange.slug] || { recommended: true, tags: [], riskNote: '' };
   const score = Object.values(exchange.score).reduce((sum, value) => sum + value, 0);
   const affiliate = resolveAffiliateLink(config.affiliateLinks[exchange.slug] || exchange.affiliate);
   const outboundUrl = affiliate.outboundUrl;
@@ -36,6 +37,11 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
             <div>
               <p className="text-sm text-stone-500">Editorial score</p>
               <p className="mt-2 text-4xl font-semibold">{score}/100</p>
+            </div>
+            <div className="rounded-2xl bg-stone-50 p-4 text-sm text-stone-700">
+              <p>Recommendation: {profile.recommended ? 'recommended' : 'watchlist'}</p>
+              <p className="mt-1">Tags: {profile.tags.length ? profile.tags.join(', ') : '-'}</p>
+              <p className="mt-1">Risk note: {profile.riskNote || '-'}</p>
             </div>
             <div className="rounded-2xl bg-stone-50 p-4 text-sm text-stone-700">
               {health?.note || 'No adapter health note available.'}

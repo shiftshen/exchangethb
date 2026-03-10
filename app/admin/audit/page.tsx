@@ -1,0 +1,78 @@
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getAdminSession } from '@/lib/auth';
+import { readAuditLog } from '@/lib/audit-log';
+
+const pageSize = 30;
+
+function buildHref(action: string, page: number) {
+  const params = new URLSearchParams();
+  if (action) params.set('action', action);
+  if (page > 1) params.set('page', String(page));
+  const query = params.toString();
+  return query ? `/admin/audit?${query}` : '/admin/audit';
+}
+
+export default async function AdminAuditPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>>; }) {
+  const session = await getAdminSession();
+  if (!session) redirect('/admin/login');
+  const query = await searchParams;
+  const action = typeof query.action === 'string' ? query.action : '';
+  const pageRaw = Number(typeof query.page === 'string' ? query.page : '1');
+  const page = Number.isFinite(pageRaw) && pageRaw > 0 ? Math.floor(pageRaw) : 1;
+  const logs = await readAuditLog(2000);
+  const filtered = action ? logs.filter((row) => row.action.includes(action)) : logs;
+  const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const safePage = Math.min(page, pageCount);
+  const offset = (safePage - 1) * pageSize;
+  const rows = filtered.slice(offset, offset + pageSize);
+
+  return (
+    <main className="container-shell space-y-8 py-10">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-600">Admin</p>
+          <h1 className="text-4xl font-semibold tracking-tight">Audit logs</h1>
+          <p className="mt-2 max-w-3xl text-stone-600">Search and review administrator actions, scrape operations, config updates, and rollback events.</p>
+        </div>
+        <Link href="/admin/dashboard#audit-logs" className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">Back dashboard</Link>
+      </div>
+      <div className="card p-6">
+        <div className="flex flex-wrap gap-2">
+          <Link href={buildHref('', 1)} className={`rounded-full px-3 py-1 text-xs font-medium ${!action ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700'}`}>all</Link>
+          {['admin.cash.refresh', 'admin.cash.rollback', 'admin.config.updated', 'admin.login.success', 'admin.login.failed'].map((item) => (
+            <Link key={item} href={buildHref(item, 1)} className={`rounded-full px-3 py-1 text-xs font-medium ${action === item ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700'}`}>{item}</Link>
+          ))}
+        </div>
+        <div className="mt-4 overflow-hidden rounded-2xl border border-stone-200">
+          <table className="min-w-full text-left text-sm">
+            <thead className="bg-stone-50 text-stone-500">
+              <tr>
+                {['Time', 'Actor', 'Action', 'Target', 'IP'].map((head) => <th key={head} className="px-4 py-3 font-medium">{head}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={`${row.at}-${row.action}-${row.actor}`} className="border-t border-stone-100">
+                  <td className="px-4 py-3">{new Date(row.at).toLocaleString()}</td>
+                  <td className="px-4 py-3">{row.actor}</td>
+                  <td className="px-4 py-3">{row.action}</td>
+                  <td className="px-4 py-3">{row.target}</td>
+                  <td className="px-4 py-3">{row.ip || '-'}</td>
+                </tr>
+              ))}
+              {!rows.length ? <tr><td colSpan={5} className="px-4 py-6 text-center text-stone-500">No audit records in current filter.</td></tr> : null}
+            </tbody>
+          </table>
+        </div>
+        <div className="mt-4 flex items-center justify-between text-sm text-stone-600">
+          <span>Page {safePage} / {pageCount}</span>
+          <div className="flex gap-2">
+            <Link href={buildHref(action, Math.max(1, safePage - 1))} className="rounded-full border border-stone-300 px-3 py-1">Prev</Link>
+            <Link href={buildHref(action, Math.min(pageCount, safePage + 1))} className="rounded-full border border-stone-300 px-3 py-1">Next</Link>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}

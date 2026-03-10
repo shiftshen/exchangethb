@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { compareCashLive } from '@/lib/cash-live';
+import { readAdminConfig } from '@/lib/content-store';
 import { CurrencyCode } from '@/lib/types';
 
 const cachePath = path.join(process.cwd(), 'content', 'cash-scrape-cache.json');
@@ -48,6 +49,7 @@ export interface AdminCashAlert {
 }
 
 export async function getAdminCashHealth(options?: { range?: string }) {
+  const adminConfig = await readAdminConfig();
   const range = timeRanges.includes((options?.range || 'all') as CashHealthRange) ? (options?.range || 'all') as CashHealthRange : 'all';
   const rangeMinutes = readRangeMinutes(range);
   const cutoffMs = rangeMinutes === null ? null : Date.now() - rangeMinutes * 60 * 1000;
@@ -125,6 +127,7 @@ export async function getAdminCashHealth(options?: { range?: string }) {
     })
     .sort((a, b) => statusScore(b.status) - statusScore(a.status) || b.alertCount - a.alertCount || a.providerSlug.localeCompare(b.providerSlug));
   const filteredAlerts = alerts.filter((item) => {
+    if (adminConfig.scrapeReview.hiddenAlerts.includes(`${item.provider} ${item.message}`)) return false;
     if (cutoffMs === null) return true;
     if (!item.observedAt) return false;
     const ts = Date.parse(item.observedAt);
