@@ -81,6 +81,8 @@ describe('scrapeSuperrich1965', () => {
     expect(result.ok).toBe(true);
     expect(result.provider).toBe('superrich-1965');
     expect((result.rates || []).length).toBeGreaterThan(0);
+    expect((result.rates || [])[0].sourceKind).toBe('hybrid');
+    expect((result.rates || [])[0].buyRate).toBeLessThan((result.rates || [])[0].sellRate);
     expect(result.notes[0]).toContain('Parsed');
   });
 });

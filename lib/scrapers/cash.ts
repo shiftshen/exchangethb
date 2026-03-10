@@ -206,6 +206,7 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
           denomination: rate.denomination,
           normalizedDenomination: normalizeDenomination(rate.denomination),
           buyRate: rate.buyRate,
+          sellRate: rate.sellRate,
           branchId: branch.id,
         };
       });
@@ -243,7 +244,7 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
         providerSlug: 'superrich-1965',
         currency: fallback.currency,
         denomination: fallback.denomination,
-        buyRate: fallback.buyRate,
+        buyRate: Number(Math.max(0, sell.sellRate - Math.max(0.0001, fallback.sellRate - fallback.buyRate)).toFixed(4)),
         sellRate: sell.sellRate,
         observedAt: new Date(sell.timestamp).toISOString(),
         sourceUrl: 'https://superrichrate2.ztidev.com/superRich/getBooking (guest feed)',
@@ -265,7 +266,7 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
       observedAt,
       notes: [
         `Parsed ${rates.length} hybrid rows from official guest booking feed.`,
-        'Buy side still follows verified fallback table; live feed currently exposes sell-side only.',
+        'Buy side is derived from validated fallback spread model; live feed currently exposes sell-side only.',
         latestDynUpdate ? `Latest branch rate update marker: ${latestDynUpdate}` : 'No branch update marker in guest feed.',
       ],
       rates,
