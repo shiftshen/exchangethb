@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { readAuditLog } from '@/lib/audit-log';
 import { getAdminSession } from '@/lib/auth';
@@ -76,6 +77,14 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
         <form action="/api/admin/logout" method="post">
           <button className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">Log out</button>
         </form>
+      </div>
+
+      <div className="card flex items-center justify-between gap-4 p-5">
+        <div>
+          <p className="text-sm text-stone-500">Cash health module</p>
+          <p className="mt-1 text-sm text-stone-600">Open dedicated view for provider grading, paged alerts, and CSV export.</p>
+        </div>
+        <Link href="/admin/cash-health" className="rounded-full bg-brand-700 px-4 py-2 text-sm font-medium text-white">Open module</Link>
       </div>
 
       <div className="grid gap-4 md:grid-cols-5">
