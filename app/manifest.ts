@@ -5,10 +5,10 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'ExchangeTHB',
     short_name: 'ExchangeTHB',
     description: 'Compare Crypto → THB and Cash / FX → THB with transparent source labels.',
-    start_url: '/th',
+    start_url: '/en',
     display: 'standalone',
-    background_color: '#ffffff',
-    theme_color: '#0f766e',
+    background_color: '#0b0f19',
+    theme_color: '#f0b90b',
     icons: [],
   };
 }

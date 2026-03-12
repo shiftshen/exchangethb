@@ -1,10 +1,13 @@
 import { Locale } from '@/lib/types';
 
 const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+const googleVerification = process.env.GOOGLE_SITE_VERIFICATION?.trim();
 
 export const siteUrl = configuredSiteUrl && /^https?:\/\//.test(configuredSiteUrl)
   ? configuredSiteUrl.replace(/\/+$/, '')
-  : 'https://exchangethb.com';
+  : 'https://www.exchangethb.com';
+
+export const googleSiteVerification = googleVerification || undefined;
 
 export function withLocalePath(locale: Locale, path = '') {
   return `${siteUrl}/${locale}${path}`;

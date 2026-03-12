@@ -1,7 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
-import { organizationJsonLd, siteUrl } from '@/lib/seo';
+import { googleSiteVerification, organizationJsonLd, siteUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'ExchangeTHB',
     description: 'Compare routes into Thai baht with transparent source labels.',
+  },
+  verification: {
+    google: googleSiteVerification,
   },
 };
 

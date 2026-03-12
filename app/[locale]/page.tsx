@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { exchanges, publicCashProviders } from '@/data/site';
 import { TrackLink } from '@/components/track-link';
 import { t } from '@/lib/i18n';
+import { routeGuides } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
 import { breadcrumbJsonLd, localeAlternates, websiteJsonLd, withLocalePath } from '@/lib/seo';
 import { Pill, Section, StatCard } from '@/components/ui';
@@ -38,6 +39,8 @@ const copy = {
     routeLabel: 'เส้นทางยอดนิยม',
     trustedTitle: 'แหล่งข้อมูลที่ตรวจสอบได้',
     trustedDescription: 'คัดเลือกจากแหล่งที่ตรวจสอบได้ พร้อมคำอธิบายวิธีการและสถานะข้อมูลอย่างโปร่งใส',
+    routeGuidesTitle: 'เส้นทางค้นหาที่ควรมีหน้าเฉพาะ',
+    routeGuidesDescription: 'หน้าเหล่านี้เหมาะกับผู้ใช้ที่มาจากการค้นหา เช่น USD cash to THB, BTC to THB หรือ JPY cash to THB แล้วต้องการเข้าเปรียบเทียบต่อทันที',
     exchangesTitle: 'แพลตฟอร์มคริปโต',
     changersTitle: 'ร้านแลกเงิน',
     viewProfile: 'ดูโปรไฟล์',
@@ -97,6 +100,8 @@ const copy = {
     routeLabel: 'Popular route',
     trustedTitle: 'Trusted coverage',
     trustedDescription: 'Traceable sources with transparent methodology and visible data-state labels.',
+    routeGuidesTitle: 'Route guides for search intent',
+    routeGuidesDescription: 'These landing pages help users arriving from searches like USD cash to THB, BTC to THB, or JPY cash to THB move straight into a realistic comparison flow.',
     exchangesTitle: 'Exchanges',
     changersTitle: 'Money changers',
     viewProfile: 'View profile',
@@ -156,6 +161,8 @@ const copy = {
     routeLabel: '热门路线',
     trustedTitle: '可信覆盖',
     trustedDescription: '来源可追溯，方法论透明，并明确展示数据状态。',
+    routeGuidesTitle: '面向搜索需求的路线页',
+    routeGuidesDescription: '这些页面适合承接诸如 USD cash to THB、BTC to THB、JPY cash to THB 之类的搜索意图，再把用户带入真实比较流程。',
     exchangesTitle: '交易所',
     changersTitle: '换汇品牌',
     viewProfile: '查看详情',
@@ -193,6 +200,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const coverageValue = c.coverageValue
     .replace('{exchangeCount}', String(exchanges.length))
     .replace('{cashCount}', String(publicCashProviders.length));
+  const homeRouteGuides = routeGuides.slice(0, 6);
   const webSiteLd = websiteJsonLd(locale, '', c.heroBody);
   const breadcrumbLd = breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }]);
   return (
@@ -284,6 +292,24 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             <TrackLink key={route.label} href={route.href} eventName="homepage_popular_route_click" eventParams={{ route: route.label }} className="card card-interactive p-5">
               <p className="text-sm text-stone-400">{c.routeLabel}</p>
               <p className="mt-2 text-xl font-semibold text-white">{route.label}</p>
+            </TrackLink>
+          ))}
+        </div>
+      </Section>
+
+      <Section title={c.routeGuidesTitle} description={c.routeGuidesDescription}>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {homeRouteGuides.map((guide) => (
+            <TrackLink
+              key={guide.slug}
+              href={`/${locale}/routes/${guide.slug}`}
+              eventName="homepage_route_guide_click"
+              eventParams={{ route: guide.slug }}
+              className="card card-interactive p-5"
+            >
+              <p className="text-sm text-stone-400">{guide.type === 'crypto' ? c.quickCryptoPill : c.quickCashPill}</p>
+              <p className="mt-2 text-xl font-semibold text-white">{guide.title[locale]}</p>
+              <p className="mt-3 text-sm text-stone-400">{guide.summary[locale]}</p>
             </TrackLink>
           ))}
         </div>

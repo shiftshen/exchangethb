@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { exchanges, publicCashProviders } from '@/data/site';
 import { locales } from '@/lib/i18n';
+import { routeGuides } from '@/lib/route-guides';
 import { localeAlternates, siteUrl } from '@/lib/seo';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -8,6 +9,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/${locale}`, priority: 1, changeFrequency: 'daily' as const, alternates: { languages: localeAlternates() } },
     { url: `${siteUrl}/${locale}/crypto`, priority: 0.9, changeFrequency: 'hourly' as const, alternates: { languages: localeAlternates('/crypto') } },
     { url: `${siteUrl}/${locale}/cash`, priority: 0.9, changeFrequency: 'hourly' as const, alternates: { languages: localeAlternates('/cash') } },
+    ...routeGuides.map((guide) => ({
+      url: `${siteUrl}/${locale}/routes/${guide.slug}`,
+      priority: 0.75,
+      changeFrequency: 'weekly' as const,
+      alternates: { languages: localeAlternates(`/routes/${guide.slug}`) },
+    })),
     { url: `${siteUrl}/${locale}/legal/methodology`, priority: 0.5, changeFrequency: 'monthly' as const, alternates: { languages: localeAlternates('/legal/methodology') } },
     { url: `${siteUrl}/${locale}/legal/disclaimer`, priority: 0.5, changeFrequency: 'monthly' as const, alternates: { languages: localeAlternates('/legal/disclaimer') } },
     { url: `${siteUrl}/${locale}/legal/privacy-policy`, priority: 0.5, changeFrequency: 'monthly' as const, alternates: { languages: localeAlternates('/legal/privacy-policy') } },
