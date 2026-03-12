@@ -17,9 +17,6 @@ export function SiteHeader({ locale }: { locale: Locale }) {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/admin/login" className="hidden rounded-full border border-white/10 bg-surface-900 px-4 py-2 text-sm font-medium text-stone-200 hover:border-brand-500/50 hover:text-brand-300 lg:inline-flex">
-              {t({ th: '后台', en: 'Admin', zh: '后台' }, locale)}
-            </Link>
             <LanguageSwitcher locale={locale} />
           </div>
         </div>

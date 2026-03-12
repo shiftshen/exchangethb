@@ -7,7 +7,6 @@ export const navigation: NavItem[] = [
   { href: '/crypto', label: { th: 'คริปโตเป็นบาท', en: 'Crypto to THB', zh: '加密换泰铢' } },
   { href: '/cash', label: { th: 'เงินสด/ฟอเร็กซ์เป็นบาท', en: 'Cash / FX to THB', zh: '现金换泰铢' } },
   { href: '/legal/methodology', label: { th: 'วิธีการ', en: 'Methodology', zh: '方法论' } },
-  { href: '/admin/login', label: { th: 'ผู้ดูแล', en: 'Admin', zh: '后台' } },
 ];
 
 export function isLocale(value: string): value is Locale {

@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { appendAuditLog } from '@/lib/audit-log';
 import { adminCookieName, createSession, verifyAdminPassword } from '@/lib/auth';
 
+function adminRedirectUrl(path: string, request: NextRequest) {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || request.url;
+  return new URL(path, base);
+}
+
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const email = String(formData.get('email') || '').trim();
@@ -13,10 +18,10 @@ export async function POST(request: NextRequest) {
 
   if (email !== validEmail || !passwordOk) {
     await appendAuditLog({ actor: email || 'unknown', action: 'admin.login.failed', target: 'admin.auth', ip, note: 'Invalid credentials' });
-    return NextResponse.redirect(new URL('/admin/login?error=invalid', request.url));
+    return NextResponse.redirect(adminRedirectUrl('/admin/login?error=invalid', request));
   }
 
-  const response = NextResponse.redirect(new URL('/admin/dashboard', request.url));
+  const response = NextResponse.redirect(adminRedirectUrl('/admin/dashboard', request));
   response.cookies.set(adminCookieName, createSession(email), {
     httpOnly: true,
     sameSite: 'lax',
