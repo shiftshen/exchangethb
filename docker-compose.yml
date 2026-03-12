@@ -1,17 +1,19 @@
 services:
   web:
-    image: node:20-alpine
-    working_dir: /app
-    command: sh -c "npm install --include=dev && npm run build && npm run start"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh ./scripts/docker-web-entrypoint.sh
     ports:
       - "3000:3000"
-    volumes:
-      - ./:/app
     env_file:
       - .env
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    init: true
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:3000/api/health || exit 1"]
@@ -19,18 +21,19 @@ services:
       timeout: 5s
       retries: 5
   worker:
-    image: node:20-alpine
-    working_dir: /app
-    command: sh -c "npm install --include=dev && npx -y tsx worker/index.ts"
-    volumes:
-      - ./:/app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh ./scripts/docker-worker-entrypoint.sh
     env_file:
       - .env
     depends_on:
-      - postgres
-      - redis
-    profiles:
-      - worker
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    init: true
+    restart: unless-stopped
   postgres:
     image: postgres:16-alpine
     environment:

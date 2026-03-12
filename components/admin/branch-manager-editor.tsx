@@ -42,7 +42,7 @@ export function BranchManagerEditor({ initialConfig, branches }: { initialConfig
       body: JSON.stringify({ ...config, legal: { updatedAt: new Date().toISOString() } }),
     });
     setSaving(false);
-    setMessage(response.ok ? 'Saved.' : 'Save failed.');
+    setMessage(response.ok ? '已保存。' : '保存失败。');
   }
 
   return (
@@ -55,20 +55,32 @@ export function BranchManagerEditor({ initialConfig, branches }: { initialConfig
               <h3 className="font-semibold">{branch.providerSlug} · {branch.id}</h3>
               <label className="flex items-center gap-2 text-sm">
                 <input type="checkbox" checked={override.isVisible ?? true} onChange={(event) => setConfig({ ...config, branchOverrides: { ...config.branchOverrides, [branch.id]: { ...override, isVisible: event.target.checked } } })} />
-                visible
+                前台可见
               </label>
             </div>
             <div className="mt-3 grid gap-3 md:grid-cols-2">
-              <input className="rounded-xl border border-stone-300 px-3 py-2 text-sm" value={override.name ?? branch.name} onChange={(event) => setConfig({ ...config, branchOverrides: { ...config.branchOverrides, [branch.id]: { ...override, name: event.target.value } } })} />
-              <input className="rounded-xl border border-stone-300 px-3 py-2 text-sm" value={override.address ?? branch.address} onChange={(event) => setConfig({ ...config, branchOverrides: { ...config.branchOverrides, [branch.id]: { ...override, address: event.target.value } } })} />
-              <input className="rounded-xl border border-stone-300 px-3 py-2 text-sm" value={override.hours ?? branch.hours} onChange={(event) => setConfig({ ...config, branchOverrides: { ...config.branchOverrides, [branch.id]: { ...override, hours: event.target.value } } })} />
-              <input className="rounded-xl border border-stone-300 px-3 py-2 text-sm" value={override.mapsUrl ?? branch.mapsUrl} onChange={(event) => setConfig({ ...config, branchOverrides: { ...config.branchOverrides, [branch.id]: { ...override, mapsUrl: event.target.value } } })} />
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-stone-700">门店名称</label>
+                <input className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm" value={override.name ?? branch.name} onChange={(event) => setConfig({ ...config, branchOverrides: { ...config.branchOverrides, [branch.id]: { ...override, name: event.target.value } } })} />
+              </div>
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-stone-700">门店地址</label>
+                <input className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm" value={override.address ?? branch.address} onChange={(event) => setConfig({ ...config, branchOverrides: { ...config.branchOverrides, [branch.id]: { ...override, address: event.target.value } } })} />
+              </div>
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-stone-700">营业时间</label>
+                <input className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm" value={override.hours ?? branch.hours} onChange={(event) => setConfig({ ...config, branchOverrides: { ...config.branchOverrides, [branch.id]: { ...override, hours: event.target.value } } })} />
+              </div>
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-stone-700">地图或参考链接</label>
+                <input className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm" value={override.mapsUrl ?? branch.mapsUrl} onChange={(event) => setConfig({ ...config, branchOverrides: { ...config.branchOverrides, [branch.id]: { ...override, mapsUrl: event.target.value } } })} />
+              </div>
             </div>
           </div>
         );
       })}
       <div className="flex items-center gap-3">
-        <button onClick={save} disabled={saving} className="rounded-full bg-brand-700 px-5 py-3 text-sm font-medium text-white">{saving ? 'Working...' : 'Save branches'}</button>
+        <button onClick={save} disabled={saving} className="rounded-full bg-brand-700 px-5 py-3 text-sm font-medium text-white">{saving ? '保存中...' : '保存门店资料'}</button>
         {message ? <span className="text-sm text-stone-600">{message}</span> : null}
       </div>
     </div>

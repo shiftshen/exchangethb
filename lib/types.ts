@@ -44,6 +44,7 @@ export interface CashBranch {
   hours: string;
   isOpen: boolean;
   distanceKm: number;
+  locationPrecision?: 'exact' | 'address' | 'reference';
 }
 export interface CashRate {
   branchId: string;

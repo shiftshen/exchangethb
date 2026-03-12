@@ -14,8 +14,8 @@ const localeMeta = {
     description: 'เปรียบเทียบ Crypto → THB และ Cash / FX → THB ด้วยข้อมูลแหล่งที่มาแบบโปร่งใส',
   },
   en: {
-    title: 'Compare Routes Into THB',
-    description: 'Compare Crypto → THB and Cash / FX → THB with transparent source and fallback states.',
+    title: 'Thailand Crypto and Cash Exchange Comparison',
+    description: 'Compare crypto-to-THB and cash-to-THB routes for travelers, expats, and international users with transparent source states.',
   },
   zh: {
     title: '比较换入 THB 路径',
@@ -39,6 +39,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       description: m.description,
       url: withLocalePath(locale),
     },
+    keywords: locale === 'en'
+      ? ['Thailand exchange rates', 'crypto to THB', 'cash to THB', 'Bangkok money changer', 'THB comparison']
+      : undefined,
     twitter: {
       title: m.title,
       description: m.description,
@@ -54,6 +57,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
 
   return (
     <>
+      <Script id="locale-html-lang" strategy="beforeInteractive">{`document.documentElement.lang = ${JSON.stringify(locale)};`}</Script>
       <SiteHeader locale={locale} />
       <main className="container-shell py-10">{children}</main>
       <SiteFooter locale={locale} />

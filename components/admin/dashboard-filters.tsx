@@ -52,7 +52,7 @@ export function HealthStatusFilters({ statusFilter, criticalOnly }: { statusFilt
     <div className="mt-4 flex flex-wrap gap-2">
       {['all', 'healthy', 'degraded', 'down'].map((status) => (
         <button key={status} type="button" onClick={() => applyFilters(status, criticalOnly)} className={`rounded-full px-3 py-1 text-xs font-medium ${filterClass(statusFilter === status)}`}>
-          {status}
+          {status === 'all' ? '全部' : status === 'healthy' ? '正常' : status === 'degraded' ? '降级' : '故障'}
         </button>
       ))}
     </div>
@@ -64,8 +64,8 @@ export function AlertScopeFilters({ statusFilter, criticalOnly }: { statusFilter
   const filterClass = (active: boolean) => active ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700';
   return (
     <div className="mt-4 flex flex-wrap gap-2">
-      <button type="button" onClick={() => applyFilters(statusFilter, false)} className={`rounded-full px-3 py-1 text-xs font-medium ${filterClass(!criticalOnly)}`}>all alerts</button>
-      <button type="button" onClick={() => applyFilters(statusFilter, true)} className={`rounded-full px-3 py-1 text-xs font-medium ${filterClass(criticalOnly)}`}>critical only</button>
+      <button type="button" onClick={() => applyFilters(statusFilter, false)} className={`rounded-full px-3 py-1 text-xs font-medium ${filterClass(!criticalOnly)}`}>全部异常</button>
+      <button type="button" onClick={() => applyFilters(statusFilter, true)} className={`rounded-full px-3 py-1 text-xs font-medium ${filterClass(criticalOnly)}`}>仅严重异常</button>
     </div>
   );
 }

@@ -1,10 +1,8 @@
-import { promises as fs } from 'fs';
-import path from 'path';
 import { compareCashLive } from '@/lib/cash-live';
+import { readCashCache } from '@/lib/cash-cache-store';
 import { readAdminConfig } from '@/lib/content-store';
 import { CurrencyCode } from '@/lib/types';
 
-const cachePath = path.join(process.cwd(), 'content', 'cash-scrape-cache.json');
 const currencies: CurrencyCode[] = ['USD', 'CNY', 'EUR', 'JPY', 'GBP'];
 const timeRanges = ['1h', '24h', '7d', 'all'] as const;
 
@@ -48,12 +46,27 @@ export interface AdminCashAlert {
   observedAt: string | null;
 }
 
+export interface AdminCashInfoNote {
+  provider: string;
+  message: string;
+  observedAt: string | null;
+}
+
+function isInformationalCashNote(note: string) {
+  const lower = note.toLowerCase();
+  return (
+    lower.startsWith('parsed ') ||
+    lower.includes('latest branch rate update marker') ||
+    lower.includes('buy side is derived from validated fallback spread model')
+  );
+}
+
 export async function getAdminCashHealth(options?: { range?: string }) {
   const adminConfig = await readAdminConfig();
   const range = timeRanges.includes((options?.range || 'all') as CashHealthRange) ? (options?.range || 'all') as CashHealthRange : 'all';
   const rangeMinutes = readRangeMinutes(range);
   const cutoffMs = rangeMinutes === null ? null : Date.now() - rangeMinutes * 60 * 1000;
-  const compareResults = await Promise.all(currencies.map((currency) => compareCashLive({ currency, amount: 1000, maxDistanceKm: 100 })));
+  const compareResults = await Promise.all(currencies.map((currency) => compareCashLive({ currency, amount: 1000, maxDistanceKm: 100, includeUnstableProviders: true })));
   const providerMap = new Map<string, { score: number; reasons: Set<string>; currencies: Set<CurrencyCode> }>();
   for (let index = 0; index < compareResults.length; index += 1) {
     const currency = currencies[index];
@@ -77,19 +90,21 @@ export async function getAdminCashHealth(options?: { range?: string }) {
     }))
     .sort((a, b) => statusScore(b.status) - statusScore(a.status) || a.providerSlug.localeCompare(b.providerSlug));
 
-  let cacheJson: { generatedAt?: string; results?: Array<{ provider?: string; ok?: boolean; notes?: string[]; observedAt?: string }> } = {};
-  try {
-    cacheJson = JSON.parse(await fs.readFile(cachePath, 'utf8'));
-  } catch {
-    cacheJson = {};
-  }
+  const cacheJson = await readCashCache();
   const providerObservedAtMap = new Map<string, string>();
   const providerAlertCountMap = new Map<string, number>();
   const criticalProviderSet = new Set<string>();
+  const infoNotes: AdminCashInfoNote[] = [];
   for (const item of cacheJson.results || []) {
     if (item.provider && item.observedAt) providerObservedAtMap.set(item.provider, item.observedAt);
-    if (item.provider) providerAlertCountMap.set(item.provider, (providerAlertCountMap.get(item.provider) || 0) + (item.notes?.length || 0));
     if (item.provider && item.ok === false) criticalProviderSet.add(item.provider);
+    for (const note of item.notes || []) {
+      if (isInformationalCashNote(note)) {
+        infoNotes.push({ provider: item.provider || 'unknown', message: note, observedAt: item.observedAt || null });
+      } else if (item.provider) {
+        providerAlertCountMap.set(item.provider, (providerAlertCountMap.get(item.provider) || 0) + 1);
+      }
+    }
   }
   const alerts = (cacheJson.results || []).flatMap((item) => {
     const notes = item.notes || [];
@@ -97,7 +112,9 @@ export async function getAdminCashHealth(options?: { range?: string }) {
     if (!notes.length) {
       return item.ok === false ? [{ provider: item.provider || 'unknown', message: 'scrape_failed_without_notes', critical: true, observedAt }] : [];
     }
-    return notes.map((note) => ({ provider: item.provider || 'unknown', message: note, critical: item.ok === false, observedAt }));
+    return notes
+      .filter((note) => !isInformationalCashNote(note))
+      .map((note) => ({ provider: item.provider || 'unknown', message: note, critical: item.ok === false, observedAt }));
   });
   const providerHealth: AdminCashHealthRow[] = providerHealthBase
     .map((item) => {
@@ -133,10 +150,17 @@ export async function getAdminCashHealth(options?: { range?: string }) {
     const ts = Date.parse(item.observedAt);
     return Number.isFinite(ts) && ts >= cutoffMs;
   });
+  const filteredInfoNotes = infoNotes.filter((item) => {
+    if (cutoffMs === null) return true;
+    if (!item.observedAt) return false;
+    const ts = Date.parse(item.observedAt);
+    return Number.isFinite(ts) && ts >= cutoffMs;
+  });
   return {
     generatedAt: cacheJson.generatedAt || null,
     providerHealth,
     alerts: filteredAlerts,
+    infoNotes: filteredInfoNotes,
     range,
     anyCacheStale: compareResults.some((result) => result.cacheStale),
     newestCacheAgeMinutes: compareResults.reduce<number | null>((best, row) => {

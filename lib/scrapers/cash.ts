@@ -28,29 +28,6 @@ function stripText(html: string) {
     .trim();
 }
 
-function extractVasuRates(html: string): ScrapedCashRate[] {
-  const observedAt = new Date().toISOString();
-  const text = stripText(html);
-  const output: ScrapedCashRate[] = [];
-
-  for (const match of text.matchAll(/USD\s+(100|50|5-20|1-2)\s+(\d+\.\d{2,4})\s+(\d+\.\d{2,4})/gi)) {
-    output.push({ providerSlug: 'vasu', currency: 'USD', denomination: match[1], buyRate: Number(match[2]), sellRate: Number(match[3]), observedAt, sourceUrl: 'https://www.vasuexchange.com/' });
-  }
-  for (const match of text.matchAll(/(?:EURO|EUR)\s+(100-500|50|5-20)\s+(\d+\.\d{2,4})\s+(\d+\.\d{2,4})/gi)) {
-    output.push({ providerSlug: 'vasu', currency: 'EUR', denomination: match[1], buyRate: Number(match[2]), sellRate: Number(match[3]), observedAt, sourceUrl: 'https://www.vasuexchange.com/' });
-  }
-  for (const match of text.matchAll(/GBP\s+(50|5-20)\s+(\d+\.\d{2,4})\s+(\d+\.\d{2,4})/gi)) {
-    output.push({ providerSlug: 'vasu', currency: 'GBP', denomination: match[1], buyRate: Number(match[2]), sellRate: Number(match[3]), observedAt, sourceUrl: 'https://www.vasuexchange.com/' });
-  }
-  for (const match of text.matchAll(/JPY\s+(\d+\.\d{4})\s+(\d+\.\d{4})/gi)) {
-    output.push({ providerSlug: 'vasu', currency: 'JPY', denomination: '10000-1000', buyRate: Number(match[1]), sellRate: Number(match[2]), observedAt, sourceUrl: 'https://www.vasuexchange.com/' });
-  }
-  for (const match of text.matchAll(/CNY\s+(\d+\.\d{2,4})\s+(\d+\.\d{2,4})/gi)) {
-    output.push({ providerSlug: 'vasu', currency: 'CNY', denomination: 'notes', buyRate: Number(match[1]), sellRate: Number(match[2]), observedAt, sourceUrl: 'https://www.vasuexchange.com/' });
-  }
-  return output;
-}
-
 function extractRatchadaRates(html: string): ScrapedCashRate[] {
   const observedAt = new Date().toISOString();
   const rows = [...html.matchAll(/id="(USD|EUR|GBP|JPY|CNY)"[^>]*>\s*<td[^>]*>([^<]+)<\/td>\s*<td[^>]*>(\d+\.\d{2,4})<\/td>\s*<td[^>]*>(\d+\.\d{2,4})<\/td>/gi)];
@@ -65,13 +42,60 @@ function extractRatchadaRates(html: string): ScrapedCashRate[] {
   }));
 }
 
+function extractSiaRates(html: string): ScrapedCashRate[] {
+  const observedAt = new Date().toISOString();
+  const supported = new Set<CurrencyCode>(['USD', 'CNY', 'EUR', 'JPY', 'GBP']);
+  const rows = [...html.matchAll(/<tr class="list-(?:over|none)">[\s\S]*?<td[^>]*align="center">([^<]+)<\/td>[\s\S]*?<td[^>]*align="center">([^<]+)<\/td>[\s\S]*?<td[^>]*class="show-rate"[^>]*>([^<]+)<\/td>[\s\S]*?<td[^>]*class="show-rate"[^>]*>([^<]+)<\/td>[\s\S]*?<\/tr>/gi)];
+  const output: ScrapedCashRate[] = [];
+
+  for (const match of rows) {
+    const currencyLabel = match[2].replace(/\s+/g, ' ').trim();
+    const symbol = (currencyLabel.match(/USD|CNY|EUR|JPY|GBP/) || [])[0] as CurrencyCode | undefined;
+    if (!symbol || !supported.has(symbol)) continue;
+    const buyRate = Number(match[3].trim());
+    const sellRaw = match[4].trim();
+    const sellRate = sellRaw === '-' ? 0 : Number(sellRaw);
+    if (!Number.isFinite(buyRate) || buyRate <= 0) continue;
+    output.push({
+      providerSlug: 'sia',
+      currency: symbol,
+      denomination: currencyLabel.replace(symbol, '').replace('/', '').trim() || 'notes',
+      buyRate,
+      sellRate: Number.isFinite(sellRate) ? sellRate : 0,
+      observedAt,
+      sourceUrl: 'http://www.siamoneyexchange.com/rate/',
+      sourceKind: 'live',
+    });
+  }
+
+  return output;
+}
+
 async function fetchHtml(url: string) {
-  const response = await fetch(url, {
+  const response = await fetchWithTimeout(url, {
     headers: { 'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0' },
     cache: 'no-store',
   });
   if (!response.ok) throw new Error(`Failed ${url}: ${response.status}`);
   return response.text();
+}
+
+async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs = 15000) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, {
+      ...init,
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error(`Timeout ${url} after ${timeoutMs}ms`);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function extractSuperrichThailandRates(payload: unknown): ScrapedCashRate[] {
@@ -102,16 +126,6 @@ function extractSuperrichThailandRates(payload: unknown): ScrapedCashRate[] {
   return output;
 }
 
-export async function scrapeVasu(): Promise<ScrapeResult> {
-  try {
-    const html = await fetchHtml('https://www.vasuexchange.com/');
-    const rates = extractVasuRates(html);
-    return { provider: 'vasu', ok: rates.length > 0, observedAt: new Date().toISOString(), notes: [`Parsed ${rates.length} rate rows from official page.`], rates };
-  } catch (error) {
-    return { provider: 'vasu', ok: false, observedAt: new Date().toISOString(), notes: [error instanceof Error ? error.message : 'Unknown scrape error'] };
-  }
-}
-
 export async function scrapeRatchada(): Promise<ScrapeResult> {
   try {
     const html = await fetchHtml('https://www.ratchadaexchange.com/');
@@ -124,7 +138,7 @@ export async function scrapeRatchada(): Promise<ScrapeResult> {
 
 export async function scrapeSuperrichThailand(): Promise<ScrapeResult> {
   try {
-    const response = await fetch('https://www.superrichthailand.com/api/v1/rates', {
+    const response = await fetchWithTimeout('https://www.superrichthailand.com/api/v1/rates', {
       headers: {
         'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0',
         authorization: 'Basic c3VwZXJyaWNoVGg6aFRoY2lycmVwdXM=',
@@ -140,6 +154,22 @@ export async function scrapeSuperrichThailand(): Promise<ScrapeResult> {
   }
 }
 
+export async function scrapeSia(): Promise<ScrapeResult> {
+  try {
+    const html = await fetchHtml('http://www.siamoneyexchange.com/rate/');
+    const rates = extractSiaRates(html);
+    return {
+      provider: 'sia',
+      ok: rates.length > 0,
+      observedAt: new Date().toISOString(),
+      notes: [`Parsed ${rates.length} rate rows from official rate page over HTTP.`],
+      rates,
+    };
+  } catch (error) {
+    return { provider: 'sia', ok: false, observedAt: new Date().toISOString(), notes: [error instanceof Error ? error.message : 'Unknown scrape error'] };
+  }
+}
+
 export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
   const observedAt = new Date().toISOString();
   const supported = new Set<CurrencyCode>(['USD', 'CNY', 'EUR', 'JPY', 'GBP']);
@@ -152,7 +182,7 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
   };
   const normalizeDenomination = (value: string) => value.replace(/\s+/g, '').replace(/–/g, '-').toUpperCase();
   try {
-    const guestTokenResponse = await fetch('https://superrichrate2.ztidev.com/superRich/getGuestToken', {
+    const guestTokenResponse = await fetchWithTimeout('https://superrichrate2.ztidev.com/superRich/getGuestToken', {
       headers: { 'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0' },
       cache: 'no-store',
     });
@@ -174,7 +204,7 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
         notes: ['Guest token endpoint returned empty token.'],
       };
     }
-    const locationsResponse = await fetch('https://superrichrate2.ztidev.com/superRich/getLocationsRate?isBooking=0&page=0&sizeContents=100', {
+    const locationsResponse = await fetchWithTimeout('https://superrichrate2.ztidev.com/superRich/getLocationsRate?isBooking=0&page=0&sizeContents=100', {
       headers: {
         'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0',
         token,
@@ -183,7 +213,7 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
     });
     const bookingPages: Array<{ data?: { content?: Array<{ rateUpdateDate?: number; updateDate?: number; createDate?: number; currencyList?: Array<{ currencyCode?: string; denominationList?: Array<{ denom?: string; sell?: string }> }> }> } }> = [];
     for (let page = 0; page < 6; page += 1) {
-      const bookingsResponse = await fetch(`https://superrichrate2.ztidev.com/superRich/getBooking?page=${page}&sizeContents=100`, {
+      const bookingsResponse = await fetchWithTimeout(`https://superrichrate2.ztidev.com/superRich/getBooking?page=${page}&sizeContents=100`, {
         headers: {
           'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0',
           token,
@@ -295,9 +325,5 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
 }
 
 export async function runCashScrapers(): Promise<ScrapeResult[]> {
-  const results = await Promise.all([scrapeVasu(), scrapeRatchada(), scrapeSuperrichThailand(), scrapeSuperrich1965()]);
-  return [
-    ...results,
-    { provider: 'sia', ok: false, observedAt: new Date().toISOString(), notes: ['Public website has certificate mismatch; keep official/manual review fallback for now.'] },
-  ];
+  return Promise.all([scrapeRatchada(), scrapeSuperrichThailand(), scrapeSuperrich1965(), scrapeSia()]);
 }

@@ -1,7 +1,10 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import { Prisma } from '@prisma/client';
+import { z } from 'zod';
 import { AffiliateLink, ExchangeSlug } from '@/lib/types';
 import { cashBranches, exchanges } from '@/data/site';
+import { getPrismaClient } from '@/lib/prisma';
 
 const storePath = path.join(process.cwd(), 'content', 'admin-config.json');
 
@@ -57,6 +60,54 @@ function defaultConfig(): AdminConfigStore {
   };
 }
 
+const copyGroupSchema = z.object({
+  th: z.string(),
+  en: z.string(),
+  zh: z.string(),
+});
+
+const affiliateLinkSchema = z.object({
+  status: z.enum(['reward_available', 'campaign_only', 'official_only']),
+  trackingUrl: z.string().optional(),
+  officialUrl: z.string(),
+  disclosure: copyGroupSchema,
+  startAt: z.string().optional(),
+  endAt: z.string().optional(),
+});
+
+const exchangeProfileSchema = z.object({
+  recommended: z.boolean(),
+  tags: z.array(z.string()),
+  riskNote: z.string(),
+});
+
+const branchOverrideSchema = z.object({
+  name: z.string().optional(),
+  address: z.string().optional(),
+  hours: z.string().optional(),
+  mapsUrl: z.string().optional(),
+  isVisible: z.boolean().optional(),
+});
+
+const adminConfigSchema = z.object({
+  affiliateLinks: z.record(z.string(), affiliateLinkSchema).default({}),
+  feeOverrides: z.record(z.string(), z.number()).default({}),
+  exchangeProfiles: z.record(z.string(), exchangeProfileSchema).default({}),
+  branchOverrides: z.record(z.string(), branchOverrideSchema).default({}),
+  scrapeReview: z.object({
+    hiddenAlerts: z.array(z.string()).default([]),
+    providerModes: z.record(z.string(), z.enum(['auto', 'force_fallback', 'force_live'])).default({}),
+    reviewNotes: z.record(z.string(), z.string()).default({}),
+  }).default({
+    hiddenAlerts: [],
+    providerModes: {},
+    reviewNotes: {},
+  }),
+  legal: z.object({
+    updatedAt: z.string(),
+  }).default({ updatedAt: new Date().toISOString() }),
+});
+
 function normalizeConfig(input: Partial<AdminConfigStore>): AdminConfigStore {
   const base = defaultConfig();
   return {
@@ -75,15 +126,48 @@ function normalizeConfig(input: Partial<AdminConfigStore>): AdminConfigStore {
   };
 }
 
+export function parseAdminConfig(input: unknown): AdminConfigStore {
+  const parsed = adminConfigSchema.parse(input);
+  return normalizeConfig(parsed);
+}
+
+function toJsonValue<T>(value: T): Prisma.InputJsonValue {
+  return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
+}
+
 export async function readAdminConfig(): Promise<AdminConfigStore> {
+  const prisma = getPrismaClient();
+  if (prisma) {
+    try {
+      const state = await prisma.adminConfigState.findUnique({ where: { key: 'global' } });
+      if (state?.value) {
+        return parseAdminConfig(state.value);
+      }
+    } catch {
+      // Fall back to file storage when DB is unavailable.
+    }
+  }
   try {
     const raw = await fs.readFile(storePath, 'utf8');
-    return normalizeConfig(JSON.parse(raw) as Partial<AdminConfigStore>);
+    return parseAdminConfig(JSON.parse(raw));
   } catch {
     return defaultConfig();
   }
 }
 
 export async function writeAdminConfig(config: AdminConfigStore) {
-  await fs.writeFile(storePath, JSON.stringify(normalizeConfig(config), null, 2));
+  const normalized = parseAdminConfig(config);
+  const prisma = getPrismaClient();
+  if (prisma) {
+    try {
+      await prisma.adminConfigState.upsert({
+        where: { key: 'global' },
+        update: { value: toJsonValue(normalized) },
+        create: { key: 'global', value: toJsonValue(normalized) },
+      });
+    } catch {
+      // Fall through to file persistence.
+    }
+  }
+  await fs.writeFile(storePath, JSON.stringify(normalized, null, 2));
 }

@@ -33,10 +33,10 @@ export const exchanges: ExchangeRecord[] = [
   },
   {
     slug: 'bitkub', name: 'Bitkub', license: 'Thai SEC digital asset exchange license',
-    summary: { th: 'แพลตฟอร์มยอดนิยมในไทย เหมาะกับการแปลง THB แบบ local-first', en: 'Popular Thai exchange with strong local THB support.', zh: '泰国本地化体验较强，适合 THB 场景。' },
+    summary: { th: 'แพลตฟอร์มซื้อขายสินทรัพย์ดิจิทัลที่รองรับเงินบาทและมีการบริการภาษาไทยอย่างชัดเจน', en: 'Digital asset exchange with direct THB support and Thai-language operations.', zh: '支持泰铢交易并提供完整泰语服务的数字资产平台。' },
     strengths: [
-      { th: 'รองรับผู้ใช้ไทยดี', en: 'Strong THB-native experience', zh: '本地 THB 体验强' },
-      { th: 'เหมาะกับการ导流首发', en: 'Good fit for launch-phase referrals', zh: '适合首发导流' },
+      { th: 'รองรับการฝากถอนเงินบาทและงานบริการฝั่งไทย', en: 'Supports THB deposits, withdrawals, and Thai-side operations', zh: '支持泰铢充提与本地化运营' },
+      { th: 'มีศูนย์ช่วยเหลือและช่องทางประกาศที่อัปเดตสม่ำเสมอ', en: 'Maintains active support and announcement channels', zh: '帮助中心和公告渠道更新较稳定' },
     ],
     cautions: [{ th: 'บางคู่ลึกน้อยกว่า', en: 'Some markets can be thinner', zh: '部分交易对深度较薄' }],
     affiliate: { status: 'official_only', officialUrl: 'https://www.bitkub.com', disclosure: { th: 'ลิงก์ทางการหรือโปรโมชันอาจอัปเดตได้', en: 'Official or campaign links may be updated.', zh: '官方或活动链接可能更新。' } },
@@ -47,9 +47,9 @@ export const exchanges: ExchangeRecord[] = [
   },
   {
     slug: 'upbit-thailand', name: 'Upbit Thailand', license: 'Thai SEC digital asset exchange license',
-    summary: { th: 'ใช้ข้อมูล quotation/orderbook ที่มีมาตรฐานสม่ำเสมอ', en: 'Consistent quotation and orderbook data with strong market structure.', zh: '报价和订单簿结构稳定，适合标准化比较。' },
-    strengths: [{ th: 'ข้อมูลตลาดเป็นระเบียบ', en: 'Well-structured market data', zh: '市场数据结构规范' }],
-    cautions: [{ th: 'ข้อมูล referral สาธารณะยังไม่ชัด', en: 'Public referral terms are less clear', zh: '公开返佣信息不够明确' }],
+    summary: { th: 'แพลตฟอร์มที่มีหน้าตลาดและโครงสร้างคู่เทรดแบบมาตรฐาน เหมาะกับการเทียบราคา THB หลัก', en: 'Exchange with standardized market pages and pair structure that is straightforward to compare on core THB markets.', zh: '市场页和交易对结构较标准，适合做主流 THB 市场对比。' },
+    strengths: [{ th: 'โครงสร้างตลาดและหน้าคู่เทรดอ่านง่าย', en: 'Clear market structure and pair pages', zh: '市场结构和交易对页面清晰' }],
+    cautions: [{ th: 'ข้อมูลโปรโมชันหรือ referral สาธารณะมีไม่มาก', en: 'Public promotion or referral information is limited', zh: '公开促销或返佣信息较少' }],
     affiliate: { status: 'official_only', officialUrl: 'https://th.upbit.com', disclosure: { th: 'ใช้ลิงก์ทางการเป็นค่าเริ่มต้น', en: 'Official link used by default.', zh: '默认使用官方链接。' } },
     fee: { tradingFeePct: 0.25, thbWithdraw: 20, networks: { BTC: 0.00028, ETH: 0.0032, USDT: 1 } },
     score: { compliance: 24, feeTransparency: 13, apiQuality: 14, thbFriendliness: 13, executionQuality: 18, operations: 8 },
@@ -58,9 +58,9 @@ export const exchanges: ExchangeRecord[] = [
   },
   {
     slug: 'orbix', name: 'Orbix', license: 'Thai SEC digital asset exchange license',
-    summary: { th: 'เหมาะกับแคมเปญเฉพาะช่วง และหน้าโปรไฟล์แพลตฟอร์มแบบเน้นเนื้อหา', en: 'Useful for campaign-led discovery and editorial platform pages.', zh: '适合活动导向流量与内容型平台资料页。' },
-    strengths: [{ th: 'กิจกรรมและข้อเสนอปรับใช้ได้', en: 'Campaign-friendly operations', zh: '活动型运营更灵活' }],
-    cautions: [{ th: 'คู่และ深度บางช่วงอาจจำกัด', en: 'Pair coverage and depth can vary', zh: '部分时段交易对和深度有限' }],
+    summary: { th: 'แพลตฟอร์มไทยที่มีหน้าสินค้า เว็บข้อมูลบริษัท และช่องทางซัพพอร์ตครบค่อนข้างชัดเจน', en: 'Thai exchange with clearly published product pages, company information, and support channels.', zh: '官网公开了较完整的产品页、公司信息和支持渠道的泰国交易平台。' },
+    strengths: [{ th: 'มีช่องทางช่วยเหลือและข้อมูลบริษัทบนเว็บอย่างชัดเจน', en: 'Publishes visible support and company information on the website', zh: '官网可见支持渠道和公司信息' }],
+    cautions: [{ th: 'จำนวนคู่เทรดและความลึกบางช่วงอาจจำกัด', en: 'Pair coverage and depth can still vary by period', zh: '交易对覆盖和深度仍可能随时段变化' }],
     affiliate: { status: 'campaign_only', officialUrl: 'https://www.orbixtrade.com', disclosure: { th: 'หากแคมเปญหมดอายุ ระบบจะแสดงลิงก์ทางการแทน', en: 'Expired campaigns fall back to the official link.', zh: '活动过期后将回退到官方链接。' } },
     fee: { tradingFeePct: 0.2, thbWithdraw: 15, networks: { BTC: 0.00024, ETH: 0.0028, USDT: 0.8 } },
     score: { compliance: 23, feeTransparency: 12, apiQuality: 12, thbFriendliness: 13, executionQuality: 16, operations: 8 },
@@ -81,28 +81,27 @@ export const marketSnapshots: MarketSnapshot[] = [
 ];
 
 export const cashProviders: CashProvider[] = [
-  { slug: 'superrich-1965', name: 'SuperRich 1965', summary: { th: 'ผู้ให้บริการแลกเงินชื่อดังแบบสาขา', en: 'Well-known exchange provider with branch-level rates.', zh: '知名换汇品牌，支持门店级汇率。' }, officialUrl: 'https://www.superrich1965.com', affiliate: { status: 'official_only', officialUrl: 'https://www.superrich1965.com', disclosure: { th: 'ข้อมูลอาจต่างกันตามสาขาและเวลาจริง', en: 'Rates can vary by branch and time.', zh: '汇率可能因门店与时间不同而变化。' } } },
-  { slug: 'superrich-thailand', name: 'SuperRich Thailand', summary: { th: 'แบรนด์ยอดนิยมในกรุงเทพสำหรับเงินสดต่างประเทศ', en: 'Popular Bangkok cash exchange brand.', zh: '曼谷常见现金换汇品牌。' }, officialUrl: 'https://www.superrichthailand.com', affiliate: { status: 'official_only', officialUrl: 'https://www.superrichthailand.com', disclosure: { th: 'ใช้ลิงก์ทางการเท่านั้น', en: 'Official links only.', zh: '仅使用官方链接。' } } },
-  { slug: 'vasu', name: 'Vasu Exchange', summary: { th: 'แหล่งอ้างอิงอัตราแลกเปลี่ยนคุณภาพสูงในกรุงเทพ', en: 'High-signal Bangkok source for exchange rates.', zh: '曼谷高质量汇率参考来源。' }, officialUrl: 'https://www.vasuexchange.com', affiliate: { status: 'official_only', officialUrl: 'https://www.vasuexchange.com', disclosure: { th: 'อัตราอาจเปลี่ยนระหว่างวัน', en: 'Rates may change intraday.', zh: '汇率可能日内变化。' } } },
-  { slug: 'sia', name: 'SIA Money Exchange', summary: { th: 'ตัวเลือกเสริมสำหรับเทียบเรตรอบเมือง', en: 'Supplementary Bangkok option for rate comparison.', zh: '可作为曼谷范围内的补充比价来源。' }, officialUrl: 'https://www.siamoneyexchange.com', affiliate: { status: 'official_only', officialUrl: 'https://www.siamoneyexchange.com', disclosure: { th: 'โปรดตรวจสอบเรทล่าสุดจากผู้ให้บริการ', en: 'Please verify final rates with the provider.', zh: '请以门店最终汇率为准。' } } },
-  { slug: 'ratchada', name: 'Ratchada Exchange', summary: { th: 'ผู้ให้บริการเดี่ยวที่มีคุณภาพข้อมูลค่อนข้างนิ่ง', en: 'Single-store provider with stable public rate data.', zh: '单店型来源，公开汇率数据较稳定。' }, officialUrl: 'https://www.ratchadaexchange.com', affiliate: { status: 'official_only', officialUrl: 'https://www.ratchadaexchange.com', disclosure: { th: 'ลิงก์นี้พาไปยังเว็บไซต์ทางการ', en: 'This link goes to the official website.', zh: '该链接跳转至官网。' } } }
+  { slug: 'superrich-1965', name: 'SuperRich 1965', summary: { th: 'ผู้ให้บริการแลกเงินรายใหญ่ที่เผยแพร่อัตราสำหรับลูกค้าทั่วไปผ่าน guest feed', en: 'Large money changer whose public guest feed exposes customer-facing rates.', zh: '通过公开 guest feed 提供面向客户汇率的大型换汇品牌。' }, officialUrl: 'https://www.superrich1965.com', affiliate: { status: 'official_only', officialUrl: 'https://www.superrich1965.com', disclosure: { th: 'ข้อมูลอาจต่างกันตามสาขาและเวลาจริง', en: 'Rates can vary by branch and time.', zh: '汇率可能因门店与时间不同而变化。' } } },
+  { slug: 'superrich-thailand', name: 'SuperRich Thailand', summary: { th: 'ผู้ให้บริการแลกเงินที่เปิดเผย API อัตราแลกเปลี่ยนสาธารณะบนเว็บไซต์ทางการ', en: 'Money changer with a public rates API exposed on its official site.', zh: '官网公开提供汇率 API 的换汇品牌。' }, officialUrl: 'https://www.superrichthailand.com', affiliate: { status: 'official_only', officialUrl: 'https://www.superrichthailand.com', disclosure: { th: 'ใช้ลิงก์ทางการเท่านั้น', en: 'Official links only.', zh: '仅使用官方链接。' } } },
+  { slug: 'sia', name: 'SIA Money Exchange', summary: { th: 'ผู้ให้บริการย่านประตูน้ำที่เผยแพร่หน้าอัตราและข้อมูลสำนักงานใหญ่บนเว็บทางการ', en: 'Pratunam-area money changer that publishes rates and headquarters details on its official website.', zh: '位于水门一带，官网公开展示汇率和总部资料的换汇商。' }, officialUrl: 'http://www.siamoneyexchange.com', affiliate: { status: 'official_only', officialUrl: 'http://www.siamoneyexchange.com', disclosure: { th: 'โปรดตรวจสอบเรทล่าสุดจากผู้ให้บริการ', en: 'Please verify final rates with the provider.', zh: '请以门店最终汇率为准。' } } },
+  { slug: 'ratchada', name: 'Ratchada Exchange', summary: { th: 'ผู้ให้บริการรายเดี่ยวที่เผยแพร่หน้าเรทและข้อมูลติดต่อเองบนเว็บไซต์ทางการ', en: 'Single-store provider publishing its own rates page and contact details on the official website.', zh: '官网自行公开汇率页和联系方式的单店型换汇商。' }, officialUrl: 'https://www.ratchadaexchange.com', affiliate: { status: 'official_only', officialUrl: 'https://www.ratchadaexchange.com', disclosure: { th: 'ลิงก์นี้พาไปยังเว็บไซต์ทางการ', en: 'This link goes to the official website.', zh: '该链接跳转至官网。' } } }
 ];
 
+export const publicCashProviderSlugs = ['superrich-thailand', 'sia', 'ratchada'] as const;
+export const publicCashProviders = cashProviders.filter((provider) => publicCashProviderSlugs.includes(provider.slug as typeof publicCashProviderSlugs[number]));
+
 export const cashBranches: CashBranch[] = [
-  { id: 'sr1965-asok', providerSlug: 'superrich-1965', name: 'SuperRich 1965 Asok', area: 'Asok', address: 'Sukhumvit Rd, Bangkok', mapsUrl: 'https://maps.google.com/?q=13.737,100.560', latitude: 13.737, longitude: 100.56, hours: '09:00-18:00', isOpen: true, distanceKm: 1.1 },
-  { id: 'sr-th-pratunam', providerSlug: 'superrich-thailand', name: 'SuperRich Thailand Pratunam', area: 'Pratunam', address: 'Ratchadamri Rd, Bangkok', mapsUrl: 'https://maps.google.com/?q=13.75,100.54', latitude: 13.75, longitude: 100.54, hours: '09:00-18:00', isOpen: true, distanceKm: 3.2 },
-  { id: 'vasu-main', providerSlug: 'vasu', name: 'Vasu Exchange Main', area: 'Nana', address: 'Sukhumvit Soi 7, Bangkok', mapsUrl: 'https://maps.google.com/?q=13.742,100.554', latitude: 13.742, longitude: 100.554, hours: '09:00-18:30', isOpen: true, distanceKm: 1.8 },
-  { id: 'sia-silom', providerSlug: 'sia', name: 'SIA Silom', area: 'Silom', address: 'Silom Rd, Bangkok', mapsUrl: 'https://maps.google.com/?q=13.728,100.531', latitude: 13.728, longitude: 100.531, hours: '10:00-18:00', isOpen: false, distanceKm: 4.7 },
-  { id: 'ratchada-main', providerSlug: 'ratchada', name: 'Ratchada Exchange', area: 'Ratchada', address: 'Ratchadaphisek Rd, Bangkok', mapsUrl: 'https://maps.google.com/?q=13.77,100.57', latitude: 13.77, longitude: 100.57, hours: '09:30-19:00', isOpen: true, distanceKm: 5.5 }
+  { id: 'sr1965-asok', providerSlug: 'superrich-1965', name: 'SuperRich 1965 Head Office', area: 'Central Bangkok', address: 'Official guest booking feed branch: Head Office (exact public walk-in address should be verified on the provider contact page).', mapsUrl: 'https://www.superrich1965.com', latitude: 13.747, longitude: 100.533, hours: 'Branch hours vary by location; verify with provider before visiting', isOpen: true, distanceKm: 1.1, locationPrecision: 'reference' },
+  { id: 'sr-th-pratunam', providerSlug: 'superrich-thailand', name: 'SuperRich Thailand Pratunam Area Reference', area: 'Pratunam', address: 'Official website identifies central Bangkok / Pratunam area operations; exact branch selection is loaded dynamically from the provider contact module.', mapsUrl: 'https://www.superrichthailand.com/#!/en/contact', latitude: 13.7504, longitude: 100.5401, hours: 'Monday-Saturday 09:00-16:30', isOpen: true, distanceKm: 3.2, locationPrecision: 'reference' },
+  { id: 'sia-hq-pratunam', providerSlug: 'sia', name: 'SIA Money Exchange HQ', area: 'Pratunam', address: '1091/156-7 Soi Petchaburi 33, New Petchaburi Rd, Makkasan, Ratchathewi, Bangkok 10400', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=1091%2F156-7%20Soi%20Petchaburi%2033%2C%20New%20Petchaburi%20Rd%2C%20Makkasan%2C%20Ratchathewi%2C%20Bangkok%2010400', latitude: 13.751234, longitude: 100.546349, hours: 'Mon-Sat 09:00-18:00, Sun closed', isOpen: true, distanceKm: 3.4, locationPrecision: 'address' },
+  { id: 'ratchada-main', providerSlug: 'ratchada', name: 'Ratchada Exchange', area: 'Huai Khwang', address: '78/13 Prachatbamphen Rd., Huai Khwang, Bangkok 10310', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=78%2F13%20Prachatbamphen%20Rd.%2C%20Huai%20Khwang%2C%20Bangkok%2010310', latitude: 13.77837, longitude: 100.577055, hours: 'Open daily 09:00-20:30', isOpen: true, distanceKm: 5.5, locationPrecision: 'address' }
 ];
 
 export const cashRates: CashRate[] = [
-  { branchId: 'sr1965-asok', currency: 'USD', denomination: '100', buyRate: 35.62, sellRate: 35.78, observedAt: '2026-03-08T00:00:00+07:00' },
-  { branchId: 'sr-th-pratunam', currency: 'USD', denomination: '100', buyRate: 35.58, sellRate: 35.75, observedAt: '2026-03-08T00:00:00+07:00' },
-  { branchId: 'vasu-main', currency: 'USD', denomination: '100', buyRate: 35.64, sellRate: 35.81, observedAt: '2026-03-08T00:00:00+07:00' },
-  { branchId: 'sia-silom', currency: 'USD', denomination: '100', buyRate: 35.51, sellRate: 35.72, observedAt: '2026-03-08T00:00:00+07:00' },
-  { branchId: 'ratchada-main', currency: 'USD', denomination: '100', buyRate: 35.57, sellRate: 35.74, observedAt: '2026-03-08T00:00:00+07:00' },
-  { branchId: 'sr1965-asok', currency: 'CNY', denomination: 'notes', buyRate: 4.89, sellRate: 5.01, observedAt: '2026-03-08T00:00:00+07:00' },
-  { branchId: 'vasu-main', currency: 'CNY', denomination: 'notes', buyRate: 4.9, sellRate: 5.02, observedAt: '2026-03-08T00:00:00+07:00' },
-  { branchId: 'ratchada-main', currency: 'CNY', denomination: 'notes', buyRate: 4.88, sellRate: 5.03, observedAt: '2026-03-08T00:00:00+07:00' }
+  { branchId: 'sr1965-asok', currency: 'USD', denomination: '100', buyRate: 31.91, sellRate: 32.07, observedAt: '2026-03-10T18:56:10+07:00' },
+  { branchId: 'sr-th-pratunam', currency: 'USD', denomination: '100', buyRate: 31.52, sellRate: 31.62, observedAt: '2026-03-10T18:56:10+07:00' },
+  { branchId: 'sia-hq-pratunam', currency: 'USD', denomination: '100', buyRate: 31.53, sellRate: 31.70, observedAt: '2026-03-10T16:02:07+07:00' },
+  { branchId: 'ratchada-main', currency: 'USD', denomination: '100', buyRate: 31.46, sellRate: 31.62, observedAt: '2026-03-10T18:56:10+07:00' },
+  { branchId: 'sr1965-asok', currency: 'CNY', denomination: 'notes', buyRate: 4.55, sellRate: 4.67, observedAt: '2026-03-10T18:56:10+07:00' },
+  { branchId: 'ratchada-main', currency: 'CNY', denomination: 'notes', buyRate: 4.58, sellRate: 4.64, observedAt: '2026-03-10T18:56:10+07:00' }
 ];

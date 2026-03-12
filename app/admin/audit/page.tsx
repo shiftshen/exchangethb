@@ -31,15 +31,15 @@ export default async function AdminAuditPage({ searchParams }: { searchParams: P
     <main className="container-shell space-y-8 py-10">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-600">Admin</p>
-          <h1 className="text-4xl font-semibold tracking-tight">Audit logs</h1>
-          <p className="mt-2 max-w-3xl text-stone-600">Search and review administrator actions, scrape operations, config updates, and rollback events.</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-600">后台</p>
+          <h1 className="text-4xl font-semibold tracking-tight">审计日志</h1>
+          <p className="mt-2 max-w-3xl text-stone-600">查询和回看管理员操作、抓取任务、配置更新以及回滚事件。</p>
         </div>
-        <Link href="/admin/dashboard#audit-logs" className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">Back dashboard</Link>
+        <Link href="/admin/dashboard#audit-logs" className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">返回后台首页</Link>
       </div>
       <div className="card p-6">
         <div className="flex flex-wrap gap-2">
-          <Link href={buildHref('', 1)} className={`rounded-full px-3 py-1 text-xs font-medium ${!action ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700'}`}>all</Link>
+          <Link href={buildHref('', 1)} className={`rounded-full px-3 py-1 text-xs font-medium ${!action ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700'}`}>全部</Link>
           {['admin.cash.refresh', 'admin.cash.rollback', 'admin.config.updated', 'admin.login.success', 'admin.login.failed'].map((item) => (
             <Link key={item} href={buildHref(item, 1)} className={`rounded-full px-3 py-1 text-xs font-medium ${action === item ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700'}`}>{item}</Link>
           ))}
@@ -48,7 +48,7 @@ export default async function AdminAuditPage({ searchParams }: { searchParams: P
           <table className="min-w-full text-left text-sm">
             <thead className="bg-stone-50 text-stone-500">
               <tr>
-                {['Time', 'Actor', 'Action', 'Target', 'IP'].map((head) => <th key={head} className="px-4 py-3 font-medium">{head}</th>)}
+                {['时间', '操作者', '动作', '目标', 'IP'].map((head) => <th key={head} className="px-4 py-3 font-medium">{head}</th>)}
               </tr>
             </thead>
             <tbody>
@@ -61,15 +61,15 @@ export default async function AdminAuditPage({ searchParams }: { searchParams: P
                   <td className="px-4 py-3">{row.ip || '-'}</td>
                 </tr>
               ))}
-              {!rows.length ? <tr><td colSpan={5} className="px-4 py-6 text-center text-stone-500">No audit records in current filter.</td></tr> : null}
+              {!rows.length ? <tr><td colSpan={5} className="px-4 py-6 text-center text-stone-500">当前筛选条件下没有日志。</td></tr> : null}
             </tbody>
           </table>
         </div>
         <div className="mt-4 flex items-center justify-between text-sm text-stone-600">
-          <span>Page {safePage} / {pageCount}</span>
+          <span>第 {safePage} 页 / 共 {pageCount} 页</span>
           <div className="flex gap-2">
-            <Link href={buildHref(action, Math.max(1, safePage - 1))} className="rounded-full border border-stone-300 px-3 py-1">Prev</Link>
-            <Link href={buildHref(action, Math.min(pageCount, safePage + 1))} className="rounded-full border border-stone-300 px-3 py-1">Next</Link>
+            <Link href={buildHref(action, Math.max(1, safePage - 1))} className="rounded-full border border-stone-300 px-3 py-1">上一页</Link>
+            <Link href={buildHref(action, Math.min(pageCount, safePage + 1))} className="rounded-full border border-stone-300 px-3 py-1">下一页</Link>
           </div>
         </div>
       </div>

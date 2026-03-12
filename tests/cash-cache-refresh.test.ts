@@ -30,7 +30,7 @@ describe('refreshCashScrapeCache safeguards', () => {
   it('skips scrape when cache is fresh within interval', async () => {
     readFileMock.mockResolvedValueOnce(JSON.stringify({
       generatedAt: new Date().toISOString(),
-      results: [{ provider: 'vasu', ok: true, observedAt: new Date().toISOString(), notes: ['ok'], rates: [{ providerSlug: 'vasu', currency: 'USD', denomination: '100', buyRate: 36, sellRate: 36.1, observedAt: new Date().toISOString(), sourceUrl: 'https://www.vasuexchange.com/' }] }],
+      results: [{ provider: 'ratchada', ok: true, observedAt: new Date().toISOString(), notes: ['ok'], rates: [{ providerSlug: 'ratchada', currency: 'USD', denomination: '100', buyRate: 31.46, sellRate: 31.62, observedAt: new Date().toISOString(), sourceUrl: 'https://www.ratchadaexchange.com/' }] }],
     }));
     const payload = await refreshCashScrapeCache();
     expect(runCashScrapersMock).not.toHaveBeenCalled();
@@ -41,10 +41,10 @@ describe('refreshCashScrapeCache safeguards', () => {
   it('keeps previous cache when all scrapers fail', async () => {
     const oldCache = {
       generatedAt: '2026-03-10T00:00:00.000Z',
-      results: [{ provider: 'vasu', ok: true, observedAt: '2026-03-10T00:00:00.000Z', notes: ['ok'], rates: [{ providerSlug: 'vasu', currency: 'USD', denomination: '100', buyRate: 36, sellRate: 36.1, observedAt: '2026-03-10T00:00:00.000Z', sourceUrl: 'https://www.vasuexchange.com/' }] }],
+      results: [{ provider: 'ratchada', ok: true, observedAt: '2026-03-10T00:00:00.000Z', notes: ['ok'], rates: [{ providerSlug: 'ratchada', currency: 'USD', denomination: '100', buyRate: 31.46, sellRate: 31.62, observedAt: '2026-03-10T00:00:00.000Z', sourceUrl: 'https://www.ratchadaexchange.com/' }] }],
     };
     readFileMock.mockResolvedValueOnce(JSON.stringify(oldCache));
-    runCashScrapersMock.mockResolvedValueOnce([{ provider: 'vasu', ok: false, observedAt: new Date().toISOString(), notes: ['down'], rates: [] }]);
+    runCashScrapersMock.mockResolvedValueOnce([{ provider: 'ratchada', ok: false, observedAt: new Date().toISOString(), notes: ['down'], rates: [] }]);
     const payload = await refreshCashScrapeCache();
     expect(payload.generatedAt).toBe(oldCache.generatedAt);
     expect(writeFileMock).not.toHaveBeenCalled();

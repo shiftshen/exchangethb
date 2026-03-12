@@ -1,7 +1,9 @@
 import crypto from 'crypto';
 import { cookies } from 'next/headers';
+import { hasUnsafeProductionConfig } from '@/lib/runtime-config';
 
 const cookieName = 'exchangethb_admin_session';
+const sessionMaxAgeMs = 1000 * 60 * 60 * 8;
 
 function secret() {
   return process.env.ADMIN_SESSION_SECRET || 'dev-session-secret-change-me';
@@ -26,8 +28,10 @@ export function verifySession(token?: string | null) {
   if (signature.length !== expected.length) return null;
   if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) return null;
   try {
-    const decoded = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')) as { email?: string };
-    return typeof decoded.email === 'string' ? decoded.email : null;
+    const decoded = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')) as { email?: string; ts?: number };
+    if (typeof decoded.email !== 'string' || typeof decoded.ts !== 'number') return null;
+    if (!Number.isFinite(decoded.ts) || Date.now() - decoded.ts > sessionMaxAgeMs) return null;
+    return decoded.email;
   } catch {
     return null;
   }
@@ -54,6 +58,7 @@ function verifyScryptHash(password: string, encodedHash: string) {
 }
 
 export function verifyAdminPassword(password: string) {
+  if (hasUnsafeProductionConfig()) return false;
   const hash = process.env.ADMIN_PASSWORD_HASH;
   if (hash && verifyScryptHash(password, hash)) return true;
   const fallback = process.env.ADMIN_PASSWORD;

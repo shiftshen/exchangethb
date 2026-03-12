@@ -1,22 +1,21 @@
-import { promises as fs } from 'fs';
-import path from 'path';
-import { cashBranches, cashProviders, cashRates } from '@/data/site';
+import { cashBranches, cashProviders, cashRates, publicCashProviderSlugs } from '@/data/site';
+import { readCashCache, rollbackCashCache, writeCashCache } from '@/lib/cash-cache-store';
+import { getBangkokReferenceDistanceKm, getUserDistanceKm } from '@/lib/cash-entities';
 import { readAdminConfig } from '@/lib/content-store';
 import { CurrencyCode, Locale } from '@/lib/types';
 import { runCashScrapers, ScrapeResult } from '@/lib/scrapers/cash';
 
-const cachePath = path.join(process.cwd(), 'content', 'cash-scrape-cache.json');
-const cacheBackupPath = path.join(process.cwd(), 'content', 'cash-scrape-cache.backup.json');
 const minScrapeIntervalMinutes = Number(process.env.CASH_SCRAPE_MIN_INTERVAL_MINUTES || '5');
 const staleThresholdMinutes = Number(process.env.CASH_CACHE_STALE_MINUTES || '30');
 
 async function readCache(): Promise<{ generatedAt: string | null; results: ScrapeResult[] }> {
-  try {
-    const raw = await fs.readFile(cachePath, 'utf8');
-    return JSON.parse(raw);
-  } catch {
-    return { generatedAt: null, results: [] };
-  }
+  return readCashCache();
+}
+
+function sourceRank(sourceType: 'live' | 'hybrid' | 'fallback') {
+  if (sourceType === 'live') return 3;
+  if (sourceType === 'hybrid') return 2;
+  return 1;
 }
 
 export async function refreshCashScrapeCache() {
@@ -34,23 +33,34 @@ export async function refreshCashScrapeCache() {
     return previousCache;
   }
   const payload = { generatedAt: new Date().toISOString(), results };
-  if (previousCache.results.length > 0) {
-    await fs.writeFile(cacheBackupPath, JSON.stringify(previousCache, null, 2));
-  }
-  await fs.writeFile(cachePath, JSON.stringify(payload, null, 2));
+  await writeCashCache(payload, previousCache.results.length > 0 ? previousCache : null);
   return payload;
 }
 
 export async function rollbackCashScrapeCache() {
-  const raw = await fs.readFile(cacheBackupPath, 'utf8');
-  const backup = JSON.parse(raw) as { generatedAt: string | null; results: ScrapeResult[] };
-  await fs.writeFile(cachePath, JSON.stringify(backup, null, 2));
-  return backup;
+  return rollbackCashCache();
 }
 
-export async function compareCashLive(input: { currency: CurrencyCode; amount: number; prioritizeNearest?: boolean; maxDistanceKm?: number; locale?: Locale; }) {
+export async function compareCashLive(input: {
+  currency: CurrencyCode;
+  amount: number;
+  prioritizeNearest?: boolean;
+  maxDistanceKm?: number;
+  locale?: Locale;
+  userLatitude?: number | null;
+  userLongitude?: number | null;
+  includeUnstableProviders?: boolean;
+}) {
+  const hasUserLocation = Number.isFinite(input.userLatitude) && Number.isFinite(input.userLongitude);
+  const userLocation = hasUserLocation
+    ? { latitude: Number(input.userLatitude), longitude: Number(input.userLongitude) }
+    : null;
   const adminConfig = await readAdminConfig();
+  const visibleProviderSet = input.includeUnstableProviders
+    ? null
+    : new Set<string>(publicCashProviderSlugs);
   const effectiveBranches = cashBranches
+    .filter((branch) => (visibleProviderSet ? visibleProviderSet.has(branch.providerSlug) : true))
     .map((branch) => {
       const override = adminConfig.branchOverrides[branch.id] || {};
       return {
@@ -60,13 +70,17 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
         hours: override.hours || branch.hours,
         mapsUrl: override.mapsUrl || branch.mapsUrl,
         isVisible: override.isVisible ?? true,
+        distanceKm: userLocation ? getUserDistanceKm(branch, userLocation) : getBangkokReferenceDistanceKm(branch),
       };
     })
     .filter((branch) => branch.isVisible);
   const cache = await readCache();
   const cacheAgeMinutes = cache.generatedAt ? Math.max(0, (Date.now() - Date.parse(cache.generatedAt)) / 60000) : null;
   const cacheStale = typeof cacheAgeMinutes === 'number' && Number.isFinite(cacheAgeMinutes) ? cacheAgeMinutes > staleThresholdMinutes : true;
-  const liveRows = cache.results.flatMap((result) => result.rates || []).filter((rate) => rate.currency === input.currency);
+  const liveRows = cache.results
+    .flatMap((result) => result.rates || [])
+    .filter((rate) => rate.currency === input.currency)
+    .filter((rate) => (visibleProviderSet ? visibleProviderSet.has(rate.providerSlug) : true));
   const staticRows = cashRates.filter((rate) => rate.currency === input.currency);
   const liveProviderSlugs = new Set(liveRows.map((rate) => rate.providerSlug));
   const mergedRows = [
@@ -84,7 +98,7 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
       ? effectiveBranches.find((entry) => entry.id === rate.branchId)!
       : effectiveBranches.find((entry) => entry.providerSlug === providerSlug)!;
     const observedAt = rate.observedAt;
-    const sourceType = 'providerSlug' in rate
+    const sourceType: 'live' | 'hybrid' | 'fallback' = 'providerSlug' in rate
       ? (rate.sourceKind === 'hybrid' ? 'hybrid' : 'live')
       : 'fallback';
     return {
@@ -93,6 +107,8 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
       branchName: branch.name,
       area: branch.area,
       distanceKm: branch.distanceKm,
+      distanceOrigin: userLocation ? 'user' : 'reference',
+      locationPrecision: branch.locationPrecision || 'reference',
       isOpen: branch.isOpen,
       hours: branch.hours,
       buyRate: rate.buyRate,
@@ -115,29 +131,38 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
   const expectedProviderSlugs = new Set(staticRows.map((rate) => effectiveBranches.find((entry) => entry.id === rate.branchId)?.providerSlug).filter((slug): slug is string => Boolean(slug)));
   const presentProviderSlugs = new Set(hydrated.map((row) => row.providerSlug));
   const missingProviders = [...expectedProviderSlugs].filter((slug) => !presentProviderSlugs.has(slug));
-  const staticBaselineMap = new Map(staticRows.map((rate) => {
-    const branch = effectiveBranches.find((entry) => entry.id === rate.branchId)!;
-    return [`${branch.providerSlug}:${rate.denomination}`, rate.buyRate] as const;
-  }));
-  const anomalies = hydrated
-    .filter((row) => row.live)
-    .map((row) => {
-      const baseline = staticBaselineMap.get(`${row.providerSlug}:${row.denomination}`);
-      if (!baseline || baseline <= 0) return null;
-      const deviationPct = Math.abs((row.buyRate - baseline) / baseline) * 100;
-      if (deviationPct < 8) return null;
-      return `${row.providerSlug} ${row.denomination} deviation ${deviationPct.toFixed(2)}%`;
+
+  const comparisonRows = hydrated
+    .sort((a, b) => {
+      const sourceDiff = sourceRank(b.sourceType) - sourceRank(a.sourceType);
+      if (sourceDiff !== 0) return sourceDiff;
+      if (b.buyRate !== a.buyRate) return b.buyRate - a.buyRate;
+      return a.distanceKm - b.distanceKm;
     })
-    .filter((item): item is string => Boolean(item))
+    .reduce<typeof hydrated>((rows, row) => {
+      if (!rows.some((item) => item.providerSlug === row.providerSlug)) {
+        rows.push(row);
+      }
+      return rows;
+    }, []);
+
+  const anomalies = cache.results
+    .flatMap((result) => (result.notes || []).map((note) => ({ provider: result.provider, note })))
+    .filter((item) => {
+      const lower = item.note.toLowerCase();
+      return !lower.startsWith('parsed ') && !lower.includes('latest branch rate update marker');
+    })
+    .map((item) => `${item.provider} ${item.note}`)
     .filter((item) => !adminConfig.scrapeReview.hiddenAlerts.includes(item));
 
-  const bestRate = [...hydrated].sort((a, b) => b.buyRate - a.buyRate);
-  const nearestGood = [...hydrated].sort((a, b) => (a.distanceKm * 0.7 - a.buyRate * 0.3) - (b.distanceKm * 0.7 - b.buyRate * 0.3));
-  const liveHydratedRows = hydrated.filter((row) => row.live);
-  const fallbackHydratedRows = hydrated.filter((row) => !row.live);
+  const bestRate = [...comparisonRows].sort((a, b) => b.buyRate - a.buyRate);
+  const nearestGood = [...comparisonRows].sort((a, b) => (a.distanceKm * 0.7 - a.buyRate * 0.3) - (b.distanceKm * 0.7 - b.buyRate * 0.3));
+  const liveHydratedRows = hydrated.filter((row) => row.sourceType === 'live');
+  const hybridHydratedRows = hydrated.filter((row) => row.sourceType === 'hybrid');
+  const fallbackHydratedRows = hydrated.filter((row) => row.sourceType === 'fallback');
   const providerUniverse = new Set<string>([
     ...expectedProviderSlugs,
-    ...hydrated.map((row) => row.providerSlug),
+    ...comparisonRows.map((row) => row.providerSlug),
   ]);
   const providerHealth = [...providerUniverse].map((providerSlug) => {
     const rows = hydrated.filter((row) => row.providerSlug === providerSlug);
@@ -160,13 +185,16 @@ export async function compareCashLive(input: { currency: CurrencyCode; amount: n
     source: liveRows.length
       ? (cacheStale ? 'Stale live snapshot with fallback completion' : 'Official scraping with fallback completion')
       : 'Reviewed fallback dataset',
+    distanceOrigin: userLocation ? 'user' : 'reference',
     cacheGeneratedAt: cache.generatedAt,
     cacheAgeMinutes,
     cacheStale,
     quality: {
       liveRows: liveHydratedRows.length,
+      hybridRows: hybridHydratedRows.length,
       fallbackRows: fallbackHydratedRows.length,
       liveProviderCount: new Set(liveHydratedRows.map((row) => row.providerSlug)).size,
+      hybridProviderCount: new Set(hybridHydratedRows.map((row) => row.providerSlug)).size,
       fallbackProviderCount: new Set(fallbackHydratedRows.map((row) => row.providerSlug)).size,
       missingProviders,
       providerHealth,

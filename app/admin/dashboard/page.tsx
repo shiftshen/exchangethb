@@ -1,9 +1,8 @@
-import { promises as fs } from 'fs';
-import path from 'path';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { readAuditLog } from '@/lib/audit-log';
 import { getAdminSession } from '@/lib/auth';
+import { readCashCache } from '@/lib/cash-cache-store';
 import { readAdminConfig } from '@/lib/content-store';
 import { getAdapterHealth } from '@/lib/market-data';
 import { compareCashLive } from '@/lib/cash-live';
@@ -11,19 +10,19 @@ import { ConfigEditor } from '@/components/admin/config-editor';
 import { AlertScopeFilters, DashboardFilterBootstrap, HealthStatusFilters } from '@/components/admin/dashboard-filters';
 
 const modules = [
-  { title: 'Data source monitor', body: 'Track exchange APIs, scraper freshness, failures, and alert state.', href: '/admin/cash-health' },
-  { title: 'Rules and fees', body: 'Edit trading fees, THB withdrawals, network fees, and disclosure notes.', href: '/admin/dashboard' },
-  { title: 'Affiliate links', body: 'Manage official, campaign, and reward-available states with validity windows.', href: '/admin/dashboard' },
-  { title: 'Exchange scores', body: 'Update editorial scoring dimensions, tags, and recommendation status.', href: '/admin/exchange-profiles' },
-  { title: 'Branch manager', body: 'Maintain branches, hours, coordinates, display state, and Maps links.', href: '/admin/branch-manager' },
-  { title: 'Scrape review', body: 'Hide anomalies, keep last valid rates, and recover reviewed values.', href: '/admin/scrape-review' },
-  { title: 'SEO and legal', body: 'Publish route pages, FAQs, methodology, disclaimer, and privacy updates.', href: '/admin/dashboard' },
-  { title: 'Audit log', body: 'Review admin changes, click events, and operational notes.', href: '/admin/audit' },
+  { title: '数据源监控', body: '查看交易所 API、抓取新鲜度、失败情况和告警状态。', href: '/admin/cash-health' },
+  { title: '规则与费用', body: '编辑交易手续费、THB 提现费、网络费和披露说明。', href: '/admin/dashboard' },
+  { title: '跳转链接', body: '维护官网链接、统计链接、活动时间和前台按钮说明。', href: '/admin/exchange-profiles' },
+  { title: '交易所资料', body: '维护推荐状态、风险提示和交易所展示元数据。', href: '/admin/exchange-profiles' },
+  { title: '门店管理', body: '维护门店、营业时间、坐标、展示状态和地图链接。', href: '/admin/branch-manager' },
+  { title: '抓取审核', body: '隐藏异常、保留最后一次有效汇率、恢复人工审核值。', href: '/admin/scrape-review' },
+  { title: 'SEO 与法务', body: '维护路由页、FAQ、方法论、免责声明和隐私政策。', href: '/admin/dashboard' },
+  { title: '审计日志', body: '查看后台修改记录、点击事件和运行备注。', href: '/admin/audit' },
 ];
 
 async function getCachePreview() {
   try {
-    return await fs.readFile(path.join(process.cwd(), 'content', 'cash-scrape-cache.json'), 'utf8');
+    return JSON.stringify(await readCashCache(), null, 2);
   } catch {
     return '{}';
   }
@@ -38,7 +37,7 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
     getAdapterHealth(),
     getCachePreview(),
     readAuditLog(12),
-    compareCashLive({ currency: 'USD', amount: 1000, maxDistanceKm: 100 }),
+    compareCashLive({ currency: 'USD', amount: 1000, maxDistanceKm: 100, includeUnstableProviders: true }),
   ]);
   const cacheJson = (() => {
     try {
@@ -70,21 +69,21 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
       <DashboardFilterBootstrap statusFilter={statusFilter} criticalOnly={criticalOnly} />
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-600">Dashboard</p>
-          <h1 className="text-4xl font-semibold tracking-tight">Admin operations shell</h1>
-          <p className="max-w-3xl text-stone-600">Signed in as {session}. This dashboard now reads live adapter health, fee overrides, and cash scrape cache.</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-600">后台首页</p>
+          <h1 className="text-4xl font-semibold tracking-tight">运营管理面板</h1>
+          <p className="max-w-3xl text-stone-600">当前登录账号：{session}。这里可以查看实时数据源状态、后台配置、抓取缓存和审计日志。</p>
         </div>
         <form action="/api/admin/logout" method="post">
-          <button className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">Log out</button>
+          <button className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">退出登录</button>
         </form>
       </div>
 
       <div className="card flex items-center justify-between gap-4 p-5">
         <div>
-          <p className="text-sm text-stone-500">Cash health module</p>
-          <p className="mt-1 text-sm text-stone-600">Open dedicated view for provider grading, paged alerts, and CSV export.</p>
+          <p className="text-sm text-stone-500">现金汇率健康监控</p>
+          <p className="mt-1 text-sm text-stone-600">打开专门页面查看 provider 分级、分页告警和 CSV 导出。</p>
         </div>
-        <Link href="/admin/cash-health" className="rounded-full bg-brand-700 px-4 py-2 text-sm font-medium text-white">Open module</Link>
+        <Link href="/admin/cash-health" className="rounded-full bg-brand-700 px-4 py-2 text-sm font-medium text-white">打开模块</Link>
       </div>
 
       <div className="grid gap-4 md:grid-cols-5">
@@ -165,7 +164,7 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
 
       <div className="card p-6">
         <h2 className="text-xl font-semibold">Admin configuration</h2>
-        <p className="mt-2 text-sm text-stone-600">Edit outbound link policy, trading fee overrides, and refresh cash scrapers from one place.</p>
+        <p className="mt-2 text-sm text-stone-600">Edit outbound link policy, fee overrides, scraper review mode, and cash refresh controls from one place.</p>
         <div className="mt-6">
           <ConfigEditor initialConfig={config} initialCachePreview={cachePreview} />
         </div>

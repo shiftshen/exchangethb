@@ -1,23 +1,29 @@
-import { promises as fs } from 'fs';
-import path from 'path';
 import { ok, fail } from '@/lib/api-response';
-
-const adminConfigPath = path.join(process.cwd(), 'content', 'admin-config.json');
-const cashCachePath = path.join(process.cwd(), 'content', 'cash-scrape-cache.json');
+import { readCashCache } from '@/lib/cash-cache-store';
+import { readAdminConfig } from '@/lib/content-store';
+import { getRuntimeConfigWarnings } from '@/lib/runtime-config';
+import { getStorageStatus } from '@/lib/storage-status';
 
 export async function GET() {
   try {
-    const [adminConfigStat, cashCacheStat] = await Promise.allSettled([
-      fs.stat(adminConfigPath),
-      fs.stat(cashCachePath),
+    const [adminConfigState, cashCacheState, storageStatus] = await Promise.allSettled([
+      readAdminConfig(),
+      readCashCache(),
+      getStorageStatus(),
     ]);
     return ok({
       status: 'ok',
       app: 'exchangethb',
       timestamp: new Date().toISOString(),
-      storage: {
-        adminConfig: adminConfigStat.status === 'fulfilled',
-        cashCache: cashCacheStat.status === 'fulfilled',
+      configWarnings: getRuntimeConfigWarnings(),
+      storage: storageStatus.status === 'fulfilled' ? storageStatus.value : {
+        mode: 'unknown',
+        databaseConfigured: false,
+        databaseReachable: false,
+        files: {
+          adminConfig: adminConfigState.status === 'fulfilled',
+          cashCache: cashCacheState.status === 'fulfilled',
+        },
       },
     });
   } catch (error) {

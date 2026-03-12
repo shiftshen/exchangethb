@@ -71,26 +71,27 @@ export default async function AdminCashHealthPage({ searchParams }: { searchPara
     <main className="container-shell space-y-8 py-10">
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-600">Cash health</p>
-          <h1 className="text-4xl font-semibold tracking-tight">Cash scraper reliability center</h1>
-          <p className="max-w-3xl text-stone-600">Track provider grading, stale cache status, and scraper alerts with filter and export support.</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-600">后台</p>
+          <h1 className="text-4xl font-semibold tracking-tight">现金数据健康中心</h1>
+          <p className="max-w-3xl text-stone-600">查看换汇 provider 的健康分级、缓存新鲜度、同步备注和真实异常，并支持筛选与导出。</p>
         </div>
         <div className="flex gap-2">
-          <Link href="/admin/dashboard" className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">Back dashboard</Link>
-          <Link href="/admin/dashboard#audit-logs" className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">View audit logs</Link>
-          <Link href={exportHref} className="rounded-full bg-brand-700 px-4 py-2 text-sm font-medium text-white">Export CSV</Link>
+          <Link href="/admin/dashboard" className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">返回后台首页</Link>
+          <Link href="/admin/dashboard#audit-logs" className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium">查看审计日志</Link>
+          <Link href={exportHref} className="rounded-full bg-brand-700 px-4 py-2 text-sm font-medium text-white">导出 CSV</Link>
         </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <div className="card p-5"><p className="text-sm text-stone-500">Providers tracked</p><p className="mt-2 text-2xl font-semibold">{data.providerHealth.length}</p></div>
-        <div className="card p-5"><p className="text-sm text-stone-500">Active alerts</p><p className="mt-2 text-2xl font-semibold">{alerts.length}</p></div>
-        <div className="card p-5"><p className="text-sm text-stone-500">Cache freshness</p><p className="mt-2 text-2xl font-semibold">{data.anyCacheStale ? 'Stale' : 'Fresh'}</p><p className="mt-1 text-xs text-stone-500">Updated {data.generatedAt ? new Date(data.generatedAt).toLocaleString() : '-'}</p></div>
-        <div className="card p-5"><p className="text-sm text-stone-500">Trend signal</p><p className="mt-2 text-2xl font-semibold">{providerRows.filter((row) => row.trend === 'worsening').length} worsening</p></div>
+        <div className="card p-5"><p className="text-sm text-stone-500">已跟踪 provider</p><p className="mt-2 text-2xl font-semibold">{data.providerHealth.length}</p></div>
+        <div className="card p-5"><p className="text-sm text-stone-500">当前异常数</p><p className="mt-2 text-2xl font-semibold">{alerts.length}</p></div>
+        <div className="card p-5"><p className="text-sm text-stone-500">同步备注数</p><p className="mt-2 text-2xl font-semibold">{data.infoNotes.length}</p></div>
+        <div className="card p-5"><p className="text-sm text-stone-500">缓存新鲜度</p><p className="mt-2 text-2xl font-semibold">{data.anyCacheStale ? '已过期' : '新鲜'}</p><p className="mt-1 text-xs text-stone-500">更新时间 {data.generatedAt ? new Date(data.generatedAt).toLocaleString() : '-'}</p></div>
+        <div className="card p-5"><p className="text-sm text-stone-500">恶化信号</p><p className="mt-2 text-2xl font-semibold">{providerRows.filter((row) => row.trend === 'worsening').length} 个</p></div>
       </div>
 
       <div className="card p-6">
-        <h2 className="text-xl font-semibold">Provider health</h2>
+        <h2 className="text-xl font-semibold">Provider 健康状态</h2>
         <div className="mt-4 flex flex-wrap gap-2">
           {ranges.map((range) => (
             <Link key={range} href={buildHref(statusFilter, criticalOnly, 1, range, selectedFields)} className={`rounded-full px-3 py-1 text-xs font-medium ${rangeFilter === range ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700'}`}>
@@ -101,33 +102,47 @@ export default async function AdminCashHealthPage({ searchParams }: { searchPara
         <div className="mt-4 flex flex-wrap gap-2">
           {['all', 'healthy', 'degraded', 'down'].map((status) => (
             <Link key={status} href={buildHref(status, criticalOnly, 1, rangeFilter, selectedFields)} className={`rounded-full px-3 py-1 text-xs font-medium ${statusFilter === status ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700'}`}>
-              {status}
+              {status === 'all' ? '全部' : status === 'healthy' ? '正常' : status === 'degraded' ? '降级' : '故障'}
             </Link>
           ))}
         </div>
         <div className="mt-4 space-y-2">
           {providerRows.map((row) => (
             <div key={row.providerSlug} className="rounded-xl border border-stone-200 px-4 py-3 text-sm">
-              <span className={`rounded-full px-2 py-1 text-xs font-medium ${statusClass(row.status)}`}>{row.status}</span>
-              <span className={`ml-2 rounded-full px-2 py-1 text-xs font-medium ${trendClass(row.trend)}`}>{row.trend}</span>
+              <span className={`rounded-full px-2 py-1 text-xs font-medium ${statusClass(row.status)}`}>{row.status === 'healthy' ? '正常' : row.status === 'degraded' ? '降级' : '故障'}</span>
+              <span className={`ml-2 rounded-full px-2 py-1 text-xs font-medium ${trendClass(row.trend)}`}>{row.trend === 'improving' ? '改善中' : row.trend === 'worsening' ? '恶化中' : '稳定'}</span>
               <span className="ml-2 font-semibold">{row.providerSlug}</span>
-              <span className="ml-2 text-stone-600">reasons: {row.reasons.join(', ')}</span>
-              <span className="ml-2 text-stone-600">trendReason: {row.trendReason}</span>
-              <span className="ml-2 text-stone-600">alerts: {row.alertCount}</span>
-              <span className="ml-2 text-stone-600">currencies: {row.currencies.join(', ')}</span>
-              <span className="ml-2 text-stone-600">observed: {row.observedAt ? new Date(row.observedAt).toLocaleString() : '-'}</span>
+              <span className="ml-2 text-stone-600">原因: {row.reasons.join(', ')}</span>
+              <span className="ml-2 text-stone-600">趋势原因: {row.trendReason}</span>
+              <span className="ml-2 text-stone-600">异常数: {row.alertCount}</span>
+              <span className="ml-2 text-stone-600">币种: {row.currencies.join(', ')}</span>
+              <span className="ml-2 text-stone-600">观测时间: {row.observedAt ? new Date(row.observedAt).toLocaleString() : '-'}</span>
             </div>
           ))}
-          {!providerRows.length ? <div className="rounded-xl border border-stone-200 px-4 py-3 text-sm text-stone-500">No providers in current filter.</div> : null}
+          {!providerRows.length ? <div className="rounded-xl border border-stone-200 px-4 py-3 text-sm text-stone-500">当前筛选条件下没有 provider。</div> : null}
+        </div>
+      </div>
+
+      <div className="card p-6">
+        <h2 className="text-xl font-semibold">同步备注</h2>
+        <p className="mt-2 text-sm text-stone-600">这些是正常同步说明，不代表失败。主要用于展示抓到了多少数据，以及某个 provider 为什么被标成 hybrid。</p>
+        <div className="mt-4 space-y-2">
+          {data.infoNotes.map((note, index) => (
+            <div key={`${note.provider}-${index}`} className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-700">
+              <span className="font-semibold">{note.provider}</span> · {note.message}
+              <span className="ml-2 text-xs opacity-80">{note.observedAt ? new Date(note.observedAt).toLocaleString() : '-'}</span>
+            </div>
+          ))}
+          {!data.infoNotes.length ? <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">当前筛选下没有同步备注。</div> : null}
         </div>
       </div>
 
       <div className="card p-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Scrape alerts</h2>
+          <h2 className="text-xl font-semibold">抓取异常</h2>
           <div className="flex gap-2">
-            <Link href={buildHref(statusFilter, false, 1, rangeFilter, selectedFields)} className={`rounded-full px-3 py-1 text-xs font-medium ${!criticalOnly ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700'}`}>all alerts</Link>
-            <Link href={buildHref(statusFilter, true, 1, rangeFilter, selectedFields)} className={`rounded-full px-3 py-1 text-xs font-medium ${criticalOnly ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700'}`}>critical only</Link>
+            <Link href={buildHref(statusFilter, false, 1, rangeFilter, selectedFields)} className={`rounded-full px-3 py-1 text-xs font-medium ${!criticalOnly ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700'}`}>全部异常</Link>
+            <Link href={buildHref(statusFilter, true, 1, rangeFilter, selectedFields)} className={`rounded-full px-3 py-1 text-xs font-medium ${criticalOnly ? 'bg-brand-700 text-white' : 'bg-stone-100 text-stone-700'}`}>仅严重异常</Link>
           </div>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -144,13 +159,13 @@ export default async function AdminCashHealthPage({ searchParams }: { searchPara
               <span className="ml-2 text-xs opacity-80">{alert.observedAt ? new Date(alert.observedAt).toLocaleString() : '-'}</span>
             </div>
           ))}
-          {!pagedAlerts.length ? <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">No active alerts in current filter.</div> : null}
+          {!pagedAlerts.length ? <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">当前筛选下没有异常。</div> : null}
         </div>
         <div className="mt-4 flex items-center justify-between text-sm text-stone-600">
-          <span>Page {safePage} / {pageCount}</span>
+          <span>第 {safePage} 页 / 共 {pageCount} 页</span>
           <div className="flex gap-2">
-            <Link href={buildHref(statusFilter, criticalOnly, Math.max(1, safePage - 1), rangeFilter, selectedFields)} className="rounded-full border border-stone-300 px-3 py-1">Prev</Link>
-            <Link href={buildHref(statusFilter, criticalOnly, Math.min(pageCount, safePage + 1), rangeFilter, selectedFields)} className="rounded-full border border-stone-300 px-3 py-1">Next</Link>
+            <Link href={buildHref(statusFilter, criticalOnly, Math.max(1, safePage - 1), rangeFilter, selectedFields)} className="rounded-full border border-stone-300 px-3 py-1">上一页</Link>
+            <Link href={buildHref(statusFilter, criticalOnly, Math.min(pageCount, safePage + 1), rangeFilter, selectedFields)} className="rounded-full border border-stone-300 px-3 py-1">下一页</Link>
           </div>
         </div>
       </div>

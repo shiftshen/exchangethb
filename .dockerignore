@@ -1,0 +1,12 @@
+.git
+.next
+node_modules
+coverage
+tmp
+*.log
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+content/cash-scrape-cache.backup.json

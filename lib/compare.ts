@@ -1,5 +1,6 @@
 import { cashBranches, cashProviders, cashRates, exchanges } from '@/data/site';
 import { resolveAffiliateLink } from '@/lib/affiliate';
+import { getBangkokReferenceDistanceKm } from '@/lib/cash-entities';
 import { describeMarketSource, getLiveMarketSnapshots } from '@/lib/market-data';
 import { readAdminConfig } from '@/lib/content-store';
 import { CryptoSymbol, CurrencyCode, ExchangeRecord, Locale } from '@/lib/types';
@@ -60,6 +61,7 @@ export async function compareCrypto(input: {
       thbWithdraw,
       license: exchange.license,
       affiliate: effectiveAffiliate,
+      affiliateUrl: effectiveAffiliate.outboundUrl,
       affiliateStatus: effectiveAffiliate.effectiveStatus,
       affiliateDowngraded: effectiveAffiliate.downgraded,
       updatedAt: snapshot.lastUpdated,
@@ -87,6 +89,7 @@ export async function compareCash(input: { currency: CurrencyCode; amount: numbe
         hours: override.hours || branch.hours,
         mapsUrl: override.mapsUrl || branch.mapsUrl,
         isVisible: override.isVisible ?? true,
+        distanceKm: getBangkokReferenceDistanceKm(branch),
       };
     })
     .filter((branch) => branch.isVisible);
