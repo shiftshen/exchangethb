@@ -8,7 +8,7 @@ import { publicCashProviders } from '@/data/site';
 import { formatDisplayAmount, formatInputAmount, inspectPositiveDecimal, parsePositiveDecimal } from '@/lib/amounts';
 import { compareCashLive } from '@/lib/cash-live';
 import { localizeCashText } from '@/lib/cash-text';
-import { resolveContentLocale } from '@/lib/i18n';
+import { resolveContentLocale, t } from '@/lib/i18n';
 import { routeGuides } from '@/lib/route-guides';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
 import { CurrencyCode, Locale } from '@/lib/types';
@@ -286,6 +286,85 @@ const copy = {
   },
 } as const;
 
+type CashCopy = typeof copy.en;
+const localeOverrides = {
+  ja: {
+    title: '現金 / FX を THB に比較',
+    description: 'バンコクの両替ルートを、レート、距離、券種、支店状況で比較します。',
+    panel: '現金ルートを設定',
+    panelHint: '通貨、金額、基準距離を選ぶと結果が自動更新されます。',
+    currencyQuick: 'よく使う通貨をすぐ選択',
+    currencyMore: 'その他の通貨',
+    currencyMoreHint: '現在対応している現金通貨はすべて上のクイック選択に表示されています。',
+    supportScope: '現在のライブ現金対応: USD, CNY, EUR, JPY, GBP',
+    supportScopeHint: 'サイトの言語対応はライブ現金セットより広く、国別ページがそのままライブ通貨対応を意味するわけではありません。',
+    amountHint: '小数対応。例: 1000.50',
+    amountNote: '1000.50 のような通常の小数を使い、指数表記は避けてください。',
+    autoRefresh: 'どの項目を変更しても結果は自動で更新されます。',
+    submitHint: 'このボタンは予備です。通常は自動再計算されます。',
+    summary: 'まず有力なルートを確認',
+    summaryHint: 'レートだけでなく、データ状態と基準距離も合わせて見てください。',
+    guideTitle: '現金結果の読み方',
+    guideOneTitle: 'まず最良レートを見る',
+    guideOneBody: '最初に推定 THB が最も強いルートを確認し、その後で移動の便利さを比較してください。',
+    guideTwoTitle: '次に距離モードを見る',
+    guideTwoBody: '位置情報を有効にしない限り、最寄りとはあなたではなくバンコク基準点からの距離です。',
+    guideThreeTitle: '最後にデータ状態を見る',
+    guideThreeBody: 'live、hybrid、fallback は隠さず表示されます。',
+    noResultsBody: '距離を広げるか、通貨と金額を変更してください。',
+  },
+  ko: {
+    title: '현금 / FX 를 THB 로 비교',
+    description: '방콕 환전 경로를 환율, 거리, 권종, 지점 상태 기준으로 비교합니다.',
+    panel: '현금 환전 조건 설정',
+    panelHint: '통화, 금액, 기준 거리를 고르면 결과가 자동으로 갱신됩니다.',
+    currencyQuick: '자주 쓰는 통화를 바로 선택',
+    currencyMore: '다른 통화',
+    currencyMoreHint: '현재 지원되는 현금 통화는 모두 위의 빠른 선택 칩에 표시됩니다.',
+    supportScope: '현재 라이브 현금 지원: USD, CNY, EUR, JPY, GBP',
+    supportScopeHint: '사이트 언어 범위가 라이브 현금 세트보다 넓기 때문에, 국가 페이지가 곧 그 통화의 실시간 지원을 의미하지는 않습니다.',
+    amountHint: '소수 입력 가능. 예: 1000.50',
+    amountNote: '1000.50 같은 일반 소수를 사용하고 과학적 표기법은 쓰지 마세요.',
+    autoRefresh: '어떤 항목을 바꿔도 결과가 자동 갱신됩니다.',
+    submitHint: '이 버튼은 예비용입니다. 보통은 자동 재계산됩니다.',
+    summary: '먼저 유력한 경로를 확인',
+    summaryHint: '환율뿐 아니라 데이터 상태와 기준 거리도 함께 봐야 합니다.',
+    guideTitle: '현금 결과 읽는 법',
+    guideOneTitle: '먼저 최적 환율을 본다',
+    guideOneBody: '가장 높은 예상 THB 결과를 먼저 확인하고, 그다음 이동 편의성을 비교하세요.',
+    guideTwoTitle: '다음으로 거리 모드를 본다',
+    guideTwoBody: '위치를 켜지 않으면 nearest 는 내 위치가 아니라 방콕 기준점에서의 거리입니다.',
+    guideThreeTitle: '마지막으로 데이터 상태를 본다',
+    guideThreeBody: 'live, hybrid, fallback 은 숨기지 않고 표시됩니다.',
+    noResultsBody: '거리 범위를 넓히거나 통화와 금액을 바꿔 보세요.',
+  },
+  de: {
+    title: 'Bargeld / FX zu THB vergleichen',
+    description: 'Vergleiche Wechselrouten in Bangkok nach Kurs, Distanz, Stückelung und Filialstatus.',
+    panel: 'Bargeldroute festlegen',
+    panelHint: 'Wähle Währung, Betrag und Referenzdistanz. Ergebnisse aktualisieren sich automatisch.',
+    currencyQuick: 'Häufige Währungen direkt wählen',
+    currencyMore: 'Weitere Währungen',
+    currencyMoreHint: 'Alle aktuell unterstützten Bargeldwährungen erscheinen bereits in den Schnellchips oben.',
+    supportScope: 'Aktuelle Live-Bargeldabdeckung: USD, CNY, EUR, JPY, GBP',
+    supportScopeHint: 'Die Sprachabdeckung der Seite ist breiter als der Live-Bargeldsatz. Länderseiten bedeuten daher nicht automatisch Live-Zeilen für diese Währung.',
+    amountHint: 'Dezimalwerte möglich, z. B. 1000.50',
+    amountNote: 'Nutze normale Dezimalzahlen wie 1000.50 und keine wissenschaftliche Schreibweise.',
+    autoRefresh: 'Die Ergebnisse aktualisieren sich automatisch, sobald du ein Feld änderst.',
+    submitHint: 'Diese Schaltfläche ist nur eine Reserve. Normalerweise wird automatisch neu gerechnet.',
+    summary: 'Zuerst die stärksten Routen prüfen',
+    summaryHint: 'Nicht nur den Kurs ansehen, sondern auch Datenstatus und Referenzdistanz mitbewerten.',
+    guideTitle: 'So liest du Bargeldergebnisse',
+    guideOneTitle: 'Mit dem besten Kurs beginnen',
+    guideOneBody: 'Prüfe zuerst, welche Route den stärksten geschätzten THB-Wert liefert, und optimiere danach die Bequemlichkeit.',
+    guideTwoTitle: 'Dann den Distanzmodus prüfen',
+    guideTwoBody: 'Ohne Standortfreigabe bedeutet nearest die Nähe zum Bangkok-Referenzpunkt, nicht zu dir.',
+    guideThreeTitle: 'Zum Schluss den Datenstatus prüfen',
+    guideThreeBody: 'Live, Hybrid und Fallback bleiben sichtbar markiert.',
+    noResultsBody: 'Erhöhe die Distanz oder ändere Währung und Betrag.',
+  },
+} satisfies Partial<Record<Locale, Partial<Record<keyof CashCopy, string>>>>;
+
 function isGoogleMapsUrl(url: string) {
   return /google\.[^/]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps|maps\.google\.com/i.test(url);
 }
@@ -301,7 +380,9 @@ export default async function CashPage({ params, searchParams }: { params: Promi
   const userLngRaw = Array.isArray(query.userLng) ? query.userLng[0] : query.userLng;
   const maxDistanceKm = parsePositiveDecimal(query.maxDistanceKm, 10, 1);
   const contentLocale = resolveContentLocale(locale);
-  const c = copy[contentLocale];
+  const c = locale in localeOverrides
+    ? { ...copy.en, ...localeOverrides[locale as keyof typeof localeOverrides] }
+    : copy[contentLocale];
   const parsedUserLat = userLatRaw ? Number(userLatRaw) : NaN;
   const parsedUserLng = userLngRaw ? Number(userLngRaw) : NaN;
   const hasUserLocation = Number.isFinite(parsedUserLat) && Math.abs(parsedUserLat) <= 90 && Number.isFinite(parsedUserLng) && Math.abs(parsedUserLng) <= 180;
@@ -679,8 +760,8 @@ export default async function CashPage({ params, searchParams }: { params: Promi
               className="card card-interactive p-5"
             >
               <p className="text-sm text-stone-400">{guide.currency ? `${guide.currency}/THB` : 'Route guide'}</p>
-              <h2 className="mt-2 text-lg font-semibold text-white">{guide.title[contentLocale]}</h2>
-              <p className="mt-3 text-sm text-stone-400">{guide.summary[contentLocale]}</p>
+              <h2 className="mt-2 text-lg font-semibold text-white">{t(guide.title, locale)}</h2>
+              <p className="mt-3 text-sm text-stone-400">{t(guide.summary, locale)}</p>
             </TrackLink>
           ))}
         </div>
@@ -692,18 +773,21 @@ export default async function CashPage({ params, searchParams }: { params: Promi
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const contentLocale = resolveContentLocale(locale);
+  const c = locale in localeOverrides
+    ? { ...copy.en, ...localeOverrides[locale as keyof typeof localeOverrides] }
+    : copy[contentLocale];
   const title = locale === 'th'
     ? 'เปรียบเทียบเงินสด/ฟอเร็กซ์เป็นบาท'
     : locale === 'zh'
       ? '现金外汇换泰铢比较'
       : locale === 'ja'
-        ? 'バンコク現金両替 THB 比較'
+        ? 'バンコク現金両替比較 | USD・EUR・JPY・GBP -> THB'
         : locale === 'ko'
-          ? '방콕 현금 환전 THB 비교'
+          ? '방콕 현금 환전 비교 | USD·EUR·JPY·GBP -> THB'
           : locale === 'de'
-            ? 'Bargeld zu THB Vergleich in Bangkok'
-            : 'Cash Exchange to THB in Bangkok';
-  const description = copy[contentLocale].description;
+            ? 'Bargeldwechsel zu THB in Bangkok | USD, EUR, JPY, GBP'
+            : 'Best Cash Exchange to THB in Bangkok | USD, EUR, JPY, GBP';
+  const description = c.description;
   return {
     title,
     description,

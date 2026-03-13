@@ -502,8 +502,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               className="card card-interactive p-5"
             >
               <p className="text-sm text-stone-400">{guide.type === 'crypto' ? c.quickCryptoPill : c.quickCashPill}</p>
-              <p className="mt-2 text-xl font-semibold text-white">{guide.title[contentLocale]}</p>
-              <p className="mt-3 text-sm text-stone-400">{guide.summary[contentLocale]}</p>
+              <p className="mt-2 text-xl font-semibold text-white">{t(guide.title, locale)}</p>
+              <p className="mt-3 text-sm text-stone-400">{t(guide.summary, locale)}</p>
             </TrackLink>
           ))}
         </div>
@@ -633,12 +633,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     : locale === 'zh'
       ? 'ExchangeTHB 首页'
       : locale === 'ja'
-        ? 'タイの暗号資産と現金両替比較 | ExchangeTHB'
+        ? 'タイバーツ換金の最適ルート比較 | ExchangeTHB'
         : locale === 'ko'
-          ? '태국 바트 비교 | ExchangeTHB'
+          ? '태국 바트로 바꾸는 최적 경로 비교 | ExchangeTHB'
           : locale === 'de'
-            ? 'Thailand Baht Vergleich | ExchangeTHB'
-            : 'Thailand Crypto and Cash Exchange Comparison';
+            ? 'Beste Wege in THB | Krypto und Bargeldvergleich'
+            : 'Best Ways to Convert Crypto or Cash to THB';
   const description = copy[contentLocale].heroBody;
   return {
     title,

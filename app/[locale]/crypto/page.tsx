@@ -7,7 +7,7 @@ import { ChoiceChip, Pill, Section } from '@/components/ui';
 import { formatDisplayAmount, formatInputAmount, inspectPositiveDecimal } from '@/lib/amounts';
 import { compareCrypto } from '@/lib/compare';
 import { localizeExchangeLicense } from '@/lib/exchange-text';
-import { resolveContentLocale } from '@/lib/i18n';
+import { resolveContentLocale, t } from '@/lib/i18n';
 import { localizeMarketFallbackReason, localizeMarketFreshness, localizeMarketSource } from '@/lib/market-text';
 import { routeGuides } from '@/lib/route-guides';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
@@ -201,6 +201,79 @@ const copy = {
   },
 } as const;
 
+type CryptoCopy = typeof copy.en;
+const localeOverrides = {
+  ja: {
+    title: '暗号資産を THB に比較',
+    description: '板の深さ、手数料、推定受取額、データ状態をまとめて比較します。',
+    panel: '暗号資産ルートを設定',
+    panelHint: 'コイン、方向、数量を選ぶと結果が自動で更新されます。',
+    pricingHintBuy: '買いは取引所の ask 側を使い、総支払額には手数料も含まれます。',
+    pricingHintSell: '売りは取引所の bid 側を使い、純受取額は手数料差し引き後です。',
+    symbolHint: '主要コインは下のチップで素早く切り替えられます。',
+    amountHint: '小数対応。例: 0.01 BTC',
+    amountNote: '0.01 のような通常の小数を使い、指数表記は避けてください。',
+    compareHint: 'このボタンは予備です。通常は自動で再計算されます。',
+    summary: 'まず最有力のルートを見る',
+    summaryHint: '外部へ進む前に、推定結果、手数料、データ状態を確認してください。',
+    guideTitle: '結果の読み方',
+    guideOneTitle: 'まず総合結果を見る',
+    guideOneBody: '買いでは総支払額、売りでは純受取 THB を優先して見てください。',
+    guideTwoTitle: '次にデータ状態を見る',
+    guideTwoBody: 'live を優先し、fallback は明確にラベル表示されます。',
+    guideThreeTitle: '最後に外部へ進む',
+    guideThreeBody: 'このページはルートの絞り込み用で、最終条件は取引所ページ側にあります。',
+    noData: 'このコインではまだ十分な比較データがありません。',
+    noResultsBody: '数量や方向を変えて再計算してください。',
+  },
+  ko: {
+    title: '가상자산을 THB 로 비교',
+    description: '호가창 깊이, 수수료, 예상 수령액, 데이터 상태를 함께 비교합니다.',
+    panel: '가상자산 경로 설정',
+    panelHint: '코인, 방향, 수량을 고르면 결과가 자동 갱신됩니다.',
+    pricingHintBuy: '매수는 거래소 ask 호가를 사용하며 총 지불액에는 수수료가 포함됩니다.',
+    pricingHintSell: '매도는 거래소 bid 호가를 사용하며 순수령액은 수수료 차감 후 금액입니다.',
+    symbolHint: '주요 코인은 아래 칩으로 빠르게 바꿀 수 있습니다.',
+    amountHint: '소수 입력 가능. 예: 0.01 BTC',
+    amountNote: '0.01 같은 일반 소수를 사용하고 과학적 표기법은 피하세요.',
+    compareHint: '이 버튼은 예비용입니다. 보통은 자동 재계산됩니다.',
+    summary: '먼저 가장 강한 경로 확인',
+    summaryHint: '거래소로 나가기 전에 예상 결과, 수수료, 데이터 상태를 확인하세요.',
+    guideTitle: '결과 읽는 법',
+    guideOneTitle: '먼저 종합 결과를 본다',
+    guideOneBody: '매수는 총 지불액, 매도는 순수령 THB 를 우선해서 보세요.',
+    guideTwoTitle: '다음으로 데이터 상태를 본다',
+    guideTwoBody: 'live 를 우선하고 fallback 은 명확히 표시됩니다.',
+    guideThreeTitle: '마지막에 외부로 이동',
+    guideThreeBody: '이 페이지는 경로를 좁히는 용도이며 최종 조건은 거래소 페이지에 있습니다.',
+    noData: '이 코인에 대한 충분한 비교 데이터가 아직 없습니다.',
+    noResultsBody: '수량이나 방향을 바꿔 다시 계산해 보세요.',
+  },
+  de: {
+    title: 'Krypto zu THB vergleichen',
+    description: 'Vergleiche Orderbuchtiefe, Gebühren, geschätzten Gegenwert und Datenstatus in einer Ansicht.',
+    panel: 'Krypto-Route festlegen',
+    panelHint: 'Wähle Coin, Richtung und Betrag. Ergebnisse aktualisieren sich automatisch.',
+    pricingHintBuy: 'Kauf nutzt die Ask-Seite der Börse; die Gesamtkosten enthalten Gebühren.',
+    pricingHintSell: 'Verkauf nutzt die Bid-Seite der Börse; der Nettobetrag ist nach Gebühren berechnet.',
+    symbolHint: 'Wichtige Coins lassen sich unten per Chip schnell wechseln.',
+    amountHint: 'Dezimalwerte möglich, z. B. 0.01 BTC',
+    amountNote: 'Nutze normale Dezimalzahlen wie 0.01 und keine wissenschaftliche Schreibweise.',
+    compareHint: 'Diese Schaltfläche ist nur eine Reserve. Normalerweise wird automatisch neu gerechnet.',
+    summary: 'Zuerst die stärkste Route prüfen',
+    summaryHint: 'Prüfe geschätztes Ergebnis, Gebühren und Datenstatus, bevor du zur Börse gehst.',
+    guideTitle: 'So liest du das Ergebnis',
+    guideOneTitle: 'Mit dem Gesamtergebnis beginnen',
+    guideOneBody: 'Beim Kauf zählt der Gesamtbetrag, beim Verkauf der Netto-THB-Ertrag.',
+    guideTwoTitle: 'Dann den Datenstatus prüfen',
+    guideTwoBody: 'Live kommt zuerst, Fallback bleibt klar gekennzeichnet.',
+    guideThreeTitle: 'Danach erst nach außen klicken',
+    guideThreeBody: 'Diese Seite filtert die Route vor. Die finalen Bedingungen gelten auf der Börsenseite.',
+    noData: 'Für diesen Coin sind noch keine ausreichenden Vergleichsdaten verfügbar.',
+    noResultsBody: 'Ändere Betrag oder Richtung und berechne die Route neu.',
+  },
+} satisfies Partial<Record<Locale, Partial<Record<keyof CryptoCopy, string>>>>;
+
 export default async function CryptoPage({ params, searchParams }: { params: Promise<{ locale: Locale }>; searchParams: Promise<Record<string, string | string[] | undefined>>; }) {
   const { locale } = await params;
   const query = await searchParams;
@@ -215,7 +288,9 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
     redirect(`/${locale}/crypto?symbol=BTC&side=buy&amount=1`);
   }
   const contentLocale = resolveContentLocale(locale);
-  const c = copy[contentLocale];
+  const c = locale in localeOverrides
+    ? { ...copy.en, ...localeOverrides[locale as keyof typeof localeOverrides] }
+    : copy[contentLocale];
   const amount = amountState.valid && amountState.parsed !== null ? amountState.parsed : 1;
   const results = amountState.valid && amountState.parsed !== null
     ? await compareCrypto({ symbol, amount, side, quoteMode: 'coin', includeWithdrawal: true, withdrawThb: side === 'sell' })
@@ -526,8 +601,8 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
               className="card card-interactive p-5"
             >
               <p className="text-sm text-stone-400">{guide.symbol}/THB</p>
-              <h2 className="mt-2 text-lg font-semibold text-white">{guide.title[contentLocale]}</h2>
-              <p className="mt-3 text-sm text-stone-400">{guide.summary[contentLocale]}</p>
+              <h2 className="mt-2 text-lg font-semibold text-white">{t(guide.title, locale)}</h2>
+              <p className="mt-3 text-sm text-stone-400">{t(guide.summary, locale)}</p>
             </TrackLink>
           ))}
         </div>
@@ -539,18 +614,21 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const contentLocale = resolveContentLocale(locale);
+  const c = locale in localeOverrides
+    ? { ...copy.en, ...localeOverrides[locale as keyof typeof localeOverrides] }
+    : copy[contentLocale];
   const title = locale === 'th'
     ? 'เปรียบเทียบคริปโตเป็นบาท'
     : locale === 'zh'
       ? '加密换泰铢比较'
       : locale === 'ja'
-        ? 'タイで暗号資産を THB に比較'
+        ? 'タイで暗号資産を THB に比較 | BTC・ETH・USDT'
         : locale === 'ko'
-          ? '태국 암호화폐 THB 비교'
+          ? '태국 암호화폐 THB 비교 | BTC·ETH·USDT'
           : locale === 'de'
-            ? 'Krypto zu THB Vergleich in Thailand'
-            : 'Crypto to THB Comparison for Thailand';
-  const description = copy[contentLocale].description;
+            ? 'Krypto zu THB Vergleich in Thailand | BTC, ETH, USDT'
+            : 'Best Crypto to THB Comparison in Thailand | BTC, ETH, USDT';
+  const description = c.description;
   return {
     title,
     description,

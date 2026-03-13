@@ -1239,6 +1239,209 @@ export const routeGuides: RouteGuide[] = [
     },
     keywords: ['bangkok money changer near me', 'money exchange near me bangkok', 'closest money changer bangkok', 'bangkok cash exchange near me', 'near me exchange thailand'],
   },
+  {
+    slug: 'suvarnabhumi-money-exchange-guide',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=30',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'Suvarnabhumi money exchange guide',
+      zh: '素万那普机场换汇指南',
+      th: 'คู่มือแลกเงินสุวรรณภูมิ',
+      ja: 'スワンナプーム両替ガイド',
+      ko: '수완나품 환전 가이드',
+      de: 'Geldwechsel am Suvarnabhumi',
+    },
+    summary: {
+      en: 'A traveler decision page for comparing airport convenience at Suvarnabhumi with stronger Bangkok city money-changing routes.',
+      zh: '面向旅客的决策页，比较素万那普机场便利性与曼谷市区更强换汇路线之间的取舍。',
+      th: 'หน้าช่วยตัดสินใจสำหรับการเทียบความสะดวกของสุวรรณภูมิกับเส้นทางแลกเงินในเมืองที่คุ้มกว่า',
+      ja: 'スワンナプーム空港の利便性と、バンコク市内のより強い両替ルートを比較する旅行者向けページです。',
+      ko: '수완나품 공항의 편의성과 방콕 시내의 더 강한 환전 경로를 비교하는 여행자용 페이지입니다.',
+      de: 'Eine Entscheidungsseite für Reisende, die die Bequemlichkeit am Suvarnabhumi gegen stärkere Wechselrouten in Bangkok abwägen.',
+    },
+    intro: {
+      en: 'Built for searches around Suvarnabhumi money exchange, this page pushes users into a realistic Bangkok compare flow rather than vague airport advice.',
+      zh: '这个页面承接 Suvarnabhumi money exchange 相关搜索，把用户导入更真实的曼谷比较流程，而不是停留在宽泛建议层面。',
+      th: 'หน้านี้รองรับคำค้นเกี่ยวกับ Suvarnabhumi money exchange และพาผู้ใช้เข้าสู่ flow เปรียบเทียบในกรุงเทพที่ใช้งานได้จริง',
+    },
+    audience: {
+      en: 'Useful for travelers landing at BKK who need to decide whether to exchange immediately or wait for a better city route.',
+      zh: '适合刚抵达 BKK、需要判断是否立刻换汇还是进城再换的用户。',
+      th: 'เหมาะกับผู้เดินทางที่เพิ่งลง BKK และต้องตัดสินใจว่าจะแลกทันทีหรือรอเข้าเมือง',
+    },
+    checks: {
+      en: ['Treat airport exchange as the convenience baseline, not the automatic best rate.', 'Use branch hours and map links before leaving the airport.', 'Compare large amounts against city routes before committing.'],
+      zh: ['把机场换汇当成便利性基线，而不是默认最优。', '离开机场前先核对营业时间和地图。', '大金额要先和市区路线比较。'],
+      th: ['มองสนามบินเป็น baseline ด้านความสะดวก ไม่ใช่ตัวเลือกที่ดีที่สุดอัตโนมัติ', 'ก่อนออกจากสนามบินให้เช็กเวลาเปิดและแผนที่ก่อน', 'ถ้าจำนวนเงินมากควรเทียบกับเส้นทางในเมืองก่อน'],
+    },
+    faqs: {
+      en: [
+        { question: 'Should I exchange money at Suvarnabhumi or wait for the city?', answer: 'Use this page to compare convenience versus stronger Bangkok routes. For larger amounts, city-center providers often justify the trip.' },
+        { question: 'What matters most after landing at BKK?', answer: 'Check branch hours, map accuracy, and whether you only need a small convenience exchange or a full route decision.' },
+      ],
+      zh: [
+        { question: '我应该在素万那普换钱，还是进城再换？', answer: '这个页面就是为了解决这个取舍问题。对大金额来说，市区路线通常更值得。' },
+        { question: '刚落地 BKK 最该先看什么？', answer: '先看营业时间、地图准确性，以及你只是需要少量应急，还是需要完整换汇路线。' },
+      ],
+      th: [
+        { question: 'ควรแลกเงินที่สุวรรณภูมิเลยหรือรอเข้าเมืองก่อน', answer: 'ใช้หน้านี้เทียบความสะดวกกับเส้นทางในกรุงเทพที่คุ้มกว่า โดยเฉพาะถ้าจำนวนเงินมาก' },
+        { question: 'สิ่งสำคัญที่สุดหลังลงที่ BKK คืออะไร', answer: 'ดูเวลาเปิด ความแม่นยำของแผนที่ และตัดสินใจก่อนว่าคุณต้องการแลกแค่เล็กน้อยเพื่อความสะดวกหรือไม่' },
+      ],
+    },
+    keywords: ['suvarnabhumi money exchange', 'bkk airport exchange rate', 'money exchange after landing bangkok', 'suvarnabhumi to baht', 'airport exchange bangkok'],
+  },
+  {
+    slug: 'don-mueang-money-exchange-guide',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=30',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'Don Mueang money exchange guide',
+      zh: '廊曼机场换汇指南',
+      th: 'คู่มือแลกเงินดอนเมือง',
+      ja: 'ドンムアン両替ガイド',
+      ko: '돈므앙 환전 가이드',
+      de: 'Geldwechsel am Don Mueang',
+    },
+    summary: {
+      en: 'A Bangkok exchange guide for DMK arrivals deciding between airport convenience and stronger city money-changing routes.',
+      zh: '面向 DMK 落地旅客的换汇指南，帮助比较机场便利性与市区更强路线。',
+      th: 'คู่มือสำหรับผู้เดินทางที่ลง DMK และต้องเลือกระหว่างความสะดวกของสนามบินกับเส้นทางในเมืองที่คุ้มกว่า',
+    },
+    intro: {
+      en: 'This page targets Don Mueang money exchange searches and turns them into a realistic compare path instead of generic airport advice.',
+      zh: '这个页面承接 Don Mueang money exchange 搜索，并把它转成真实可用的比较路径。',
+      th: 'หน้านี้รองรับคำค้นเกี่ยวกับ Don Mueang money exchange และเปลี่ยนให้เป็นเส้นทางเปรียบเทียบที่ใช้งานได้จริง',
+    },
+    audience: {
+      en: 'Useful for budget travelers and short-stay visitors landing at DMK who need a fast exchange decision.',
+      zh: '适合在 DMK 落地、停留时间短或预算更敏感的旅客。',
+      th: 'เหมาะกับนักเดินทางสายประหยัดหรือผู้ที่พักสั้นและลงที่ DMK',
+    },
+    checks: {
+      en: ['Use airport exchange for speed, not as the default best-value route.', 'Check city alternatives if the amount is meaningful.', 'Verify branch status before leaving the terminal.'],
+      zh: ['把机场换汇看成速度选择，而不是默认最划算。', '如果金额不小，要先对比市区替代路线。', '离开航站楼前先核对门店状态。'],
+      th: ['ใช้สนามบินเมื่อคุณต้องการความเร็ว ไม่ใช่มองว่าเป็นทางเลือกที่คุ้มค่าที่สุดเสมอไป', 'ถ้าจำนวนเงินมีนัยสำคัญ ให้เทียบทางเลือกในเมืองก่อน', 'ตรวจสอบสถานะสาขาก่อนออกจากอาคารผู้โดยสาร'],
+    },
+    faqs: {
+      en: [
+        { question: 'Is Don Mueang exchange good enough for a first stop?', answer: 'It can be good enough for convenience. This page exists to help you decide whether that convenience is worth the spread.' },
+        { question: 'When should I skip airport exchange at DMK?', answer: 'If the amount is larger and you can realistically reach a city branch, comparing Bangkok routes first is usually better.' },
+      ],
+      zh: [
+        { question: '廊曼机场换汇够不够当第一站？', answer: '对便利性来说通常够用，但这个页面的目的就是帮你判断这种便利是否值得付出价差。' },
+        { question: '什么时候应该跳过 DMK 机场换汇？', answer: '如果金额较大且你能实际到达市区门店，通常先比较市区路线会更好。' },
+      ],
+      th: [
+        { question: 'ดอนเมืองเหมาะพอจะเป็นจุดแลกเงินแรกหรือไม่', answer: 'อาจเพียงพอในด้านความสะดวก แต่หน้านี้มีไว้เพื่อช่วยตัดสินใจว่าความสะดวกนั้นคุ้มกับส่วนต่างหรือไม่' },
+        { question: 'เมื่อไรควรข้ามการแลกเงินที่ DMK', answer: 'ถ้าจำนวนเงินมากและคุณสามารถเดินทางไปยังร้านในเมืองได้จริง การเทียบเส้นทางในกรุงเทพก่อนมักดีกว่า' },
+      ],
+    },
+    keywords: ['don mueang money exchange', 'dmk airport exchange', 'don mueang to baht', 'airport money exchange dmk', 'bangkok airport exchange dmk'],
+  },
+  {
+    slug: 'nana-money-exchange-guide',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=12',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'Nana money exchange guide',
+      zh: '娜娜区换汇指南',
+      th: 'คู่มือแลกเงินย่านนานา',
+      ja: 'ナナ周辺の両替ガイド',
+      ko: '나나 지역 환전 가이드',
+      de: 'Geldwechsel in Nana',
+    },
+    summary: {
+      en: 'A route page for travelers staying around Nana or lower Sukhumvit who need a practical THB exchange decision.',
+      zh: '面向住在 Nana 或 Sukhumvit 下段旅客的 THB 换汇决策页。',
+      th: 'หน้าเส้นทางสำหรับผู้เข้าพักแถวนานาหรือสุขุมวิทตอนต้นที่ต้องการตัดสินใจเรื่องการแลกเงินบาทอย่างใช้งานได้จริง',
+    },
+    intro: {
+      en: 'Built for searches like Nana money exchange, this page narrows a vague neighborhood query into practical Bangkok cash routes.',
+      zh: '这个页面承接 Nana money exchange 这类搜索，把模糊的区域问题收敛成可执行的曼谷现金路线。',
+      th: 'หน้านี้รองรับคำค้นอย่าง Nana money exchange และเปลี่ยนคำถามเชิงพื้นที่ให้กลายเป็นเส้นทางเงินสดที่ใช้งานได้จริงในกรุงเทพ',
+    },
+    audience: {
+      en: 'Useful for hotel-area travelers who care about walkability, convenience, and realistic branch access more than the absolute top rate.',
+      zh: '适合住在酒店区、比起绝对最优汇率更在意步行和便利性的旅客。',
+      th: 'เหมาะกับผู้เดินทางที่พักอยู่แถวโรงแรมและให้ความสำคัญกับการเดินถึงได้และความสะดวก มากกว่าการไล่หาค่าเรตที่ดีที่สุดแบบสุดขอบ',
+    },
+    checks: {
+      en: ['Use location if you want a true near-you result.', 'Check whether the route is a branch point, address estimate, or brand reference.', 'Balance convenience against the best-rate route.'],
+      zh: ['如果你想看真正离你近的结果，请开启定位。', '先区分门店点位、地址估算还是品牌参考点。', '在便利性与最佳汇率之间做平衡。'],
+      th: ['ถ้าต้องการผลที่ใกล้คุณจริง ให้เปิดตำแหน่ง', 'แยกให้ออกว่าจุดนั้นเป็นสาขาจริง การประมาณจากที่อยู่ หรือ brand reference', 'ชั่งน้ำหนักระหว่างความสะดวกกับเรตที่ดีที่สุด'],
+    },
+    faqs: {
+      en: [
+        { question: 'Is Nana a good area to exchange cash in Bangkok?', answer: 'It can be practical if you are staying nearby. The right answer depends on whether you value convenience, branch confidence, or the very best rate.' },
+        { question: 'What should I compare before walking out from Nana?', answer: 'Compare estimated THB outcome, map confidence, branch hours, and whether you enabled your real location.' },
+      ],
+      zh: [
+        { question: 'Nana 区适合在曼谷换钱吗？', answer: '如果你就住在附近，它可以很实用。关键在于你更看重便利、门店可信度，还是极致汇率。' },
+        { question: '从 Nana 出发前我该先比较什么？', answer: '先比较预计 THB、地图可信度、营业时间，以及你是否开启了真实定位。' },
+      ],
+      th: [
+        { question: 'ย่านนานาเหมาะกับการแลกเงินในกรุงเทพหรือไม่', answer: 'เหมาะถ้าคุณพักอยู่ใกล้ๆ แต่คำตอบที่ถูกต้องขึ้นอยู่กับว่าคุณให้ค่าน้ำหนักกับความสะดวก ความมั่นใจในสาขา หรือเรตที่ดีที่สุดมากกว่า' },
+        { question: 'ก่อนจะเดินออกจากนานาควรเทียบอะไรบ้าง', answer: 'เทียบเงินบาทประมาณการ ความน่าเชื่อถือของแผนที่ เวลาเปิด และดูว่าคุณเปิดตำแหน่งจริงหรือยัง' },
+      ],
+    },
+    keywords: ['nana money exchange', 'sukhumvit money changer', 'exchange cash nana bangkok', 'money changer near nana', 'bangkok nana exchange'],
+  },
+  {
+    slug: 'asok-money-exchange-guide',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=12',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'Asok money exchange guide',
+      zh: '阿索克换汇指南',
+      th: 'คู่มือแลกเงินย่านอโศก',
+      ja: 'アソーク両替ガイド',
+      ko: '아속 환전 가이드',
+      de: 'Geldwechsel in Asok',
+    },
+    summary: {
+      en: 'A practical exchange guide for travelers around Asok and mid-Sukhumvit who want to compare THB routes before walking out.',
+      zh: '面向 Asok 和 Sukhumvit 中段旅客的实用换汇指南，帮助先比较 THB 路线再出发。',
+      th: 'คู่มือแลกเงินเชิงปฏิบัติสำหรับผู้เดินทางแถบอโศกและสุขุมวิทตอนกลางที่ต้องการเทียบเส้นทางก่อนออกเดินทาง',
+    },
+    intro: {
+      en: 'This page targets Asok money exchange searches and turns them into a route decision supported by actual Bangkok compare pages.',
+      zh: '这个页面承接 Asok money exchange 搜索，并把它转成由真实曼谷比较页支持的路线决策。',
+      th: 'หน้านี้รองรับคำค้นอย่าง Asok money exchange และเปลี่ยนให้เป็นการตัดสินใจเรื่องเส้นทางที่มีหน้าคอมแพร์จริงรองรับ',
+    },
+    audience: {
+      en: 'Useful for users staying near BTS Asok or MRT Sukhumvit who want a practical branch decision, not just a generic neighborhood list.',
+      zh: '适合住在 BTS Asok 或 MRT Sukhumvit 附近、想要实用门店决策而不是泛泛区域列表的用户。',
+      th: 'เหมาะกับผู้ใช้ที่พักใกล้ BTS อโศก หรือ MRT สุขุมวิท และต้องการการตัดสินใจระดับสาขาจริง ไม่ใช่รายชื่อย่านแบบกว้างๆ',
+    },
+    checks: {
+      en: ['Compare branch access, not just headline rate.', 'Use map and reference links before walking out.', 'Turn on location if you want real distance sorting from your current position.'],
+      zh: ['优先比较可达性，而不是只看表面汇率。', '出发前先看地图和参考页。', '如果你想按真实当前位置排序，请开启定位。'],
+      th: ['เปรียบเทียบความเข้าถึงได้ของสาขา ไม่ใช่ดูแค่เรตหน้าจอ', 'ก่อนออกเดินทางให้เปิดดูแผนที่และหน้าอ้างอิงก่อน', 'ถ้าต้องการการจัดอันดับตามระยะจริงจากคุณ ให้เปิดตำแหน่ง'],
+    },
+    faqs: {
+      en: [
+        { question: 'What makes Asok a different exchange decision from airport searches?', answer: 'Users around Asok are usually optimizing for walkable branch access and time efficiency, not just whether airport exchange is good enough.' },
+        { question: 'How should I use Asok pages on ExchangeTHB?', answer: 'Use them as a neighborhood decision layer, then move into the live Bangkok cash comparison flow for a real route check.' },
+      ],
+      zh: [
+        { question: '为什么 Asok 的换汇决策和机场搜索不一样？', answer: 'Asok 一带的用户通常更在意步行可达门店和时间效率，而不只是机场够不够用。' },
+        { question: '我应该怎么用 ExchangeTHB 上的 Asok 页面？', answer: '先把它当成区域决策层，然后再进入真实曼谷现金比较流程做最终路线判断。' },
+      ],
+      th: [
+        { question: 'อะไรทำให้การตัดสินใจเรื่องแลกเงินที่อโศกต่างจากคำค้นสนามบิน', answer: 'ผู้ใช้แถวอโศกมักให้ความสำคัญกับการเดินถึงร้านได้และประหยัดเวลา มากกว่าคำถามว่าสนามบินเพียงพอหรือไม่' },
+        { question: 'ควรใช้หน้าอโศกบน ExchangeTHB อย่างไร', answer: 'ใช้เป็นชั้นตัดสินใจระดับย่านก่อน แล้วค่อยเข้า flow เปรียบเทียบเงินสดจริงของกรุงเทพเพื่อเช็กเส้นทางสุดท้าย' },
+      ],
+    },
+    keywords: ['asok money exchange', 'sukhumvit exchange rate', 'money changer asok bangkok', 'exchange cash asok', 'bangkok asok money changer'],
+  },
 ];
 
 export const routeGuideSlugs = routeGuides.map((guide) => guide.slug);
