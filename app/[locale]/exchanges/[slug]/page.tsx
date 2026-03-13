@@ -7,7 +7,7 @@ import { resolveAffiliateLink } from '@/lib/affiliate';
 import { readAdminConfig } from '@/lib/content-store';
 import { describeMarketSource } from '@/lib/market-data';
 import { localizeExchangeLicense } from '@/lib/exchange-text';
-import { t } from '@/lib/i18n';
+import { resolveContentLocale, t } from '@/lib/i18n';
 import { localizeAdapterNote, localizeMarketFallbackReason, localizeMarketFreshness, localizeMarketSource } from '@/lib/market-text';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
 import { Locale } from '@/lib/types';
@@ -162,7 +162,7 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
   const profile = config.exchangeProfiles[exchange.slug] || { recommended: true, tags: [], riskNote: '' };
   const affiliate = resolveAffiliateLink(config.affiliateLinks[exchange.slug] || exchange.affiliate);
   const outboundUrl = affiliate.outboundUrl;
-  const c = copy[locale];
+  const c = copy[resolveContentLocale(locale)];
   const affiliateStatusLabel = affiliate.trackingUrl && !affiliate.downgraded ? c.affiliateReady : c.affiliatePending;
   const sourceLabel = source ? localizeMarketSource(source.label, locale) : c.sourceFallbackLabel;
   const freshnessLabel = source ? localizeMarketFreshness(source.freshness, locale) : c.freshnessFallback;

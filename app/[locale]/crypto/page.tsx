@@ -7,6 +7,7 @@ import { ChoiceChip, Pill, Section } from '@/components/ui';
 import { formatDisplayAmount, formatInputAmount, inspectPositiveDecimal } from '@/lib/amounts';
 import { compareCrypto } from '@/lib/compare';
 import { localizeExchangeLicense } from '@/lib/exchange-text';
+import { resolveContentLocale } from '@/lib/i18n';
 import { localizeMarketFallbackReason, localizeMarketFreshness, localizeMarketSource } from '@/lib/market-text';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
 import { CryptoSymbol, Locale } from '@/lib/types';
@@ -212,7 +213,8 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
   if (!hasDefaultRouteQuery) {
     redirect(`/${locale}/crypto?symbol=BTC&side=buy&amount=1`);
   }
-  const c = copy[locale];
+  const contentLocale = resolveContentLocale(locale);
+  const c = copy[contentLocale];
   const amount = amountState.valid && amountState.parsed !== null ? amountState.parsed : 1;
   const results = amountState.valid && amountState.parsed !== null
     ? await compareCrypto({ symbol, amount, side, quoteMode: 'coin', includeWithdrawal: true, withdrawThb: side === 'sell' })
@@ -482,14 +484,41 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
           </div>
         </div>
       </Section>
+
+      {contentLocale === 'en' ? (
+        <Section title="English search questions this page answers" description="This section strengthens long-tail relevance for people searching how to compare Thai crypto routes into baht.">
+          <div className="grid gap-4 lg:grid-cols-3">
+            {[
+              {
+                title: 'How do I compare BTC to THB in Thailand?',
+                body: 'Use buy mode to compare ask-side execution, fee drag, and the total THB payment instead of only one quoted price.',
+              },
+              {
+                title: 'How do I compare USDT to THB across Thai exchanges?',
+                body: 'Use sell mode to estimate the net THB outcome after fees, then check whether the best row is live or fallback.',
+              },
+              {
+                title: 'Why does a lower average price not always win?',
+                body: 'Liquidity gap, network fees, and trading fees can make a route look cheaper on the surface but worse in the final result.',
+              },
+            ].map((item) => (
+              <div key={item.title} className="card p-6">
+                <h2 className="text-lg font-semibold text-white">{item.title}</h2>
+                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      ) : null}
     </div>
   );
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
+  const contentLocale = resolveContentLocale(locale);
   const title = locale === 'th' ? 'เปรียบเทียบคริปโตเป็นบาท' : locale === 'zh' ? '加密换泰铢比较' : 'Crypto to THB Comparison for Thailand';
-  const description = copy[locale].description;
+  const description = copy[contentLocale].description;
   return {
     title,
     description,

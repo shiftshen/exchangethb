@@ -4,7 +4,7 @@ import { cashBranches, cashProviders, cashRates, publicCashProviderSlugs } from 
 import { readCashCache } from '@/lib/cash-cache-store';
 import { localizeCashText, localizeScrapeNote } from '@/lib/cash-text';
 import { readAdminConfig } from '@/lib/content-store';
-import { t } from '@/lib/i18n';
+import { resolveContentLocale, t } from '@/lib/i18n';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
 import { TrackAnchor } from '@/components/track-link';
 import { Locale } from '@/lib/types';
@@ -143,7 +143,10 @@ function isGoogleMapsUrl(url: string) {
   return /google\.[^/]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps|maps\.google\.com/i.test(url);
 }
 
-function locationPrecisionLabel(localeCopy: typeof copy[Locale], precision: 'exact' | 'address' | 'reference' | undefined) {
+function locationPrecisionLabel(
+  localeCopy: { precisionExact: string; precisionAddress: string; precisionReference: string },
+  precision: 'exact' | 'address' | 'reference' | undefined,
+) {
   if (precision === 'exact') return localeCopy.precisionExact;
   if (precision === 'address') return localeCopy.precisionAddress;
   return localeCopy.precisionReference;
@@ -182,7 +185,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
   const rates = liveRates.length
     ? liveRates
     : cashRates.filter((rate) => branches.some((branch) => branch.id === rate.branchId));
-  const c = copy[locale];
+  const c = copy[resolveContentLocale(locale)];
   const reviewModeLabel = reviewMode === 'force_fallback' ? c.modeForceFallback : reviewMode === 'force_live' ? c.modeForceLive : c.modeAuto;
   const rateSummary = scrape?.ok ? c.liveSummary : c.fallbackSummary;
   const breadcrumbLd = breadcrumbJsonLd([

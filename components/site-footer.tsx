@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { resolveContentLocale } from '@/lib/i18n';
 import { Locale } from '@/lib/types';
 
 const footerCopy = {
@@ -8,7 +9,7 @@ const footerCopy = {
 };
 
 export function SiteFooter({ locale }: { locale: Locale }) {
-  const copy = footerCopy[locale];
+  const copy = footerCopy[resolveContentLocale(locale)];
   return (
     <footer className="mt-20 border-t border-surface-800 bg-surface-950/90 backdrop-blur">
       <div className="container-shell flex flex-col gap-5 py-10 text-sm text-stone-400 md:flex-row md:items-center md:justify-between">

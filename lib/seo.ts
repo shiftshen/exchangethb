@@ -18,6 +18,9 @@ export function localeAlternates(path = '') {
     th: withLocalePath('th', path),
     en: withLocalePath('en', path),
     zh: withLocalePath('zh', path),
+    ja: withLocalePath('ja', path),
+    ko: withLocalePath('ko', path),
+    de: withLocalePath('de', path),
     'x-default': withLocalePath('en', path),
   };
 }

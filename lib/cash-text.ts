@@ -1,3 +1,4 @@
+import { resolveContentLocale } from '@/lib/i18n';
 import { Locale } from '@/lib/types';
 
 const textMap: Record<string, { th: string; en: string; zh: string }> = {
@@ -119,7 +120,8 @@ const textMap: Record<string, { th: string; en: string; zh: string }> = {
 };
 
 export function localizeCashText(value: string, locale: Locale) {
-  return textMap[value]?.[locale] || value;
+  const contentLocale = resolveContentLocale(locale);
+  return textMap[value]?.[contentLocale] || value;
 }
 
 export function localizeScrapeNote(note: string, locale: Locale) {

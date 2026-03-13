@@ -1,4 +1,4 @@
-import { Locale } from '@/lib/types';
+import { ContentLocale } from '@/lib/types';
 
 export type RouteGuideType = 'crypto' | 'cash';
 
@@ -9,11 +9,11 @@ export interface RouteGuide {
   symbol?: string;
   currency?: string;
   amount: string;
-  title: Record<Locale, string>;
-  summary: Record<Locale, string>;
-  intro: Record<Locale, string>;
-  audience: Record<Locale, string>;
-  checks: Record<Locale, string[]>;
+  title: Record<ContentLocale, string>;
+  summary: Record<ContentLocale, string>;
+  intro: Record<ContentLocale, string>;
+  audience: Record<ContentLocale, string>;
+  checks: Record<ContentLocale, string[]>;
   keywords: string[];
 }
 
@@ -215,6 +215,138 @@ export const routeGuides: RouteGuide[] = [
       th: ['ถ้าต้องการบริบทเพิ่ม ให้เปิดหน้าโปรไฟล์ร้านก่อน', 'ดูว่าผลลัพธ์เป็น live หรือ fallback', 'เงื่อนไขจริงหน้าร้านยังคงมีผลเหนือค่าประมาณในหน้าเทียบ'],
     },
     keywords: ['cny to thb cash', 'rmb to baht bangkok', 'exchange cny thailand', 'bangkok money changer cny', 'yuan to baht'],
+  },
+  {
+    slug: 'japan-to-thailand-money-exchange',
+    type: 'cash',
+    compareHref: '/cash?currency=JPY&amount=50000&maxDistanceKm=10',
+    currency: 'JPY',
+    amount: '50000',
+    title: {
+      en: 'Japan to Thailand money exchange guide',
+      zh: '日本游客到泰国换汇指南',
+      th: 'คู่มือแลกเงินจากญี่ปุ่นเป็นบาทไทย',
+    },
+    summary: {
+      en: 'A Bangkok-focused guide for travelers from Japan who need to compare yen cash routes into Thai baht before visiting a money changer.',
+      zh: '面向日本游客的曼谷换汇指南，帮助先比较日元现金换 THB 的路线。',
+      th: 'คู่มือสำหรับนักเดินทางจากญี่ปุ่นที่ต้องการเทียบเส้นทางแลกเงินเยนเป็นบาทไทยก่อนเดินทางไปยังร้านแลกเงินจริง',
+    },
+    intro: {
+      en: 'This page turns a broad Japan-to-Thailand exchange query into a concrete next step: compare yen cash routes in Bangkok with direct provider links.',
+      zh: '这个页面把宽泛的“日本到泰国换汇”搜索，收敛成更具体的下一步：比较曼谷的 JPY 现金路线。',
+      th: 'หน้านี้เปลี่ยนคำค้นกว้างๆ เรื่องการแลกเงินจากญี่ปุ่นมาไทย ให้กลายเป็นขั้นตอนถัดไปที่จับต้องได้ คือการเทียบเส้นทาง JPY เงินสดในกรุงเทพ',
+    },
+    audience: {
+      en: 'Built for Japanese tourists, repeat visitors, and anyone arriving with yen who wants a cleaner decision page before walking to an exchange counter.',
+      zh: '适合日本游客、回访旅客，以及任何携带日元现金到泰国的人。',
+      th: 'เหมาะกับนักท่องเที่ยวจากญี่ปุ่น ผู้เดินทางซ้ำ และผู้ที่ถือเงินเยนก่อนเข้าร้านแลกเงิน',
+    },
+    checks: {
+      en: ['Check the latest JPY rate sample before leaving.', 'Use the provider map or reference page to confirm the branch.', 'Treat this as a route guide rather than a final guaranteed quote.'],
+      zh: ['先看最新 JPY 汇率样本。', '出发前用地图或参考页确认门店。', '把它当成路线指南，而不是最终保证报价。'],
+      th: ['ดูตัวอย่างเรต JPY ล่าสุดก่อนออกเดินทาง', 'ใช้แผนที่หรือหน้าอ้างอิงเพื่อตรวจสอบสาขา', 'มองหน้านี้เป็นคู่มือเส้นทาง ไม่ใช่ใบเสนอราคาที่การันตี'],
+    },
+    keywords: ['japan to thailand money exchange', 'japan to thailand exchange rate', 'yen to baht thailand', 'japan travel money thailand', 'jpy bangkok money changer'],
+  },
+  {
+    slug: 'korea-to-thailand-money-exchange',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=10',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'Korea to Thailand money exchange guide',
+      zh: '韩国游客到泰国换汇指南',
+      th: 'คู่มือแลกเงินจากเกาหลีมาไทย',
+    },
+    summary: {
+      en: 'A practical Bangkok guide for Korea-origin travelers who want to compare stable money-changing routes into Thai baht before visiting a branch.',
+      zh: '面向韩国出发游客的曼谷换汇指南，帮助先看稳定可行的 THB 路线。',
+      th: 'คู่มือสำหรับผู้เดินทางจากเกาหลีที่ต้องการเทียบเส้นทางแลกเงินบาทที่ค่อนข้างเสถียรก่อนเดินทางไปยังร้านจริง',
+    },
+    intro: {
+      en: 'KRW cash is not yet part of the live compare set, so this page focuses on how Korea-origin visitors should use the Bangkok cash comparison flow responsibly.',
+      zh: '由于当前尚未接入 KRW 实时比较，本页重点是告诉来自韩国的用户，如何合理使用曼谷现金比较流程。',
+      th: 'เนื่องจากตอนนี้ยังไม่ได้เชื่อมชุดเปรียบเทียบ KRW สด หน้านี้จึงเน้นการบอกผู้ใช้จากเกาหลีว่า ควรใช้ flow เปรียบเทียบเงินสดในกรุงเทพอย่างไรให้ตรงความจริง',
+    },
+    audience: {
+      en: 'Useful for Korean travelers who need a decision framework first and can then switch to the closest supported cash route on the compare page.',
+      zh: '适合先建立决策框架，再在比较页选择当前支持的现金路线的韩国旅客。',
+      th: 'มีประโยชน์กับนักเดินทางชาวเกาหลีที่ต้องการกรอบการตัดสินใจก่อน แล้วค่อยไปเลือกเส้นทางเงินสดที่รองรับอยู่ในหน้าคอมแพร์',
+    },
+    checks: {
+      en: ['Do not assume unsupported currencies have live rates on this site.', 'Use branch quality, hours, and map links as the first filter.', 'Confirm final currency availability with the provider before visiting.'],
+      zh: ['不要默认本站对未接入币种提供实时汇率。', '先用门店质量、营业时间和地图作为第一层筛选。', '到店前请先向门店确认目标币种是否可兑换。'],
+      th: ['อย่าคิดว่าสกุลเงินที่ยังไม่รองรับจะมีเรตสดบนเว็บนี้', 'ใช้คุณภาพสาขา เวลาเปิด และลิงก์แผนที่เป็นตัวกรองชั้นแรก', 'ก่อนเดินทางให้ยืนยันกับผู้ให้บริการก่อนว่าสามารถแลกสกุลเงินที่ต้องการได้จริง'],
+    },
+    keywords: ['korea to thailand money exchange', 'korea to thailand exchange rate', 'korean traveler money thailand', 'thailand money exchange guide korea', 'bangkok exchange guide korea'],
+  },
+  {
+    slug: 'germany-to-thailand-money-exchange',
+    type: 'cash',
+    compareHref: '/cash?currency=EUR&amount=1000&maxDistanceKm=10',
+    currency: 'EUR',
+    amount: '1000',
+    title: {
+      en: 'Germany to Thailand money exchange guide',
+      zh: '德国游客到泰国换汇指南',
+      th: 'คู่มือแลกเงินจากเยอรมนีมาไทย',
+    },
+    summary: {
+      en: 'A route guide for Germany-origin travelers comparing euro cash into Thai baht in Bangkok with direct branch context and source labels.',
+      zh: '面向德国游客的欧元换 THB 路线页，突出门店背景和数据状态。',
+      th: 'คู่มือสำหรับผู้เดินทางจากเยอรมนีที่ต้องการเทียบเงินยูโรเป็นบาทในกรุงเทพ พร้อมบริบทสาขาและป้ายสถานะข้อมูล',
+    },
+    intro: {
+      en: 'This page is built for users searching broadly from Germany to Thailand exchange intent, then moving into a concrete euro-to-baht comparison.',
+      zh: '这个页面承接从德国到泰国的宽泛换汇意图，再把用户导入更具体的 EUR 到 THB 比较。',
+      th: 'หน้านี้สร้างมาสำหรับผู้ใช้ที่ค้นหาเจตนากว้างๆ เรื่องการแลกเงินจากเยอรมนีมาไทย แล้วต้องการไปต่อยังการเทียบ EUR เป็น THB แบบเจาะจง',
+    },
+    audience: {
+      en: 'Useful for travelers from Germany who already hold euros and want a stronger Bangkok-specific decision page than a generic FX article.',
+      zh: '适合已经持有欧元、希望看到更贴近曼谷场景而不是泛泛外汇文章的德国旅客。',
+      th: 'เหมาะกับผู้เดินทางจากเยอรมนีที่ถือเงินยูโรอยู่แล้ว และต้องการหน้าตัดสินใจสำหรับกรุงเทพที่เฉพาะทางกว่าบทความ FX ทั่วไป',
+    },
+    checks: {
+      en: ['Use the compare page to see rate context, not just one quoted number.', 'Check branch hours before traveling in Bangkok.', 'Prefer rows with live source labels when outcomes are close.'],
+      zh: ['在比较页里同时看汇率背景，而不是单一数字。', '在曼谷出发前先看营业时间。', '结果接近时优先选择实时来源。'],
+      th: ['ใช้หน้าคอมแพร์เพื่อดูบริบทของเรต ไม่ใช่ตัวเลขตัวเดียว', 'ตรวจเวลาเปิดของสาขาก่อนเดินทางในกรุงเทพ', 'ถ้าผลลัพธ์ใกล้กัน ให้เลือกรายการที่เป็น live source ก่อน'],
+    },
+    keywords: ['germany to thailand money exchange', 'germany to thailand exchange rate', 'euro to baht thailand', 'german traveler thailand money', 'eur bangkok money changer'],
+  },
+  {
+    slug: 'europe-to-thailand-money-exchange',
+    type: 'cash',
+    compareHref: '/cash?currency=EUR&amount=1000&maxDistanceKm=10',
+    currency: 'EUR',
+    amount: '1000',
+    title: {
+      en: 'Europe to Thailand money exchange guide',
+      zh: '欧洲游客到泰国换汇指南',
+      th: 'คู่มือแลกเงินจากยุโรปมาไทย',
+    },
+    summary: {
+      en: 'A Europe-focused entry page that leads travelers into the practical Bangkok EUR cash to THB comparison flow.',
+      zh: '面向欧洲访客的入口页，把用户导入更实用的曼谷 EUR 现金换 THB 流程。',
+      th: 'หน้าเริ่มต้นสำหรับผู้เดินทางจากยุโรปที่ต้องการเข้าสู่ flow การเทียบ EUR เงินสดเป็น THB ในกรุงเทพ',
+    },
+    intro: {
+      en: 'This route helps Europe-origin users skip generic travel content and move directly into a Bangkok-specific money-changing decision.',
+      zh: '这个页面帮助来自欧洲的用户跳过泛泛旅游内容，直接进入更贴近曼谷实际情况的换汇决策。',
+      th: 'หน้านี้ช่วยให้ผู้ใช้จากยุโรปข้ามคอนเทนต์ท่องเที่ยวแบบกว้างๆ แล้วเข้าไปยังการตัดสินใจเรื่องร้านแลกเงินในกรุงเทพโดยตรง',
+    },
+    audience: {
+      en: 'Useful for euro-zone visitors, long-stay travelers, and remote workers planning their first cash exchange route after landing in Thailand.',
+      zh: '适合欧元区游客、长期停留者和远程工作者，在抵达泰国后规划第一条现金换汇路线。',
+      th: 'เหมาะกับผู้เดินทางจากยูโรโซน ผู้พำนักระยะยาว และ remote worker ที่ต้องการวางแผนเส้นทางแลกเงินสดครั้งแรกหลังมาถึงไทย',
+    },
+    checks: {
+      en: ['Start with the EUR route if that is your actual carry currency.', 'Use distance and branch hours together, not rate alone.', 'Open the provider page again before you leave your hotel or airport.'],
+      zh: ['如果你实际携带的是欧元，就先从 EUR 路线开始。', '同时看距离和营业时间，不要只看汇率。', '离开酒店或机场前再打开一次品牌页面确认。'],
+      th: ['ถ้าคุณถือเงินยูโรจริง ให้เริ่มจากเส้นทาง EUR ก่อน', 'ดูทั้งระยะทางและเวลาเปิด ไม่ใช่ดูเรตอย่างเดียว', 'ก่อนออกจากโรงแรมหรือสนามบิน ให้เปิดหน้าแบรนด์ตรวจสอบอีกครั้ง'],
+    },
+    keywords: ['europe to thailand money exchange', 'europe to thailand exchange rate', 'europe travel money thailand', 'euro cash thailand', 'bangkok exchange guide europe'],
   },
 ];
 

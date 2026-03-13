@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { exchanges, publicCashProviders } from '@/data/site';
 import { TrackLink } from '@/components/track-link';
-import { t } from '@/lib/i18n';
+import { resolveContentLocale, t } from '@/lib/i18n';
 import { routeGuides } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
 import { breadcrumbJsonLd, localeAlternates, websiteJsonLd, withLocalePath } from '@/lib/seo';
@@ -192,15 +192,199 @@ const copy = {
     proofThreeTitle: '热门路线预填即用',
     proofThreeBody: '打开就是合理默认路线，不是空白起步。',
   },
+  ja: {
+    heroKicker: 'THB に入るための比較ルート',
+    heroTitle: '暗号資産と現金両替を同じ判断画面で比較',
+    heroBody: 'ExchangeTHB は、推定受取額、手数料、深さ、バンコク中心部からの参考距離、営業時間を 1 か所で比較します。',
+    primary: '暗号資産を比較',
+    secondary: '現金両替を比較',
+    trust: '公式 API、公式サイト、レビュー済みルールに基づく比較です。',
+    coverageTitle: '対象範囲',
+    coverageValue: '{exchangeCount} 取引所 / {cashCount} 現金ブランド',
+    coverageHint: '公開範囲は品質優先で絞っています',
+    localeTitle: '標準言語',
+    localeValue: 'EN',
+    localeHint: 'TH / 中文 / 日本語 も切替可能',
+    mapsTitle: '地図',
+    mapsValue: '地図 / 参照ページ',
+    mapsHint: '地図があれば地図へ、なければブランド参照ページへ移動します',
+    complianceTitle: '注意',
+    complianceValue: '推定値のみ',
+    complianceHint: '約定価格を保証するものではありません',
+    quickTitle: 'すぐに比較を始める',
+    quickDescription: '次の判断に合ったルートを選んでください。',
+    cryptoCardTitle: '板の厚みを踏まえた取引所比較',
+    cryptoCardBody: 'BTC、ETH、USDT、XRP、DOGE、SOL の推定結果と手数料を表示します。',
+    cashCardTitle: 'レートと参考距離で現金両替を比較',
+    cashCardBody: '最良レート、参考距離、営業時間、地図や参照リンクを確認できます。',
+    routeTitle: 'よく使われるルート',
+    routeDescription: '空の画面から始めずに、よく使われる条件で比較を始められます。',
+    routeLabel: '人気ルート',
+    trustedTitle: '信頼できる対象範囲',
+    trustedDescription: 'ソースと状態表示が明確な比較対象だけを公開しています。',
+    routeGuidesTitle: '検索意図向けのルートガイド',
+    routeGuidesDescription: 'BTC to THB や USD cash to THB のような検索から来たユーザーを、空のツールではなく実際の比較導線に入れるためのページです。',
+    exchangesTitle: '取引所',
+    changersTitle: '両替ブランド',
+    viewProfile: '詳細を見る',
+    startTitle: 'よくあるケースから始める',
+    startDescription: '1 回のクリックで実用的な初期条件の比較画面に入れます。',
+    sourceTitle: '表示されるデータ状態',
+    sourceDescription: 'live / hybrid / fallback を隠さずに表示します。',
+    sourceLiveTitle: 'ライブ',
+    sourceLiveBody: '最新更新で取得できた公式 API または公式サイト由来の値です。',
+    sourceHybridTitle: 'ハイブリッド',
+    sourceHybridBody: '公式データを主に使い、必要に応じてレビュー済み補完を加えます。',
+    sourceFallbackTitle: 'フォールバック',
+    sourceFallbackBody: 'ライブソースが使えない時だけ使い、理由も表示します。',
+    quickCryptoPill: 'Crypto -> THB',
+    quickCashPill: 'Cash / FX -> THB',
+    startBuyBtc: '0.01 BTC を購入',
+    startSellUsdt: '1000 USDT を売却',
+    startUsdCash: '1000 USD を両替',
+    startCnyCash: '5000 CNY を両替',
+    missionEyebrow: 'このページの役割',
+    missionTitle: '実際の業者へ進む前にルートを判断する',
+    missionBody: '総コスト、手数料、流動性、データ状態、外部リンクを同じ画面にまとめています。',
+    proofOneTitle: 'データ状態が明確',
+    proofOneBody: '各ページで live、hybrid、fallback を明示します。',
+    proofTwoTitle: '外部リンクがすぐ使える',
+    proofTwoBody: '取引所、地図、参照ページへ直接移動できます。',
+    proofThreeTitle: '初期ルートが用意済み',
+    proofThreeBody: '空白状態ではなく、現実的な開始条件で開きます。',
+  },
+  ko: {
+    heroKicker: 'THB 전환 경로 비교 도구',
+    heroTitle: '가상자산과 현금 환전을 한 화면에서 비교',
+    heroBody: 'ExchangeTHB는 예상 수령액, 수수료, 유동성, 방콕 중심 기준 거리, 영업시간을 한곳에서 비교합니다.',
+    primary: '가상자산 비교',
+    secondary: '현금 환전 비교',
+    trust: '공식 API, 공식 웹사이트, 검토된 규칙 기반 비교입니다.',
+    coverageTitle: '커버리지',
+    coverageValue: '{exchangeCount} 거래소 / {cashCount} 현금 브랜드',
+    coverageHint: '품질을 위해 공개 범위를 제한했습니다',
+    localeTitle: '기본 언어',
+    localeValue: 'EN',
+    localeHint: 'TH / 中文 / 한국어 전환 가능',
+    mapsTitle: '지도',
+    mapsValue: '지도 / 참고 페이지',
+    mapsHint: '실제 지도 링크가 있으면 지도, 없으면 브랜드 참고 페이지로 이동합니다.',
+    complianceTitle: '안내',
+    complianceValue: '추정치 전용',
+    complianceHint: '최종 체결가를 보장하지 않습니다',
+    quickTitle: '바로 비교 시작',
+    quickDescription: '지금 필요한 전환 경로를 바로 선택하세요.',
+    cryptoCardTitle: '호가창 깊이를 반영한 거래소 비교',
+    cryptoCardBody: 'BTC, ETH, USDT, XRP, DOGE, SOL 의 예상 결과와 수수료를 보여줍니다.',
+    cashCardTitle: '환율과 기준 거리로 현금 환전 비교',
+    cashCardBody: '최적 환율, 기준 거리, 영업시간, 지도 또는 참고 링크를 볼 수 있습니다.',
+    routeTitle: '자주 쓰는 경로',
+    routeDescription: '빈 페이지에서 시작하지 않고 자주 쓰는 조건으로 바로 비교할 수 있습니다.',
+    routeLabel: '인기 경로',
+    trustedTitle: '신뢰 가능한 비교 범위',
+    trustedDescription: '출처와 데이터 상태가 명확한 비교 대상만 공개합니다.',
+    routeGuidesTitle: '검색 의도용 경로 가이드',
+    routeGuidesDescription: 'BTC to THB, USD cash to THB 같은 검색에서 들어온 사용자를 실제 비교 흐름으로 바로 연결합니다.',
+    exchangesTitle: '거래소',
+    changersTitle: '환전 브랜드',
+    viewProfile: '자세히 보기',
+    startTitle: '가장 흔한 사용 사례에서 시작',
+    startDescription: '한 번의 클릭으로 현실적인 기본값이 채워진 비교 화면을 엽니다.',
+    sourceTitle: '표시되는 데이터 상태',
+    sourceDescription: 'live / hybrid / fallback 상태를 숨기지 않고 보여줍니다.',
+    sourceLiveTitle: '실시간',
+    sourceLiveBody: '가장 최근 새로고침에서 가져온 공식 API 또는 공식 웹페이지 값입니다.',
+    sourceHybridTitle: '혼합',
+    sourceHybridBody: '공식 데이터를 중심으로, 일부를 검토된 보완 데이터로 채웁니다.',
+    sourceFallbackTitle: '대체',
+    sourceFallbackBody: '실시간 소스를 쓸 수 없을 때만 사용하며 이유를 표시합니다.',
+    quickCryptoPill: 'Crypto -> THB',
+    quickCashPill: 'Cash / FX -> THB',
+    startBuyBtc: '0.01 BTC 매수',
+    startSellUsdt: '1000 USDT 매도',
+    startUsdCash: '1000 USD 환전',
+    startCnyCash: '5000 CNY 환전',
+    missionEyebrow: '이 페이지의 목적',
+    missionTitle: '실제 업체로 가기 전에 경로를 먼저 판단',
+    missionBody: '총비용, 수수료, 유동성, 데이터 상태, 실제 외부 링크를 한 화면에 모았습니다.',
+    proofOneTitle: '데이터 상태가 명확함',
+    proofOneBody: '각 페이지에서 live, hybrid, fallback 을 분명히 표시합니다.',
+    proofTwoTitle: '외부 링크가 바로 작동',
+    proofTwoBody: '거래소, 지도, 참고 페이지로 바로 이동할 수 있습니다.',
+    proofThreeTitle: '현실적인 기본 경로 제공',
+    proofThreeBody: '빈 상태가 아니라 실제로 쓸 만한 기본 경로로 열립니다.',
+  },
+  de: {
+    heroKicker: 'Bessere Wege in THB finden',
+    heroTitle: 'Krypto und Bargeldwechsel in einer Entscheidungsansicht vergleichen',
+    heroBody: 'ExchangeTHB vergleicht geschätzten Gegenwert, Gebühren, Markttiefe, Referenzdistanz in Bangkok und Öffnungszeiten an einem Ort.',
+    primary: 'Krypto vergleichen',
+    secondary: 'Bargeld vergleichen',
+    trust: 'Auf Basis offizieller APIs, offizieller Websites und überprüfter Regeln.',
+    coverageTitle: 'Abdeckung',
+    coverageValue: '{exchangeCount} Börsen / {cashCount} Bargeldmarken',
+    coverageHint: 'Der Startumfang ist aus Qualitätsgründen bewusst begrenzt',
+    localeTitle: 'Standardsprache',
+    localeValue: 'EN',
+    localeHint: 'TH / 中文 / DE per Klick',
+    mapsTitle: 'Karten',
+    mapsValue: 'Karte / Referenzseite',
+    mapsHint: 'Wenn vorhanden direkt zur Karte, sonst zur Referenzseite des Anbieters.',
+    complianceTitle: 'Hinweis',
+    complianceValue: 'Nur Schätzung',
+    complianceHint: 'Kein garantierter Ausführungspreis',
+    quickTitle: 'Schnell vergleichen',
+    quickDescription: 'Wähle den Pfad, der zu deiner nächsten THB-Entscheidung passt.',
+    cryptoCardTitle: 'Börsenvergleich mit Tiefenbezug',
+    cryptoCardBody: 'BTC, ETH, USDT, XRP, DOGE, SOL mit Gebührenaufschlüsselung und Schätzwerten.',
+    cashCardTitle: 'Bargeldwechsel nach Kurs und Referenzdistanz',
+    cashCardBody: 'Bester Kurs, Referenzdistanz, Öffnungszeiten und direkte Karten- oder Referenzlinks.',
+    routeTitle: 'Beliebte Routen',
+    routeDescription: 'Häufige Startpunkte, damit du nicht jedes Mal bei null beginnst.',
+    routeLabel: 'Beliebte Route',
+    trustedTitle: 'Verlässliche Abdeckung',
+    trustedDescription: 'Nachvollziehbare Quellen mit transparenter Methodik und sichtbaren Datenstatus.',
+    routeGuidesTitle: 'Routenleitfäden für Suchintention',
+    routeGuidesDescription: 'Diese Seiten fangen Suchen wie BTC to THB oder USD cash to THB ab und leiten direkt in den passenden Vergleich über.',
+    exchangesTitle: 'Börsen',
+    changersTitle: 'Wechselstuben',
+    viewProfile: 'Profil ansehen',
+    startTitle: 'Mit einem typischen Fall starten',
+    startDescription: 'Ein Klick öffnet einen realistischen Vergleich mit vorausgefüllten Werten.',
+    sourceTitle: 'Datenstatus auf der Seite',
+    sourceDescription: 'Live, Hybrid und Fallback werden sichtbar markiert statt versteckt.',
+    sourceLiveTitle: 'Live',
+    sourceLiveBody: 'Aus einer offiziellen API oder Website im letzten erfolgreichen Abruf.',
+    sourceHybridTitle: 'Hybrid',
+    sourceHybridBody: 'Offizielle Daten, ergänzt durch überprüfte Vervollständigung bei unvollständigen Quellen.',
+    sourceFallbackTitle: 'Fallback',
+    sourceFallbackBody: 'Wird nur genutzt, wenn die Live-Quelle fehlt, inklusive Begründung.',
+    quickCryptoPill: 'Krypto -> THB',
+    quickCashPill: 'Bargeld / FX -> THB',
+    startBuyBtc: '0,01 BTC kaufen',
+    startSellUsdt: '1000 USDT verkaufen',
+    startUsdCash: '1000 USD Bargeld wechseln',
+    startCnyCash: '5000 CNY Bargeld wechseln',
+    missionEyebrow: 'Wofür diese Seite da ist',
+    missionTitle: 'Vor dem Klick zum echten Anbieter entscheiden',
+    missionBody: 'Gesamtkosten, Gebühren, Liquidität, Datenstatus und echte Ausgeh-Links in einer Ansicht statt als rohe Datensammlung.',
+    proofOneTitle: 'Datenstatus klar sichtbar',
+    proofOneBody: 'Jede Fläche zeigt live, hybrid oder fallback offen an.',
+    proofTwoTitle: 'Direkte Ausgeh-Aktionen',
+    proofTwoBody: 'Direkter Sprung zur Börse, Karte oder Referenzseite.',
+    proofThreeTitle: 'Vorgefüllte Standardrouten',
+    proofThreeBody: 'Die Seite öffnet nicht leer, sondern mit einem realistischen Startpunkt.',
+  },
 };
 
 export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
+  const contentLocale = resolveContentLocale(locale);
   const c = copy[locale];
   const coverageValue = c.coverageValue
     .replace('{exchangeCount}', String(exchanges.length))
     .replace('{cashCount}', String(publicCashProviders.length));
-  const homeRouteGuides = routeGuides.slice(0, 6);
+  const homeRouteGuides = routeGuides.slice(0, 8);
   const webSiteLd = websiteJsonLd(locale, '', c.heroBody);
   const breadcrumbLd = breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }]);
   return (
@@ -308,8 +492,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               className="card card-interactive p-5"
             >
               <p className="text-sm text-stone-400">{guide.type === 'crypto' ? c.quickCryptoPill : c.quickCashPill}</p>
-              <p className="mt-2 text-xl font-semibold text-white">{guide.title[locale]}</p>
-              <p className="mt-3 text-sm text-stone-400">{guide.summary[locale]}</p>
+              <p className="mt-2 text-xl font-semibold text-white">{guide.title[contentLocale]}</p>
+              <p className="mt-3 text-sm text-stone-400">{guide.summary[contentLocale]}</p>
             </TrackLink>
           ))}
         </div>
@@ -329,6 +513,32 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           ))}
         </div>
       </Section>
+
+      {contentLocale === 'en' ? (
+        <Section title="Who this site is built for" description="English search traffic is the fastest path to international discovery, so the homepage now explains the real use cases more clearly.">
+          <div className="grid gap-4 lg:grid-cols-3">
+            {[
+              {
+                title: 'Travelers landing in Bangkok',
+                body: 'Use ExchangeTHB to compare USD, EUR, JPY, or CNY cash routes before choosing an in-city money changer.',
+              },
+              {
+                title: 'Expats and long-stay users',
+                body: 'Compare BTC or USDT routes into THB with fees, orderbook depth, and outbound links to regulated Thai exchanges.',
+              },
+              {
+                title: 'International search users',
+                body: 'Country-intent pages and route guides help users searching from Japan, Korea, Germany, or Europe move straight into a THB comparison flow.',
+              },
+            ].map((item) => (
+              <div key={item.title} className="card p-6">
+                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
+                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      ) : null}
 
       <Section title={c.trustedTitle} description={c.trustedDescription}>
         <div className="grid gap-6 lg:grid-cols-2">
@@ -368,8 +578,19 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
-  const title = locale === 'th' ? 'หน้าแรก ExchangeTHB' : locale === 'zh' ? 'ExchangeTHB 首页' : 'Thailand Crypto and Cash Exchange Comparison';
-  const description = copy[locale].heroBody;
+  const contentLocale = resolveContentLocale(locale);
+  const title = locale === 'th'
+    ? 'หน้าแรก ExchangeTHB'
+    : locale === 'zh'
+      ? 'ExchangeTHB 首页'
+      : locale === 'ja'
+        ? 'Thailand Crypto and Cash Exchange Comparison'
+        : locale === 'ko'
+          ? 'Thailand Crypto and Cash Exchange Comparison'
+          : locale === 'de'
+            ? 'Thailand Crypto and Cash Exchange Comparison'
+            : 'Thailand Crypto and Cash Exchange Comparison';
+  const description = copy[contentLocale].heroBody;
   return {
     title,
     description,

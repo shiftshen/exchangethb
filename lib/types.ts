@@ -1,10 +1,18 @@
-export type Locale = 'th' | 'en' | 'zh';
+export type Locale = 'th' | 'en' | 'zh' | 'ja' | 'ko' | 'de';
+export type ContentLocale = 'th' | 'en' | 'zh';
 export type AffiliateStatus = 'reward_available' | 'campaign_only' | 'official_only';
 export type ExchangeSlug = 'binance-th' | 'bitkub' | 'upbit-thailand' | 'orbix';
 export type CurrencyCode = 'USD' | 'CNY' | 'EUR' | 'JPY' | 'GBP';
 export type CryptoSymbol = 'BTC' | 'ETH' | 'USDT' | 'XRP' | 'DOGE' | 'SOL';
 
-export interface CopyGroup { th: string; en: string; zh: string; }
+export interface CopyGroup {
+  th: string;
+  en: string;
+  zh: string;
+  ja?: string;
+  ko?: string;
+  de?: string;
+}
 export interface NavItem { href: string; label: CopyGroup; }
 export interface AffiliateLink { status: AffiliateStatus; trackingUrl?: string; officialUrl: string; disclosure: CopyGroup; startAt?: string; endAt?: string; }
 export interface ExchangeFee { tradingFeePct: number; thbWithdraw: number; networks: Record<string, number>; }

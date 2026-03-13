@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
+import { locales, resolveContentLocale } from '@/lib/i18n';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
 import { getRouteGuide, routeGuideSlugs } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
@@ -34,14 +35,37 @@ const uiCopy = {
     noteTitle: 'ทำไมหน้านี้จึงมีประโยชน์',
     noteBody: 'หน้านี้ช่วยให้ผู้ใช้ที่มาจากการค้นหาลงจอดบนเส้นทางเปรียบเทียบ THB ที่สมจริงทันที แทนการเริ่มจากหน้าคอมแพร์ว่างเปล่า',
   },
+  ja: {
+    routeGuide: 'ルートガイド',
+    whyTitle: 'このページで判断できること',
+    checklistTitle: '外部へ進む前に確認すること',
+    compareCta: '比較ページを開く',
+    methodologyCta: '方法論を見る',
+    noteTitle: 'このページの役割',
+    noteBody: '検索から来たユーザーが空の比較ツールではなく、実際の THB 比較導線へ直接入れるようにするためのページです。',
+  },
+  ko: {
+    routeGuide: '경로 가이드',
+    whyTitle: '이 페이지가 도와주는 결정',
+    checklistTitle: '외부로 나가기 전 확인할 점',
+    compareCta: '비교 페이지 열기',
+    methodologyCta: '방법론 보기',
+    noteTitle: '이 페이지의 역할',
+    noteBody: '검색에서 들어온 사용자가 빈 비교 도구가 아니라 실제 THB 비교 흐름으로 바로 들어가도록 만드는 페이지입니다.',
+  },
+  de: {
+    routeGuide: 'Routenleitfaden',
+    whyTitle: 'Wobei diese Seite hilft',
+    checklistTitle: 'Vor dem Klick nach außen prüfen',
+    compareCta: 'Live-Vergleich öffnen',
+    methodologyCta: 'Methodik lesen',
+    noteTitle: 'Warum diese Seite existiert',
+    noteBody: 'Diese Seite hilft Suchenden dabei, direkt in einen realistischen THB-Vergleich einzusteigen statt auf einer leeren Vergleichsseite zu landen.',
+  },
 } as const;
 
 export function generateStaticParams() {
-  return routeGuideSlugs.flatMap((slug) => ([
-    { locale: 'en', slug },
-    { locale: 'zh', slug },
-    { locale: 'th', slug },
-  ]));
+  return routeGuideSlugs.flatMap((slug) => locales.map((locale) => ({ locale, slug })));
 }
 
 export default async function RouteGuidePage({ params }: { params: Promise<{ locale: Locale; slug: string }> }) {
@@ -49,11 +73,12 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
   const guide = getRouteGuide(slug);
   if (!guide) notFound();
 
+  const contentLocale = resolveContentLocale(locale);
   const c = uiCopy[locale];
-  const guideTitle = guide.title[locale];
-  const guideSummary = guide.summary[locale];
-  const guideIntro = guide.intro[locale];
-  const guideAudience = guide.audience[locale];
+  const guideTitle = guide.title[contentLocale];
+  const guideSummary = guide.summary[contentLocale];
+  const guideIntro = guide.intro[contentLocale];
+  const guideAudience = guide.audience[contentLocale];
   const compareHref = `/${locale}${guide.compareHref}`;
   const breadcrumbLd = breadcrumbJsonLd([
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
@@ -91,7 +116,7 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
           <div className="card p-6">
             <h2 className="text-lg font-semibold text-white">{c.checklistTitle}</h2>
             <ul className="mt-4 space-y-3 text-sm text-stone-300">
-              {guide.checks[locale].map((item) => (
+              {guide.checks[contentLocale].map((item) => (
                 <li key={item} className="rounded-2xl border border-white/8 bg-surface-800/70 px-4 py-3">{item}</li>
               ))}
             </ul>
@@ -107,8 +132,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const guide = getRouteGuide(slug);
   if (!guide) return {};
 
-  const title = guide.title[locale];
-  const description = guide.summary[locale];
+  const contentLocale = resolveContentLocale(locale);
+  const title = guide.title[contentLocale];
+  const description = guide.summary[contentLocale];
   const path = `/routes/${guide.slug}`;
 
   return {

@@ -8,6 +8,7 @@ import { publicCashProviders } from '@/data/site';
 import { formatDisplayAmount, formatInputAmount, inspectPositiveDecimal, parsePositiveDecimal } from '@/lib/amounts';
 import { compareCashLive } from '@/lib/cash-live';
 import { localizeCashText } from '@/lib/cash-text';
+import { resolveContentLocale } from '@/lib/i18n';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
 import { CurrencyCode, Locale } from '@/lib/types';
 
@@ -292,7 +293,8 @@ export default async function CashPage({ params, searchParams }: { params: Promi
   const userLatRaw = Array.isArray(query.userLat) ? query.userLat[0] : query.userLat;
   const userLngRaw = Array.isArray(query.userLng) ? query.userLng[0] : query.userLng;
   const maxDistanceKm = parsePositiveDecimal(query.maxDistanceKm, 10, 1);
-  const c = copy[locale];
+  const contentLocale = resolveContentLocale(locale);
+  const c = copy[contentLocale];
   const parsedUserLat = userLatRaw ? Number(userLatRaw) : NaN;
   const parsedUserLng = userLngRaw ? Number(userLngRaw) : NaN;
   const hasUserLocation = Number.isFinite(parsedUserLat) && Math.abs(parsedUserLat) <= 90 && Number.isFinite(parsedUserLng) && Math.abs(parsedUserLng) <= 180;
@@ -625,14 +627,41 @@ export default async function CashPage({ params, searchParams }: { params: Promi
           </div>
         </div>
       </Section>
+
+      {contentLocale === 'en' ? (
+        <Section title="English search questions this page answers" description="These blocks strengthen long-tail relevance for travelers and international users searching for Bangkok cash exchange routes.">
+          <div className="grid gap-4 lg:grid-cols-3">
+            {[
+              {
+                title: 'Where should I exchange USD to THB in Bangkok?',
+                body: 'This page compares money changers by observed rate, distance context, branch hours, and the quality of the current data source.',
+              },
+              {
+                title: 'How do I compare EUR cash to THB in Thailand?',
+                body: 'Use the cash compare page to rank Bangkok routes by estimated THB output, then inspect the branch detail page before you travel.',
+              },
+              {
+                title: 'Why is the best rate not always the best branch for me?',
+                body: 'Distance, map accuracy, reference-point precision, and opening hours can change which route is actually useful.',
+              },
+            ].map((item) => (
+              <div key={item.title} className="card p-6">
+                <h2 className="text-lg font-semibold text-white">{item.title}</h2>
+                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      ) : null}
     </div>
   );
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
+  const contentLocale = resolveContentLocale(locale);
   const title = locale === 'th' ? 'เปรียบเทียบเงินสด/ฟอเร็กซ์เป็นบาท' : locale === 'zh' ? '现金外汇换泰铢比较' : 'Cash Exchange to THB in Bangkok';
-  const description = copy[locale].description;
+  const description = copy[contentLocale].description;
   return {
     title,
     description,
