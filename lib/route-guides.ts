@@ -1,6 +1,7 @@
-import { ContentLocale } from '@/lib/types';
+import { CopyGroup } from '@/lib/types';
 
 export type RouteGuideType = 'crypto' | 'cash';
+export type LocalizedList<T> = { th: T; en: T; zh: T; ja?: T; ko?: T; de?: T };
 
 export interface RouteGuide {
   slug: string;
@@ -9,12 +10,12 @@ export interface RouteGuide {
   symbol?: string;
   currency?: string;
   amount: string;
-  title: Record<ContentLocale, string>;
-  summary: Record<ContentLocale, string>;
-  intro: Record<ContentLocale, string>;
-  audience: Record<ContentLocale, string>;
-  checks: Record<ContentLocale, string[]>;
-  faqs?: Record<ContentLocale, Array<{ question: string; answer: string }>>;
+  title: CopyGroup;
+  summary: CopyGroup;
+  intro: CopyGroup;
+  audience: CopyGroup;
+  checks: LocalizedList<string[]>;
+  faqs?: LocalizedList<Array<{ question: string; answer: string }>>;
   keywords: string[];
 }
 
@@ -392,21 +393,33 @@ export const routeGuides: RouteGuide[] = [
       en: 'Japan to Thailand money exchange guide',
       zh: '日本游客到泰国换汇指南',
       th: 'คู่มือแลกเงินจากญี่ปุ่นเป็นบาทไทย',
+      ja: '日本からタイへの両替ガイド',
+      ko: '일본 출발 태국 환전 가이드',
+      de: 'Geldwechsel von Japan nach Thailand',
     },
     summary: {
       en: 'A Bangkok-focused guide for travelers from Japan who need to compare yen cash routes into Thai baht before visiting a money changer.',
       zh: '面向日本游客的曼谷换汇指南，帮助先比较日元现金换 THB 的路线。',
       th: 'คู่มือสำหรับนักเดินทางจากญี่ปุ่นที่ต้องการเทียบเส้นทางแลกเงินเยนเป็นบาทไทยก่อนเดินทางไปยังร้านแลกเงินจริง',
+      ja: '日本からの旅行者向けに、両替店へ行く前にバンコクで円現金から THB へのルートを比較できるガイドです。',
+      ko: '일본에서 오는 여행자가 환전소를 방문하기 전에 방콕에서 엔화 현금을 THB로 바꾸는 경로를 비교할 수 있게 돕는 가이드입니다.',
+      de: 'Ein Bangkok-orientierter Leitfaden für Reisende aus Japan, die vor dem Gang zur Wechselstube Yen-Bargeld in THB vergleichen möchten.',
     },
     intro: {
       en: 'This page turns a broad Japan-to-Thailand exchange query into a concrete next step: compare yen cash routes in Bangkok with direct provider links.',
       zh: '这个页面把宽泛的“日本到泰国换汇”搜索，收敛成更具体的下一步：比较曼谷的 JPY 现金路线。',
       th: 'หน้านี้เปลี่ยนคำค้นกว้างๆ เรื่องการแลกเงินจากญี่ปุ่นมาไทย ให้กลายเป็นขั้นตอนถัดไปที่จับต้องได้ คือการเทียบเส้นทาง JPY เงินสดในกรุงเทพ',
+      ja: 'このページは「日本からタイへの両替」という広い検索を、バンコクで円現金ルートを比較する具体的な次の行動へ変えます。',
+      ko: '이 페이지는 "일본에서 태국 환전" 같은 넓은 검색 의도를 방콕의 엔화 현금 비교라는 구체적인 다음 단계로 바꿉니다.',
+      de: 'Diese Seite verwandelt eine breite Suche wie Geldwechsel von Japan nach Thailand in den konkreten nächsten Schritt: Yen-Bargeldrouten in Bangkok mit direkten Anbieterlinks vergleichen.',
     },
     audience: {
       en: 'Built for Japanese tourists, repeat visitors, and anyone arriving with yen who wants a cleaner decision page before walking to an exchange counter.',
       zh: '适合日本游客、回访旅客，以及任何携带日元现金到泰国的人。',
       th: 'เหมาะกับนักท่องเที่ยวจากญี่ปุ่น ผู้เดินทางซ้ำ และผู้ที่ถือเงินเยนก่อนเข้าร้านแลกเงิน',
+      ja: '日本人旅行者、リピーター、そして円を持って到着する人が、両替カウンターへ行く前に判断しやすいページとして設計されています。',
+      ko: '일본인 관광객, 재방문 여행자, 그리고 엔화를 들고 도착하는 사용자가 환전 카운터에 가기 전에 더 쉽게 판단할 수 있도록 만든 페이지입니다.',
+      de: 'Gedacht für japanische Touristen, Wiederkehrer und alle, die mit Yen anreisen und vor dem Gang zur Wechselstube eine klarere Entscheidungsseite brauchen.',
     },
     checks: {
       en: ['Check the latest JPY rate sample before leaving.', 'Use the provider map or reference page to confirm the branch.', 'Treat this as a route guide rather than a final guaranteed quote.'],
@@ -444,6 +457,36 @@ export const routeGuides: RouteGuide[] = [
           answer: 'ไม่ หน้านี้เป็น route guide จากข้อมูลที่สังเกตได้และบริบทของผู้ให้บริการเท่านั้น เรตจริงยังขึ้นกับหน้าร้าน',
         },
       ],
+      ja: [
+        {
+          question: '日本からの旅行者が円からバーツを素早く比較するにはどうすればよいですか？',
+          answer: 'まず JPY 現金ルートページを開き、バンコクの支店文脈、営業時間、データ状態を見てから移動先を決めてください。',
+        },
+        {
+          question: 'このページは店頭の最終レートを保証しますか？',
+          answer: '保証しません。これはルートガイドであり、最終条件は各提供者の店頭ルールに従います。',
+        },
+      ],
+      ko: [
+        {
+          question: '일본 출발 여행자는 엔화에서 바트로 가장 빨리 어떻게 비교해야 하나요?',
+          answer: '먼저 JPY 현금 경로 페이지에서 방콕 지점 맥락, 영업시간, 데이터 상태를 보고 이동 여부를 결정하면 됩니다.',
+        },
+        {
+          question: '이 페이지가 실제 환전소 최종 환율을 보장하나요?',
+          answer: '아닙니다. 이 페이지는 경로 가이드이며 최종 조건은 각 제공자 현장 규칙에 따릅니다.',
+        },
+      ],
+      de: [
+        {
+          question: 'Wie vergleichen Reisende aus Japan Yen zu Baht am schnellsten?',
+          answer: 'Starte mit der JPY-Bargeldroute und prüfe dann Filialkontext, Öffnungszeiten und Datenstatus in Bangkok, bevor du losgehst.',
+        },
+        {
+          question: 'Garantiert diese Seite den finalen Filialkurs?',
+          answer: 'Nein. Diese Seite ist ein Routenguide; die endgültigen Bedingungen liegen weiterhin beim jeweiligen Anbieter.',
+        },
+      ],
     },
     keywords: ['japan to thailand money exchange', 'japan to thailand exchange rate', 'yen to baht thailand', 'japan travel money thailand', 'jpy bangkok money changer'],
   },
@@ -457,21 +500,33 @@ export const routeGuides: RouteGuide[] = [
       en: 'Korea to Thailand money exchange guide',
       zh: '韩国游客到泰国换汇指南',
       th: 'คู่มือแลกเงินจากเกาหลีมาไทย',
+      ja: '韓国からタイへの両替ガイド',
+      ko: '한국 출발 태국 환전 가이드',
+      de: 'Geldwechsel von Korea nach Thailand',
     },
     summary: {
       en: 'A practical Bangkok guide for Korea-origin travelers who want to compare stable money-changing routes into Thai baht before visiting a branch.',
       zh: '面向韩国出发游客的曼谷换汇指南，帮助先看稳定可行的 THB 路线。',
       th: 'คู่มือสำหรับผู้เดินทางจากเกาหลีที่ต้องการเทียบเส้นทางแลกเงินบาทที่ค่อนข้างเสถียรก่อนเดินทางไปยังร้านจริง',
+      ja: '韓国からの旅行者向けに、支店へ行く前にバンコクで現実的な THB ルートを比較する実用ガイドです。',
+      ko: '한국 출발 여행자가 지점을 방문하기 전에 방콕에서 현실적인 THB 환전 경로를 비교할 수 있도록 돕는 실용 가이드입니다.',
+      de: 'Ein praktischer Bangkok-Leitfaden für Reisende aus Korea, die vor dem Besuch einer Wechselstube stabile THB-Routen vergleichen möchten.',
     },
     intro: {
       en: 'KRW cash is not yet part of the live compare set, so this page focuses on how Korea-origin visitors should use the Bangkok cash comparison flow responsibly.',
       zh: '由于当前尚未接入 KRW 实时比较，本页重点是告诉来自韩国的用户，如何合理使用曼谷现金比较流程。',
       th: 'เนื่องจากตอนนี้ยังไม่ได้เชื่อมชุดเปรียบเทียบ KRW สด หน้านี้จึงเน้นการบอกผู้ใช้จากเกาหลีว่า ควรใช้ flow เปรียบเทียบเงินสดในกรุงเทพอย่างไรให้ตรงความจริง',
+      ja: 'KRW 現金はまだライブ比較セットに入っていないため、このページは韓国からの旅行者がバンコクの現金比較フローをどう現実的に使うべきかに焦点を当てています。',
+      ko: 'KRW 현금은 아직 실시간 비교 세트에 포함되지 않았기 때문에, 이 페이지는 한국 출발 사용자가 방콕 현금 비교 흐름을 어떻게 현실적으로 써야 하는지에 초점을 둡니다.',
+      de: 'Da KRW-Bargeld noch nicht Teil des Live-Vergleichs ist, konzentriert sich diese Seite darauf, wie Reisende aus Korea den Bangkok-Cash-Flow realistisch nutzen sollten.',
     },
     audience: {
       en: 'Useful for Korean travelers who need a decision framework first and can then switch to the closest supported cash route on the compare page.',
       zh: '适合先建立决策框架，再在比较页选择当前支持的现金路线的韩国旅客。',
       th: 'มีประโยชน์กับนักเดินทางชาวเกาหลีที่ต้องการกรอบการตัดสินใจก่อน แล้วค่อยไปเลือกเส้นทางเงินสดที่รองรับอยู่ในหน้าคอมแพร์',
+      ja: 'まず判断の枠組みを作り、その後比較ページで現在対応している現金ルートに切り替えたい韓国人旅行者に役立ちます。',
+      ko: '먼저 판단 프레임을 만든 뒤 비교 페이지에서 현재 지원되는 현금 경로로 이동하려는 한국 여행자에게 유용합니다.',
+      de: 'Nützlich für koreanische Reisende, die zuerst einen Entscheidungsrahmen brauchen und danach im Vergleich auf unterstützte Bargeldrouten wechseln können.',
     },
     checks: {
       en: ['Do not assume unsupported currencies have live rates on this site.', 'Use branch quality, hours, and map links as the first filter.', 'Confirm final currency availability with the provider before visiting.'],
@@ -509,6 +564,36 @@ export const routeGuides: RouteGuide[] = [
           answer: 'เพราะสกุลเงินที่ยังไม่รองรับไม่ควรถูกนำเสนอเหมือนเป็นข้อมูลสด หน้านี้จึงช่วยให้ผู้ใช้จากเกาหลีตัดสินใจเรื่องสาขาและเส้นทางได้อย่างตรงความจริง',
         },
       ],
+      ja: [
+        {
+          question: 'ExchangeTHB は現在 KRW から THB のライブ比較をサポートしていますか？',
+          answer: 'いいえ。この韓国ページは旅行者向けの両替判断ページであり、KRW のライブ比較ページではありません。',
+        },
+        {
+          question: 'なぜ韓国ページは KRW 行ではなく、対応済みのバンコク現金ルートへ案内するのですか？',
+          answer: '未対応通貨をライブとして見せるべきではないためです。このページは、韓国からの旅行者が現実的な支店とルートを選べるように作られています。',
+        },
+      ],
+      ko: [
+        {
+          question: 'ExchangeTHB는 지금 KRW에서 THB 실시간 비교를 지원하나요?',
+          answer: '아니요. 이 한국 페이지는 여행 환전 의사결정 페이지이지 KRW 실시간 비교 페이지가 아닙니다.',
+        },
+        {
+          question: '왜 한국 페이지는 KRW 행 대신 지원되는 방콕 현금 경로로 연결되나요?',
+          answer: '지원되지 않는 통화를 실시간처럼 보여주면 안 되기 때문입니다. 이 페이지는 한국 출발 사용자가 현실적인 지점과 경로를 결정하도록 설계되었습니다.',
+        },
+      ],
+      de: [
+        {
+          question: 'Unterstützt ExchangeTHB aktuell einen Live-Vergleich von KRW zu THB?',
+          answer: 'Nein. Die Korea-Seite ist als Reise-Entscheidungsseite gedacht, nicht als Live-KRW-Vergleich.',
+        },
+        {
+          question: 'Warum führt die Korea-Seite zu unterstützten Bangkok-Cash-Routen statt zu KRW-Zeilen?',
+          answer: 'Weil nicht unterstützte Währungen nicht als live dargestellt werden sollten. Diese Seite hilft Reisenden aus Korea, realistische Filial- und Routenentscheidungen zu treffen.',
+        },
+      ],
     },
     keywords: ['korea to thailand money exchange', 'korea to thailand exchange rate', 'korean traveler money thailand', 'thailand money exchange guide korea', 'bangkok exchange guide korea'],
   },
@@ -522,21 +607,33 @@ export const routeGuides: RouteGuide[] = [
       en: 'Germany to Thailand money exchange guide',
       zh: '德国游客到泰国换汇指南',
       th: 'คู่มือแลกเงินจากเยอรมนีมาไทย',
+      ja: 'ドイツからタイへの両替ガイド',
+      ko: '독일 출발 태국 환전 가이드',
+      de: 'Geldwechsel von Deutschland nach Thailand',
     },
     summary: {
       en: 'A route guide for Germany-origin travelers comparing euro cash into Thai baht in Bangkok with direct branch context and source labels.',
       zh: '面向德国游客的欧元换 THB 路线页，突出门店背景和数据状态。',
       th: 'คู่มือสำหรับผู้เดินทางจากเยอรมนีที่ต้องการเทียบเงินยูโรเป็นบาทในกรุงเทพ พร้อมบริบทสาขาและป้ายสถานะข้อมูล',
+      ja: 'ドイツからの旅行者向けに、バンコクでユーロ現金を THB に替える際の支店文脈とデータ状態を比較するルートガイドです。',
+      ko: '독일 출발 여행자가 방콕에서 유로 현금을 THB로 바꿀 때 지점 맥락과 데이터 상태를 함께 비교할 수 있는 경로 가이드입니다.',
+      de: 'Ein Routenguide für Reisende aus Deutschland, die Euro-Bargeld in Bangkok mit Filialkontext und Quellenstatus in THB vergleichen möchten.',
     },
     intro: {
       en: 'This page is built for users searching broadly from Germany to Thailand exchange intent, then moving into a concrete euro-to-baht comparison.',
       zh: '这个页面承接从德国到泰国的宽泛换汇意图，再把用户导入更具体的 EUR 到 THB 比较。',
       th: 'หน้านี้สร้างมาสำหรับผู้ใช้ที่ค้นหาเจตนากว้างๆ เรื่องการแลกเงินจากเยอรมนีมาไทย แล้วต้องการไปต่อยังการเทียบ EUR เป็น THB แบบเจาะจง',
+      ja: 'このページは、ドイツからタイへの両替という広い検索意図を、より具体的な EUR から THB の比較へつなげるために作られています。',
+      ko: '이 페이지는 독일에서 태국 환전이라는 넓은 검색 의도를 더 구체적인 EUR에서 THB 비교로 이어주기 위해 만들어졌습니다.',
+      de: 'Diese Seite ist für Nutzer gedacht, die breit nach Geldwechsel von Deutschland nach Thailand suchen und anschließend in einen konkreten EUR-zu-THB-Vergleich wechseln wollen.',
     },
     audience: {
       en: 'Useful for travelers from Germany who already hold euros and want a stronger Bangkok-specific decision page than a generic FX article.',
       zh: '适合已经持有欧元、希望看到更贴近曼谷场景而不是泛泛外汇文章的德国旅客。',
       th: 'เหมาะกับผู้เดินทางจากเยอรมนีที่ถือเงินยูโรอยู่แล้ว และต้องการหน้าตัดสินใจสำหรับกรุงเทพที่เฉพาะทางกว่าบทความ FX ทั่วไป',
+      ja: 'すでにユーロを持っていて、一般的な FX 記事よりもバンコクに特化した判断ページを求めるドイツからの旅行者に役立ちます。',
+      ko: '이미 유로를 들고 있고 일반적인 FX 글보다 방콕에 특화된 의사결정 페이지를 원하는 독일 출발 여행자에게 유용합니다.',
+      de: 'Nützlich für Reisende aus Deutschland, die bereits Euro halten und statt eines generischen FX-Artikels eine stärkere Bangkok-spezifische Entscheidungsseite brauchen.',
     },
     checks: {
       en: ['Use the compare page to see rate context, not just one quoted number.', 'Check branch hours before traveling in Bangkok.', 'Prefer rows with live source labels when outcomes are close.'],
@@ -574,6 +671,36 @@ export const routeGuides: RouteGuide[] = [
           answer: 'มีประโยชน์กว่า เพราะเชื่อมกับสาขาและลิงก์ของผู้ให้บริการในกรุงเทพโดยตรง ไม่ใช่แค่บทความอธิบายเรตแบบกว้างๆ',
         },
       ],
+      ja: [
+        {
+          question: 'ドイツからの旅行者は、バンコクでユーロを替える前に何を比較すべきですか？',
+          answer: '推定 THB、営業時間、そしてその行が live か fallback かを見てから使うルートを決めてください。',
+        },
+        {
+          question: 'このページは一般的な EUR to THB 記事より役立ちますか？',
+          answer: 'はい。これは実際のバンコク支店と提供者リンクに結びついた判断ページで、抽象的な為替記事ではありません。',
+        },
+      ],
+      ko: [
+        {
+          question: '독일 출발 여행자는 방콕에서 유로를 환전하기 전에 무엇을 비교해야 하나요?',
+          answer: '예상 THB 결과, 영업시간, 그리고 해당 행이 live인지 fallback인지 먼저 확인해야 합니다.',
+        },
+        {
+          question: '이 페이지가 일반적인 EUR to THB 글보다 더 유용한가요?',
+          answer: '그렇습니다. 이 페이지는 실제 방콕 지점과 제공자 링크에 연결된 의사결정 페이지이며 추상적인 환율 글이 아닙니다.',
+        },
+      ],
+      de: [
+        {
+          question: 'Was sollten Reisende aus Deutschland vor dem Euro-Wechsel in Bangkok vergleichen?',
+          answer: 'Vergleiche den geschätzten THB-Ertrag, Öffnungszeiten und ob die Zeile live oder fallback ist, bevor du die Route nutzt.',
+        },
+        {
+          question: 'Ist diese Seite hilfreicher als ein generischer EUR-zu-THB-Artikel?',
+          answer: 'Ja. Sie ist als Entscheidungsseite mit echten Bangkok-Filialen und Anbieterlinks gebaut, nicht als abstrakter Wechselkursartikel.',
+        },
+      ],
     },
     keywords: ['germany to thailand money exchange', 'germany to thailand exchange rate', 'euro to baht thailand', 'german traveler thailand money', 'eur bangkok money changer'],
   },
@@ -587,21 +714,33 @@ export const routeGuides: RouteGuide[] = [
       en: 'Europe to Thailand money exchange guide',
       zh: '欧洲游客到泰国换汇指南',
       th: 'คู่มือแลกเงินจากยุโรปมาไทย',
+      ja: 'ヨーロッパからタイへの両替ガイド',
+      ko: '유럽 출발 태국 환전 가이드',
+      de: 'Geldwechsel von Europa nach Thailand',
     },
     summary: {
       en: 'A Europe-focused entry page that leads travelers into the practical Bangkok EUR cash to THB comparison flow.',
       zh: '面向欧洲访客的入口页，把用户导入更实用的曼谷 EUR 现金换 THB 流程。',
       th: 'หน้าเริ่มต้นสำหรับผู้เดินทางจากยุโรปที่ต้องการเข้าสู่ flow การเทียบ EUR เงินสดเป็น THB ในกรุงเทพ',
+      ja: 'ヨーロッパからの旅行者を、実用的なバンコク EUR 現金から THB への比較フローへ導く入口ページです。',
+      ko: '유럽 출발 여행자를 방콕의 실용적인 EUR 현금 -> THB 비교 흐름으로 이끄는 진입 페이지입니다.',
+      de: 'Eine Europa-orientierte Einstiegsseite, die Reisende in den praktischen Bangkok-EUR-Bargeld-zu-THB-Vergleich führt.',
     },
     intro: {
       en: 'This route helps Europe-origin users skip generic travel content and move directly into a Bangkok-specific money-changing decision.',
       zh: '这个页面帮助来自欧洲的用户跳过泛泛旅游内容，直接进入更贴近曼谷实际情况的换汇决策。',
       th: 'หน้านี้ช่วยให้ผู้ใช้จากยุโรปข้ามคอนเทนต์ท่องเที่ยวแบบกว้างๆ แล้วเข้าไปยังการตัดสินใจเรื่องร้านแลกเงินในกรุงเทพโดยตรง',
+      ja: 'このルートは、ヨーロッパからのユーザーが一般的な旅行記事を飛ばし、バンコク特化の両替判断へ直接進めるようにします。',
+      ko: '이 경로는 유럽 출발 사용자가 일반적인 여행 콘텐츠를 건너뛰고 방콕 특화 환전 의사결정으로 바로 들어가도록 돕습니다.',
+      de: 'Diese Route hilft Nutzern aus Europa, generische Reiseinhalte zu überspringen und direkt in eine Bangkok-spezifische Geldwechsel-Entscheidung zu gehen.',
     },
     audience: {
       en: 'Useful for euro-zone visitors, long-stay travelers, and remote workers planning their first cash exchange route after landing in Thailand.',
       zh: '适合欧元区游客、长期停留者和远程工作者，在抵达泰国后规划第一条现金换汇路线。',
       th: 'เหมาะกับผู้เดินทางจากยูโรโซน ผู้พำนักระยะยาว และ remote worker ที่ต้องการวางแผนเส้นทางแลกเงินสดครั้งแรกหลังมาถึงไทย',
+      ja: 'ユーロ圏からの旅行者、長期滞在者、リモートワーカーがタイ到着後の最初の現金両替ルートを計画するのに役立ちます。',
+      ko: '유로존 방문자, 장기 체류자, 원격 근무자가 태국 도착 후 첫 현금 환전 경로를 계획할 때 유용합니다.',
+      de: 'Nützlich für Besucher aus der Eurozone, Langzeitreisende und Remote-Worker, die ihre erste Bargeldwechselroute nach der Ankunft in Thailand planen.',
     },
     checks: {
       en: ['Start with the EUR route if that is your actual carry currency.', 'Use distance and branch hours together, not rate alone.', 'Open the provider page again before you leave your hotel or airport.'],
@@ -639,6 +778,36 @@ export const routeGuides: RouteGuide[] = [
           answer: 'เหมาะที่สุดกับผู้ใช้จากยูโรโซน แต่ก็ยังใช้เป็นจุดเริ่มต้นการตัดสินใจสำหรับผู้เดินทางจากยุโรปได้',
         },
       ],
+      ja: [
+        {
+          question: 'ヨーロッパからの旅行者はバンコク到着前にこのページをどう使うべきですか？',
+          answer: '広い Europe-to-Thailand 意図を、より実用的な EUR 現金ルートへ絞り込み、そこから実際の提供者比較へ進めてください。',
+        },
+        {
+          question: 'このページはユーロ圏旅行者専用ですか？',
+          answer: '最も相性が良いのはユーロ圏ユーザーですが、ヨーロッパ発ユーザー全体の最初の判断ページとしても使えます。',
+        },
+      ],
+      ko: [
+        {
+          question: '유럽 출발 여행자는 방콕 도착 전에 이 페이지를 어떻게 써야 하나요?',
+          answer: '넓은 Europe-to-Thailand 의도를 더 실용적인 EUR 현금 경로로 좁힌 뒤 실제 제공자 비교로 넘어가면 됩니다.',
+        },
+        {
+          question: '이 페이지는 유로존 여행자 전용인가요?',
+          answer: '가장 잘 맞는 대상은 유로존 사용자지만, 유럽 출발 사용자 전체가 첫 판단 페이지로 써도 됩니다.',
+        },
+      ],
+      de: [
+        {
+          question: 'Wie sollten Reisende aus Europa diese Seite vor der Ankunft in Bangkok nutzen?',
+          answer: 'Nutze sie, um eine breite Europe-to-Thailand-Absicht auf eine praktischere EUR-Bargeldroute zu verdichten und dann in den echten Vergleich zu gehen.',
+        },
+        {
+          question: 'Ist diese Seite nur für Reisende aus der Eurozone?',
+          answer: 'Sie ist am stärksten für Nutzer aus der Eurozone, funktioniert aber auch als erste Entscheidungsseite für Reisende aus Europa allgemein.',
+        },
+      ],
     },
     keywords: ['europe to thailand money exchange', 'europe to thailand exchange rate', 'europe travel money thailand', 'euro cash thailand', 'bangkok exchange guide europe'],
   },
@@ -652,21 +821,33 @@ export const routeGuides: RouteGuide[] = [
       en: 'Bangkok airport money exchange guide',
       zh: '曼谷机场换汇指南',
       th: 'คู่มือแลกเงินที่สนามบินกรุงเทพ',
+      ja: 'バンコク空港の両替ガイド',
+      ko: '방콕 공항 환전 가이드',
+      de: 'Geldwechsel am Flughafen Bangkok',
     },
     summary: {
       en: 'A decision page for travelers comparing airport convenience against stronger city money changer routes into Thai baht.',
       zh: '面向游客的决策页，比较机场便利性与市区更强路线之间的取舍。',
       th: 'หน้าช่วยตัดสินใจสำหรับนักเดินทางที่ต้องการเทียบความสะดวกของสนามบินกับเส้นทางแลกเงินในเมืองที่ดีกว่า',
+      ja: '空港の便利さと、市内でより強い両替ルートを比較したい旅行者向けの判断ページです。',
+      ko: '공항의 편의성과 시내의 더 강한 환전 경로를 비교하려는 여행자를 위한 의사결정 페이지입니다.',
+      de: 'Eine Entscheidungsseite für Reisende, die Bequemlichkeit am Flughafen gegen stärkere Wechselrouten in der Stadt abwägen.',
     },
     intro: {
       en: 'This page is built for searches like Bangkok airport money exchange and helps users move from a broad arrival question into a practical compare flow.',
       zh: '这个页面承接 Bangkok airport money exchange 这类搜索，把用户带进更实用的比较流程。',
       th: 'หน้านี้รองรับคำค้นอย่าง Bangkok airport money exchange และช่วยให้ผู้ใช้เปลี่ยนจากคำถามกว้างๆ ตอนมาถึง ไปสู่ flow เปรียบเทียบที่ใช้งานได้จริง',
+      ja: 'このページは Bangkok airport money exchange のような検索を受け止め、到着直後の広い疑問を実用的な比較フローへ変えます。',
+      ko: '이 페이지는 Bangkok airport money exchange 같은 검색을 받아, 도착 직후의 넓은 질문을 실용적인 비교 흐름으로 바꿉니다.',
+      de: 'Diese Seite ist für Suchanfragen wie Bangkok airport money exchange gebaut und führt von einer breiten Ankunftsfrage in einen praktischen Vergleichsfluss.',
     },
     audience: {
       en: 'Useful for first-time visitors who need a fast answer on whether to exchange at the airport or wait for a city-center money changer.',
       zh: '适合第一次来泰国、想快速判断该在机场换还是进市区再换的用户。',
       th: 'เหมาะกับผู้มาไทยครั้งแรกที่ต้องการคำตอบเร็วๆ ว่าควรแลกที่สนามบินหรือรอเข้าเมืองก่อน',
+      ja: '空港で替えるべきか、市内の両替店まで待つべきかを素早く判断したい初回訪問者に役立ちます。',
+      ko: '공항에서 바로 환전할지 시내 환전소까지 기다릴지 빠르게 판단해야 하는 첫 방문자에게 유용합니다.',
+      de: 'Nützlich für Erstbesucher, die schnell entscheiden wollen, ob sie am Flughafen wechseln oder bis zur Stadt warten sollten.',
     },
     checks: {
       en: ['Use airport exchange only as the convenience baseline.', 'Compare city-center routes before locking in a large amount.', 'Check branch hours and map links before leaving the airport.'],
@@ -704,6 +885,36 @@ export const routeGuides: RouteGuide[] = [
           answer: 'เช็กเวลาเปิด ลิงก์แผนที่หรือหน้าอ้างอิง และดูว่าข้อมูลตอนนี้เป็น live หรือ fallback',
         },
       ],
+      ja: [
+        {
+          question: 'バンコク空港で替えるべきですか、それとも市内まで待つべきですか？',
+          answer: 'このページはそのトレードオフを比較するためのものです。空港は便利ですが、金額が大きい場合は市内ルートの方が価値が出ることがあります。',
+        },
+        {
+          question: '空港から市内の両替店へ向かう前に何を確認すべきですか？',
+          answer: '営業時間、地図または参照リンク、そして現在のデータ状態が live か fallback かを確認してください。',
+        },
+      ],
+      ko: [
+        {
+          question: '방콕 공항에서 바로 환전해야 하나요, 아니면 시내까지 기다려야 하나요?',
+          answer: '이 페이지는 그 선택을 비교하도록 돕습니다. 공항은 편하지만, 금액이 크면 시내 경로가 더 나을 수 있습니다.',
+        },
+        {
+          question: '공항에서 시내 환전소로 가기 전에 무엇을 확인해야 하나요?',
+          answer: '영업시간, 지도 또는 참고 링크, 그리고 현재 데이터가 live인지 fallback인지 확인해야 합니다.',
+        },
+      ],
+      de: [
+        {
+          question: 'Soll ich am Flughafen Bangkok wechseln oder bis zur Stadt warten?',
+          answer: 'Diese Seite hilft, genau diesen Trade-off zu vergleichen. Der Flughafen ist bequemer, aber bei größeren Beträgen lohnt sich oft die Fahrt in die Stadt.',
+        },
+        {
+          question: 'Was sollte ich prüfen, bevor ich vom Flughafen zu einer Wechselstube in Bangkok fahre?',
+          answer: 'Prüfe Öffnungszeiten, Karten- oder Referenzlinks und ob die Daten aktuell live oder fallback sind.',
+        },
+      ],
     },
     keywords: ['bangkok airport money exchange', 'bangkok airport exchange rate', 'exchange money after landing bangkok', 'airport vs city exchange bangkok', 'thailand airport money exchange'],
   },
@@ -717,21 +928,33 @@ export const routeGuides: RouteGuide[] = [
       en: 'Pratunam money exchange guide',
       zh: '水门换汇指南',
       th: 'คู่มือแลกเงินย่านประตูน้ำ',
+      ja: 'プラトゥーナム両替ガイド',
+      ko: '프라투남 환전 가이드',
+      de: 'Geldwechsel in Pratunam',
     },
     summary: {
       en: 'A Bangkok cash route page centered on Pratunam-area providers, branch context, and practical walk-in decisions.',
       zh: '以水门一带为核心的曼谷换汇路线页，强调门店背景和到店决策。',
       th: 'หน้าเส้นทางแลกเงินในกรุงเทพที่เน้นย่านประตูน้ำ พร้อมบริบทของสาขาและการตัดสินใจก่อนเดินทางไปจริง',
+      ja: 'プラトゥーナム周辺の提供者、支店文脈、実際の来店判断に焦点を当てたバンコク現金ルートページです。',
+      ko: '프라투남 지역 제공자, 지점 맥락, 실제 방문 결정을 중심으로 한 방콕 현금 경로 페이지입니다.',
+      de: 'Eine Bangkok-Cash-Route-Seite rund um Anbieter im Gebiet Pratunam, Filialkontext und praktische Walk-in-Entscheidungen.',
     },
     intro: {
       en: 'This page turns broad Pratunam money exchange searches into a realistic compare flow using the providers that currently have the strongest public data in this area.',
       zh: '这个页面把宽泛的 Pratunam money exchange 搜索，转成更真实的比较流程。',
       th: 'หน้านี้เปลี่ยนคำค้นกว้างๆ เรื่อง Pratunam money exchange ให้กลายเป็น flow เปรียบเทียบที่ตรงความจริงมากขึ้น',
+      ja: 'このページは広い Pratunam money exchange 検索を、このエリアで現在もっとも公開データが強い提供者を使った比較フローへ変えます。',
+      ko: '이 페이지는 넓은 Pratunam money exchange 검색을, 이 지역에서 현재 공개 데이터가 가장 강한 제공자 중심의 비교 흐름으로 바꿉니다.',
+      de: 'Diese Seite verwandelt breite Suchen nach Pratunam money exchange in einen realistischen Vergleichsfluss mit den in diesem Gebiet derzeit stärksten öffentlichen Datenquellen.',
     },
     audience: {
       en: 'Useful for travelers staying near Pratunam who want a cleaner answer than a generic neighborhood blog post.',
       zh: '适合住在水门附近、想要比普通旅游博客更实用答案的旅客。',
       th: 'เหมาะกับนักเดินทางที่พักใกล้ประตูน้ำและต้องการคำตอบที่ใช้งานได้จริงกว่าบล็อกแนะนำย่านทั่วไป',
+      ja: 'プラトゥーナム近くに滞在し、一般的な街歩きブログより実用的な答えが欲しい旅行者に役立ちます。',
+      ko: '프라투남 근처에 머물며 일반적인 지역 블로그 글보다 실용적인 답을 원하는 여행자에게 유용합니다.',
+      de: 'Nützlich für Reisende in der Nähe von Pratunam, die eine praktischere Antwort als einen generischen Viertel-Blogpost suchen.',
     },
     checks: {
       en: ['Use this as a route page, not a guaranteed branch quote.', 'Check whether the row is an address-based point or a reference point.', 'Compare hours before walking over in Bangkok traffic.'],
@@ -769,6 +992,36 @@ export const routeGuides: RouteGuide[] = [
           answer: 'ไม่เสมอไป บางรายการเป็นจุดที่อิงจากที่อยู่จริง บางรายการเป็นเพียง area reference และระบบจะแสดงความต่างนั้นไว้ชัดเจน',
         },
       ],
+      ja: [
+        {
+          question: 'なぜプラトゥーナムはバンコク両替検索で重要なのですか？',
+          answer: 'プラトゥーナムはバンコクでも強い両替検索クラスターの一つであり、このページは地域意図を実際の支店比較へつなげます。',
+        },
+        {
+          question: 'このページはプラトゥーナムの正確な窓口だけを比較していますか？',
+          answer: '必ずしもそうではありません。正確な住所ベースの点もあれば、エリア参照点もあり、その違いをページ上で明示しています。',
+        },
+      ],
+      ko: [
+        {
+          question: '왜 프라투남은 방콕 환전 검색에서 중요한가요?',
+          answer: '프라투남은 방콕에서 가장 강한 환전 검색 클러스터 중 하나이며, 이 페이지는 지역 의도를 실제 지점 비교로 연결합니다.',
+        },
+        {
+          question: '이 페이지는 프라투남의 정확한 창구만 비교하나요?',
+          answer: '항상 그렇지는 않습니다. 정확한 주소 기반 점도 있고 지역 참조점도 있으며, 페이지에서 그 차이를 명확히 표시합니다.',
+        },
+      ],
+      de: [
+        {
+          question: 'Warum ist Pratunam für Geldwechsel-Suchen in Bangkok so wichtig?',
+          answer: 'Pratunam ist einer der stärksten Wechsel-Suchcluster in Bangkok. Diese Seite führt von der Viertelabsicht direkt in einen echten Filialvergleich.',
+        },
+        {
+          question: 'Vergleicht diese Seite nur exakte Schalter in Pratunam?',
+          answer: 'Nicht immer. Einige Zeilen sind präzise adressbasierte Punkte, andere nur Bereichsreferenzen. Die Seite kennzeichnet den Unterschied ausdrücklich.',
+        },
+      ],
     },
     keywords: ['pratunam money exchange', 'pratunam exchange rate', 'bangkok money changer pratunam', 'pratunam cash to thb', 'money exchange near pratunam'],
   },
@@ -782,21 +1035,33 @@ export const routeGuides: RouteGuide[] = [
       en: 'Central Bangkok money exchange guide',
       zh: '曼谷市中心换汇指南',
       th: 'คู่มือแลกเงินในกรุงเทพชั้นใน',
+      ja: 'バンコク中心部の両替ガイド',
+      ko: '방콕 중심부 환전 가이드',
+      de: 'Geldwechsel im Zentrum Bangkoks',
     },
     summary: {
       en: 'A city-center exchange guide for comparing Bangkok money changer routes with distance, hours, and source transparency.',
       zh: '面向曼谷市中心换汇需求的路线页，比较距离、营业时间和数据透明度。',
       th: 'คู่มือสำหรับการแลกเงินในกรุงเทพชั้นใน ที่ช่วยเทียบระยะทาง เวลาเปิด และความโปร่งใสของแหล่งข้อมูล',
+      ja: '距離、営業時間、ソース透明性を見ながらバンコク中心部の両替ルートを比較するためのガイドです。',
+      ko: '거리, 영업시간, 소스 투명성을 함께 보며 방콕 중심부 환전 경로를 비교하는 가이드입니다.',
+      de: 'Ein Leitfaden zum Vergleich von Geldwechselrouten im Zentrum Bangkoks anhand von Distanz, Öffnungszeiten und Quellentransparenz.',
     },
     intro: {
       en: 'This page helps users searching for central Bangkok money exchange move past generic lists and into a realistic route comparison.',
       zh: '这个页面帮助搜索市中心换汇的用户跳过泛泛列表，进入更真实的路线比较。',
       th: 'หน้านี้ช่วยให้ผู้ใช้ที่ค้นหาร้านแลกเงินในกรุงเทพชั้นใน ข้ามพ้นลิสต์แบบกว้างๆ แล้วเข้าไปยังการเทียบเส้นทางที่สมจริงกว่า',
+      ja: 'このページは、central Bangkok money exchange を探すユーザーが一般的な一覧を越えて、より現実的なルート比較へ進むのを助けます。',
+      ko: '이 페이지는 central Bangkok money exchange 를 찾는 사용자가 일반적인 목록을 넘어서 더 현실적인 경로 비교로 들어가도록 돕습니다.',
+      de: 'Diese Seite hilft Suchenden nach central Bangkok money exchange, über generische Listen hinaus in einen realistischeren Routenvergleich zu kommen.',
     },
     audience: {
       en: 'Useful for visitors who care about balancing a stronger rate against practical branch access in Bangkok traffic.',
       zh: '适合希望在汇率和实际到店便利之间做平衡的访客。',
       th: 'เหมาะกับผู้ใช้ที่ต้องการชั่งน้ำหนักระหว่างเรตที่ดีกว่า กับความสะดวกในการเดินทางท่ามกลางการจราจรของกรุงเทพ',
+      ja: 'より良いレートと、バンコクの交通事情の中で実際に行きやすい支店アクセスのバランスを取りたい訪問者に役立ちます。',
+      ko: '더 좋은 환율과 방콕 교통 상황 속 실제 지점 접근성 사이의 균형을 보고 싶은 방문자에게 유용합니다.',
+      de: 'Nützlich für Besucher, die einen stärkeren Kurs gegen praktikablen Filialzugang im Bangkoker Verkehr abwägen wollen.',
     },
     checks: {
       en: ['Use distance mode honestly: your location is best, Bangkok reference is second best.', 'Check hours before assuming a city-center branch is usable.', 'Treat each result as a route option, not a guaranteed quote.'],
@@ -834,6 +1099,36 @@ export const routeGuides: RouteGuide[] = [
           answer: 'ให้ดูทั้งสถานะแหล่งข้อมูล ป้ายความแม่นยำของตำแหน่ง และเวลาเปิดก่อนใช้เส้นทางนั้น',
         },
       ],
+      ja: [
+        {
+          question: 'このサイトでいう central Bangkok money exchange とは何ですか？',
+          answer: 'バンコク市内アクセス、支店文脈、参照距離に基づくルート順位を意味し、すべての行があなたに最も近い正確な支店だという意味ではありません。',
+        },
+        {
+          question: '市内の高いレートに惑わされないにはどうすればよいですか？',
+          answer: 'ソース状態、位置精度ラベル、営業時間を一緒に確認してからルートを使ってください。',
+        },
+      ],
+      ko: [
+        {
+          question: '이 사이트에서 central Bangkok money exchange 는 정확히 무엇을 뜻하나요?',
+          answer: '방콕 도심 접근성, 지점 맥락, 참조 거리를 기준으로 한 경로 순위를 뜻하며, 모든 행이 당신에게 가장 가까운 정확한 지점이라는 뜻은 아닙니다.',
+        },
+        {
+          question: '도심의 높은 환율에 오해받지 않으려면 어떻게 해야 하나요?',
+          answer: '소스 상태, 위치 정밀도 라벨, 영업시간을 함께 확인한 뒤 경로를 사용해야 합니다.',
+        },
+      ],
+      de: [
+        {
+          question: 'Was bedeutet central Bangkok money exchange auf dieser Seite wirklich?',
+          answer: 'Es bedeutet eine Routenrangfolge rund um Stadtnähe, Filialkontext und Referenzdistanz, nicht die Aussage, dass jede Zeile deine exakt nächstgelegene Filiale ist.',
+        },
+        {
+          question: 'Wie vermeide ich Fehlentscheidungen wegen eines starken Innenstadtkurses?',
+          answer: 'Prüfe Datenstatus, Positionspräzision und Öffnungszeiten gemeinsam, bevor du die Route nutzt.',
+        },
+      ],
     },
     keywords: ['central bangkok money exchange', 'bangkok city center exchange rate', 'money changer central bangkok', 'cash exchange bangkok city center', 'bangkok exchange guide city center'],
   },
@@ -847,21 +1142,33 @@ export const routeGuides: RouteGuide[] = [
       en: 'Bangkok money changer near me guide',
       zh: '我附近的曼谷换汇点指南',
       th: 'คู่มือร้านแลกเงินใกล้ฉันในกรุงเทพ',
+      ja: 'バンコクの近くの両替店ガイド',
+      ko: '내 주변 방콕 환전소 가이드',
+      de: 'Bangkok money changer near me Leitfaden',
     },
     summary: {
       en: 'A location-aware decision page for users searching money changers near them in Bangkok, with clearer guidance on real distance versus reference distance.',
       zh: '面向搜索“我附近的曼谷换汇点”的用户，强调真实距离和参考距离的区别。',
       th: 'หน้าตัดสินใจแบบอิงตำแหน่งสำหรับผู้ใช้ที่ค้นหาร้านแลกเงินใกล้ฉันในกรุงเทพ พร้อมคำอธิบายที่ชัดเจนระหว่างระยะจริงกับระยะอ้างอิง',
+      ja: 'バンコクで近くの両替店を探すユーザー向けに、実距離と参照距離の違いを明確に示す位置対応型の判断ページです。',
+      ko: '방콕에서 내 주변 환전소를 찾는 사용자를 위해 실제 거리와 참조 거리의 차이를 더 분명히 설명하는 위치 인식형 의사결정 페이지입니다.',
+      de: 'Eine standortbezogene Entscheidungsseite für Nutzer, die Geldwechsler in ihrer Nähe in Bangkok suchen, mit klarerer Führung zu realer Distanz versus Referenzdistanz.',
     },
     intro: {
       en: 'This page is built around the near-me intent and helps users understand when they should enable location instead of relying on the Bangkok reference point.',
       zh: '这个页面围绕 near me 搜索意图，帮助用户理解什么时候应该开启定位，而不是只看曼谷参考点。',
       th: 'หน้านี้สร้างขึ้นจากเจตนา near me และช่วยให้ผู้ใช้เข้าใจว่าเมื่อใดควรเปิดตำแหน่งจริง แทนที่จะดูแค่จุดอ้างอิงในกรุงเทพ',
+      ja: 'このページは near-me 意図を中心に作られており、バンコク参照点だけに頼らず、いつ位置情報を有効にすべきかを理解する助けになります。',
+      ko: '이 페이지는 near-me 의도를 중심으로 만들어졌으며, 방콕 참조점만 보지 말고 언제 위치를 켜야 하는지 이해하도록 돕습니다.',
+      de: 'Diese Seite ist rund um die near-me-Absicht gebaut und hilft Nutzern zu verstehen, wann sie Standortzugriff aktivieren sollten statt sich nur auf den Bangkok-Referenzpunkt zu verlassen.',
     },
     audience: {
       en: 'Useful for mobile users already in Bangkok who want the closest practical route without confusing reference-distance labels.',
       zh: '适合已经在曼谷、想找最近可行路线的移动端用户。',
       th: 'เหมาะกับผู้ใช้มือถือที่อยู่ในกรุงเทพแล้ว และต้องการเส้นทางที่ใกล้และใช้งานได้จริงโดยไม่สับสนกับป้ายระยะอ้างอิง',
+      ja: 'すでにバンコクにいて、参照距離ラベルに混乱せず最も実用的に近いルートを見たいモバイルユーザーに役立ちます。',
+      ko: '이미 방콕에 있고 참조 거리 라벨에 헷갈리지 않으면서 가장 실용적으로 가까운 경로를 찾고 싶은 모바일 사용자에게 유용합니다.',
+      de: 'Nützlich für mobile Nutzer, die bereits in Bangkok sind und die praktisch nächstgelegene Route ohne verwirrende Referenzdistanz-Labels finden möchten.',
     },
     checks: {
       en: ['Enable your location if you want a true near-me result.', 'Without location, nearest means closest to the Bangkok reference point.', 'Always use map links before walking to a branch.'],
@@ -897,6 +1204,36 @@ export const routeGuides: RouteGuide[] = [
         {
           question: 'ทำไมเว็บจึงพูดถึงทั้งระยะจริงและระยะอ้างอิง',
           answer: 'เพราะผู้ใช้บางคนอนุญาตตำแหน่งจริง และบางคนไม่อนุญาต หน้านี้จึงทำให้ความต่างนั้นชัดเจนแทนที่จะซ่อนไว้',
+        },
+      ],
+      ja: [
+        {
+          question: 'バンコクで本当に近くの両替店結果を得るにはどうすればいいですか？',
+          answer: 'cash compare ページで位置情報を有効にしてください。そうしない場合、サイトはバンコク参照点でしか順位付けできません。',
+        },
+        {
+          question: 'なぜこのサイトは実距離と参照距離の両方を表示するのですか？',
+          answer: '一部のユーザーは位置情報を許可し、一部は許可しないためです。この違いを隠さず明示するように設計されています。',
+        },
+      ],
+      ko: [
+        {
+          question: '방콕에서 진짜 내 주변 환전소 결과를 보려면 어떻게 해야 하나요?',
+          answer: 'cash compare 페이지에서 위치를 켜야 합니다. 그렇지 않으면 사이트는 방콕 참조점 기준으로만 정렬할 수 있습니다.',
+        },
+        {
+          question: '왜 사이트가 실제 거리와 참조 거리 둘 다를 보여주나요?',
+          answer: '일부 사용자는 위치를 허용하고 일부는 허용하지 않기 때문입니다. 이 차이를 숨기지 않고 분명히 보여주도록 설계되었습니다.',
+        },
+      ],
+      de: [
+        {
+          question: 'Wie bekomme ich in Bangkok ein echtes near-me Ergebnis für Geldwechsel?',
+          answer: 'Aktiviere den Standort auf der Cash-Vergleichsseite. Ohne Standort kann die Seite Filialen nur nach dem Bangkok-Referenzpunkt ordnen.',
+        },
+        {
+          question: 'Warum zeigt die Seite sowohl reale Distanz als auch Referenzdistanz an?',
+          answer: 'Weil manche Nutzer Live-Standort erlauben und andere nicht. Die Seite macht diesen Unterschied absichtlich sichtbar statt ihn zu verstecken.',
         },
       ],
     },

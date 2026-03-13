@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
-import { locales, resolveContentLocale } from '@/lib/i18n';
+import { locales, t } from '@/lib/i18n';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
-import { getRouteGuide, routeGuideSlugs } from '@/lib/route-guides';
+import { getRouteGuide, routeGuides, routeGuideSlugs } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
 
 const uiCopy = {
@@ -85,6 +85,10 @@ function faqJsonLd(entries: Array<{ question: string; answer: string }>) {
   };
 }
 
+function localizeList<T>(value: { th: T; en: T; zh: T; ja?: T; ko?: T; de?: T }, locale: Locale): T {
+  return value[locale] ?? value.en ?? value.th ?? value.zh;
+}
+
 export function generateStaticParams() {
   return routeGuideSlugs.flatMap((slug) => locales.map((locale) => ({ locale, slug })));
 }
@@ -94,14 +98,17 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
   const guide = getRouteGuide(slug);
   if (!guide) notFound();
 
-  const contentLocale = resolveContentLocale(locale);
   const c = uiCopy[locale];
-  const guideTitle = guide.title[contentLocale];
-  const guideSummary = guide.summary[contentLocale];
-  const guideIntro = guide.intro[contentLocale];
-  const guideAudience = guide.audience[contentLocale];
-  const guideFaqs = guide.faqs?.[contentLocale] || [];
+  const guideTitle = t(guide.title, locale);
+  const guideSummary = t(guide.summary, locale);
+  const guideIntro = t(guide.intro, locale);
+  const guideAudience = t(guide.audience, locale);
+  const guideChecks = localizeList(guide.checks, locale);
+  const guideFaqs = guide.faqs ? localizeList(guide.faqs, locale) : [];
   const compareHref = `/${locale}${guide.compareHref}`;
+  const relatedGuides = routeGuides
+    .filter((item) => item.slug !== guide.slug && item.type === guide.type)
+    .slice(0, 3);
   const breadcrumbLd = breadcrumbJsonLd([
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
     { name: guideTitle, item: withLocalePath(locale, `/routes/${guide.slug}`) },
@@ -140,7 +147,7 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
           <div className="card p-6">
             <h2 className="text-lg font-semibold text-white">{c.checklistTitle}</h2>
             <ul className="mt-4 space-y-3 text-sm text-stone-300">
-              {guide.checks[contentLocale].map((item) => (
+              {guideChecks.map((item) => (
                 <li key={item} className="rounded-2xl border border-white/8 bg-surface-800/70 px-4 py-3">{item}</li>
               ))}
             </ul>
@@ -160,6 +167,29 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
           </div>
         </Section>
       ) : null}
+
+      {relatedGuides.length ? (
+        <Section
+          title={locale === 'th' ? 'เส้นทางที่เกี่ยวข้อง' : locale === 'zh' ? '相关路线' : locale === 'ja' ? '関連ルート' : locale === 'ko' ? '관련 경로' : locale === 'de' ? 'Verwandte Routen' : 'Related routes'}
+          description={locale === 'th' ? 'หน้าพวกนี้ช่วยให้ผู้ใช้ไหลต่อจากเจตนาใกล้เคียง ไปยังเส้นทาง THB ที่เกี่ยวข้องมากขึ้น' : locale === 'zh' ? '这些路线页可以把相邻搜索意图继续导向更贴近的 THB 比较页。' : locale === 'ja' ? '近い検索意図から、より適した THB 比較ルートへ進めるための関連ページです。' : locale === 'ko' ? '비슷한 검색 의도에서 더 적합한 THB 비교 경로로 이어지게 하는 관련 페이지입니다.' : locale === 'de' ? 'Diese Seiten leiten ähnliche Suchintentionen in passendere THB-Vergleichswege weiter.' : 'These pages help nearby search intents flow into the next most relevant THB comparison path.'}
+        >
+          <div className="grid gap-4 md:grid-cols-3">
+            {relatedGuides.map((item) => (
+              <TrackLink
+                key={item.slug}
+                href={`/${locale}/routes/${item.slug}`}
+                eventName="route_guide_related_click"
+                eventParams={{ from: guide.slug, to: item.slug }}
+                className="card card-interactive p-5"
+              >
+                <p className="text-sm text-stone-400">{item.type === 'crypto' ? 'Crypto -> THB' : 'Cash / FX -> THB'}</p>
+                <h2 className="mt-2 text-lg font-semibold text-white">{t(item.title, locale)}</h2>
+                <p className="mt-3 text-sm text-stone-400">{t(item.summary, locale)}</p>
+              </TrackLink>
+            ))}
+          </div>
+        </Section>
+      ) : null}
     </div>
   );
 }
@@ -169,9 +199,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const guide = getRouteGuide(slug);
   if (!guide) return {};
 
-  const contentLocale = resolveContentLocale(locale);
-  const title = guide.title[contentLocale];
-  const description = guide.summary[contentLocale];
+  const title = t(guide.title, locale);
+  const description = t(guide.summary, locale);
   const path = `/routes/${guide.slug}`;
 
   return {
