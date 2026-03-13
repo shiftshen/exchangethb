@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/${locale}`, priority: 1, changeFrequency: 'daily' as const, lastModified: now, alternates: { languages: localeAlternates() } },
     { url: `${siteUrl}/${locale}/crypto`, priority: 0.9, changeFrequency: 'hourly' as const, lastModified: now, alternates: { languages: localeAlternates('/crypto') } },
     { url: `${siteUrl}/${locale}/cash`, priority: 0.9, changeFrequency: 'hourly' as const, lastModified: now, alternates: { languages: localeAlternates('/cash') } },
+    { url: `${siteUrl}/${locale}/routes`, priority: 0.8, changeFrequency: 'weekly' as const, lastModified: now, alternates: { languages: localeAlternates('/routes') } },
     ...routeGuides.map((guide) => ({
       url: `${siteUrl}/${locale}/routes/${guide.slug}`,
       priority: 0.75,

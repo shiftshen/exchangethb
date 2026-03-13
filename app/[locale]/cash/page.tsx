@@ -97,6 +97,7 @@ const copy = {
     detail: 'ดูรายละเอียด',
     table: 'ตารางสาขา',
     tableDescription: 'แสดงผลลัพธ์ที่ดีที่สุดต่อแบรนด์จากข้อมูลสด ข้อมูลผสม หรือข้อมูลสำรองที่ผ่านการทบทวน พร้อมระยะอ้างอิงจากจุดศูนย์กลางกรุงเทพ',
+    routeIndex: 'ดู route guides ทั้งหมด',
     provider: 'แบรนด์',
     sourceType: 'สถานะข้อมูล',
     observed: 'สังเกตเมื่อ',
@@ -186,6 +187,7 @@ const copy = {
     detail: 'View detail',
     table: 'Branch table',
     tableDescription: 'Shows the best current row per provider from live, hybrid, or reviewed fallback data, using a central Bangkok reference distance.',
+    routeIndex: 'Browse all THB route guides',
     provider: 'Provider',
     sourceType: 'Data state',
     observed: 'Observed',
@@ -275,6 +277,7 @@ const copy = {
     detail: '查看详情',
     table: '门店列表',
     tableDescription: '按品牌展示当前最佳结果，来源可能是实时抓取、混合数据或人工审核后的备用数据，并显示距曼谷中心参考点的距离。',
+    routeIndex: '查看全部 THB 路线页',
     provider: '品牌',
     sourceType: '数据状态',
     observed: '观测时间',
@@ -764,6 +767,9 @@ export default async function CashPage({ params, searchParams }: { params: Promi
               <p className="mt-3 text-sm text-stone-400">{t(guide.summary, locale)}</p>
             </TrackLink>
           ))}
+        </div>
+        <div>
+          <TrackLink href={`/${locale}/routes`} eventName="cash_route_index_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{c.routeIndex}</TrackLink>
         </div>
       </Section>
     </div>

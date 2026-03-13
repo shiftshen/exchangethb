@@ -65,6 +65,7 @@ const copy = {
     noResultsBody: 'ลองเปลี่ยนจำนวนหรือทิศทาง แล้วระบบจะคำนวณใหม่ทันที',
     table: 'ตารางเปรียบเทียบ',
     tableDescription: 'ผลลัพธ์ทั้งหมดเป็นค่าประมาณและสามารถกดดูรายละเอียดแพลตฟอร์มได้',
+    routeIndex: 'ดู route guides ทั้งหมด',
     platform: 'แพลตฟอร์ม',
     fees: 'ค่าธรรมเนียม',
     fill: 'อัตราการเติมเต็ม',
@@ -126,6 +127,7 @@ const copy = {
     noResultsBody: 'Try another amount or switch the direction to refresh the route.',
     table: 'Comparison table',
     tableDescription: 'Every result is labeled as estimated and linked to the official platform page.',
+    routeIndex: 'Browse all THB route guides',
     platform: 'Platform',
     fees: 'Fees',
     fill: 'Fill ratio',
@@ -187,6 +189,7 @@ const copy = {
     noResultsBody: '可以尝试修改金额或方向，页面会重新计算当前路径。',
     table: '比较表',
     tableDescription: '所有结果均标注为估算值，并可进入平台详情页。',
+    routeIndex: '查看全部 THB 路线页',
     platform: '平台',
     fees: '费用',
     fill: '成交率',
@@ -605,6 +608,9 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
               <p className="mt-3 text-sm text-stone-400">{t(guide.summary, locale)}</p>
             </TrackLink>
           ))}
+        </div>
+        <div>
+          <TrackLink href={`/${locale}/routes`} eventName="crypto_route_index_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{c.routeIndex}</TrackLink>
         </div>
       </Section>
     </div>

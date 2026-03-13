@@ -41,6 +41,7 @@ const copy = {
     trustedDescription: 'คัดเลือกจากแหล่งที่ตรวจสอบได้ พร้อมคำอธิบายวิธีการและสถานะข้อมูลอย่างโปร่งใส',
     routeGuidesTitle: 'เส้นทางค้นหาที่ควรมีหน้าเฉพาะ',
     routeGuidesDescription: 'หน้าเหล่านี้เหมาะกับผู้ใช้ที่มาจากการค้นหา เช่น USD cash to THB, BTC to THB หรือ JPY cash to THB แล้วต้องการเข้าเปรียบเทียบต่อทันที',
+    routeGuidesBrowse: 'ดูหน้ารวม route guides ทั้งหมด',
     exchangesTitle: 'แพลตฟอร์มคริปโต',
     changersTitle: 'ร้านแลกเงิน',
     viewProfile: 'ดูโปรไฟล์',
@@ -102,6 +103,7 @@ const copy = {
     trustedDescription: 'Traceable sources with transparent methodology and visible data-state labels.',
     routeGuidesTitle: 'Route guides for search intent',
     routeGuidesDescription: 'These landing pages help users arriving from searches like USD cash to THB, BTC to THB, or JPY cash to THB move straight into a realistic comparison flow.',
+    routeGuidesBrowse: 'Browse the full route guide index',
     exchangesTitle: 'Exchanges',
     changersTitle: 'Money changers',
     viewProfile: 'View profile',
@@ -163,6 +165,7 @@ const copy = {
     trustedDescription: '来源可追溯，方法论透明，并明确展示数据状态。',
     routeGuidesTitle: '面向搜索需求的路线页',
     routeGuidesDescription: '这些页面适合承接诸如 USD cash to THB、BTC to THB、JPY cash to THB 之类的搜索意图，再把用户带入真实比较流程。',
+    routeGuidesBrowse: '查看全部路线总览页',
     exchangesTitle: '交易所',
     changersTitle: '换汇品牌',
     viewProfile: '查看详情',
@@ -224,6 +227,7 @@ const copy = {
     trustedDescription: 'ソースと状態表示が明確な比較対象だけを公開しています。',
     routeGuidesTitle: '検索意図向けのルートガイド',
     routeGuidesDescription: 'BTC to THB や USD cash to THB のような検索から来たユーザーを、空のツールではなく実際の比較導線に入れるためのページです。',
+    routeGuidesBrowse: 'すべてのルートガイドを見る',
     exchangesTitle: '取引所',
     changersTitle: '両替ブランド',
     viewProfile: '詳細を見る',
@@ -285,6 +289,7 @@ const copy = {
     trustedDescription: '출처와 데이터 상태가 명확한 비교 대상만 공개합니다.',
     routeGuidesTitle: '검색 의도용 경로 가이드',
     routeGuidesDescription: 'BTC to THB, USD cash to THB 같은 검색에서 들어온 사용자를 실제 비교 흐름으로 바로 연결합니다.',
+    routeGuidesBrowse: '전체 경로 가이드 보기',
     exchangesTitle: '거래소',
     changersTitle: '환전 브랜드',
     viewProfile: '자세히 보기',
@@ -346,6 +351,7 @@ const copy = {
     trustedDescription: 'Nachvollziehbare Quellen mit transparenter Methodik und sichtbaren Datenstatus.',
     routeGuidesTitle: 'Routenleitfäden für Suchintention',
     routeGuidesDescription: 'Diese Seiten fangen Suchen wie BTC to THB oder USD cash to THB ab und leiten direkt in den passenden Vergleich über.',
+    routeGuidesBrowse: 'Gesamten Routenindex öffnen',
     exchangesTitle: 'Börsen',
     changersTitle: 'Wechselstuben',
     viewProfile: 'Profil ansehen',
@@ -506,6 +512,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               <p className="mt-3 text-sm text-stone-400">{t(guide.summary, locale)}</p>
             </TrackLink>
           ))}
+        </div>
+        <div>
+          <TrackLink href={`/${locale}/routes`} eventName="homepage_route_index_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{c.routeGuidesBrowse}</TrackLink>
         </div>
       </Section>
 
