@@ -564,6 +564,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               'germany-to-thailand-money-exchange',
               'europe-to-thailand-money-exchange',
               'korea-to-thailand-money-exchange',
+              'bangkok-airport-money-exchange-guide',
+              'pratunam-money-exchange-guide',
+              'central-bangkok-money-exchange-guide',
+              'bangkok-money-changer-near-me-guide',
             ].map((slug) => {
               const guide = routeGuides.find((item) => item.slug === slug);
               if (!guide) return null;
