@@ -14,6 +14,7 @@ export interface RouteGuide {
   intro: Record<ContentLocale, string>;
   audience: Record<ContentLocale, string>;
   checks: Record<ContentLocale, string[]>;
+  faqs?: Record<ContentLocale, Array<{ question: string; answer: string }>>;
   keywords: string[];
 }
 
@@ -412,6 +413,38 @@ export const routeGuides: RouteGuide[] = [
       zh: ['先看最新 JPY 汇率样本。', '出发前用地图或参考页确认门店。', '把它当成路线指南，而不是最终保证报价。'],
       th: ['ดูตัวอย่างเรต JPY ล่าสุดก่อนออกเดินทาง', 'ใช้แผนที่หรือหน้าอ้างอิงเพื่อตรวจสอบสาขา', 'มองหน้านี้เป็นคู่มือเส้นทาง ไม่ใช่ใบเสนอราคาที่การันตี'],
     },
+    faqs: {
+      en: [
+        {
+          question: 'What is the fastest way for Japan travelers to compare yen to baht in Bangkok?',
+          answer: 'Start from the JPY cash route page, then compare branch context, hours, and source freshness before leaving for a money changer.',
+        },
+        {
+          question: 'Does this page guarantee the final yen to baht rate in store?',
+          answer: 'No. This page is a route guide based on current observed data and provider context. Final in-store conditions still belong to the provider.',
+        },
+      ],
+      zh: [
+        {
+          question: '来自日本的旅客，最快怎么比较日元到泰铢的路线？',
+          answer: '先进入 JPY 现金路线页，再结合门店背景、营业时间和数据状态做判断。',
+        },
+        {
+          question: '这个页面会保证最终门店汇率吗？',
+          answer: '不会。它是路线参考页，最终门店条件仍以品牌现场规则为准。',
+        },
+      ],
+      th: [
+        {
+          question: 'นักเดินทางจากญี่ปุ่นควรเริ่มเทียบเงินเยนเป็นบาทอย่างไรให้เร็วที่สุด',
+          answer: 'เริ่มจากหน้า JPY cash route แล้วดูบริบทของสาขา เวลาเปิด และความสดของข้อมูลก่อนออกเดินทาง',
+        },
+        {
+          question: 'หน้านี้การันตีเรตจริงหน้าร้านหรือไม่',
+          answer: 'ไม่ หน้านี้เป็น route guide จากข้อมูลที่สังเกตได้และบริบทของผู้ให้บริการเท่านั้น เรตจริงยังขึ้นกับหน้าร้าน',
+        },
+      ],
+    },
     keywords: ['japan to thailand money exchange', 'japan to thailand exchange rate', 'yen to baht thailand', 'japan travel money thailand', 'jpy bangkok money changer'],
   },
   {
@@ -444,6 +477,38 @@ export const routeGuides: RouteGuide[] = [
       en: ['Do not assume unsupported currencies have live rates on this site.', 'Use branch quality, hours, and map links as the first filter.', 'Confirm final currency availability with the provider before visiting.'],
       zh: ['不要默认本站对未接入币种提供实时汇率。', '先用门店质量、营业时间和地图作为第一层筛选。', '到店前请先向门店确认目标币种是否可兑换。'],
       th: ['อย่าคิดว่าสกุลเงินที่ยังไม่รองรับจะมีเรตสดบนเว็บนี้', 'ใช้คุณภาพสาขา เวลาเปิด และลิงก์แผนที่เป็นตัวกรองชั้นแรก', 'ก่อนเดินทางให้ยืนยันกับผู้ให้บริการก่อนว่าสามารถแลกสกุลเงินที่ต้องการได้จริง'],
+    },
+    faqs: {
+      en: [
+        {
+          question: 'Does ExchangeTHB support live KRW to THB comparison right now?',
+          answer: 'No. Korea pages are framed as travel exchange decision pages, not live KRW comparison pages. Use them to choose a practical Bangkok cash route and verify final currency support with the provider.',
+        },
+        {
+          question: 'Why does the Korea page link into supported Bangkok cash routes instead of KRW rows?',
+          answer: 'Because unsupported currencies should not be presented as live. The page is designed to help Korea-origin travelers make a realistic branch and route decision without pretending KRW is currently in the live compare set.',
+        },
+      ],
+      zh: [
+        {
+          question: 'ExchangeTHB 现在支持 KRW 到 THB 的实时比较吗？',
+          answer: '不支持。韩国页是旅行换汇决策页，不是假装提供 KRW 实时比较的页面。',
+        },
+        {
+          question: '为什么韩国页会引导到当前支持的现金路线，而不是直接给 KRW 行情？',
+          answer: '因为未接入币种不应该被包装成实时数据。这个页面的目标是帮助来自韩国的用户做出真实可执行的门店和路线决策。',
+        },
+      ],
+      th: [
+        {
+          question: 'ตอนนี้ ExchangeTHB รองรับการเปรียบเทียบ KRW เป็น THB แบบสดหรือไม่',
+          answer: 'ยังไม่รองรับ หน้าสำหรับเกาหลีถูกออกแบบเป็นหน้าช่วยตัดสินใจเรื่องการแลกเงินระหว่างการเดินทาง ไม่ใช่หน้าที่แกล้งทำเป็นมีเรต KRW สด',
+        },
+        {
+          question: 'ทำไมหน้าเกาหลีจึงพาไปยังเส้นทางเงินสดที่รองรับแทนที่จะมีแถว KRW โดยตรง',
+          answer: 'เพราะสกุลเงินที่ยังไม่รองรับไม่ควรถูกนำเสนอเหมือนเป็นข้อมูลสด หน้านี้จึงช่วยให้ผู้ใช้จากเกาหลีตัดสินใจเรื่องสาขาและเส้นทางได้อย่างตรงความจริง',
+        },
+      ],
     },
     keywords: ['korea to thailand money exchange', 'korea to thailand exchange rate', 'korean traveler money thailand', 'thailand money exchange guide korea', 'bangkok exchange guide korea'],
   },
@@ -478,6 +543,38 @@ export const routeGuides: RouteGuide[] = [
       zh: ['在比较页里同时看汇率背景，而不是单一数字。', '在曼谷出发前先看营业时间。', '结果接近时优先选择实时来源。'],
       th: ['ใช้หน้าคอมแพร์เพื่อดูบริบทของเรต ไม่ใช่ตัวเลขตัวเดียว', 'ตรวจเวลาเปิดของสาขาก่อนเดินทางในกรุงเทพ', 'ถ้าผลลัพธ์ใกล้กัน ให้เลือกรายการที่เป็น live source ก่อน'],
     },
+    faqs: {
+      en: [
+        {
+          question: 'What should Germany travelers compare before exchanging euros in Bangkok?',
+          answer: 'Compare the estimated THB outcome, branch hours, and whether the row is live or fallback before using a Bangkok money changer.',
+        },
+        {
+          question: 'Is this page better than a generic EUR to THB article?',
+          answer: 'Yes. It is built as a decision page tied to actual Bangkok branches and provider links, not just an abstract exchange-rate article.',
+        },
+      ],
+      zh: [
+        {
+          question: '来自德国的旅客，在曼谷换欧元前应该先看什么？',
+          answer: '先比较预计到手 THB、营业时间，以及当前是实时还是备用数据。',
+        },
+        {
+          question: '这个页面比泛泛的 EUR to THB 文章更有用吗？',
+          answer: '更有用。它直接对应曼谷门店和品牌入口，而不是抽象的汇率说明文。',
+        },
+      ],
+      th: [
+        {
+          question: 'ผู้เดินทางจากเยอรมนีควรดูอะไรบ้างก่อนแลกยูโรในกรุงเทพ',
+          answer: 'ให้ดูจำนวน THB โดยประมาณ เวลาเปิดของสาขา และดูว่ารายการนั้นเป็น live หรือ fallback',
+        },
+        {
+          question: 'หน้านี้มีประโยชน์กว่าบทความ EUR to THB ทั่วไปหรือไม่',
+          answer: 'มีประโยชน์กว่า เพราะเชื่อมกับสาขาและลิงก์ของผู้ให้บริการในกรุงเทพโดยตรง ไม่ใช่แค่บทความอธิบายเรตแบบกว้างๆ',
+        },
+      ],
+    },
     keywords: ['germany to thailand money exchange', 'germany to thailand exchange rate', 'euro to baht thailand', 'german traveler thailand money', 'eur bangkok money changer'],
   },
   {
@@ -510,6 +607,38 @@ export const routeGuides: RouteGuide[] = [
       en: ['Start with the EUR route if that is your actual carry currency.', 'Use distance and branch hours together, not rate alone.', 'Open the provider page again before you leave your hotel or airport.'],
       zh: ['如果你实际携带的是欧元，就先从 EUR 路线开始。', '同时看距离和营业时间，不要只看汇率。', '离开酒店或机场前再打开一次品牌页面确认。'],
       th: ['ถ้าคุณถือเงินยูโรจริง ให้เริ่มจากเส้นทาง EUR ก่อน', 'ดูทั้งระยะทางและเวลาเปิด ไม่ใช่ดูเรตอย่างเดียว', 'ก่อนออกจากโรงแรมหรือสนามบิน ให้เปิดหน้าแบรนด์ตรวจสอบอีกครั้ง'],
+    },
+    faqs: {
+      en: [
+        {
+          question: 'How should Europe travelers use this page before arriving in Bangkok?',
+          answer: 'Use it to move from broad Europe-to-Thailand intent into a practical EUR cash route, then compare real provider pages and branch context.',
+        },
+        {
+          question: 'Does this page work only for euro-zone visitors?',
+          answer: 'It is strongest for euro-zone travelers, but it also works as a decision entry page for Europe-origin users who need a realistic first step into Bangkok money changing.',
+        },
+      ],
+      zh: [
+        {
+          question: '来自欧洲的旅客，在到曼谷前应该怎么用这个页面？',
+          answer: '先把宽泛的 Europe to Thailand 换汇需求，收敛成更实用的 EUR 现金路线，再进入真实门店比较。',
+        },
+        {
+          question: '这个页面只适合欧元区旅客吗？',
+          answer: '它最适合欧元区用户，但也适合作为欧洲访客进入曼谷换汇决策的第一步。',
+        },
+      ],
+      th: [
+        {
+          question: 'ผู้เดินทางจากยุโรปควรใช้หน้านี้อย่างไรก่อนมาถึงกรุงเทพ',
+          answer: 'ใช้หน้านี้เปลี่ยนเจตนากว้างๆ เรื่องการแลกเงินจากยุโรปมาไทย ให้กลายเป็นเส้นทาง EUR เงินสดที่ใช้งานได้จริง แล้วค่อยเข้าไปเทียบร้านจริง',
+        },
+        {
+          question: 'หน้านี้เหมาะเฉพาะผู้เดินทางจากยูโรโซนหรือไม่',
+          answer: 'เหมาะที่สุดกับผู้ใช้จากยูโรโซน แต่ก็ยังใช้เป็นจุดเริ่มต้นการตัดสินใจสำหรับผู้เดินทางจากยุโรปได้',
+        },
+      ],
     },
     keywords: ['europe to thailand money exchange', 'europe to thailand exchange rate', 'europe travel money thailand', 'euro cash thailand', 'bangkok exchange guide europe'],
   },

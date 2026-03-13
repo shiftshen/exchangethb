@@ -16,6 +16,7 @@ const uiCopy = {
     methodologyCta: 'Read the methodology',
     noteTitle: 'Why this page matters for search',
     noteBody: 'This route page exists so users landing from search can go straight into a realistic THB comparison instead of starting from a blank compare screen.',
+    faqTitle: 'Common questions for this route',
   },
   zh: {
     routeGuide: '路线指南',
@@ -25,6 +26,7 @@ const uiCopy = {
     methodologyCta: '查看方法论',
     noteTitle: '为什么要单独做这类页面',
     noteBody: '这个页面是为了让从搜索结果进入的用户直接落到更贴近真实需求的 THB 比较入口，而不是从空白工具页开始。',
+    faqTitle: '这个路线最常见的问题',
   },
   th: {
     routeGuide: 'คู่มือเส้นทาง',
@@ -34,6 +36,7 @@ const uiCopy = {
     methodologyCta: 'ดูวิธีการ',
     noteTitle: 'ทำไมหน้านี้จึงมีประโยชน์',
     noteBody: 'หน้านี้ช่วยให้ผู้ใช้ที่มาจากการค้นหาลงจอดบนเส้นทางเปรียบเทียบ THB ที่สมจริงทันที แทนการเริ่มจากหน้าคอมแพร์ว่างเปล่า',
+    faqTitle: 'คำถามที่พบบ่อยของเส้นทางนี้',
   },
   ja: {
     routeGuide: 'ルートガイド',
@@ -43,6 +46,7 @@ const uiCopy = {
     methodologyCta: '方法論を見る',
     noteTitle: 'このページの役割',
     noteBody: '検索から来たユーザーが空の比較ツールではなく、実際の THB 比較導線へ直接入れるようにするためのページです。',
+    faqTitle: 'このルートでよくある質問',
   },
   ko: {
     routeGuide: '경로 가이드',
@@ -52,6 +56,7 @@ const uiCopy = {
     methodologyCta: '방법론 보기',
     noteTitle: '이 페이지의 역할',
     noteBody: '검색에서 들어온 사용자가 빈 비교 도구가 아니라 실제 THB 비교 흐름으로 바로 들어가도록 만드는 페이지입니다.',
+    faqTitle: '이 경로의 자주 묻는 질문',
   },
   de: {
     routeGuide: 'Routenleitfaden',
@@ -61,8 +66,24 @@ const uiCopy = {
     methodologyCta: 'Methodik lesen',
     noteTitle: 'Warum diese Seite existiert',
     noteBody: 'Diese Seite hilft Suchenden dabei, direkt in einen realistischen THB-Vergleich einzusteigen statt auf einer leeren Vergleichsseite zu landen.',
+    faqTitle: 'Häufige Fragen zu dieser Route',
   },
 } as const;
+
+function faqJsonLd(entries: Array<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: entries.map((entry) => ({
+      '@type': 'Question',
+      name: entry.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: entry.answer,
+      },
+    })),
+  };
+}
 
 export function generateStaticParams() {
   return routeGuideSlugs.flatMap((slug) => locales.map((locale) => ({ locale, slug })));
@@ -79,15 +100,18 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
   const guideSummary = guide.summary[contentLocale];
   const guideIntro = guide.intro[contentLocale];
   const guideAudience = guide.audience[contentLocale];
+  const guideFaqs = guide.faqs?.[contentLocale] || [];
   const compareHref = `/${locale}${guide.compareHref}`;
   const breadcrumbLd = breadcrumbJsonLd([
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
     { name: guideTitle, item: withLocalePath(locale, `/routes/${guide.slug}`) },
   ]);
+  const faqLd = guideFaqs.length ? faqJsonLd(guideFaqs) : null;
 
   return (
     <div className="space-y-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      {faqLd ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} /> : null}
       <section className="frontend-hero overflow-hidden p-6 sm:p-8 lg:p-10">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div className="space-y-5">
@@ -123,6 +147,19 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
           </div>
         </div>
       </Section>
+
+      {guideFaqs.length ? (
+        <Section title={c.faqTitle} description={guideSummary}>
+          <div className="grid gap-4">
+            {guideFaqs.map((item) => (
+              <div key={item.question} className="card p-6">
+                <h2 className="text-lg font-semibold text-white">{item.question}</h2>
+                <p className="mt-3 text-sm text-stone-300">{item.answer}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      ) : null}
     </div>
   );
 }
