@@ -24,7 +24,7 @@ ExchangeTHB is a launch-ready multilingual comparison site for finding better pa
 5. Refresh cached cash data with `npm run worker`
 6. Start development with `npm run dev`
 7. Or use `docker compose up`
-8. Production Docker now starts both `web` and a long-running `worker` service; manual refresh remains available through `npm run worker`
+8. Production Docker starts `web`, `postgres`, and an optional long-running `worker` service; manual refresh remains available through `npm run worker`
 
 ## Persistence modes
 - If `DATABASE_URL` is reachable, admin config, audit logs, and cash cache use database-backed persistence.

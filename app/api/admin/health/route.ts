@@ -12,7 +12,7 @@ export async function GET() {
     const [health, cash, storage] = await Promise.all([getAdapterHealth(), runCashScrapers(), getStorageStatus()]);
     return ok({
       status: 'ok',
-      services: ['web', 'worker', 'postgres', 'redis'],
+      services: ['web', 'worker', 'postgres'],
       configWarnings: getRuntimeConfigWarnings(),
       storage,
       marketAdapters: health,

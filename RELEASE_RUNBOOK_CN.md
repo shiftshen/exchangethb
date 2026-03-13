@@ -8,7 +8,7 @@
 ## 2. 发布前输入（必须准备）
 - 域名与 DNS：`exchangethb.com` 指向生产 VPS。
 - 服务器访问：生产主机 SSH 访问路径与权限。
-- 生产环境变量：`ADMIN_EMAIL`、`ADMIN_PASSWORD_HASH`、`ADMIN_SESSION_SECRET`、`DATABASE_URL`、`REDIS_URL`、`NEXT_PUBLIC_SITE_URL`。
+- 生产环境变量：`ADMIN_EMAIL`、`ADMIN_PASSWORD_HASH`、`ADMIN_SESSION_SECRET`、`DATABASE_URL`、`NEXT_PUBLIC_SITE_URL`。
 - 法务与披露：最终免责声明文案、推荐/活动链接清单。
 - 可选分析：GA4 测量 ID、Search Console 验证方式。
 
@@ -17,7 +17,7 @@
 2. 复制 `.env.example` 为 `.env`，填入生产值。
 3. 执行 `docker compose down --remove-orphans`。
 4. 执行 `docker compose up -d --build`。
-5. 执行 `docker compose ps`，确认 `web/postgres/redis` 全部运行。
+5. 执行 `docker compose ps`，确认 `web/postgres` 全部运行，worker 如启用则正常运行。
 6. 若首次缓存为空，执行 `docker compose --profile worker run --rm worker` 进行首轮采集。
 7. 配置 Nginx 反向代理到 `127.0.0.1:3000`。
 8. 配置 HTTPS 证书并开启自动续期。

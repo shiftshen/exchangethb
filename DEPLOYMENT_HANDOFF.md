@@ -21,7 +21,6 @@
 - `ADMIN_PASSWORD_HASH=<recommended scrypt hash>` or `ADMIN_PASSWORD=<fallback plain password>`
 - `ADMIN_SESSION_SECRET=<long random secret>`
 - `DATABASE_URL=<postgres production url>`
-- `REDIS_URL=<redis production url>`
 - `NEXT_PUBLIC_SITE_URL=https://exchangethb.com`
 - `NEXT_PUBLIC_GA4_MEASUREMENT_ID=<optional>`
 
@@ -32,7 +31,7 @@
 4. Run `npm run prisma:push` if you want database-backed persistence active on first boot
 5. Run `docker compose down --remove-orphans`
 6. Run `docker compose up -d --build`
-7. Run `docker compose ps` and confirm `web`, `worker`, `postgres`, `redis` are running
+7. Run `docker compose ps` and confirm `web`, `worker`, and `postgres` are running
 8. Check `/api/health` and confirm `configWarnings` is empty before opening traffic
 9. Put Nginx in front of port `3000`
 10. Issue HTTPS certificate for `exchangethb.com`

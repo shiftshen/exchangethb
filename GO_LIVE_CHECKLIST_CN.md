@@ -10,7 +10,7 @@
 ## B. 发布执行（T0）
 - [ ] `docker compose down --remove-orphans` 执行成功。
 - [ ] `docker compose up -d --build` 执行成功。
-- [ ] `docker compose ps` 显示 web/postgres/redis 全部 healthy/running。
+- [ ] `docker compose ps` 显示 web/postgres 全部 healthy/running，worker 如启用则为 running。
 - [ ] 首轮 worker 已执行（首次部署场景）。
 - [ ] Nginx 反向代理与 HTTPS 配置完成。
 
