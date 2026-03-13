@@ -8,6 +8,21 @@ import { Locale } from '@/lib/types';
 import { breadcrumbJsonLd, localeAlternates, websiteJsonLd, withLocalePath } from '@/lib/seo';
 import { Pill, Section, StatCard } from '@/components/ui';
 
+function faqJsonLd(entries: ReadonlyArray<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: entries.map((entry) => ({
+      '@type': 'Question',
+      name: entry.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: entry.answer,
+      },
+    })),
+  };
+}
+
 const copy = {
   th: {
     heroKicker: 'ตัวช่วยเลือกทางแลกเงินบาทที่ดีกว่า',
@@ -383,6 +398,39 @@ const copy = {
   },
 };
 
+const homeFaqs = {
+  th: [
+    { question: 'ExchangeTHB ใช้ทำอะไร', answer: 'เว็บไซต์นี้ใช้เปรียบเทียบเส้นทางที่คุ้มกว่าสำหรับการเปลี่ยนเป็นเงินบาท ไม่ว่าจะผ่านคริปโตหรือร้านแลกเงินสดในกรุงเทพ' },
+    { question: 'เว็บไซต์นี้ทำรายการแทนผู้ใช้หรือไม่', answer: 'ไม่ เว็บไซต์นี้ไม่รับฝากเงิน ไม่ถือครองสินทรัพย์ และไม่เป็นคู่สัญญาในการซื้อขายหรือการแลกเงิน' },
+    { question: 'ข้อมูลสดครอบคลุมอะไรบ้าง', answer: 'คริปโตเปรียบเทียบจากแพลตฟอร์มไทยที่รองรับ และเงินสดสดตอนนี้ครอบคลุม USD, CNY, EUR, JPY และ GBP' },
+  ],
+  en: [
+    { question: 'What is ExchangeTHB for', answer: 'ExchangeTHB helps users find a stronger path into Thai baht, whether they are comparing crypto routes or Bangkok cash exchange options.' },
+    { question: 'Does this site handle transactions', answer: 'No. The site does not custody funds or assets, and it does not execute exchange or trading transactions on behalf of users.' },
+    { question: 'What live coverage is available now', answer: 'Crypto comparison uses supported Thai exchanges, and live cash comparison currently covers USD, CNY, EUR, JPY, and GBP.' },
+  ],
+  zh: [
+    { question: 'ExchangeTHB 是做什么的', answer: '这个网站帮助用户比较更划算的泰铢兑换方式，包括加密兑换和曼谷线下现金换汇。' },
+    { question: '网站会替用户完成交易吗', answer: '不会。本站不托管资金或资产，也不替用户执行交易或换汇。' },
+    { question: '当前有哪些实时支持', answer: '加密比较使用已接入的泰国交易所，实时现金当前覆盖 USD、CNY、EUR、JPY、GBP。' },
+  ],
+  ja: [
+    { question: 'ExchangeTHB は何のためのサイトですか', answer: '暗号資産ルートやバンコクの現金両替ルートを比較し、より良い THB への入り方を見つけるためのサイトです。' },
+    { question: 'このサイトが取引を実行しますか', answer: 'いいえ。このサイトは資産を預からず、売買や両替を代行しません。' },
+    { question: '現在のライブ対応範囲は', answer: '暗号資産比較は対応するタイ取引所を使い、ライブ現金比較は USD、CNY、EUR、JPY、GBP を扱います。' },
+  ],
+  ko: [
+    { question: 'ExchangeTHB 는 어떤 사이트인가요', answer: '가상자산 경로와 방콕 현금 환전 경로를 비교해 더 나은 THB 전환 경로를 찾도록 돕는 사이트입니다.' },
+    { question: '이 사이트가 거래를 대신 하나요', answer: '아니요. 이 사이트는 자산을 보관하지 않고, 매매나 환전을 대신 실행하지도 않습니다.' },
+    { question: '현재 라이브 지원 범위는 무엇인가요', answer: '가상자산 비교는 지원되는 태국 거래소를 사용하고, 라이브 현금 비교는 USD, CNY, EUR, JPY, GBP 를 다룹니다.' },
+  ],
+  de: [
+    { question: 'Wofür ist ExchangeTHB gedacht', answer: 'Die Seite hilft dabei, bessere Wege in Thai Baht zu finden, egal ob über Krypto oder Bargeldwechsel in Bangkok.' },
+    { question: 'Führt die Website selbst Transaktionen aus', answer: 'Nein. Die Seite verwahrt keine Gelder oder Assets und führt keine Wechsel- oder Handelsgeschäfte für Nutzer aus.' },
+    { question: 'Welche Live-Abdeckung gibt es aktuell', answer: 'Der Kryptovergleich nutzt unterstützte Thai-Börsen, und der Live-Bargeldvergleich deckt USD, CNY, EUR, JPY und GBP ab.' },
+  ],
+} as const;
+
 export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   const contentLocale = resolveContentLocale(locale);
@@ -393,10 +441,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const homeRouteGuides = routeGuides;
   const webSiteLd = websiteJsonLd(locale, '', c.heroBody);
   const breadcrumbLd = breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }]);
+  const faqLd = faqJsonLd(homeFaqs[locale]);
   return (
     <div className="space-y-16">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <section className="frontend-hero overflow-hidden p-6 sm:p-8 lg:p-10">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-500/70 to-transparent" />
         <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
@@ -628,6 +678,20 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               ))}
             </div>
           </div>
+        </div>
+      </Section>
+
+      <Section
+        title={locale === 'th' ? 'คำถามที่พบบ่อย' : locale === 'zh' ? '常见问题' : locale === 'ja' ? 'よくある質問' : locale === 'ko' ? '자주 묻는 질문' : locale === 'de' ? 'Häufige Fragen' : 'Frequently asked questions'}
+        description={locale === 'th' ? 'ส่วนนี้ช่วยให้ผู้ใช้ใหม่และ search engine เข้าใจขอบเขตของเว็บไซต์ได้เร็วขึ้น' : locale === 'zh' ? '这一部分帮助新用户和搜索引擎更快理解网站用途与边界。' : locale === 'ja' ? 'このセクションは、サイトの役割と境界を新規ユーザーと検索エンジンに明確に伝えるためのものです。' : locale === 'ko' ? '이 섹션은 사이트의 역할과 범위를 신규 사용자와 검색엔진에 더 명확히 전달합니다.' : locale === 'de' ? 'Dieser Abschnitt erklärt neuen Besuchern und Suchmaschinen schneller, wofür die Website gedacht ist.' : 'This section helps new visitors and search engines understand the site scope faster.'}
+      >
+        <div className="grid gap-4 lg:grid-cols-3">
+          {homeFaqs[locale].map((item) => (
+            <div key={item.question} className="card p-6">
+              <h3 className="text-lg font-semibold text-white">{item.question}</h3>
+              <p className="mt-3 text-sm text-stone-400">{item.answer}</p>
+            </div>
+          ))}
         </div>
       </Section>
     </div>

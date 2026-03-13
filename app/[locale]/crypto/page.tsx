@@ -13,6 +13,21 @@ import { routeGuides } from '@/lib/route-guides';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
 import { CryptoSymbol, Locale } from '@/lib/types';
 
+function faqJsonLd(entries: ReadonlyArray<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: entries.map((entry) => ({
+      '@type': 'Question',
+      name: entry.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: entry.answer,
+      },
+    })),
+  };
+}
+
 const symbols: CryptoSymbol[] = ['BTC', 'ETH', 'USDT', 'XRP', 'DOGE', 'SOL'];
 
 const copy = {
@@ -277,6 +292,39 @@ const localeOverrides = {
   },
 } satisfies Partial<Record<Locale, Partial<Record<keyof CryptoCopy, string>>>>;
 
+const cryptoFaqs = {
+  th: [
+    { question: 'โหมดซื้อและโหมดขายอ่านอย่างไร', answer: 'โหมดซื้อคำนวณจากฝั่งขายของแพลตฟอร์ม ส่วนโหมดขายคำนวณจากฝั่งซื้อของแพลตฟอร์ม' },
+    { question: 'ทำไมต้นทุนรวมกับราคาเฉลี่ยไม่เท่ากัน', answer: 'ต้นทุนรวมและยอดรับสุทธิรวมค่าธรรมเนียมไว้แล้ว จึงต่างจากราคาเฉลี่ยล้วนๆ ได้' },
+    { question: 'live, hybrid, fallback ต่างกันอย่างไร', answer: 'live มาจากแหล่งทางการที่ดึงได้ล่าสุด hybrid ผสมข้อมูลทางการกับกฎที่ผ่านการทบทวน และ fallback ใช้เมื่อแหล่งสดไม่พร้อม' },
+  ],
+  en: [
+    { question: 'How should I read buy versus sell mode', answer: 'Buy mode uses the exchange ask side, while sell mode uses the exchange bid side.' },
+    { question: 'Why does the total outcome differ from the average price', answer: 'The total payment or net receive already includes fees, so it can differ from the simple average execution price.' },
+    { question: 'What do live, hybrid, and fallback mean', answer: 'Live uses the latest official source, hybrid combines official data with reviewed completion, and fallback is used only when a live source is unavailable.' },
+  ],
+  zh: [
+    { question: '买入和卖出模式怎么理解', answer: '买入按平台卖盘计算，卖出按平台买盘计算。' },
+    { question: '为什么总结果和平均价格不一样', answer: '预计总支付或净到手已经包含费用，所以会和纯均价不同。' },
+    { question: 'live、hybrid、fallback 分别代表什么', answer: 'live 来自最新可用官方源，hybrid 是官方数据加审核补全，fallback 只在实时源不可用时启用。' },
+  ],
+  ja: [
+    { question: '買いモードと売りモードはどう読むべきですか', answer: '買いは取引所の ask 側、売りは bid 側で計算します。' },
+    { question: '総額と平均価格が違うのはなぜですか', answer: '総支払額や純受取額には手数料が含まれるため、平均価格と一致しないことがあります。' },
+    { question: 'live、hybrid、fallback の違いは何ですか', answer: 'live は最新の公式ソース、hybrid は公式データとレビュー済み補完の組み合わせ、fallback はライブソースが使えない時だけ使います。' },
+  ],
+  ko: [
+    { question: '매수와 매도 모드는 어떻게 읽어야 하나요', answer: '매수는 거래소 ask 호가를, 매도는 bid 호가를 기준으로 계산합니다.' },
+    { question: '총 결과와 평균 가격이 다른 이유는 무엇인가요', answer: '총 지불액이나 순수령액에는 수수료가 포함되므로 단순 평균가와 다를 수 있습니다.' },
+    { question: 'live, hybrid, fallback 은 무엇을 뜻하나요', answer: 'live 는 최신 공식 소스, hybrid 는 공식 데이터와 검토된 보완의 조합, fallback 은 라이브 소스를 쓸 수 없을 때만 사용합니다.' },
+  ],
+  de: [
+    { question: 'Wie lese ich Kauf- und Verkaufsmodus', answer: 'Im Kaufmodus wird die Ask-Seite der Börse verwendet, im Verkaufsmodus die Bid-Seite.' },
+    { question: 'Warum unterscheidet sich das Gesamtergebnis vom Durchschnittspreis', answer: 'Gesamtzahlung und Nettoerhalt enthalten Gebühren und können daher vom reinen Durchschnittspreis abweichen.' },
+    { question: 'Was bedeuten live, hybrid und fallback', answer: 'Live nutzt die aktuellste offizielle Quelle, hybrid kombiniert offizielle Daten mit überprüfter Ergänzung, und fallback wird nur genutzt, wenn keine Live-Quelle verfügbar ist.' },
+  ],
+} as const;
+
 export default async function CryptoPage({ params, searchParams }: { params: Promise<{ locale: Locale }>; searchParams: Promise<Record<string, string | string[] | undefined>>; }) {
   const { locale } = await params;
   const query = await searchParams;
@@ -309,10 +357,12 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
     { name: c.title, item: withLocalePath(locale, '/crypto') },
   ]);
+  const faqLd = faqJsonLd(cryptoFaqs[locale]);
 
   return (
     <div className="space-y-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <Section title={c.title} description={c.description}>
         <div className="grid gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
           <div className="card overflow-hidden border-brand-500/20 bg-gradient-to-br from-surface-900 via-surface-850 to-surface-900">
@@ -611,6 +661,20 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
         </div>
         <div>
           <TrackLink href={`/${locale}/routes`} eventName="crypto_route_index_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{c.routeIndex}</TrackLink>
+        </div>
+      </Section>
+
+      <Section
+        title={locale === 'th' ? 'คำถามที่พบบ่อย' : locale === 'zh' ? '常见问题' : locale === 'ja' ? 'よくある質問' : locale === 'ko' ? '자주 묻는 질문' : locale === 'de' ? 'Häufige Fragen' : 'Frequently asked questions'}
+        description={locale === 'th' ? 'ส่วนนี้ช่วยอธิบายวิธีอ่านโหมดซื้อขาย ค่าธรรมเนียม และสถานะข้อมูลให้ชัดเจนขึ้น' : locale === 'zh' ? '这一部分帮助用户和搜索引擎更准确理解买卖口径、费用和数据状态。' : locale === 'ja' ? 'このセクションは、売買方向、手数料、データ状態の読み方をより明確にします。' : locale === 'ko' ? '이 섹션은 매수/매도, 수수료, 데이터 상태를 더 명확히 설명합니다.' : locale === 'de' ? 'Dieser Abschnitt erklärt Kauf/Verkauf, Gebühren und Datenstatus klarer.' : 'This section clarifies side, fees, and data-state logic for both users and search engines.'}
+      >
+        <div className="grid gap-4 lg:grid-cols-3">
+          {cryptoFaqs[locale].map((item) => (
+            <div key={item.question} className="card p-6">
+              <h3 className="text-lg font-semibold text-white">{item.question}</h3>
+              <p className="mt-3 text-sm text-stone-400">{item.answer}</p>
+            </div>
+          ))}
         </div>
       </Section>
     </div>

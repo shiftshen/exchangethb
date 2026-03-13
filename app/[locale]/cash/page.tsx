@@ -13,6 +13,21 @@ import { routeGuides } from '@/lib/route-guides';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
 import { CurrencyCode, Locale } from '@/lib/types';
 
+function faqJsonLd(entries: ReadonlyArray<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: entries.map((entry) => ({
+      '@type': 'Question',
+      name: entry.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: entry.answer,
+      },
+    })),
+  };
+}
+
 const currencies: CurrencyCode[] = ['USD', 'CNY', 'EUR', 'JPY', 'GBP'];
 const quickCurrencies: CurrencyCode[] = ['USD', 'CNY', 'EUR', 'JPY', 'GBP'];
 
@@ -368,6 +383,39 @@ const localeOverrides = {
   },
 } satisfies Partial<Record<Locale, Partial<Record<keyof CashCopy, string>>>>;
 
+const cashFaqs = {
+  th: [
+    { question: 'ระยะอ้างอิงกับระยะจริงต่างกันอย่างไร', answer: 'ถ้าไม่เปิดตำแหน่ง ระบบจะใช้จุดอ้างอิงในกรุงเทพ แต่ถ้าอนุญาตตำแหน่งแล้ว ระบบจะใช้ระยะจริงจากคุณ' },
+    { question: 'ตอนนี้รองรับสกุลเงินสดอะไรบ้าง', answer: 'ชุดเงินสดสดตอนนี้รองรับ USD, CNY, EUR, JPY และ GBP' },
+    { question: 'live, hybrid, fallback ในหน้าร้านแลกเงินหมายถึงอะไร', answer: 'live คือแหล่งทางการสด hybrid คือข้อมูลทางการผสมกฎที่ผ่านการทบทวน และ fallback คือข้อมูลสำรองเมื่อแหล่งสดไม่พร้อม' },
+  ],
+  en: [
+    { question: 'What is the difference between reference distance and real distance', answer: 'Without location access, the page uses a central Bangkok reference point. With location enabled, it uses your real distance to the branch.' },
+    { question: 'Which cash currencies are supported live right now', answer: 'The current live cash set supports USD, CNY, EUR, JPY, and GBP.' },
+    { question: 'What do live, hybrid, and fallback mean on the cash page', answer: 'Live means the latest official source, hybrid combines official data with reviewed completion, and fallback is used only when the live source is unavailable.' },
+  ],
+  zh: [
+    { question: '参考距离和真实距离有什么区别', answer: '未开启定位时，页面按曼谷参考点计算；开启定位后，会按你到门店的真实距离计算。' },
+    { question: '当前有哪些实时现金币种', answer: '当前实时现金支持 USD、CNY、EUR、JPY、GBP。' },
+    { question: '现金页里的 live、hybrid、fallback 分别代表什么', answer: 'live 是最新官方源，hybrid 是官方数据加审核补全，fallback 只在实时源不可用时启用。' },
+  ],
+  ja: [
+    { question: '参照距離と実距離の違いは何ですか', answer: '位置情報がない場合はバンコク中心の参照点を使い、位置情報を許可すると支店までの実距離を使います。' },
+    { question: '現在ライブ対応している現金通貨は何ですか', answer: '現在のライブ現金対応は USD、CNY、EUR、JPY、GBP です。' },
+    { question: '現金ページの live、hybrid、fallback は何を意味しますか', answer: 'live は最新の公式ソース、hybrid は公式データとレビュー済み補完の組み合わせ、fallback はライブソースが使えない時だけ使います。' },
+  ],
+  ko: [
+    { question: '기준 거리와 실제 거리의 차이는 무엇인가요', answer: '위치 정보를 허용하지 않으면 방콕 기준점을 사용하고, 허용하면 지점까지의 실제 거리를 사용합니다.' },
+    { question: '현재 라이브 지원 현금 통화는 무엇인가요', answer: '현재 라이브 현금 지원은 USD, CNY, EUR, JPY, GBP 입니다.' },
+    { question: '현금 페이지의 live, hybrid, fallback 은 무엇인가요', answer: 'live 는 최신 공식 소스, hybrid 는 공식 데이터와 검토된 보완의 조합, fallback 은 라이브 소스를 쓸 수 없을 때만 사용합니다.' },
+  ],
+  de: [
+    { question: 'Was ist der Unterschied zwischen Referenzdistanz und echter Distanz', answer: 'Ohne Standortfreigabe nutzt die Seite einen Referenzpunkt in Bangkok. Mit Standortfreigabe wird die echte Distanz zur Filiale verwendet.' },
+    { question: 'Welche Bargeldwährungen sind aktuell live unterstützt', answer: 'Aktuell unterstützt der Live-Bargeldsatz USD, CNY, EUR, JPY und GBP.' },
+    { question: 'Was bedeuten live, hybrid und fallback auf der Bargeldseite', answer: 'Live steht für die neueste offizielle Quelle, hybrid kombiniert offizielle Daten mit überprüfter Ergänzung, und fallback wird nur genutzt, wenn keine Live-Quelle verfügbar ist.' },
+  ],
+} as const;
+
 function isGoogleMapsUrl(url: string) {
   return /google\.[^/]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps|maps\.google\.com/i.test(url);
 }
@@ -420,10 +468,12 @@ export default async function CashPage({ params, searchParams }: { params: Promi
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
     { name: c.title, item: withLocalePath(locale, '/cash') },
   ]);
+  const faqLd = faqJsonLd(cashFaqs[locale]);
 
   return (
     <div className="space-y-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <Section title={c.title} description={c.description}>
         <div className="grid gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
           <div className="card overflow-hidden border-brand-500/20 bg-gradient-to-br from-surface-900 via-surface-850 to-surface-900">
@@ -770,6 +820,20 @@ export default async function CashPage({ params, searchParams }: { params: Promi
         </div>
         <div>
           <TrackLink href={`/${locale}/routes`} eventName="cash_route_index_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{c.routeIndex}</TrackLink>
+        </div>
+      </Section>
+
+      <Section
+        title={locale === 'th' ? 'คำถามที่พบบ่อย' : locale === 'zh' ? '常见问题' : locale === 'ja' ? 'よくある質問' : locale === 'ko' ? '자주 묻는 질문' : locale === 'de' ? 'Häufige Fragen' : 'Frequently asked questions'}
+        description={locale === 'th' ? 'ส่วนนี้ช่วยอธิบายระยะจริง ระยะอ้างอิง และขอบเขตสกุลเงินสดที่รองรับในตอนนี้ให้ชัดเจนขึ้น' : locale === 'zh' ? '这一部分帮助用户和搜索引擎更准确理解距离模式、支持范围和数据状态。' : locale === 'ja' ? 'このセクションは、距離モード、対応範囲、データ状態をより明確に説明します。' : locale === 'ko' ? '이 섹션은 거리 모드, 지원 범위, 데이터 상태를 더 명확히 설명합니다.' : locale === 'de' ? 'Dieser Abschnitt erklärt Distanzmodus, Abdeckung und Datenstatus klarer.' : 'This section clarifies distance mode, support scope, and data-state logic for users and search engines.'}
+      >
+        <div className="grid gap-4 lg:grid-cols-3">
+          {cashFaqs[locale].map((item) => (
+            <div key={item.question} className="card p-6">
+              <h3 className="text-lg font-semibold text-white">{item.question}</h3>
+              <p className="mt-3 text-sm text-stone-400">{item.answer}</p>
+            </div>
+          ))}
         </div>
       </Section>
     </div>
