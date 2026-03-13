@@ -384,7 +384,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const coverageValue = c.coverageValue
     .replace('{exchangeCount}', String(exchanges.length))
     .replace('{cashCount}', String(publicCashProviders.length));
-  const homeRouteGuides = routeGuides.slice(0, 8);
+  const homeRouteGuides = routeGuides;
   const webSiteLd = websiteJsonLd(locale, '', c.heroBody);
   const breadcrumbLd = breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }]);
   return (
@@ -450,10 +450,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       </Section>
 
       <Section title={c.startTitle} description={c.startDescription}>
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
           {[
             { label: c.startBuyBtc, href: `/${locale}/crypto?symbol=BTC&amount=0.01&side=buy` },
             { label: c.startSellUsdt, href: `/${locale}/crypto?symbol=USDT&amount=1000&side=sell` },
+            {
+              label: contentLocale === 'th' ? 'ซื้อ 0.1 ETH' : contentLocale === 'zh' ? '买入 0.1 ETH' : 'Buy 0.1 ETH',
+              href: `/${locale}/crypto?symbol=ETH&amount=0.1&side=buy`,
+            },
+            {
+              label: contentLocale === 'th' ? 'ซื้อ 500 XRP' : contentLocale === 'zh' ? '买入 500 XRP' : 'Buy 500 XRP',
+              href: `/${locale}/crypto?symbol=XRP&amount=500&side=buy`,
+            },
             { label: c.startUsdCash, href: `/${locale}/cash?currency=USD&amount=1000&maxDistanceKm=10` },
             { label: c.startCnyCash, href: `/${locale}/cash?currency=CNY&amount=5000&maxDistanceKm=10` },
           ].map((item) => (
@@ -466,12 +474,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       </Section>
 
       <Section title={c.routeTitle} description={c.routeDescription}>
-        <div className="grid gap-4 md:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
           {[
             { label: 'BTC/THB', href: `/${locale}/crypto?symbol=BTC&amount=0.01&side=buy` },
             { label: 'USDT/THB', href: `/${locale}/crypto?symbol=USDT&amount=1000&side=buy` },
+            { label: 'ETH/THB', href: `/${locale}/crypto?symbol=ETH&amount=0.1&side=buy` },
             { label: 'USD→THB', href: `/${locale}/cash?currency=USD&amount=1000&maxDistanceKm=10` },
-            { label: 'CNY→THB', href: `/${locale}/cash?currency=CNY&amount=5000&maxDistanceKm=10` },
+            { label: 'EUR→THB', href: `/${locale}/cash?currency=EUR&amount=1000&maxDistanceKm=10` },
+            { label: 'GBP→THB', href: `/${locale}/cash?currency=GBP&amount=500&maxDistanceKm=10` },
           ].map((route) => (
             <TrackLink key={route.label} href={route.href} eventName="homepage_popular_route_click" eventParams={{ route: route.label }} className="card card-interactive p-5">
               <p className="text-sm text-stone-400">{c.routeLabel}</p>
@@ -482,7 +492,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       </Section>
 
       <Section title={c.routeGuidesTitle} description={c.routeGuidesDescription}>
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {homeRouteGuides.map((guide) => (
             <TrackLink
               key={guide.slug}
@@ -540,6 +550,41 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         </Section>
       ) : null}
 
+      {contentLocale === 'en' ? (
+        <Section title="High-intent route pages for international search" description="These landing pages are built to match real search intent from travelers, expats, and users comparing crypto or cash routes into Thai baht.">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {[
+              'btc-to-thb',
+              'eth-to-thb',
+              'usdt-to-thb',
+              'usd-cash-to-thb',
+              'eur-cash-to-thb',
+              'gbp-cash-to-thb',
+              'japan-to-thailand-money-exchange',
+              'germany-to-thailand-money-exchange',
+              'europe-to-thailand-money-exchange',
+              'korea-to-thailand-money-exchange',
+            ].map((slug) => {
+              const guide = routeGuides.find((item) => item.slug === slug);
+              if (!guide) return null;
+              return (
+                <TrackLink
+                  key={guide.slug}
+                  href={`/${locale}/routes/${guide.slug}`}
+                  eventName="homepage_high_intent_route_click"
+                  eventParams={{ route: guide.slug }}
+                  className="card card-interactive p-5"
+                >
+                  <p className="text-sm text-stone-400">{guide.type === 'crypto' ? 'Crypto intent' : 'Cash intent'}</p>
+                  <p className="mt-2 text-xl font-semibold text-white">{guide.title.en}</p>
+                  <p className="mt-3 text-sm text-stone-400">{guide.summary.en}</p>
+                </TrackLink>
+              );
+            })}
+          </div>
+        </Section>
+      ) : null}
+
       <Section title={c.trustedTitle} description={c.trustedDescription}>
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="card p-6">
@@ -584,11 +629,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     : locale === 'zh'
       ? 'ExchangeTHB 首页'
       : locale === 'ja'
-        ? 'Thailand Crypto and Cash Exchange Comparison'
+        ? 'タイの暗号資産と現金両替比較 | ExchangeTHB'
         : locale === 'ko'
-          ? 'Thailand Crypto and Cash Exchange Comparison'
+          ? '태국 바트 비교 | ExchangeTHB'
           : locale === 'de'
-            ? 'Thailand Crypto and Cash Exchange Comparison'
+            ? 'Thailand Baht Vergleich | ExchangeTHB'
             : 'Thailand Crypto and Cash Exchange Comparison';
   const description = copy[contentLocale].heroBody;
   return {
@@ -599,7 +644,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       languages: localeAlternates(),
     },
     keywords: locale === 'en'
-      ? ['Thailand crypto exchange comparison', 'THB conversion', 'Bangkok money changer', 'crypto to baht', 'cash exchange Thailand']
+      ? ['Thailand crypto exchange comparison', 'THB conversion', 'Bangkok money changer', 'crypto to baht', 'cash exchange Thailand', 'Japan to Thailand money exchange', 'Germany to Thailand money exchange', 'Europe to Thailand money exchange']
       : undefined,
     openGraph: {
       title,

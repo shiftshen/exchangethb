@@ -9,6 +9,7 @@ import { compareCrypto } from '@/lib/compare';
 import { localizeExchangeLicense } from '@/lib/exchange-text';
 import { resolveContentLocale } from '@/lib/i18n';
 import { localizeMarketFallbackReason, localizeMarketFreshness, localizeMarketSource } from '@/lib/market-text';
+import { routeGuides } from '@/lib/route-guides';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
 import { CryptoSymbol, Locale } from '@/lib/types';
 
@@ -510,6 +511,27 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
           </div>
         </Section>
       ) : null}
+
+      <Section
+        title={contentLocale === 'th' ? 'เส้นทางคริปโตที่เกี่ยวข้อง' : contentLocale === 'zh' ? '相关加密路线页' : 'Related crypto route guides'}
+        description={contentLocale === 'th' ? 'หน้าพวกนี้ช่วยรองรับคำค้นเฉพาะของแต่ละเหรียญ แล้วพาผู้ใช้กลับเข้ามายัง flow เปรียบเทียบจริง' : contentLocale === 'zh' ? '这些页面承接更具体的币种搜索，再把用户带回真实比较流程。' : 'These landing pages target specific coin-to-THB search intent and feed users back into the live Thai comparison flow.'}
+      >
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {routeGuides.filter((guide) => guide.type === 'crypto').map((guide) => (
+            <TrackLink
+              key={guide.slug}
+              href={`/${locale}/routes/${guide.slug}`}
+              eventName="crypto_related_route_click"
+              eventParams={{ route: guide.slug }}
+              className="card card-interactive p-5"
+            >
+              <p className="text-sm text-stone-400">{guide.symbol}/THB</p>
+              <h2 className="mt-2 text-lg font-semibold text-white">{guide.title[contentLocale]}</h2>
+              <p className="mt-3 text-sm text-stone-400">{guide.summary[contentLocale]}</p>
+            </TrackLink>
+          ))}
+        </div>
+      </Section>
     </div>
   );
 }
@@ -517,7 +539,17 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const contentLocale = resolveContentLocale(locale);
-  const title = locale === 'th' ? 'เปรียบเทียบคริปโตเป็นบาท' : locale === 'zh' ? '加密换泰铢比较' : 'Crypto to THB Comparison for Thailand';
+  const title = locale === 'th'
+    ? 'เปรียบเทียบคริปโตเป็นบาท'
+    : locale === 'zh'
+      ? '加密换泰铢比较'
+      : locale === 'ja'
+        ? 'タイで暗号資産を THB に比較'
+        : locale === 'ko'
+          ? '태국 암호화폐 THB 비교'
+          : locale === 'de'
+            ? 'Krypto zu THB Vergleich in Thailand'
+            : 'Crypto to THB Comparison for Thailand';
   const description = copy[contentLocale].description;
   return {
     title,
@@ -527,7 +559,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       languages: localeAlternates('/crypto'),
     },
     keywords: locale === 'en'
-      ? ['BTC to THB', 'USDT to THB', 'crypto exchange Thailand', 'buy crypto in Thailand', 'sell crypto for baht']
+      ? ['BTC to THB', 'ETH to THB', 'USDT to THB', 'XRP to THB', 'DOGE to THB', 'SOL to THB', 'crypto exchange Thailand', 'buy crypto in Thailand', 'sell crypto for baht']
       : undefined,
     openGraph: {
       title,

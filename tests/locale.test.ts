@@ -6,10 +6,13 @@ describe('locale guard', () => {
     expect(isLocale('th')).toBe(true);
     expect(isLocale('en')).toBe(true);
     expect(isLocale('zh')).toBe(true);
+    expect(isLocale('ja')).toBe(true);
+    expect(isLocale('ko')).toBe(true);
+    expect(isLocale('de')).toBe(true);
   });
 
   it('rejects unsupported locales', () => {
-    expect(isLocale('ja')).toBe(false);
+    expect(isLocale('fr')).toBe(false);
     expect(isLocale('')).toBe(false);
   });
 });

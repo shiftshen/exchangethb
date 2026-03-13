@@ -9,6 +9,7 @@ import { formatDisplayAmount, formatInputAmount, inspectPositiveDecimal, parsePo
 import { compareCashLive } from '@/lib/cash-live';
 import { localizeCashText } from '@/lib/cash-text';
 import { resolveContentLocale } from '@/lib/i18n';
+import { routeGuides } from '@/lib/route-guides';
 import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
 import { CurrencyCode, Locale } from '@/lib/types';
 
@@ -653,6 +654,27 @@ export default async function CashPage({ params, searchParams }: { params: Promi
           </div>
         </Section>
       ) : null}
+
+      <Section
+        title={contentLocale === 'th' ? 'เส้นทางเงินสดและนักเดินทางที่เกี่ยวข้อง' : contentLocale === 'zh' ? '相关现金路线与国家页' : 'Related cash and country route guides'}
+        description={contentLocale === 'th' ? 'ทั้งหน้าคู่เงินสดและหน้าคำค้นจากแต่ละประเทศจะพากลับเข้ามายัง flow เปรียบเทียบเงินสดจริงของกรุงเทพ' : contentLocale === 'zh' ? '这些现金路线页和国家意图页都会把用户带回真实的曼谷现金比较流程。' : 'These cash route pages and country-intent guides support international search traffic and feed users back into the practical Bangkok compare flow.'}
+      >
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {routeGuides.filter((guide) => guide.type === 'cash').map((guide) => (
+            <TrackLink
+              key={guide.slug}
+              href={`/${locale}/routes/${guide.slug}`}
+              eventName="cash_related_route_click"
+              eventParams={{ route: guide.slug }}
+              className="card card-interactive p-5"
+            >
+              <p className="text-sm text-stone-400">{guide.currency ? `${guide.currency}/THB` : 'Route guide'}</p>
+              <h2 className="mt-2 text-lg font-semibold text-white">{guide.title[contentLocale]}</h2>
+              <p className="mt-3 text-sm text-stone-400">{guide.summary[contentLocale]}</p>
+            </TrackLink>
+          ))}
+        </div>
+      </Section>
     </div>
   );
 }
@@ -660,7 +682,17 @@ export default async function CashPage({ params, searchParams }: { params: Promi
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const contentLocale = resolveContentLocale(locale);
-  const title = locale === 'th' ? 'เปรียบเทียบเงินสด/ฟอเร็กซ์เป็นบาท' : locale === 'zh' ? '现金外汇换泰铢比较' : 'Cash Exchange to THB in Bangkok';
+  const title = locale === 'th'
+    ? 'เปรียบเทียบเงินสด/ฟอเร็กซ์เป็นบาท'
+    : locale === 'zh'
+      ? '现金外汇换泰铢比较'
+      : locale === 'ja'
+        ? 'バンコク現金両替 THB 比較'
+        : locale === 'ko'
+          ? '방콕 현금 환전 THB 비교'
+          : locale === 'de'
+            ? 'Bargeld zu THB Vergleich in Bangkok'
+            : 'Cash Exchange to THB in Bangkok';
   const description = copy[contentLocale].description;
   return {
     title,
@@ -670,7 +702,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       languages: localeAlternates('/cash'),
     },
     keywords: locale === 'en'
-      ? ['Bangkok money changer', 'cash to THB', 'USD to THB cash', 'EUR to THB cash', 'Thailand exchange rate']
+      ? ['Bangkok money changer', 'cash to THB', 'USD to THB cash', 'EUR to THB cash', 'GBP to THB cash', 'JPY to THB cash', 'CNY to THB cash', 'Thailand exchange rate', 'Japan to Thailand money exchange', 'Germany to Thailand money exchange', 'Europe to Thailand money exchange', 'Korea to Thailand money exchange']
       : undefined,
     openGraph: {
       title,
