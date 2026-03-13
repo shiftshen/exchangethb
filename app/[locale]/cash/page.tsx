@@ -25,7 +25,9 @@ const copy = {
     currency: 'สกุลเงิน',
     currencyQuick: 'แตะเลือกสกุลหลักได้ทันที',
     currencyMore: 'สกุลอื่นๆ',
-    currencyMoreHint: 'ตอนนี้ทุกสกุลที่เชื่อมอยู่แสดงครบในปุ่มลัดด้านบนแล้ว',
+    currencyMoreHint: 'ตอนนี้ทุกสกุลเงินสดที่เชื่อมอยู่แสดงครบในปุ่มลัดด้านบนแล้ว',
+    supportScope: 'สกุลเงินสดที่รองรับสดในตอนนี้: USD, CNY, EUR, JPY, GBP',
+    supportScopeHint: 'เว็บไซต์รองรับหลายภาษา แต่ยังไม่ได้หมายความว่าทุกสกุลเงินของทุกประเทศมีข้อมูลสดอยู่ในหน้าเปรียบเทียบ',
     amount: 'จำนวนเงิน',
     amountHint: 'รองรับทศนิยม เช่น 1000.50',
     amountNote: 'กรอกเป็นตัวเลขปกติ เช่น 1000.50 และไม่ใช้รูปแบบวิทยาศาสตร์',
@@ -113,6 +115,8 @@ const copy = {
     currencyQuick: 'Tap a common currency',
     currencyMore: 'More currencies',
     currencyMoreHint: 'All currently supported cash currencies already appear in the quick chips above.',
+    supportScope: 'Current live cash support: USD, CNY, EUR, JPY, GBP',
+    supportScopeHint: 'The site supports more languages than the live cash set, so country pages do not automatically mean that currency has live rows.',
     amount: 'Amount',
     amountHint: 'Supports decimals, for example 1000.50',
     amountNote: 'Use normal decimal numbers like 1000.50 and avoid scientific notation.',
@@ -200,6 +204,8 @@ const copy = {
     currencyQuick: '常用币种快捷选择',
     currencyMore: '更多币种',
     currencyMoreHint: '当前接入的现金币种都已经显示在上面的快捷标签里。',
+    supportScope: '当前实时现金支持：USD、CNY、EUR、JPY、GBP',
+    supportScopeHint: '网站语言覆盖会大于实时现金支持集，所以国家页并不自动等于该国货币已有实时行。',
     amount: '金额',
     amountHint: '支持小数，例如 1000.50',
     amountNote: '请输入普通数字格式，例如 1000.50，不要使用科学计数法。',
@@ -377,6 +383,10 @@ export default async function CashPage({ params, searchParams }: { params: Promi
                     {currencies.map((item) => <option key={item}>{item}</option>)}
                   </select>
                   <p className="mt-2 text-xs text-stone-500">{c.currencyMoreHint}</p>
+                </div>
+                <div className="rounded-2xl border border-brand-500/20 bg-brand-500/8 px-4 py-3">
+                  <p className="text-sm font-medium text-brand-200">{c.supportScope}</p>
+                  <p className="mt-1 text-xs text-stone-400">{c.supportScopeHint}</p>
                 </div>
               </div>
 

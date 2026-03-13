@@ -16,6 +16,8 @@ const uiCopy = {
     methodologyCta: 'Read the methodology',
     noteTitle: 'Why this page matters for search',
     noteBody: 'This route page exists so users landing from search can go straight into a realistic THB comparison instead of starting from a blank compare screen.',
+    supportTitleCash: 'Current live cash coverage',
+    supportBodyCash: 'Live cash comparison currently covers USD, CNY, EUR, JPY, and GBP. Country-intent pages can still help with travel decisions even when that local currency is not part of the live compare set.',
     faqTitle: 'Common questions for this route',
   },
   zh: {
@@ -26,6 +28,8 @@ const uiCopy = {
     methodologyCta: '查看方法论',
     noteTitle: '为什么要单独做这类页面',
     noteBody: '这个页面是为了让从搜索结果进入的用户直接落到更贴近真实需求的 THB 比较入口，而不是从空白工具页开始。',
+    supportTitleCash: '当前实时现金支持集',
+    supportBodyCash: '当前实时现金比较只覆盖 USD、CNY、EUR、JPY 和 GBP。即使某个国家页不对应实时本币，它仍然可以作为旅行换汇决策页存在。',
     faqTitle: '这个路线最常见的问题',
   },
   th: {
@@ -36,6 +40,8 @@ const uiCopy = {
     methodologyCta: 'ดูวิธีการ',
     noteTitle: 'ทำไมหน้านี้จึงมีประโยชน์',
     noteBody: 'หน้านี้ช่วยให้ผู้ใช้ที่มาจากการค้นหาลงจอดบนเส้นทางเปรียบเทียบ THB ที่สมจริงทันที แทนการเริ่มจากหน้าคอมแพร์ว่างเปล่า',
+    supportTitleCash: 'ขอบเขตเงินสดสดที่รองรับตอนนี้',
+    supportBodyCash: 'ชุดเปรียบเทียบเงินสดสดตอนนี้ครอบคลุม USD, CNY, EUR, JPY และ GBP เท่านั้น ส่วนหน้าประเทศยังใช้เป็นหน้าช่วยตัดสินใจการเดินทางได้ แม้สกุลเงินท้องถิ่นนั้นจะยังไม่อยู่ในชุดสด',
     faqTitle: 'คำถามที่พบบ่อยของเส้นทางนี้',
   },
   ja: {
@@ -46,6 +52,8 @@ const uiCopy = {
     methodologyCta: '方法論を見る',
     noteTitle: 'このページの役割',
     noteBody: '検索から来たユーザーが空の比較ツールではなく、実際の THB 比較導線へ直接入れるようにするためのページです。',
+    supportTitleCash: '現在のライブ現金対応',
+    supportBodyCash: '現在ライブで比較できる現金通貨は USD、CNY、EUR、JPY、GBP です。国別ページは、その国の通貨がライブ比較に含まれない場合でも旅行時の判断ページとして機能します。',
     faqTitle: 'このルートでよくある質問',
   },
   ko: {
@@ -56,6 +64,8 @@ const uiCopy = {
     methodologyCta: '방법론 보기',
     noteTitle: '이 페이지의 역할',
     noteBody: '검색에서 들어온 사용자가 빈 비교 도구가 아니라 실제 THB 비교 흐름으로 바로 들어가도록 만드는 페이지입니다.',
+    supportTitleCash: '현재 라이브 현금 지원 범위',
+    supportBodyCash: '현재 라이브 현금 비교는 USD, CNY, EUR, JPY, GBP만 지원합니다. 국가 페이지는 해당 현지 통화가 라이브 세트에 없더라도 여행 환전 의사결정 페이지로 쓸 수 있습니다.',
     faqTitle: '이 경로의 자주 묻는 질문',
   },
   de: {
@@ -66,6 +76,8 @@ const uiCopy = {
     methodologyCta: 'Methodik lesen',
     noteTitle: 'Warum diese Seite existiert',
     noteBody: 'Diese Seite hilft Suchenden dabei, direkt in einen realistischen THB-Vergleich einzusteigen statt auf einer leeren Vergleichsseite zu landen.',
+    supportTitleCash: 'Aktuelle Live-Bargeldabdeckung',
+    supportBodyCash: 'Der Live-Bargeldvergleich deckt aktuell USD, CNY, EUR, JPY und GBP ab. Länderseiten können trotzdem als Reise-Entscheidungsseiten dienen, auch wenn die jeweilige lokale Währung nicht im Live-Satz liegt.',
     faqTitle: 'Häufige Fragen zu dieser Route',
   },
 } as const;
@@ -135,6 +147,12 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
           <div className="card-panel p-6">
             <p className="text-sm uppercase tracking-[0.22em] text-stone-500">{c.noteTitle}</p>
             <p className="mt-3 text-base text-stone-300">{c.noteBody}</p>
+            {guide.type === 'cash' ? (
+              <div className="mt-4 rounded-2xl border border-brand-500/20 bg-brand-500/8 px-4 py-4">
+                <p className="text-sm font-semibold text-brand-200">{c.supportTitleCash}</p>
+                <p className="mt-2 text-sm text-stone-300">{c.supportBodyCash}</p>
+              </div>
+            ) : null}
           </div>
         </div>
       </section>

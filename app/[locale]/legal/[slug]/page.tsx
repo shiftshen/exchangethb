@@ -3,8 +3,9 @@ import { Metadata } from 'next';
 import { Locale } from '@/lib/types';
 import { t } from '@/lib/i18n';
 import { localeAlternates, withLocalePath } from '@/lib/seo';
+import { CopyGroup } from '@/lib/types';
 
-type LocalizedText = { th: string; en: string; zh: string };
+type LocalizedText = CopyGroup;
 
 type LegalSection = {
   heading: LocalizedText;
@@ -44,9 +45,17 @@ const legalPages: Record<string, {
       {
         heading: { th: 'วิธีเปรียบเทียบฝั่งเงินสด', en: 'How cash comparisons are built', zh: '现金比较的生成方式' },
         bullets: [
-          { th: 'ระบบดึงอัตราจากหน้าเว็บหรือ API สาธารณะของผู้ให้บริการ แล้วรวมกับชุดข้อมูล fallback ที่ผ่านการทบทวนเมื่อจำเป็น', en: 'The system pulls rates from official public pages or APIs, then combines them with reviewed fallback data when needed.', zh: '系统优先抓取官方公开页面或 API 的汇率，必要时再结合经审核的备用数据。' },
-          { th: 'หากคุณเปิดตำแหน่ง ระบบจะคำนวณระยะจริงจากตำแหน่งของคุณ มิฉะนั้นจะใช้จุดอ้างอิงกลางกรุงเทพ', en: 'If you enable location, distances use your real position; otherwise the site falls back to a central Bangkok reference point.', zh: '如果你开启定位，距离会按你当前位置计算；否则回退到曼谷中心参考点。' },
-          { th: 'จุดบางจุดยังเป็น reference point หรือการประมาณจากที่อยู่ เพราะบางแบรนด์ไม่ได้เปิดเผยโครงสร้างสาขาแบบสมบูรณ์', en: 'Some locations are still address-based or reference points because not every brand publishes fully structured branch data.', zh: '由于部分品牌没有公开完整的门店结构，某些位置仍然是按地址估算或品牌参考点。' },
+          { th: 'ระบบดึงอัตราจากหน้าเว็บหรือ API สาธารณะของผู้ให้บริการที่เปิดใช้งานอยู่ แล้วรวมกับชุดข้อมูล fallback ที่ผ่านการทบทวนเมื่อจำเป็น', en: 'The system pulls rates from official public pages or APIs for the currently enabled providers, then combines them with reviewed fallback data when needed.', zh: '系统优先抓取当前启用品牌的官方公开页面或 API 汇率，必要时再结合经审核的备用数据。', ja: 'システムは現在有効化されているブランドの公式公開ページまたは API からレートを取得し、必要な場合のみレビュー済み fallback データを組み合わせます。', ko: '시스템은 현재 활성화된 브랜드의 공식 공개 페이지나 API에서 환율을 가져오고, 필요한 경우에만 검토된 fallback 데이터를 결합합니다.', de: 'Das System zieht Kurse von offiziellen öffentlichen Seiten oder APIs der aktuell aktivierten Anbieter und kombiniert sie nur bei Bedarf mit geprüftem Fallback-Material.' },
+          { th: 'หากคุณเปิดตำแหน่ง ระบบจะคำนวณระยะจริงจากตำแหน่งของคุณ มิฉะนั้นจะใช้จุดอ้างอิงกลางกรุงเทพ', en: 'If you enable location, distances use your real position; otherwise the site falls back to a central Bangkok reference point.', zh: '如果你开启定位，距离会按你当前位置计算；否则回退到曼谷中心参考点。', ja: '位置情報を許可すると距離は実際の現在地から計算され、許可しない場合はバンコク中心の参照点にフォールバックします。', ko: '위치 권한을 주면 거리 계산은 실제 현재 위치를 사용하고, 그렇지 않으면 방콕 중심 참조점으로 돌아갑니다.', de: 'Wenn du den Standort freigibst, werden Distanzen von deiner realen Position aus berechnet; andernfalls fällt die Seite auf einen Referenzpunkt im Zentrum von Bangkok zurück.' },
+          { th: 'จุดบางจุดยังเป็น reference point หรือการประมาณจากที่อยู่ เพราะบางแบรนด์ไม่ได้เปิดเผยโครงสร้างสาขาแบบสมบูรณ์', en: 'Some locations are still address-based or reference points because not every brand publishes fully structured branch data.', zh: '由于部分品牌没有公开完整的门店结构，某些位置仍然是按地址估算或品牌参考点。', ja: '一部のブランドは支店データを完全には公開していないため、住所ベースまたはブランド参照点の場所が残っています。', ko: '일부 브랜드는 지점 데이터를 완전히 공개하지 않기 때문에, 몇몇 위치는 주소 기반 또는 브랜드 참조점으로 남아 있습니다.', de: 'Einige Marken veröffentlichen ihre Filialstruktur nicht vollständig, deshalb bleiben manche Standorte adressbasiert oder als Marken-Referenzpunkte markiert.' },
+        ],
+      },
+      {
+        heading: { th: 'ภาษาและสกุลเงินที่รองรับไม่ได้เท่ากันเสมอไป', en: 'Language coverage does not mean every currency is supported live', zh: '语言覆盖并不等于每种货币都已接入实时支持', ja: '言語対応と通貨のライブ対応は同じ意味ではありません', ko: '언어 지원이 모든 통화의 실시간 지원을 뜻하지는 않습니다', de: 'Sprachabdeckung bedeutet nicht, dass jede Währung live unterstützt wird' },
+        bullets: [
+          { th: 'เว็บไซต์มีหลายภาษาเพื่อรองรับผู้ใช้จากหลายประเทศ แต่ชุดเปรียบเทียบเงินจริงจะขึ้นอยู่กับผู้ให้บริการที่เชื่อมอยู่ในขณะนั้น', en: 'The site supports multiple languages for international users, but the real compare set only covers currencies and routes that are currently connected.', zh: '网站提供多语言是为了服务不同国家用户，但真实比较集只覆盖当前已接入的币种和路线。', ja: 'サイトは国際ユーザー向けに多言語対応していますが、実際の比較対象は現在接続されている通貨とルートに限られます。', ko: '사이트는 국제 사용자를 위해 여러 언어를 지원하지만, 실제 비교 세트는 현재 연결된 통화와 경로에만 한정됩니다.', de: 'Die Seite unterstützt mehrere Sprachen für internationale Nutzer, aber der echte Vergleichssatz umfasst nur die aktuell angebundenen Währungen und Routen.' },
+          { th: 'ชุดเงินสดที่รองรับสดในตอนนี้คือ USD, CNY, EUR, JPY และ GBP ส่วนหน้าประเทศอย่าง Korea to Thailand จะเป็นหน้าช่วยตัดสินใจการเดินทาง ไม่ใช่หน้าราคา KRW สด', en: 'The current live cash set covers USD, CNY, EUR, JPY, and GBP. Country pages such as Korea to Thailand are travel decision pages, not live KRW pricing pages.', zh: '当前接入的实时现金币种是 USD、CNY、EUR、JPY 和 GBP。像 Korea to Thailand 这类国家页属于旅行换汇决策页，不是假装提供 KRW 实时行情的页面。', ja: '現在のライブ現金比較セットは USD、CNY、EUR、JPY、GBP です。Korea to Thailand のような国別ページは旅行時の両替判断ページであり、KRW のライブ価格ページではありません。', ko: '현재 라이브 현금 비교 세트는 USD, CNY, EUR, JPY, GBP입니다. Korea to Thailand 같은 국가 페이지는 여행 환전 의사결정 페이지이지 KRW 실시간 가격 페이지가 아닙니다.', de: 'Der aktuelle Live-Cash-Satz umfasst USD, CNY, EUR, JPY und GBP. Länderseiten wie Korea to Thailand sind Reise-Entscheidungsseiten und keine Live-KRW-Preis-Seiten.' },
+          { th: 'หากหน้าใดเป็นเพียง route guide หรือ travel-intent page เราจะพยายามระบุให้ชัดว่าเป็นหน้าช่วยตัดสินใจ ไม่ใช่การันตีว่ามีแถวข้อมูลสดของสกุลนั้น', en: 'When a page is only a route guide or travel-intent page, it should be treated as decision support rather than proof that the site has live rows for that currency.', zh: '如果某个页面只是路线指南或旅行意图页，它应该被理解为决策辅助，而不是证明站点已经有该币种的实时行。', ja: 'ページがルートガイドや旅行意図ページである場合、それは判断支援であって、その通貨のライブ行が存在する証明ではありません。', ko: '페이지가 경로 가이드나 여행 의도 페이지라면, 그것은 의사결정 지원일 뿐 해당 통화의 실시간 행이 존재한다는 뜻은 아닙니다.', de: 'Wenn eine Seite nur als Routen- oder Reise-Intent-Seite dient, sollte sie als Entscheidungshilfe verstanden werden und nicht als Beweis, dass für diese Währung Live-Zeilen vorhanden sind.' },
         ],
       },
       {
@@ -142,7 +151,7 @@ export default async function LegalPage({ params }: { params: Promise<{ locale: 
     <article className="mx-auto max-w-5xl space-y-10">
       <header className="space-y-4 rounded-[2rem] border border-surface-700 bg-gradient-to-br from-surface-900 via-surface-850 to-surface-900 p-8 shadow-glow">
         <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-400">
-          {t({ th: 'กฎหมายและการเปิดเผยข้อมูล', en: 'Legal and Disclosure', zh: '法务与披露' }, locale)}
+          {t({ th: 'กฎหมายและการเปิดเผยข้อมูล', en: 'Legal and Disclosure', zh: '法务与披露', ja: '法務と開示', ko: '법률 및 공개', de: 'Rechtliches und Offenlegung' }, locale)}
         </p>
         <h1 className="text-4xl font-semibold tracking-tight text-white">{t(page.title, locale)}</h1>
         <p className="max-w-4xl text-lg text-stone-300">{t(page.intro, locale)}</p>
@@ -187,6 +196,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       title,
       description,
       url: withLocalePath(locale, `/legal/${slug}`),
+    },
+    twitter: {
+      title,
+      description,
     },
   };
 }
