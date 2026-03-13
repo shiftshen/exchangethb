@@ -642,6 +642,266 @@ export const routeGuides: RouteGuide[] = [
     },
     keywords: ['europe to thailand money exchange', 'europe to thailand exchange rate', 'europe travel money thailand', 'euro cash thailand', 'bangkok exchange guide europe'],
   },
+  {
+    slug: 'bangkok-airport-money-exchange-guide',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=25',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'Bangkok airport money exchange guide',
+      zh: '曼谷机场换汇指南',
+      th: 'คู่มือแลกเงินที่สนามบินกรุงเทพ',
+    },
+    summary: {
+      en: 'A decision page for travelers comparing airport convenience against stronger city money changer routes into Thai baht.',
+      zh: '面向游客的决策页，比较机场便利性与市区更强路线之间的取舍。',
+      th: 'หน้าช่วยตัดสินใจสำหรับนักเดินทางที่ต้องการเทียบความสะดวกของสนามบินกับเส้นทางแลกเงินในเมืองที่ดีกว่า',
+    },
+    intro: {
+      en: 'This page is built for searches like Bangkok airport money exchange and helps users move from a broad arrival question into a practical compare flow.',
+      zh: '这个页面承接 Bangkok airport money exchange 这类搜索，把用户带进更实用的比较流程。',
+      th: 'หน้านี้รองรับคำค้นอย่าง Bangkok airport money exchange และช่วยให้ผู้ใช้เปลี่ยนจากคำถามกว้างๆ ตอนมาถึง ไปสู่ flow เปรียบเทียบที่ใช้งานได้จริง',
+    },
+    audience: {
+      en: 'Useful for first-time visitors who need a fast answer on whether to exchange at the airport or wait for a city-center money changer.',
+      zh: '适合第一次来泰国、想快速判断该在机场换还是进市区再换的用户。',
+      th: 'เหมาะกับผู้มาไทยครั้งแรกที่ต้องการคำตอบเร็วๆ ว่าควรแลกที่สนามบินหรือรอเข้าเมืองก่อน',
+    },
+    checks: {
+      en: ['Use airport exchange only as the convenience baseline.', 'Compare city-center routes before locking in a large amount.', 'Check branch hours and map links before leaving the airport.'],
+      zh: ['把机场换汇当成便利性基线，而不是默认最优。', '大金额前先比较市区路线。', '离开机场前先看营业时间和地图链接。'],
+      th: ['มองการแลกที่สนามบินเป็น baseline ด้านความสะดวก ไม่ใช่ตัวเลือกที่ดีที่สุดโดยอัตโนมัติ', 'ถ้าจำนวนเงินมาก ให้เทียบเส้นทางในเมืองก่อนตัดสินใจ', 'ก่อนออกจากสนามบินให้เช็กเวลาเปิดและลิงก์แผนที่ของสาขา'],
+    },
+    faqs: {
+      en: [
+        {
+          question: 'Should I exchange money at Bangkok airport or wait until I reach the city?',
+          answer: 'This page helps you compare that tradeoff. Airport exchange may be more convenient, but city-center providers often justify the extra trip for larger amounts.',
+        },
+        {
+          question: 'What should I check before leaving the airport for a Bangkok money changer?',
+          answer: 'Check opening hours, map or reference links, and whether the provider currently shows live or fallback data before you travel.',
+        },
+      ],
+      zh: [
+        {
+          question: '我应该在曼谷机场换钱，还是进市区再换？',
+          answer: '这个页面就是为了解决这个取舍问题。机场更方便，但对大金额来说，市区路线往往更值得。',
+        },
+        {
+          question: '离开机场去市区换汇前，我应该先看什么？',
+          answer: '先看营业时间、地图或参考页，以及当前是实时还是备用数据。',
+        },
+      ],
+      th: [
+        {
+          question: 'ควรแลกเงินที่สนามบินกรุงเทพเลยหรือรอเข้าเมืองก่อน',
+          answer: 'หน้านี้ช่วยให้คุณเทียบข้อแลกเปลี่ยนนั้นได้ สนามบินสะดวกกว่า แต่สำหรับจำนวนเงินมาก ร้านในเมืองมักคุ้มค่ากว่า',
+        },
+        {
+          question: 'ก่อนออกจากสนามบินไปหาร้านแลกเงินในกรุงเทพควรเช็กอะไรบ้าง',
+          answer: 'เช็กเวลาเปิด ลิงก์แผนที่หรือหน้าอ้างอิง และดูว่าข้อมูลตอนนี้เป็น live หรือ fallback',
+        },
+      ],
+    },
+    keywords: ['bangkok airport money exchange', 'bangkok airport exchange rate', 'exchange money after landing bangkok', 'airport vs city exchange bangkok', 'thailand airport money exchange'],
+  },
+  {
+    slug: 'pratunam-money-exchange-guide',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=8',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'Pratunam money exchange guide',
+      zh: '水门换汇指南',
+      th: 'คู่มือแลกเงินย่านประตูน้ำ',
+    },
+    summary: {
+      en: 'A Bangkok cash route page centered on Pratunam-area providers, branch context, and practical walk-in decisions.',
+      zh: '以水门一带为核心的曼谷换汇路线页，强调门店背景和到店决策。',
+      th: 'หน้าเส้นทางแลกเงินในกรุงเทพที่เน้นย่านประตูน้ำ พร้อมบริบทของสาขาและการตัดสินใจก่อนเดินทางไปจริง',
+    },
+    intro: {
+      en: 'This page turns broad Pratunam money exchange searches into a realistic compare flow using the providers that currently have the strongest public data in this area.',
+      zh: '这个页面把宽泛的 Pratunam money exchange 搜索，转成更真实的比较流程。',
+      th: 'หน้านี้เปลี่ยนคำค้นกว้างๆ เรื่อง Pratunam money exchange ให้กลายเป็น flow เปรียบเทียบที่ตรงความจริงมากขึ้น',
+    },
+    audience: {
+      en: 'Useful for travelers staying near Pratunam who want a cleaner answer than a generic neighborhood blog post.',
+      zh: '适合住在水门附近、想要比普通旅游博客更实用答案的旅客。',
+      th: 'เหมาะกับนักเดินทางที่พักใกล้ประตูน้ำและต้องการคำตอบที่ใช้งานได้จริงกว่าบล็อกแนะนำย่านทั่วไป',
+    },
+    checks: {
+      en: ['Use this as a route page, not a guaranteed branch quote.', 'Check whether the row is an address-based point or a reference point.', 'Compare hours before walking over in Bangkok traffic.'],
+      zh: ['把它当成路线页，不是保证门店报价。', '先看当前是地址级点位还是参考点。', '出发前先比较营业时间。'],
+      th: ['มองหน้านี้เป็น route page ไม่ใช่ใบเสนอราคาที่การันตีจากสาขา', 'เช็กก่อนว่ารายการนั้นเป็นจุดที่อิงจากที่อยู่หรือเป็น reference point', 'ก่อนเดินไปจริงให้ดูเวลาเปิดควบคู่กัน'],
+    },
+    faqs: {
+      en: [
+        {
+          question: 'Why is Pratunam important for Bangkok money exchange searches?',
+          answer: 'Pratunam is one of the strongest exchange search clusters in Bangkok, so this page helps users move from neighborhood intent into a real branch comparison flow.',
+        },
+        {
+          question: 'Does this page compare exact Pratunam walk-in counters only?',
+          answer: 'Not always. Some rows are precise address-based points, while others are area references. The page labels this difference explicitly.',
+        },
+      ],
+      zh: [
+        {
+          question: '为什么水门对曼谷换汇搜索这么重要？',
+          answer: '因为水门是曼谷最强的换汇搜索区域之一，这个页面能把区域意图导向真实比较流程。',
+        },
+        {
+          question: '这个页面只比较水门精确柜台吗？',
+          answer: '不一定。有些是精确地址点位，有些是区域参考点，页面会明确标出来。',
+        },
+      ],
+      th: [
+        {
+          question: 'ทำไมย่านประตูน้ำจึงสำคัญกับการค้นหาร้านแลกเงินในกรุงเทพ',
+          answer: 'เพราะประตูน้ำเป็นหนึ่งในคลัสเตอร์การค้นหาร้านแลกเงินที่สำคัญที่สุดของกรุงเทพ และหน้านี้ช่วยเปลี่ยนเจตนาแบบย่านไปสู่ flow เปรียบเทียบจริง',
+        },
+        {
+          question: 'หน้านี้เปรียบเทียบเฉพาะเคาน์เตอร์ที่อยู่ในประตูน้ำแบบเป๊ะๆ หรือไม่',
+          answer: 'ไม่เสมอไป บางรายการเป็นจุดที่อิงจากที่อยู่จริง บางรายการเป็นเพียง area reference และระบบจะแสดงความต่างนั้นไว้ชัดเจน',
+        },
+      ],
+    },
+    keywords: ['pratunam money exchange', 'pratunam exchange rate', 'bangkok money changer pratunam', 'pratunam cash to thb', 'money exchange near pratunam'],
+  },
+  {
+    slug: 'central-bangkok-money-exchange-guide',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=10',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'Central Bangkok money exchange guide',
+      zh: '曼谷市中心换汇指南',
+      th: 'คู่มือแลกเงินในกรุงเทพชั้นใน',
+    },
+    summary: {
+      en: 'A city-center exchange guide for comparing Bangkok money changer routes with distance, hours, and source transparency.',
+      zh: '面向曼谷市中心换汇需求的路线页，比较距离、营业时间和数据透明度。',
+      th: 'คู่มือสำหรับการแลกเงินในกรุงเทพชั้นใน ที่ช่วยเทียบระยะทาง เวลาเปิด และความโปร่งใสของแหล่งข้อมูล',
+    },
+    intro: {
+      en: 'This page helps users searching for central Bangkok money exchange move past generic lists and into a realistic route comparison.',
+      zh: '这个页面帮助搜索市中心换汇的用户跳过泛泛列表，进入更真实的路线比较。',
+      th: 'หน้านี้ช่วยให้ผู้ใช้ที่ค้นหาร้านแลกเงินในกรุงเทพชั้นใน ข้ามพ้นลิสต์แบบกว้างๆ แล้วเข้าไปยังการเทียบเส้นทางที่สมจริงกว่า',
+    },
+    audience: {
+      en: 'Useful for visitors who care about balancing a stronger rate against practical branch access in Bangkok traffic.',
+      zh: '适合希望在汇率和实际到店便利之间做平衡的访客。',
+      th: 'เหมาะกับผู้ใช้ที่ต้องการชั่งน้ำหนักระหว่างเรตที่ดีกว่า กับความสะดวกในการเดินทางท่ามกลางการจราจรของกรุงเทพ',
+    },
+    checks: {
+      en: ['Use distance mode honestly: your location is best, Bangkok reference is second best.', 'Check hours before assuming a city-center branch is usable.', 'Treat each result as a route option, not a guaranteed quote.'],
+      zh: ['距离模式要看清：真实定位优先，曼谷参考点次之。', '先看营业时间，再判断市中心路线是否可用。', '把每个结果当作路线选项，而不是保证报价。'],
+      th: ['ใช้โหมดระยะทางอย่างตรงความจริง: ตำแหน่งจริงดีที่สุด จุดอ้างอิงกรุงเทพเป็นรองลงมา', 'ตรวจเวลาเปิดก่อนคิดว่าสาขาในเมืองใช้ได้แน่', 'มองแต่ละผลลัพธ์เป็นตัวเลือกของเส้นทาง ไม่ใช่ราคาแบบการันตี'],
+    },
+    faqs: {
+      en: [
+        {
+          question: 'What does central Bangkok money exchange really mean on this site?',
+          answer: 'It means routes ranked around Bangkok city access, branch context, and reference distance, not a claim that every row is your exact nearest branch.',
+        },
+        {
+          question: 'How do I avoid being misled by a city-center rate?',
+          answer: 'Check the source state, location precision label, and opening hours together before using the route.',
+        },
+      ],
+      zh: [
+        {
+          question: '这个网站里的“曼谷市中心换汇”到底是什么意思？',
+          answer: '它代表围绕市区可达性、门店背景和参考距离做出的路线排序，不是说每一行都是离你最近的精确门店。',
+        },
+        {
+          question: '我怎么避免被“市中心高汇率”误导？',
+          answer: '同时看来源状态、位置精度标签和营业时间，再决定是否采用这条路线。',
+        },
+      ],
+      th: [
+        {
+          question: 'คำว่า central Bangkok money exchange บนเว็บนี้หมายความว่าอย่างไร',
+          answer: 'หมายถึงการจัดอันดับเส้นทางโดยดูความเข้าถึงในเขตเมือง บริบทของสาขา และระยะอ้างอิง ไม่ได้หมายความว่าทุกรายการคือสาขาที่ใกล้คุณที่สุดแบบเป๊ะๆ',
+        },
+        {
+          question: 'จะหลีกเลี่ยงการถูกเรตในเมืองทำให้เข้าใจผิดได้อย่างไร',
+          answer: 'ให้ดูทั้งสถานะแหล่งข้อมูล ป้ายความแม่นยำของตำแหน่ง และเวลาเปิดก่อนใช้เส้นทางนั้น',
+        },
+      ],
+    },
+    keywords: ['central bangkok money exchange', 'bangkok city center exchange rate', 'money changer central bangkok', 'cash exchange bangkok city center', 'bangkok exchange guide city center'],
+  },
+  {
+    slug: 'bangkok-money-changer-near-me-guide',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=10',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'Bangkok money changer near me guide',
+      zh: '我附近的曼谷换汇点指南',
+      th: 'คู่มือร้านแลกเงินใกล้ฉันในกรุงเทพ',
+    },
+    summary: {
+      en: 'A location-aware decision page for users searching money changers near them in Bangkok, with clearer guidance on real distance versus reference distance.',
+      zh: '面向搜索“我附近的曼谷换汇点”的用户，强调真实距离和参考距离的区别。',
+      th: 'หน้าตัดสินใจแบบอิงตำแหน่งสำหรับผู้ใช้ที่ค้นหาร้านแลกเงินใกล้ฉันในกรุงเทพ พร้อมคำอธิบายที่ชัดเจนระหว่างระยะจริงกับระยะอ้างอิง',
+    },
+    intro: {
+      en: 'This page is built around the near-me intent and helps users understand when they should enable location instead of relying on the Bangkok reference point.',
+      zh: '这个页面围绕 near me 搜索意图，帮助用户理解什么时候应该开启定位，而不是只看曼谷参考点。',
+      th: 'หน้านี้สร้างขึ้นจากเจตนา near me และช่วยให้ผู้ใช้เข้าใจว่าเมื่อใดควรเปิดตำแหน่งจริง แทนที่จะดูแค่จุดอ้างอิงในกรุงเทพ',
+    },
+    audience: {
+      en: 'Useful for mobile users already in Bangkok who want the closest practical route without confusing reference-distance labels.',
+      zh: '适合已经在曼谷、想找最近可行路线的移动端用户。',
+      th: 'เหมาะกับผู้ใช้มือถือที่อยู่ในกรุงเทพแล้ว และต้องการเส้นทางที่ใกล้และใช้งานได้จริงโดยไม่สับสนกับป้ายระยะอ้างอิง',
+    },
+    checks: {
+      en: ['Enable your location if you want a true near-me result.', 'Without location, nearest means closest to the Bangkok reference point.', 'Always use map links before walking to a branch.'],
+      zh: ['如果你真的想看“离我最近”，就开启定位。', '没开定位时，“最近”代表最接近曼谷参考点。', '出发前先用地图链接确认。'],
+      th: ['ถ้าคุณต้องการผลลัพธ์ใกล้ฉันจริงๆ ให้เปิดตำแหน่ง', 'ถ้ายังไม่เปิดตำแหน่ง คำว่าใกล้ที่สุดหมายถึงใกล้จุดอ้างอิงในกรุงเทพ', 'ก่อนเดินทางให้ใช้ลิงก์แผนที่ตรวจสอบทุกครั้ง'],
+    },
+    faqs: {
+      en: [
+        {
+          question: 'How do I get a true money changer near me result in Bangkok?',
+          answer: 'Enable location on the cash compare page. Without that, the site can only rank branches by the Bangkok reference point.',
+        },
+        {
+          question: 'Why does the site show both real distance and reference distance language?',
+          answer: 'Because some users allow live location and some do not. The page is designed to make that difference explicit instead of hiding it.',
+        },
+      ],
+      zh: [
+        {
+          question: '我怎么才能看到真正“离我最近”的曼谷换汇点？',
+          answer: '在现金比较页开启定位。否则系统只能按曼谷参考点做排序。',
+        },
+        {
+          question: '为什么页面会同时强调真实距离和参考距离？',
+          answer: '因为有些用户开启了定位，有些没有。页面会明确把这两种情况区分开。',
+        },
+      ],
+      th: [
+        {
+          question: 'จะได้ผลลัพธ์ร้านแลกเงินใกล้ฉันจริงๆ ในกรุงเทพได้อย่างไร',
+          answer: 'ให้เปิดตำแหน่งในหน้าคอมแพร์เงินสด ถ้าไม่เปิด ระบบจะจัดอันดับได้แค่ตามจุดอ้างอิงในกรุงเทพ',
+        },
+        {
+          question: 'ทำไมเว็บจึงพูดถึงทั้งระยะจริงและระยะอ้างอิง',
+          answer: 'เพราะผู้ใช้บางคนอนุญาตตำแหน่งจริง และบางคนไม่อนุญาต หน้านี้จึงทำให้ความต่างนั้นชัดเจนแทนที่จะซ่อนไว้',
+        },
+      ],
+    },
+    keywords: ['bangkok money changer near me', 'money exchange near me bangkok', 'closest money changer bangkok', 'bangkok cash exchange near me', 'near me exchange thailand'],
+  },
 ];
 
 export const routeGuideSlugs = routeGuides.map((guide) => guide.slug);
