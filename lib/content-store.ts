@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { Prisma } from '@prisma/client';
+import type { InputJsonValue } from '@prisma/client/runtime/library';
 import { z } from 'zod';
 import { AffiliateLink, ExchangeSlug } from '@/lib/types';
 import { cashBranches, exchanges } from '@/data/site';
@@ -131,8 +131,8 @@ export function parseAdminConfig(input: unknown): AdminConfigStore {
   return normalizeConfig(parsed);
 }
 
-function toJsonValue<T>(value: T): Prisma.InputJsonValue {
-  return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
+function toJsonValue<T>(value: T): InputJsonValue {
+  return JSON.parse(JSON.stringify(value)) as InputJsonValue;
 }
 
 export async function readAdminConfig(): Promise<AdminConfigStore> {

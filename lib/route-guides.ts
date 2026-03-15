@@ -384,6 +384,160 @@ export const routeGuides: RouteGuide[] = [
     keywords: ['gbp to thb cash', 'pound to baht bangkok', 'uk traveler thailand money exchange', 'bangkok money changer gbp', 'gbp cash thailand'],
   },
   {
+    slug: 'us-to-thailand-money-exchange',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=10',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'US to Thailand money exchange guide',
+      zh: '美国游客到泰国换汇指南',
+      th: 'คู่มือแลกเงินจากสหรัฐมาไทย',
+      ja: 'アメリカからタイへの両替ガイド',
+      ko: '미국 출발 태국 환전 가이드',
+      de: 'Geldwechsel von den USA nach Thailand',
+    },
+    summary: {
+      en: 'A high-intent entry page for US-origin travelers comparing practical cash routes into Thai baht in Bangkok.',
+      zh: '面向美国访客的高意图入口页，帮助比较在曼谷把现金换成 THB 的可执行路线。',
+      th: 'หน้าเริ่มต้นสำหรับผู้เดินทางจากสหรัฐที่ต้องการเทียบเส้นทางแลกเงินสดเป็นบาทในกรุงเทพอย่างใช้งานได้จริง',
+      ja: 'アメリカからの旅行者向けに、バンコクで現実的な現金->THB ルートを比較する高意図ページです。',
+      ko: '미국 출발 여행자가 방콕에서 현실적인 현금->THB 경로를 비교할 수 있도록 만든 고의도 진입 페이지입니다.',
+      de: 'Eine High-Intent-Einstiegsseite für Reisende aus den USA, um praktische Bargeldrouten nach THB in Bangkok zu vergleichen.',
+    },
+    intro: {
+      en: 'This page converts broad US-to-Thailand exchange searches into a practical route decision tied to real Bangkok compare pages.',
+      zh: '这个页面把宽泛的 US to Thailand 换汇搜索，转成可执行的路线决策，并连接到真实曼谷比较页。',
+      th: 'หน้านี้เปลี่ยนคำค้นกว้างๆ เรื่อง US to Thailand money exchange ให้เป็นการตัดสินใจเส้นทางที่เชื่อมกับหน้าคอมแพร์จริงของกรุงเทพ',
+      ja: 'このページは US-to-Thailand の広い検索意図を、実際のバンコク比較ページにつながる実用的なルート判断へ変えます。',
+      ko: '이 페이지는 US-to-Thailand 같은 넓은 검색 의도를 실제 방콕 비교 페이지로 이어지는 실용적인 경로 판단으로 바꿉니다.',
+      de: 'Diese Seite wandelt breite Suchen wie US-to-Thailand money exchange in eine praktische Routenentscheidung mit echten Bangkok-Vergleichsseiten um.',
+    },
+    audience: {
+      en: 'Useful for first-time US visitors, long-stay travelers, and remote workers who need a clear first cash-exchange decision in Thailand.',
+      zh: '适合首次来泰国的美国旅客、长住用户和远程工作者，先做第一步现金换汇决策。',
+      th: 'เหมาะกับผู้มาไทยครั้งแรกจากสหรัฐ ผู้พำนักระยะยาว และ remote worker ที่ต้องตัดสินใจเรื่องการแลกเงินสดครั้งแรกให้ชัดเจน',
+      ja: '初めてタイへ来る米国旅行者、長期滞在者、リモートワーカーが最初の現金両替判断を明確にするのに役立ちます。',
+      ko: '태국을 처음 방문하는 미국 여행자, 장기 체류자, 원격 근무자가 첫 현금 환전 결정을 명확히 내릴 때 유용합니다.',
+      de: 'Nützlich für Erstbesucher aus den USA, Langzeitreisende und Remote-Worker, die in Thailand eine klare erste Bargeldentscheidung brauchen.',
+    },
+    checks: {
+      en: ['Use this page as a decision layer, then open the live cash comparison.', 'Check branch hours and map confidence before heading out.', 'Treat airport exchange as convenience, not automatic best value.'],
+      zh: ['先把本页当作决策层，再进入实时现金比较页。', '出发前先看营业时间和地图可信度。', '把机场换汇当作便利性选项，而不是默认最优。'],
+      th: ['ใช้หน้านี้เป็นชั้นตัดสินใจก่อน แล้วค่อยเปิดหน้าคอมแพร์เงินสดแบบสด', 'ก่อนออกเดินทางให้เช็กเวลาเปิดและความน่าเชื่อถือของแผนที่', 'มองการแลกที่สนามบินเป็นทางเลือกด้านความสะดวก ไม่ใช่ดีที่สุดโดยอัตโนมัติ'],
+    },
+    faqs: {
+      en: [
+        {
+          question: 'What should US travelers compare first after landing in Thailand?',
+          answer: 'Compare route practicality: branch access, opening hours, and current source status before committing to a money changer.',
+        },
+        {
+          question: 'Is this a live USD quote guarantee page?',
+          answer: 'No. It is a route decision page that links into live comparisons and provider context; in-store conditions still belong to the provider.',
+        },
+      ],
+      zh: [
+        {
+          question: '美国旅客到泰国后第一步该比较什么？',
+          answer: '先比较路线可执行性：门店可达性、营业时间和数据状态，再决定去哪个换汇点。',
+        },
+        {
+          question: '这是一个保证实时 USD 报价的页面吗？',
+          answer: '不是。它是路线决策页，会引导到实时比较和门店上下文；最终门店条件仍以品牌现场规则为准。',
+        },
+      ],
+      th: [
+        {
+          question: 'ผู้เดินทางจากสหรัฐควรเริ่มเทียบอะไรเป็นอย่างแรกหลังมาถึงไทย',
+          answer: 'ให้เทียบความเป็นไปได้ของเส้นทางก่อน เช่น การเดินทางไปสาขา เวลาเปิด และสถานะข้อมูล แล้วค่อยตัดสินใจ',
+        },
+        {
+          question: 'หน้านี้การันตีเรต USD แบบสดหรือไม่',
+          answer: 'ไม่ หน้านี้เป็นหน้าตัดสินใจเส้นทางและเชื่อมไปยังการเปรียบเทียบสด ส่วนเงื่อนไขจริงขึ้นกับผู้ให้บริการ',
+        },
+      ],
+    },
+    keywords: ['us to thailand money exchange', 'american traveler money exchange thailand', 'usd cash to thb bangkok', 'usa to thailand exchange money', 'bangkok exchange guide us'],
+  },
+  {
+    slug: 'uk-to-thailand-money-exchange',
+    type: 'cash',
+    compareHref: '/cash?currency=GBP&amount=500&maxDistanceKm=10',
+    currency: 'GBP',
+    amount: '500',
+    title: {
+      en: 'UK to Thailand money exchange guide',
+      zh: '英国游客到泰国换汇指南',
+      th: 'คู่มือแลกเงินจากสหราชอาณาจักรมาไทย',
+      ja: 'イギリスからタイへの両替ガイド',
+      ko: '영국 출발 태국 환전 가이드',
+      de: 'Geldwechsel vom Vereinigten Königreich nach Thailand',
+    },
+    summary: {
+      en: 'A country-intent guide for UK-origin search traffic that moves users into practical GBP cash to THB routes.',
+      zh: '面向英国来源搜索流量的国家意图页，把用户导入可执行的 GBP 现金换 THB 路线。',
+      th: 'คู่มือสำหรับคำค้นจากสหราชอาณาจักรที่พาผู้ใช้เข้าสู่เส้นทาง GBP เงินสดเป็น THB ที่ใช้งานได้จริง',
+      ja: '英国からの検索意図を、実用的な GBP 現金->THB ルートへ導く国別ガイドです。',
+      ko: '영국 출발 검색 의도를 실용적인 GBP 현금->THB 경로로 연결하는 국가 의도 가이드입니다.',
+      de: 'Ein Länder-Intent-Leitfaden für Suchtraffic aus dem UK, der Nutzer in praktische GBP-Bargeld-zu-THB-Routen führt.',
+    },
+    intro: {
+      en: 'This page captures UK-to-Thailand exchange intent and reduces it to clear branch-level next steps in Bangkok.',
+      zh: '这个页面承接 UK to Thailand 换汇意图，并把它收敛成曼谷可执行的门店级下一步。',
+      th: 'หน้านี้รองรับเจตนาการค้นหา UK to Thailand money exchange และลดให้เหลือขั้นตอนถัดไปแบบสาขาจริงในกรุงเทพ',
+      ja: 'このページは UK-to-Thailand の両替意図を受け止め、バンコクで実行可能な支店レベルの次の行動へ落とし込みます。',
+      ko: '이 페이지는 UK-to-Thailand 환전 의도를 받아 방콕에서 실행 가능한 지점 단위 다음 단계로 정리합니다.',
+      de: 'Diese Seite fängt UK-to-Thailand-Wechselabsicht ab und reduziert sie auf klare, filialbezogene nächste Schritte in Bangkok.',
+    },
+    audience: {
+      en: 'Useful for UK travelers carrying pound notes who want a stronger route decision page than a generic exchange-rate article.',
+      zh: '适合携带英镑现金、希望看到比泛泛汇率文章更实用路线决策页的英国旅客。',
+      th: 'เหมาะกับผู้เดินทางจากสหราชอาณาจักรที่ถือเงินปอนด์และต้องการหน้าตัดสินใจเชิงเส้นทางที่ชัดกว่าบทความเรตทั่วไป',
+      ja: 'ポンド現金を持つ英国旅行者が、一般的な為替記事より強いルート判断ページを求める場合に役立ちます。',
+      ko: '파운드 현금을 들고 온 영국 여행자가 일반적인 환율 글보다 더 실용적인 경로 판단 페이지를 원할 때 유용합니다.',
+      de: 'Nützlich für UK-Reisende mit Pfund-Bargeld, die statt eines generischen Wechselkursartikels eine stärkere Routenentscheidung brauchen.',
+    },
+    checks: {
+      en: ['Check fresh GBP route rows before heading out.', 'Use hours and location confidence with rate context together.', 'Reopen provider references before leaving hotel or airport.'],
+      zh: ['出发前先看最新 GBP 路线行。', '把营业时间、位置可信度和汇率背景一起比较。', '离开酒店或机场前再打开一次品牌参考页。'],
+      th: ['ก่อนออกเดินทางให้ดูแถว GBP ที่อัปเดตล่าสุดก่อน', 'ดูเวลาเปิด ความน่าเชื่อถือของตำแหน่ง และบริบทของเรตร่วมกัน', 'ก่อนออกจากโรงแรมหรือสนามบินให้เปิดหน้าอ้างอิงผู้ให้บริการอีกครั้ง'],
+    },
+    faqs: {
+      en: [
+        {
+          question: 'Why does UK-intent need a dedicated page if GBP cash routes already exist?',
+          answer: 'Country-intent queries are broader than pair queries. This page bridges that broad search into concrete GBP route actions.',
+        },
+        {
+          question: 'Should I exchange pounds at the airport first?',
+          answer: 'Only for immediate convenience needs. For meaningful amounts, compare city routes and branch status first.',
+        },
+      ],
+      zh: [
+        {
+          question: '既然已有 GBP 现金路线，为什么还需要 UK 意图页？',
+          answer: '国家意图搜索通常更宽泛。本页负责把这种宽泛搜索桥接到具体 GBP 路线动作。',
+        },
+        {
+          question: '我应该先在机场把英镑换掉吗？',
+          answer: '仅在你有即时便利需求时这样做。金额较大时应先比较市区路线和门店状态。',
+        },
+      ],
+      th: [
+        {
+          question: 'ถ้ามีหน้า GBP cash route แล้ว ทำไมยังต้องมีหน้า UK-intent',
+          answer: 'เพราะคำค้นแบบประเทศกว้างกว่าคู่เงิน หน้านี้ทำหน้าที่เชื่อมคำค้นกว้างให้ไปสู่การตัดสินใจเส้นทาง GBP ที่ทำได้จริง',
+        },
+        {
+          question: 'ควรแลกเงินปอนด์ที่สนามบินก่อนเลยไหม',
+          answer: 'เหมาะแค่กรณีต้องการความสะดวกทันที ถ้าจำนวนเงินมีนัยสำคัญควรเทียบเส้นทางในเมืองและสถานะสาขาก่อน',
+        },
+      ],
+    },
+    keywords: ['uk to thailand money exchange', 'uk traveler money exchange thailand', 'gbp to thb bangkok guide', 'british tourist thailand exchange', 'uk thailand cash exchange'],
+  },
+  {
     slug: 'japan-to-thailand-money-exchange',
     type: 'cash',
     compareHref: '/cash?currency=JPY&amount=50000&maxDistanceKm=10',
@@ -1441,6 +1595,220 @@ export const routeGuides: RouteGuide[] = [
       ],
     },
     keywords: ['asok money exchange', 'sukhumvit exchange rate', 'money changer asok bangkok', 'exchange cash asok', 'bangkok asok money changer'],
+  },
+  {
+    slug: 'silom-money-exchange-guide',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=12',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'Silom money exchange guide',
+      zh: '席隆换汇指南',
+      th: 'คู่มือแลกเงินย่านสีลม',
+      ja: 'シーロム両替ガイド',
+      ko: '실롬 환전 가이드',
+      de: 'Geldwechsel in Silom',
+    },
+    summary: {
+      en: 'A district-intent route page for users staying around Silom and Sathorn who need a practical THB cash decision.',
+      zh: '面向住在 Silom 和 Sathorn 一带用户的区域意图页，帮助做可执行的 THB 现金换汇决策。',
+      th: 'หน้าเจตนาการค้นหาระดับย่านสำหรับผู้ที่พักแถวสีลมและสาทร เพื่อช่วยตัดสินใจเส้นทางแลกเงินสดเป็น THB อย่างใช้งานได้จริง',
+      ja: 'シーロムとサトーン周辺に滞在するユーザー向けの地区意図ページで、実用的な THB 現金判断を支援します。',
+      ko: '실롬·사톤 주변에 머무는 사용자를 위한 지역 의도 경로 페이지로, 실용적인 THB 현금 환전 판단을 돕습니다.',
+      de: 'Eine Bezirks-Intent-Seite für Nutzer rund um Silom und Sathorn, die eine praktische THB-Bargeldentscheidung brauchen.',
+    },
+    intro: {
+      en: 'This page targets Silom money exchange searches and channels them into real Bangkok comparison routes with branch-level context.',
+      zh: '这个页面承接 Silom money exchange 搜索，并把流量导向带有门店级上下文的真实曼谷比较路线。',
+      th: 'หน้านี้รองรับคำค้นอย่าง Silom money exchange และพาผู้ใช้ไปยังเส้นทางเปรียบเทียบจริงของกรุงเทพที่มีบริบทระดับสาขา',
+      ja: 'このページは Silom money exchange 検索を受け止め、支店レベル文脈のある実際のバンコク比較ルートへ導きます。',
+      ko: '이 페이지는 Silom money exchange 검색을 받아 지점 단위 맥락이 있는 실제 방콕 비교 경로로 연결합니다.',
+      de: 'Diese Seite bedient Suchen nach Silom money exchange und führt sie in reale Bangkok-Vergleichswege mit Filialkontext.',
+    },
+    audience: {
+      en: 'Useful for business travelers and hotel-area visitors balancing walkability, opening hours, and exchange quality around Silom.',
+      zh: '适合商务旅客和酒店区访客，在 Silom 一带平衡步行可达性、营业时间和换汇质量。',
+      th: 'เหมาะกับนักธุรกิจและผู้เข้าพักย่านโรงแรมที่ต้องชั่งน้ำหนักความเดินถึงได้ เวลาเปิด และคุณภาพการแลกเงินในโซนสีลม',
+      ja: 'シーロム周辺で、徒歩アクセス・営業時間・両替品質のバランスを取りたい出張者や宿泊者に有用です。',
+      ko: '실롬 주변에서 도보 접근성, 영업시간, 환전 품질의 균형을 보려는 비즈니스 여행자와 숙박객에게 유용합니다.',
+      de: 'Nützlich für Geschäftsreisende und Hotelgäste, die in Silom Laufbarkeit, Öffnungszeiten und Wechselqualität abwägen wollen.',
+    },
+    checks: {
+      en: ['Use branch access and hours with rate context, not rate alone.', 'Enable location for true distance sorting when possible.', 'Treat each row as route support, not a guaranteed in-store quote.'],
+      zh: ['请结合门店可达性、营业时间和汇率背景，不要只看单一汇率。', '条件允许时开启定位，以获得真实距离排序。', '把每一行当作路线参考，不是门店保证报价。'],
+      th: ['ดูการเข้าถึงสาขา เวลาเปิด และบริบทเรตร่วมกัน ไม่ใช่ดูเรตอย่างเดียว', 'ถ้าเป็นไปได้ให้เปิดตำแหน่งเพื่อได้การจัดอันดับระยะทางจริง', 'มองแต่ละแถวเป็นข้อมูลช่วยตัดสินใจเส้นทาง ไม่ใช่เรตการันตีหน้าร้าน'],
+    },
+    faqs: {
+      en: [
+        {
+          question: 'Who should use the Silom route page first?',
+          answer: 'Users staying in Silom or Sathorn who want a fast route decision before walking to a money changer.',
+        },
+        {
+          question: 'Is Silom always the best area-level exchange route?',
+          answer: 'Not always. The best route depends on your location, timing, and branch availability at that moment.',
+        },
+      ],
+      zh: [
+        {
+          question: '谁最适合先使用 Silom 路线页？',
+          answer: '住在 Silom 或 Sathorn 一带、希望出发前快速做路线决策的用户。',
+        },
+        {
+          question: 'Silom 一定是区域层面的最优换汇路线吗？',
+          answer: '不一定。最优路线取决于你当下的位置、时间和门店可用性。',
+        },
+      ],
+      th: [
+        {
+          question: 'ใครควรเริ่มใช้หน้าเส้นทางสีลมก่อน',
+          answer: 'ผู้ที่พักแถวสีลมหรือสาทรและต้องการตัดสินใจเส้นทางอย่างรวดเร็วก่อนเดินไปยังร้านแลกเงิน',
+        },
+        {
+          question: 'สีลมเป็นเส้นทางที่ดีที่สุดเสมอหรือไม่',
+          answer: 'ไม่เสมอไป เส้นทางที่ดีที่สุดขึ้นอยู่กับตำแหน่ง เวลา และสถานะของสาขาในช่วงนั้น',
+        },
+      ],
+      ja: [
+        {
+          question: '最初に Silom ルートページを使うべき人は誰ですか？',
+          answer: 'Silom または Sathorn 周辺に滞在し、両替所へ歩いて行く前に素早くルート判断をしたい人です。',
+        },
+        {
+          question: 'Silom は常に最良のエリア別両替ルートですか？',
+          answer: '常にそうとは限りません。最適なルートは、その時点の現在地、時間帯、支店の営業状況によって変わります。',
+        },
+      ],
+      ko: [
+        {
+          question: '누가 Silom 경로 페이지를 먼저 쓰는 게 좋나요?',
+          answer: '실롬 또는 사톤 주변에 머물면서 환전소로 걸어가기 전에 빠르게 경로 판단을 하고 싶은 사용자입니다.',
+        },
+        {
+          question: 'Silom 이 항상 지역 기준 최적 환전 경로인가요?',
+          answer: '항상 그렇지는 않습니다. 가장 좋은 경로는 현재 위치, 시간대, 그 시점의 지점 운영 상태에 따라 달라집니다.',
+        },
+      ],
+      de: [
+        {
+          question: 'Wer sollte die Silom-Routenseite zuerst nutzen?',
+          answer: 'Nutzer, die in Silom oder Sathorn wohnen und vor dem Weg zur Wechselstube schnell eine Routenentscheidung treffen möchten.',
+        },
+        {
+          question: 'Ist Silom immer die beste gebietsbezogene Wechselroute?',
+          answer: 'Nicht immer. Die beste Route hängt von deinem Standort, der Uhrzeit und der aktuellen Filialverfügbarkeit ab.',
+        },
+      ],
+    },
+    keywords: ['silom money exchange', 'silom money changer', 'sathorn exchange rate', 'bangkok silom cash exchange', 'money exchange near silom'],
+  },
+  {
+    slug: 'sukhumvit-money-exchange-guide',
+    type: 'cash',
+    compareHref: '/cash?currency=USD&amount=1000&maxDistanceKm=12',
+    currency: 'USD',
+    amount: '1000',
+    title: {
+      en: 'Sukhumvit money exchange guide',
+      zh: '素坤逸换汇指南',
+      th: 'คู่มือแลกเงินย่านสุขุมวิท',
+      ja: 'スクンビット両替ガイド',
+      ko: '수쿰빗 환전 가이드',
+      de: 'Geldwechsel in Sukhumvit',
+    },
+    summary: {
+      en: 'A head-term district page for travelers staying along Sukhumvit who need a practical route into Thai baht.',
+      zh: '面向住在素坤逸一带旅客的头部区域词页面，帮助做更实际的 THB 换汇路线决策。',
+      th: 'หน้าเขตคำค้นหลักสำหรับผู้ที่พักย่านสุขุมวิทและต้องการเส้นทางแลกเงินบาทที่ใช้งานได้จริง',
+      ja: 'スクンビット周辺に滞在する旅行者向けの主要エリアページで、実用的な THB 両替ルート判断に役立ちます。',
+      ko: '수쿰빗 주변에 머무는 여행자를 위한 상위 지역 키워드 페이지로, 실용적인 THB 환전 경로 판단을 돕습니다.',
+      de: 'Eine Head-Term-Bezirksseite für Reisende entlang der Sukhumvit, die einen praktischen Weg in Thai Baht suchen.',
+    },
+    intro: {
+      en: 'This page captures Sukhumvit money exchange intent and points users into real Bangkok comparison routes instead of generic travel advice.',
+      zh: '这个页面承接 Sukhumvit money exchange 这类核心区域搜索，并把用户导向真实的曼谷比较路线，而不是泛泛旅行建议。',
+      th: 'หน้านี้รองรับคำค้นหลักอย่าง Sukhumvit money exchange และพาผู้ใช้ไปยังเส้นทางเปรียบเทียบจริงในกรุงเทพ แทนบทความท่องเที่ยวกว้างๆ',
+      ja: 'このページは Sukhumvit money exchange の主要検索意図を受け止め、一般的な旅行アドバイスではなく実際のバンコク比較ルートへつなげます。',
+      ko: '이 페이지는 Sukhumvit money exchange 핵심 검색 의도를 받아 일반 여행 조언이 아니라 실제 방콕 비교 경로로 연결합니다.',
+      de: 'Diese Seite fängt die Hauptsuche Sukhumvit money exchange ab und führt Nutzer in reale Bangkok-Vergleichswege statt in generische Reisehinweise.',
+    },
+    audience: {
+      en: 'Useful for hotel-area visitors, first-time Bangkok travelers, and users balancing walkability, branch quality, and opening hours along Sukhumvit.',
+      zh: '适合酒店区旅客、首次来曼谷的用户，以及需要在步行可达性、门店质量和营业时间之间权衡的人。',
+      th: 'เหมาะกับผู้เข้าพักแถบโรงแรม นักท่องเที่ยวที่มา Bangkok ครั้งแรก และผู้ที่ต้องชั่งน้ำหนักการเดินถึงได้ คุณภาพสาขา และเวลาเปิดตามแนวสุขุมวิท',
+      ja: 'ホテル利用者、初めてのバンコク旅行者、そしてスクンビット沿いで徒歩アクセス・支店品質・営業時間を比較したい人に役立ちます。',
+      ko: '호텔 지역 방문자, 첫 방콕 여행자, 그리고 수쿰빗 일대에서 도보 접근성, 지점 품질, 영업시간을 함께 보려는 사용자에게 유용합니다.',
+      de: 'Nützlich für Hotelgäste, Erstbesucher in Bangkok und Nutzer, die entlang der Sukhumvit Laufbarkeit, Filialqualität und Öffnungszeiten abwägen wollen.',
+    },
+    checks: {
+      en: ['Use district convenience together with rate context, not rate alone.', 'Check whether a branch is actually on your side of Sukhumvit before leaving.', 'Treat each row as route support rather than a guaranteed final counter quote.'],
+      zh: ['请把区域便利性和汇率背景一起看，不要只看汇率数字。', '出发前先确认门店是否真的在你所在的素坤逸一侧。', '把每一行当作路线参考，而不是保证的柜台最终报价。'],
+      th: ['ดูความสะดวกของย่านควบคู่กับบริบทของเรต ไม่ใช่ดูเรตอย่างเดียว', 'ก่อนออกเดินทางให้ตรวจสอบว่าสาขาอยู่ฝั่งสุขุมวิทที่คุณจะไปจริงหรือไม่', 'มองแต่ละแถวเป็นตัวช่วยตัดสินใจเส้นทาง ไม่ใช่เรตสุดท้ายที่การันตีหน้าร้าน'],
+    },
+    faqs: {
+      en: [
+        {
+          question: 'Who should start with the Sukhumvit route page?',
+          answer: 'Users staying along Sukhumvit, Nana, or Asok who want a cleaner area-level decision before picking a branch.',
+        },
+        {
+          question: 'Is Sukhumvit better than every other Bangkok exchange area?',
+          answer: 'Not automatically. Sukhumvit is useful when it matches where you stay, but the best route still depends on timing, branch quality, and distance.',
+        },
+      ],
+      zh: [
+        {
+          question: '谁适合先看 Sukhumvit 路线页？',
+          answer: '住在 Sukhumvit、Nana 或 Asok 一带，想先做区域层面决策再选门店的用户。',
+        },
+        {
+          question: 'Sukhumvit 一定比曼谷其他换汇区域更好吗？',
+          answer: '不一定。它在与你住宿区域匹配时很有价值，但最优路线仍取决于时间、门店质量和距离。',
+        },
+      ],
+      th: [
+        {
+          question: 'ใครควรเริ่มจากหน้าเส้นทางสุขุมวิทก่อน',
+          answer: 'ผู้ที่พักแถวสุขุมวิท นานา หรืออโศก และต้องการตัดสินใจในระดับย่านก่อนเลือกสาขา',
+        },
+        {
+          question: 'สุขุมวิทดีกว่าทุกย่านสำหรับการแลกเงินในกรุงเทพหรือไม่',
+          answer: 'ไม่เสมอไป สุขุมวิทมีประโยชน์เมื่อสอดคล้องกับที่พักของคุณ แต่เส้นทางที่ดีที่สุดยังขึ้นกับเวลา คุณภาพสาขา และระยะทาง',
+        },
+      ],
+      ja: [
+        {
+          question: '誰が最初に Sukhumvit ルートページを見るべきですか？',
+          answer: 'Sukhumvit、Nana、Asok 周辺に滞在し、支店を選ぶ前にエリア単位で判断したいユーザーです。',
+        },
+        {
+          question: 'Sukhumvit はバンコクの他エリアより常に有利ですか？',
+          answer: '必ずしもそうではありません。滞在場所に合うと有用ですが、最適ルートは時間帯、支店品質、距離によって決まります。',
+        },
+      ],
+      ko: [
+        {
+          question: '누가 Sukhumvit 경로 페이지부터 보는 게 좋나요?',
+          answer: '수쿰빗, 나나, 아속 주변에 머물면서 지점을 고르기 전에 지역 단위 판단을 하고 싶은 사용자입니다.',
+        },
+        {
+          question: 'Sukhumvit 이 방콕의 다른 모든 환전 지역보다 더 좋은가요?',
+          answer: '항상 그렇지는 않습니다. 숙소와 맞을 때 유용하지만, 가장 좋은 경로는 시간대, 지점 품질, 거리까지 함께 봐야 합니다.',
+        },
+      ],
+      de: [
+        {
+          question: 'Wer sollte mit der Sukhumvit-Routenseite beginnen?',
+          answer: 'Nutzer, die entlang der Sukhumvit, in Nana oder Asok wohnen und vor der Filialwahl erst eine Bereichsentscheidung treffen möchten.',
+        },
+        {
+          question: 'Ist Sukhumvit besser als jeder andere Wechselbereich in Bangkok?',
+          answer: 'Nicht automatisch. Sukhumvit ist sinnvoll, wenn es zu deinem Aufenthaltsort passt, aber die beste Route hängt weiter von Zeit, Filialqualität und Distanz ab.',
+        },
+      ],
+    },
+    keywords: ['sukhumvit money exchange', 'sukhumvit money changer', 'exchange cash sukhumvit', 'bangkok sukhumvit exchange rate', 'money exchange near sukhumvit'],
   },
 ];
 

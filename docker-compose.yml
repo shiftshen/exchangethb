@@ -4,8 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
     command: sh ./scripts/docker-web-entrypoint.sh
-    ports:
-      - "3000:3000"
     env_file:
       - .env
     depends_on:
@@ -13,6 +11,9 @@ services:
         condition: service_healthy
     init: true
     restart: unless-stopped
+    networks:
+      exchangethb_net:
+        ipv4_address: 172.30.0.10
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:3000/api/health || exit 1"]
       interval: 30s
@@ -30,6 +31,9 @@ services:
         condition: service_healthy
     init: true
     restart: unless-stopped
+    networks:
+      exchangethb_net:
+        ipv4_address: 172.30.0.12
   postgres:
     image: postgres:16-alpine
     environment:
@@ -39,6 +43,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+    networks:
+      exchangethb_net:
+        ipv4_address: 172.30.0.11
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U exchangethb -d exchangethb"]
       interval: 30s
@@ -46,3 +53,11 @@ services:
       retries: 5
 volumes:
   postgres_data:
+
+networks:
+  exchangethb_net:
+    name: exchangethb_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24

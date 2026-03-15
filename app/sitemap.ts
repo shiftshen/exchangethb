@@ -6,6 +6,9 @@ import { localeAlternates, siteUrl } from '@/lib/seo';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
+  const rootRoutes = [
+    { url: siteUrl, priority: 1, changeFrequency: 'daily' as const, lastModified: now },
+  ];
   const localeRoutes = locales.flatMap((locale) => ([
     { url: `${siteUrl}/${locale}`, priority: 1, changeFrequency: 'daily' as const, lastModified: now, alternates: { languages: localeAlternates() } },
     { url: `${siteUrl}/${locale}/crypto`, priority: 0.9, changeFrequency: 'hourly' as const, lastModified: now, alternates: { languages: localeAlternates('/crypto') } },
@@ -39,5 +42,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     alternates: { languages: localeAlternates(`/money-changers/${provider.slug}`) },
   })));
 
-  return [...localeRoutes, ...exchangeRoutes, ...changerRoutes];
+  return [...rootRoutes, ...localeRoutes, ...exchangeRoutes, ...changerRoutes];
 }

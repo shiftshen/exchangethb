@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import type { InputJsonValue } from '@prisma/client/runtime/library';
 import { getPrismaClient } from '@/lib/prisma';
 
 const logPath = path.join(process.cwd(), 'content', 'admin-audit-log.json');
@@ -13,6 +14,14 @@ export interface AuditEntry {
   note?: string;
 }
 
+interface AuditLogRow {
+  createdAt: Date;
+  adminEmail: string;
+  action: string;
+  target: string;
+  payload?: unknown;
+}
+
 export async function readAuditLog(limit = 50): Promise<AuditEntry[]> {
   const prisma = getPrismaClient();
   if (prisma) {
@@ -20,8 +29,8 @@ export async function readAuditLog(limit = 50): Promise<AuditEntry[]> {
       const logs = await prisma.adminAuditLog.findMany({
         orderBy: { createdAt: 'desc' },
         take: limit,
-      });
-      return logs.map((row) => {
+      }) as AuditLogRow[];
+      return logs.map((row: AuditLogRow) => {
         const payload = (row.payload || {}) as { ip?: string; note?: string };
         return {
           at: row.createdAt.toISOString(),
@@ -57,7 +66,7 @@ export async function appendAuditLog(entry: Omit<AuditEntry, 'at'>) {
           payload: {
             ip: entry.ip,
             note: entry.note,
-          },
+          } as InputJsonValue,
         },
       });
       return;

@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { exchanges, publicCashProviders } from '@/data/site';
 import { TrackLink } from '@/components/track-link';
-import { resolveContentLocale, t } from '@/lib/i18n';
+import { isLocale, resolveContentLocale, t } from '@/lib/i18n';
 import { routeGuides } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
 import { breadcrumbJsonLd, localeAlternates, websiteJsonLd, withLocalePath } from '@/lib/seo';
@@ -433,6 +434,7 @@ const homeFaqs = {
 
 export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
+  if (!isLocale(locale)) notFound();
   const contentLocale = resolveContentLocale(locale);
   const c = copy[locale];
   const coverageValue = c.coverageValue
@@ -619,13 +621,19 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               'usd-cash-to-thb',
               'eur-cash-to-thb',
               'gbp-cash-to-thb',
+              'us-to-thailand-money-exchange',
+              'uk-to-thailand-money-exchange',
               'japan-to-thailand-money-exchange',
               'germany-to-thailand-money-exchange',
               'europe-to-thailand-money-exchange',
               'korea-to-thailand-money-exchange',
               'bangkok-airport-money-exchange-guide',
+              'suvarnabhumi-money-exchange-guide',
+              'don-mueang-money-exchange-guide',
               'pratunam-money-exchange-guide',
               'central-bangkok-money-exchange-guide',
+              'sukhumvit-money-exchange-guide',
+              'silom-money-exchange-guide',
               'bangkok-money-changer-near-me-guide',
             ].map((slug) => {
               const guide = routeGuides.find((item) => item.slug === slug);
@@ -700,6 +708,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
+  if (!isLocale(locale)) return {};
   const contentLocale = resolveContentLocale(locale);
   const title = locale === 'th'
     ? 'หน้าแรก ExchangeTHB'

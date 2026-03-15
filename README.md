@@ -38,6 +38,7 @@ ExchangeTHB is a launch-ready multilingual comparison site for finding better pa
 - Add Nginx, HTTPS, backups, and process monitoring on the VPS.
 - Public health endpoint is `/api/health`; admin diagnostics endpoint is `/api/admin/health` (requires admin session).
 - API JSON contract is `{ ok: boolean, traceId: string, data?: T, error?: string, detail?: unknown }`.
+- Run `npm run health:prod` as the first production check before SEO work or deploy validation.
 
 ## International SEO
 - English is now the default landing locale at `/en`; the root route redirects there.

@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { Prisma } from '@prisma/client';
+import type { InputJsonValue } from '@prisma/client/runtime/library';
 import { getPrismaClient } from '@/lib/prisma';
 import { ScrapeResult } from '@/lib/scrapers/cash';
 
@@ -13,8 +13,8 @@ export interface CashCachePayload {
   results: ScrapeResult[];
 }
 
-function toJsonValue<T>(value: T): Prisma.InputJsonValue {
-  return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
+function toJsonValue<T>(value: T): InputJsonValue {
+  return JSON.parse(JSON.stringify(value)) as InputJsonValue;
 }
 
 async function readFileCache(): Promise<CashCachePayload> {
