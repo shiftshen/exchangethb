@@ -1,6 +1,7 @@
 import { ContentLocale, Locale, NavItem } from '@/lib/types';
 
 export const locales: Locale[] = ['th', 'en', 'zh', 'ja', 'ko', 'de'];
+export const indexableLocales: Locale[] = ['th', 'en', 'zh'];
 
 export const navigation: NavItem[] = [
   { href: '', label: { th: 'หน้าแรก', en: 'Home', zh: '首页', ja: 'ホーム', ko: '홈', de: 'Start' } },
@@ -11,6 +12,10 @@ export const navigation: NavItem[] = [
 
 export function isLocale(value: string): value is Locale {
   return locales.includes(value as Locale);
+}
+
+export function isIndexableLocale(locale: Locale) {
+  return indexableLocales.includes(locale);
 }
 
 export function resolveContentLocale(locale: Locale): ContentLocale {

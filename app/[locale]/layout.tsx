@@ -6,7 +6,7 @@ import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { gaMeasurementId, gaScript } from '@/lib/analytics';
 import { isLocale } from '@/lib/i18n';
-import { localeAlternates, withLocalePath } from '@/lib/seo';
+import { localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 
 const localeMeta = {
   th: {
@@ -42,15 +42,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: m.title,
     description: m.description,
-    alternates: {
-      canonical: withLocalePath(locale),
-      languages: localeAlternates(),
-    },
+    alternates: localeMetadataAlternates(locale),
     openGraph: {
       title: m.title,
       description: m.description,
       url: withLocalePath(locale),
     },
+    robots: localeRobots(locale),
     keywords: locale === 'en'
       ? ['Thailand exchange rates', 'crypto to THB', 'cash to THB', 'Bangkok money changer', 'THB comparison']
       : undefined,

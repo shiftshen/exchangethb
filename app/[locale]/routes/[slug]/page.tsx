@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
 import { locales, t } from '@/lib/i18n';
-import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { getRouteGuide, routeGuides, routeGuideSlugs } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
 
@@ -224,10 +224,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: {
-      canonical: withLocalePath(locale, path),
-      languages: localeAlternates(path),
-    },
+    alternates: localeMetadataAlternates(locale, path),
+    robots: localeRobots(locale),
     keywords: locale === 'en' ? guide.keywords : undefined,
     openGraph: {
       title,

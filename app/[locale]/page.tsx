@@ -6,7 +6,7 @@ import { TrackLink } from '@/components/track-link';
 import { isLocale, resolveContentLocale, t } from '@/lib/i18n';
 import { routeGuides } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
-import { breadcrumbJsonLd, localeAlternates, websiteJsonLd, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, websiteJsonLd, withLocalePath } from '@/lib/seo';
 import { Pill, Section, StatCard } from '@/components/ui';
 
 function faqJsonLd(entries: ReadonlyArray<{ question: string; answer: string }>) {
@@ -725,10 +725,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: {
-      canonical: withLocalePath(locale),
-      languages: localeAlternates(),
-    },
+    alternates: localeMetadataAlternates(locale),
+    robots: localeRobots(locale),
     keywords: locale === 'en'
       ? ['Thailand crypto exchange comparison', 'THB conversion', 'Bangkok money changer', 'crypto to baht', 'cash exchange Thailand', 'Japan to Thailand money exchange', 'Germany to Thailand money exchange', 'Europe to Thailand money exchange']
       : undefined,

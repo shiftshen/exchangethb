@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+import { indexableLocales } from '@/lib/i18n';
 import { Locale } from '@/lib/types';
 
 const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
@@ -14,14 +16,32 @@ export function withLocalePath(locale: Locale, path = '') {
 }
 
 export function localeAlternates(path = '') {
+  return Object.fromEntries([
+    ...indexableLocales.map((locale) => [locale, withLocalePath(locale, path)]),
+    ['x-default', withLocalePath('en', path)],
+  ]) as Record<string, string>;
+}
+
+export function localeMetadataAlternates(locale: Locale, path = ''): NonNullable<Metadata['alternates']> {
+  const canonical = withLocalePath(locale, path);
+  if (!indexableLocales.includes(locale)) {
+    return { canonical };
+  }
   return {
-    th: withLocalePath('th', path),
-    en: withLocalePath('en', path),
-    zh: withLocalePath('zh', path),
-    ja: withLocalePath('ja', path),
-    ko: withLocalePath('ko', path),
-    de: withLocalePath('de', path),
-    'x-default': withLocalePath('en', path),
+    canonical,
+    languages: localeAlternates(path),
+  };
+}
+
+export function localeRobots(locale: Locale): Metadata['robots'] | undefined {
+  if (indexableLocales.includes(locale)) return undefined;
+  return {
+    index: false,
+    follow: true,
+    googleBot: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

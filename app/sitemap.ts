@@ -1,15 +1,12 @@
 import type { MetadataRoute } from 'next';
 import { exchanges, publicCashProviders } from '@/data/site';
-import { locales } from '@/lib/i18n';
+import { indexableLocales } from '@/lib/i18n';
 import { routeGuides } from '@/lib/route-guides';
 import { localeAlternates, siteUrl } from '@/lib/seo';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const rootRoutes = [
-    { url: siteUrl, priority: 1, changeFrequency: 'daily' as const, lastModified: now },
-  ];
-  const localeRoutes = locales.flatMap((locale) => ([
+  const localeRoutes = indexableLocales.flatMap((locale) => ([
     { url: `${siteUrl}/${locale}`, priority: 1, changeFrequency: 'daily' as const, lastModified: now, alternates: { languages: localeAlternates() } },
     { url: `${siteUrl}/${locale}/crypto`, priority: 0.9, changeFrequency: 'hourly' as const, lastModified: now, alternates: { languages: localeAlternates('/crypto') } },
     { url: `${siteUrl}/${locale}/cash`, priority: 0.9, changeFrequency: 'hourly' as const, lastModified: now, alternates: { languages: localeAlternates('/cash') } },
@@ -26,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/${locale}/legal/privacy-policy`, priority: 0.5, changeFrequency: 'monthly' as const, lastModified: now, alternates: { languages: localeAlternates('/legal/privacy-policy') } },
   ]));
 
-  const exchangeRoutes = locales.flatMap((locale) => exchanges.map((exchange) => ({
+  const exchangeRoutes = indexableLocales.flatMap((locale) => exchanges.map((exchange) => ({
     url: `${siteUrl}/${locale}/exchanges/${exchange.slug}`,
     priority: 0.7,
     changeFrequency: 'daily' as const,
@@ -34,7 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     alternates: { languages: localeAlternates(`/exchanges/${exchange.slug}`) },
   })));
 
-  const changerRoutes = locales.flatMap((locale) => publicCashProviders.map((provider) => ({
+  const changerRoutes = indexableLocales.flatMap((locale) => publicCashProviders.map((provider) => ({
     url: `${siteUrl}/${locale}/money-changers/${provider.slug}`,
     priority: 0.7,
     changeFrequency: 'daily' as const,
@@ -42,5 +39,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     alternates: { languages: localeAlternates(`/money-changers/${provider.slug}`) },
   })));
 
-  return [...rootRoutes, ...localeRoutes, ...exchangeRoutes, ...changerRoutes];
+  return [...localeRoutes, ...exchangeRoutes, ...changerRoutes];
 }

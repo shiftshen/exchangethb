@@ -5,7 +5,7 @@ import { readCashCache } from '@/lib/cash-cache-store';
 import { localizeCashText, localizeScrapeNote } from '@/lib/cash-text';
 import { readAdminConfig } from '@/lib/content-store';
 import { resolveContentLocale, t } from '@/lib/i18n';
-import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { TrackAnchor } from '@/components/track-link';
 import { Locale } from '@/lib/types';
 import { Pill, Section } from '@/components/ui';
@@ -315,10 +315,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: {
-      canonical: withLocalePath(locale, path),
-      languages: localeAlternates(path),
-    },
+    alternates: localeMetadataAlternates(locale, path),
+    robots: localeRobots(locale),
     keywords: locale === 'en'
       ? [`${provider.name} Bangkok`, `${provider.name} exchange rate`, 'Bangkok money changer', 'cash exchange Thailand']
       : undefined,

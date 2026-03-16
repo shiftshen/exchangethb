@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { Locale } from '@/lib/types';
 import { t } from '@/lib/i18n';
-import { localeAlternates, withLocalePath } from '@/lib/seo';
+import { localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { CopyGroup } from '@/lib/types';
 
 type LocalizedText = CopyGroup;
@@ -188,10 +188,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: {
-      canonical: withLocalePath(locale, `/legal/${slug}`),
-      languages: localeAlternates(`/legal/${slug}`),
-    },
+    alternates: localeMetadataAlternates(locale, `/legal/${slug}`),
+    robots: localeRobots(locale),
     openGraph: {
       title,
       description,

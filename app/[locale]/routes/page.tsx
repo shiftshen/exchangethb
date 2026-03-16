@@ -3,7 +3,7 @@ import { TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
 import { locales, t } from '@/lib/i18n';
 import { RouteGuide, routeGuides } from '@/lib/route-guides';
-import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { Locale } from '@/lib/types';
 
 const copy = {
@@ -238,10 +238,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title: c.title,
     description: c.description,
-    alternates: {
-      canonical: withLocalePath(locale, path),
-      languages: localeAlternates(path),
-    },
+    alternates: localeMetadataAlternates(locale, path),
+    robots: localeRobots(locale),
     openGraph: {
       title: c.title,
       description: c.description,

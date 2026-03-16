@@ -9,7 +9,7 @@ import { describeMarketSource } from '@/lib/market-data';
 import { localizeExchangeLicense } from '@/lib/exchange-text';
 import { resolveContentLocale, t } from '@/lib/i18n';
 import { localizeAdapterNote, localizeMarketFallbackReason, localizeMarketFreshness, localizeMarketSource } from '@/lib/market-text';
-import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { Locale } from '@/lib/types';
 import { Pill, Section } from '@/components/ui';
 
@@ -288,10 +288,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: {
-      canonical: withLocalePath(locale, path),
-      languages: localeAlternates(path),
-    },
+    alternates: localeMetadataAlternates(locale, path),
+    robots: localeRobots(locale),
     keywords: locale === 'en'
       ? [`${exchange.name} Thailand`, `${exchange.name} THB`, `${exchange.name} review`, 'Thailand crypto exchange']
       : undefined,

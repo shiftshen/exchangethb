@@ -10,7 +10,7 @@ import { compareCashLive } from '@/lib/cash-live';
 import { localizeCashText } from '@/lib/cash-text';
 import { resolveContentLocale, t } from '@/lib/i18n';
 import { routeGuides } from '@/lib/route-guides';
-import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { CurrencyCode, Locale } from '@/lib/types';
 
 function faqJsonLd(entries: ReadonlyArray<{ question: string; answer: string }>) {
@@ -861,10 +861,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: {
-      canonical: withLocalePath(locale, '/cash'),
-      languages: localeAlternates('/cash'),
-    },
+    alternates: localeMetadataAlternates(locale, '/cash'),
+    robots: localeRobots(locale),
     keywords: locale === 'en'
       ? ['Bangkok money changer', 'cash to THB', 'USD to THB cash', 'EUR to THB cash', 'GBP to THB cash', 'JPY to THB cash', 'CNY to THB cash', 'Thailand exchange rate', 'Japan to Thailand money exchange', 'Germany to Thailand money exchange', 'Europe to Thailand money exchange', 'Korea to Thailand money exchange']
       : undefined,

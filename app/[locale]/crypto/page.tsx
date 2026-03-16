@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 import { AutoSubmitForm } from '@/components/auto-submit-form';
 import { TrackButton } from '@/components/track-button';
 import { TrackAnchor, TrackLink } from '@/components/track-link';
@@ -10,7 +9,7 @@ import { localizeExchangeLicense } from '@/lib/exchange-text';
 import { resolveContentLocale, t } from '@/lib/i18n';
 import { localizeMarketFallbackReason, localizeMarketFreshness, localizeMarketSource } from '@/lib/market-text';
 import { routeGuides } from '@/lib/route-guides';
-import { breadcrumbJsonLd, localeAlternates, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { CryptoSymbol, Locale } from '@/lib/types';
 
 function faqJsonLd(entries: ReadonlyArray<{ question: string; answer: string }>) {
@@ -330,20 +329,18 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
   const query = await searchParams;
   const rawSymbol = Array.isArray(query.symbol) ? query.symbol[0] : query.symbol;
   const rawSide = Array.isArray(query.side) ? query.side[0] : query.side;
-  const symbol = (query.symbol as CryptoSymbol) || 'BTC';
+  const symbol = rawSymbol && symbols.includes(rawSymbol as CryptoSymbol) ? rawSymbol as CryptoSymbol : 'BTC';
   const rawAmount = Array.isArray(query.amount) ? query.amount[0] : query.amount;
-  const amountState = inspectPositiveDecimal(query.amount, 0.00000001);
-  const side = query.side === 'sell' ? 'sell' : 'buy';
-  const hasDefaultRouteQuery = Boolean(rawSymbol || rawSide || rawAmount);
-  if (!hasDefaultRouteQuery) {
-    redirect(`/${locale}/crypto?symbol=BTC&side=buy&amount=1`);
-  }
+  const amountState = inspectPositiveDecimal(rawAmount, 0.00000001);
+  const side = rawSide === 'sell' ? 'sell' : 'buy';
   const contentLocale = resolveContentLocale(locale);
   const c = locale in localeOverrides
     ? { ...copy.en, ...localeOverrides[locale as keyof typeof localeOverrides] }
     : copy[contentLocale];
+  const hasAmountInput = Boolean(rawAmount && rawAmount.trim().length > 0);
   const amount = amountState.valid && amountState.parsed !== null ? amountState.parsed : 1;
-  const results = amountState.valid && amountState.parsed !== null
+  const shouldCompare = !hasAmountInput || amountState.valid;
+  const results = shouldCompare
     ? await compareCrypto({ symbol, amount, side, quoteMode: 'coin', includeWithdrawal: true, withdrawThb: side === 'sell' })
     : [];
   const best = results[0];
@@ -702,10 +699,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: {
-      canonical: withLocalePath(locale, '/crypto'),
-      languages: localeAlternates('/crypto'),
-    },
+    alternates: localeMetadataAlternates(locale, '/crypto'),
+    robots: localeRobots(locale),
     keywords: locale === 'en'
       ? ['BTC to THB', 'ETH to THB', 'USDT to THB', 'XRP to THB', 'DOGE to THB', 'SOL to THB', 'crypto exchange Thailand', 'buy crypto in Thailand', 'sell crypto for baht']
       : undefined,
