@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
-import { locales, t } from '@/lib/i18n';
+import { indexableLocales, t } from '@/lib/i18n';
 import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { getRouteGuide, routeGuides, routeGuideSlugs } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
@@ -102,7 +102,7 @@ function localizeList<T>(value: { th: T; en: T; zh: T; ja?: T; ko?: T; de?: T },
 }
 
 export function generateStaticParams() {
-  return routeGuideSlugs.flatMap((slug) => locales.map((locale) => ({ locale, slug })));
+  return routeGuideSlugs.flatMap((slug) => indexableLocales.map((locale) => ({ locale, slug })));
 }
 
 export default async function RouteGuidePage({ params }: { params: Promise<{ locale: Locale; slug: string }> }) {

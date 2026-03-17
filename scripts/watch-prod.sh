@@ -13,7 +13,7 @@ if curl -fsS -L --max-time "${MAX_TIME}" "${health_url}" >/dev/null; then
 fi
 
 timestamp="$(date '+%Y-%m-%dT%H:%M:%S%z')"
-echo "[${timestamp}] health check failed for ${health_url}; restarting web/worker" >> "${LOG_FILE}"
+echo "[${timestamp}] health check failed for ${health_url}; starting sequential service recovery" >> "${LOG_FILE}"
 
-cd /opt/exchangethb
-docker compose up -d web web_canary worker >> "${LOG_FILE}" 2>&1 || true
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"${SCRIPT_DIR}/deploy-prod.sh" --no-build --restart "${BASE_URL}" >> "${LOG_FILE}" 2>&1 || true

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { indexableLocales } from '@/lib/i18n';
+import { indexableLocales, isIndexableLocale, resolveContentLocale } from '@/lib/i18n';
 import { Locale } from '@/lib/types';
 
 const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
@@ -23,8 +23,9 @@ export function localeAlternates(path = '') {
 }
 
 export function localeMetadataAlternates(locale: Locale, path = ''): NonNullable<Metadata['alternates']> {
-  const canonical = withLocalePath(locale, path);
-  if (!indexableLocales.includes(locale)) {
+  const canonicalLocale = isIndexableLocale(locale) ? locale : resolveContentLocale(locale);
+  const canonical = withLocalePath(canonicalLocale, path);
+  if (!isIndexableLocale(locale)) {
     return { canonical };
   }
   return {

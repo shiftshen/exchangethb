@@ -2,6 +2,7 @@ import { ContentLocale, Locale, NavItem } from '@/lib/types';
 
 export const locales: Locale[] = ['th', 'en', 'zh', 'ja', 'ko', 'de'];
 export const indexableLocales: Locale[] = ['th', 'en', 'zh'];
+export const legacyLocales: Locale[] = ['ja', 'ko', 'de'];
 
 export const navigation: NavItem[] = [
   { href: '', label: { th: 'หน้าแรก', en: 'Home', zh: '首页', ja: 'ホーム', ko: '홈', de: 'Start' } },
@@ -14,12 +15,12 @@ export function isLocale(value: string): value is Locale {
   return locales.includes(value as Locale);
 }
 
-export function isIndexableLocale(locale: Locale) {
+export function isIndexableLocale(locale: Locale): locale is ContentLocale {
   return indexableLocales.includes(locale);
 }
 
 export function resolveContentLocale(locale: Locale): ContentLocale {
-  if (locale === 'th' || locale === 'en' || locale === 'zh') return locale;
+  if (isIndexableLocale(locale)) return locale;
   return 'en';
 }
 

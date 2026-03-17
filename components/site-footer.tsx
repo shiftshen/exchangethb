@@ -9,7 +9,8 @@ const footerCopy = {
 };
 
 export function SiteFooter({ locale }: { locale: Locale }) {
-  const copy = footerCopy[resolveContentLocale(locale)];
+  const hrefLocale = resolveContentLocale(locale);
+  const copy = footerCopy[hrefLocale];
   return (
     <footer className="mt-20 border-t border-surface-800 bg-surface-950/90 backdrop-blur">
       <div className="container-shell flex flex-col gap-5 py-10 text-sm text-stone-400 md:flex-row md:items-center md:justify-between">
@@ -18,9 +19,9 @@ export function SiteFooter({ locale }: { locale: Locale }) {
           <p className="mt-1">{copy.rights}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={`/${locale}/legal/methodology`}>{copy.methodology}</Link>
-          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={`/${locale}/legal/disclaimer`}>{copy.disclaimer}</Link>
-          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={`/${locale}/legal/privacy-policy`}>{copy.privacy}</Link>
+          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={`/${hrefLocale}/legal/methodology`}>{copy.methodology}</Link>
+          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={`/${hrefLocale}/legal/disclaimer`}>{copy.disclaimer}</Link>
+          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={`/${hrefLocale}/legal/privacy-policy`}>{copy.privacy}</Link>
         </div>
       </div>
     </footer>

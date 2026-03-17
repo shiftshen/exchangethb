@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
-import { locales, t } from '@/lib/i18n';
+import { indexableLocales, t } from '@/lib/i18n';
 import { RouteGuide, routeGuides } from '@/lib/route-guides';
 import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { Locale } from '@/lib/types';
@@ -157,7 +157,7 @@ function itemListJsonLd(locale: Locale, guides: RouteGuide[]) {
 }
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  return indexableLocales.map((locale) => ({ locale }));
 }
 
 export default async function RoutesIndexPage({ params }: { params: Promise<{ locale: Locale }> }) {

@@ -1,13 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isLocale } from '@/lib/i18n';
+import { isIndexableLocale, isLocale, resolveContentLocale } from '@/lib/i18n';
 
 function resolveLocale(pathname: string) {
   const firstSegment = pathname.split('/').filter(Boolean)[0];
-  return firstSegment && isLocale(firstSegment) ? firstSegment : 'en';
+  return firstSegment && isLocale(firstSegment) ? resolveContentLocale(firstSegment) : 'en';
 }
 
 export function middleware(request: NextRequest) {
-  const locale = resolveLocale(request.nextUrl.pathname);
+  const nextUrl = request.nextUrl.clone();
+  const segments = nextUrl.pathname.split('/').filter(Boolean);
+  const firstSegment = segments[0];
+
+  if (firstSegment && isLocale(firstSegment) && !isIndexableLocale(firstSegment)) {
+    segments[0] = resolveContentLocale(firstSegment);
+    nextUrl.pathname = `/${segments.join('/')}`;
+    return NextResponse.redirect(nextUrl, 308);
+  }
+
+  const locale = resolveLocale(nextUrl.pathname);
   const response = NextResponse.next();
   response.headers.set('Content-Language', locale);
   return response;
