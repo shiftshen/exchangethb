@@ -711,9 +711,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   if (!isLocale(locale)) return {};
   const contentLocale = resolveContentLocale(locale);
   const title = locale === 'th'
-    ? 'หน้าแรก ExchangeTHB'
+    ? 'วิธีที่ดีที่สุดในการเปลี่ยน Crypto หรือเงินสดเป็น THB'
     : locale === 'zh'
-      ? 'ExchangeTHB 首页'
+      ? '将加密货币或现金换成 THB 的最佳方式'
       : locale === 'ja'
         ? 'タイバーツ換金の最適ルート比較 | ExchangeTHB'
         : locale === 'ko'

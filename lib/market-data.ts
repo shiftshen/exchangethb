@@ -22,10 +22,23 @@ type ExchangeLiveFetcher = {
   fetchSnapshot: (symbol: string) => Promise<MarketSnapshot | null>;
 };
 
+async function fetchJsonWithTimeout(url: string, revalidateSeconds = 15, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, {
+      signal: controller.signal,
+      next: { revalidate: revalidateSeconds },
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 async function fetchBinance(symbol: string): Promise<MarketSnapshot | null> {
   const pair = BINANCE_SYMBOL_MAP[symbol];
   if (!pair) return null;
-  const response = await fetch(`https://api.binance.th/api/v1/depth?symbol=${pair}&limit=100`, { next: { revalidate: 15 } });
+  const response = await fetchJsonWithTimeout(`https://api.binance.th/api/v1/depth?symbol=${pair}&limit=100`);
   if (!response.ok) return null;
   const data = await response.json();
   return {
@@ -41,7 +54,7 @@ async function fetchBinance(symbol: string): Promise<MarketSnapshot | null> {
 async function fetchBitkub(symbol: string): Promise<MarketSnapshot | null> {
   const pair = BITKUB_SYMBOL_MAP[symbol];
   if (!pair) return null;
-  const response = await fetch(`https://api.bitkub.com/api/market/books?sym=${pair}&lmt=100`, { next: { revalidate: 15 } });
+  const response = await fetchJsonWithTimeout(`https://api.bitkub.com/api/market/books?sym=${pair}&lmt=100`);
   if (!response.ok) return null;
   const data = await response.json();
   if (data.error !== 0 || !data.result) return null;
@@ -58,7 +71,7 @@ async function fetchBitkub(symbol: string): Promise<MarketSnapshot | null> {
 async function fetchUpbit(symbol: string): Promise<MarketSnapshot | null> {
   const pair = UPBIT_SYMBOL_MAP[symbol];
   if (!pair) return null;
-  const response = await fetch(`https://th-api.upbit.com/v1/orderbook?markets=${pair}`, { next: { revalidate: 15 } });
+  const response = await fetchJsonWithTimeout(`https://th-api.upbit.com/v1/orderbook?markets=${pair}`);
   if (!response.ok) return null;
   const payload = await response.json();
   const row = Array.isArray(payload) ? payload[0] : null;
@@ -76,7 +89,7 @@ async function fetchUpbit(symbol: string): Promise<MarketSnapshot | null> {
 async function fetchOrbix(symbol: string): Promise<MarketSnapshot | null> {
   const pair = ORBIX_SYMBOL_MAP[symbol];
   if (!pair) return null;
-  const response = await fetch(`https://www.orbixtrade.com/api/orders/?pair=${pair}`, { next: { revalidate: 15 } });
+  const response = await fetchJsonWithTimeout(`https://www.orbixtrade.com/api/orders/?pair=${pair}`);
   if (!response.ok) return null;
   const data = await response.json();
   return {

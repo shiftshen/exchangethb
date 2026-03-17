@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { trackEvent } from '@/lib/analytics-client';
+import { indexableLocales } from '@/lib/i18n';
 import { Locale } from '@/lib/types';
 
 export function LanguageSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname();
-  const options: Locale[] = ['th', 'en', 'zh', 'ja', 'ko', 'de'];
+  const options = indexableLocales;
   const currentPath = pathname || '/th';
   const suffix = currentPath.replace(/^\/(th|en|zh|ja|ko|de)/, '') || '';
   const labels: Record<Locale, string> = { th: 'TH', en: 'EN', zh: 'ZH', ja: 'JA', ko: 'KO', de: 'DE' };
