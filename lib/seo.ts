@@ -69,7 +69,8 @@ export function organizationJsonLd() {
     '@type': 'Organization',
     name: 'ExchangeTHB',
     url: siteUrl,
-    logo: `${siteUrl}/icon.png`,
+    logo: `${siteUrl}/brand-logo.svg`,
+    image: `${siteUrl}/brand-logo.svg`,
     sameAs: [],
   };
 }

@@ -9,6 +9,11 @@ export const metadata: Metadata = {
     default: 'ExchangeTHB',
     template: '%s | ExchangeTHB',
   },
+  icons: {
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    apple: [{ url: '/apple-icon.svg', type: 'image/svg+xml' }],
+    shortcut: ['/icon.svg'],
+  },
   description: 'ExchangeTHB compares crypto and cash routes into Thai baht with source transparency and risk disclosures.',
   openGraph: {
     type: 'website',
@@ -16,11 +21,20 @@ export const metadata: Metadata = {
     title: 'ExchangeTHB',
     description: 'Compare Crypto → THB and Cash / FX → THB with transparent source status.',
     url: siteUrl,
+    images: [
+      {
+        url: '/brand-logo.svg',
+        width: 1280,
+        height: 360,
+        alt: 'ExchangeTHB',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'ExchangeTHB',
     description: 'Compare routes into Thai baht with transparent source labels.',
+    images: ['/brand-logo.svg'],
   },
   verification: {
     google: googleSiteVerification,

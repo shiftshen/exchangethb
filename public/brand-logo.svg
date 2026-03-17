@@ -1,0 +1,35 @@
+<svg width="1280" height="360" viewBox="0 0 1280 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="360" rx="52" fill="#0B0E11"/>
+  <rect x="24" y="24" width="312" height="312" rx="78" fill="url(#paint0_linear)"/>
+  <rect x="40" y="40" width="280" height="280" rx="62" stroke="url(#paint1_linear)" stroke-width="2"/>
+  <path d="M104 100H166.5C200.642 100 225 119.137 225 151.5C225 172.376 213.662 188.275 194.5 196.25C216.702 203.705 230 222.026 230 245C230 280.358 201.433 306 162.5 306H104V100Z" fill="#F6F3EA"/>
+  <path d="M144 136V183H163C181.873 183 194 172.937 194 159.5C194 145.631 182.366 136 163 136H144Z" fill="#0F1318"/>
+  <path d="M144 216V269H166C188.315 269 201 258.699 201 242.5C201 225.877 188.095 216 165 216H144Z" fill="#0F1318"/>
+  <path d="M250 100V245" stroke="#F0B90B" stroke-width="24" stroke-linecap="round"/>
+  <path d="M218 134L250 102L282 134" stroke="#F0B90B" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="250" cy="278" r="21" fill="#F0B90B"/>
+  <path d="M420 98H604" stroke="url(#paint2_linear)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M420 270H786" stroke="url(#paint3_linear)" stroke-width="4" stroke-linecap="round"/>
+  <text x="420" y="184" fill="#F7F3EA" font-family="Georgia, 'Times New Roman', serif" font-size="88" font-weight="700" letter-spacing="-2">ExchangeTHB</text>
+  <text x="422" y="236" fill="#F0B90B" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="27" font-weight="700" letter-spacing="9">THAI BAHT INTELLIGENCE</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="54" y1="44" x2="296" y2="310" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#171B22"/>
+      <stop offset="1" stop-color="#0F1318"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear" x1="68" y1="54" x2="300" y2="304" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0B90B" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#F6F3EA" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="paint2_linear" x1="420" y1="98" x2="604" y2="98" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0B90B" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#F0B90B" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#F0B90B" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="paint3_linear" x1="420" y1="270" x2="786" y2="270" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6F3EA" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#F6F3EA" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#F6F3EA" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>
