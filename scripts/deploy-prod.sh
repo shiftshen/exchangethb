@@ -107,3 +107,8 @@ refresh_service worker
 
 log "Running production health checks against ${BASE_URL}"
 MAX_TIME="${MAX_TIME}" "${SCRIPT_DIR}/check-prod-health.sh" "${BASE_URL}"
+
+if [[ "${SKIP_SEO_CLUSTER_CHECK:-0}" != "1" ]]; then
+  log "Running SEO cluster checks against ${BASE_URL}"
+  node "${SCRIPT_DIR}/check-seo-cluster.mjs" "${BASE_URL}"
+fi
