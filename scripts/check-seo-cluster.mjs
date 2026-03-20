@@ -32,12 +32,12 @@ const checks = [
   {
     path: '/en/exchanges',
     mustInclude: ['/en/exchanges/binance-th', '/en/exchanges/bitkub'],
-    mustMatch: [/All Thai exchanges tracked for THB comparison/, /@type":"CollectionPage"/, /@type":"ItemList"/],
+    mustMatch: [/Thailand Crypto Exchanges/, /Compare Thai Exchanges for THB/, /@type":"CollectionPage"/, /@type":"ItemList"/],
   },
   {
     path: '/en/money-changers',
     mustInclude: ['/en/money-changers/sia', '/en/money-changers/superrich-thailand'],
-    mustMatch: [/Bangkok money changers tracked for THB decisions/, /@type":"CollectionPage"/, /@type":"ItemList"/],
+    mustMatch: [/Bangkok Money Changers/, /Compare Rates, Branches, and Hours/, /@type":"CollectionPage"/, /@type":"ItemList"/],
   },
   {
     path: '/robots.txt',
