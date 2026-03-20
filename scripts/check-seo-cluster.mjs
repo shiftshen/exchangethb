@@ -47,7 +47,7 @@ const checks = [
   {
     path: '/sitemap.xml',
     mustInclude: ['/en/exchanges', '/en/money-changers', '/en/routes/usd-cash-to-thb'],
-    mustMatch: [/<priority>0\.84<\/priority>/, /<priority>0\.86<\/priority>/, /<lastmod>/],
+    mustMatch: [/<priority>0\.88<\/priority>/, /<priority>0\.9<\/priority>/, /<lastmod>/],
   },
 ];
 
