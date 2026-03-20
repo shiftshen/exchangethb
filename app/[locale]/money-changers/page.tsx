@@ -102,6 +102,18 @@ function faqJsonLd(entries: Array<{ question: string; answer: string }>) {
   };
 }
 
+function webPageJsonLd(locale: ContentLocale, title: string, description: string, dateModified?: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: withLocalePath(locale, '/money-changers'),
+    inLanguage: locale,
+    dateModified,
+  };
+}
+
 function formatLocaleDate(locale: ContentLocale, value?: string) {
   if (!value) return '-';
   return new Intl.DateTimeFormat(locale === 'th' ? 'th-TH' : locale === 'zh' ? 'zh-CN' : 'en-US', {
@@ -152,6 +164,7 @@ export default async function MoneyChangersIndexPage({ params }: { params: Promi
     c.title,
   );
   const faqLd = faqJsonLd(faqEntries);
+  const pageLd = webPageJsonLd(locale, c.title, c.description, latestRateUpdate);
 
   return (
     <div className="space-y-12">
@@ -159,6 +172,7 @@ export default async function MoneyChangersIndexPage({ params }: { params: Promi
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }} />
 
       <section className="frontend-hero overflow-hidden p-6 sm:p-8 lg:p-10">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">

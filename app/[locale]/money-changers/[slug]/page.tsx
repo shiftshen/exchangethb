@@ -190,6 +190,18 @@ function financialServiceJsonLd(
   };
 }
 
+function webPageJsonLd(locale: Locale, title: string, description: string, slug: string, dateModified?: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: withLocalePath(locale, `/money-changers/${slug}`),
+    inLanguage: locale,
+    dateModified,
+  };
+}
+
 function isGoogleMapsUrl(url: string) {
   return /google\.[^/]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps|maps\.google\.com/i.test(url);
 }
@@ -304,6 +316,12 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
           ];
   const faqLd = faqJsonLd(faqEntries);
   const businessLd = financialServiceJsonLd(locale, provider, primaryBranch);
+  const latestPageUpdate = rates
+    .map((rate) => rate.observedAt)
+    .sort((left, right) => new Date(right).getTime() - new Date(left).getTime())[0]
+    || cache.generatedAt
+    || undefined;
+  const pageLd = webPageJsonLd(locale, provider.name, providerDescription, provider.slug, latestPageUpdate);
   const primaryGuideHref = routeGuideHref(locale, provider.slug, primaryBranch?.area);
 
   return (
@@ -311,6 +329,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(businessLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }} />
       <section className="card overflow-hidden border-brand-500/20 bg-gradient-to-br from-surface-900 via-surface-850 to-surface-900 p-6 sm:p-8">
         <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
           <div className="space-y-5">
