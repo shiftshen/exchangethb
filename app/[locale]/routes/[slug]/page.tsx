@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { TrackLink } from '@/components/track-link';
+import { cashRates, exchanges, marketSnapshots } from '@/data/site';
 import { Pill, Section } from '@/components/ui';
 import { indexableLocales, t } from '@/lib/i18n';
 import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
@@ -19,6 +20,9 @@ const uiCopy = {
     supportTitleCash: 'Current live cash coverage',
     supportBodyCash: 'Live cash comparison currently covers USD, CNY, EUR, JPY, and GBP. Country-intent pages can still help with travel decisions even when that local currency is not part of the live compare set.',
     faqTitle: 'Common questions for this route',
+    updatedLabel: 'Latest data reference',
+    updatedCrypto: 'Based on the latest tracked exchange market snapshot for this route family.',
+    updatedCash: 'Based on the latest tracked cash rate sample for this route family.',
   },
   zh: {
     routeGuide: '路线指南',
@@ -31,6 +35,9 @@ const uiCopy = {
     supportTitleCash: '当前实时现金支持集',
     supportBodyCash: '当前实时现金比较只覆盖 USD、CNY、EUR、JPY 和 GBP。即使某个国家页不对应实时本币，它仍然可以作为旅行换汇决策页存在。',
     faqTitle: '这个路线最常见的问题',
+    updatedLabel: '最近数据参考时间',
+    updatedCrypto: '基于这类路线最近一次被记录的交易所市场快照。',
+    updatedCash: '基于这类路线最近一次被记录的现金汇率样本。',
   },
   th: {
     routeGuide: 'คู่มือเส้นทาง',
@@ -43,6 +50,9 @@ const uiCopy = {
     supportTitleCash: 'ขอบเขตเงินสดสดที่รองรับตอนนี้',
     supportBodyCash: 'ชุดเปรียบเทียบเงินสดสดตอนนี้ครอบคลุม USD, CNY, EUR, JPY และ GBP เท่านั้น ส่วนหน้าประเทศยังใช้เป็นหน้าช่วยตัดสินใจการเดินทางได้ แม้สกุลเงินท้องถิ่นนั้นจะยังไม่อยู่ในชุดสด',
     faqTitle: 'คำถามที่พบบ่อยของเส้นทางนี้',
+    updatedLabel: 'อ้างอิงข้อมูลล่าสุด',
+    updatedCrypto: 'อิงจาก market snapshot ล่าสุดที่ระบบติดตามได้ในกลุ่มเส้นทางนี้',
+    updatedCash: 'อิงจากตัวอย่างเรตเงินสดล่าสุดที่ระบบติดตามได้ในกลุ่มเส้นทางนี้',
   },
   ja: {
     routeGuide: 'ルートガイド',
@@ -55,6 +65,9 @@ const uiCopy = {
     supportTitleCash: '現在のライブ現金対応',
     supportBodyCash: '現在ライブで比較できる現金通貨は USD、CNY、EUR、JPY、GBP です。国別ページは、その国の通貨がライブ比較に含まれない場合でも旅行時の判断ページとして機能します。',
     faqTitle: 'このルートでよくある質問',
+    updatedLabel: '最新データ参照',
+    updatedCrypto: 'この系統のルートで追跡している最新の取引所マーケットスナップショットに基づきます。',
+    updatedCash: 'この系統のルートで追跡している最新の現金レートサンプルに基づきます。',
   },
   ko: {
     routeGuide: '경로 가이드',
@@ -67,6 +80,9 @@ const uiCopy = {
     supportTitleCash: '현재 라이브 현금 지원 범위',
     supportBodyCash: '현재 라이브 현금 비교는 USD, CNY, EUR, JPY, GBP만 지원합니다. 국가 페이지는 해당 현지 통화가 라이브 세트에 없더라도 여행 환전 의사결정 페이지로 쓸 수 있습니다.',
     faqTitle: '이 경로의 자주 묻는 질문',
+    updatedLabel: '최신 데이터 기준',
+    updatedCrypto: '이 경로군에서 추적 중인 최신 거래소 마켓 스냅샷 기준입니다.',
+    updatedCash: '이 경로군에서 추적 중인 최신 현금 환율 샘플 기준입니다.',
   },
   de: {
     routeGuide: 'Routenleitfaden',
@@ -79,6 +95,9 @@ const uiCopy = {
     supportTitleCash: 'Aktuelle Live-Bargeldabdeckung',
     supportBodyCash: 'Der Live-Bargeldvergleich deckt aktuell USD, CNY, EUR, JPY und GBP ab. Länderseiten können trotzdem als Reise-Entscheidungsseiten dienen, auch wenn die jeweilige lokale Währung nicht im Live-Satz liegt.',
     faqTitle: 'Häufige Fragen zu dieser Route',
+    updatedLabel: 'Letzte Datenreferenz',
+    updatedCrypto: 'Basierend auf dem neuesten erfassten Markt-Snapshot in dieser Routenfamilie.',
+    updatedCash: 'Basierend auf dem neuesten erfassten Bargeldkurs-Sample in dieser Routenfamilie.',
   },
 } as const;
 
@@ -94,6 +113,36 @@ function faqJsonLd(entries: Array<{ question: string; answer: string }>) {
         text: entry.answer,
       },
     })),
+  };
+}
+
+function latestRouteDataTimestamp(guideType: 'crypto' | 'cash') {
+  if (guideType === 'crypto') {
+    const latestMarket = marketSnapshots
+      .map((snapshot) => new Date(snapshot.lastUpdated))
+      .sort((a, b) => b.getTime() - a.getTime())[0];
+    const latestExchange = exchanges
+      .map((exchange) => new Date(exchange.lastUpdated))
+      .sort((a, b) => b.getTime() - a.getTime())[0];
+    return [latestMarket, latestExchange]
+      .filter((value): value is Date => Boolean(value))
+      .sort((a, b) => b.getTime() - a.getTime())[0];
+  }
+
+  return cashRates
+    .map((rate) => new Date(rate.observedAt))
+    .sort((a, b) => b.getTime() - a.getTime())[0];
+}
+
+function webPageJsonLd(locale: Locale, slug: string, name: string, description: string, dateModified?: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name,
+    description,
+    url: withLocalePath(locale, `/routes/${slug}`),
+    inLanguage: locale,
+    dateModified,
   };
 }
 
@@ -118,6 +167,12 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
   const guideChecks = localizeList(guide.checks, locale);
   const guideFaqs = guide.faqs ? localizeList(guide.faqs, locale) : [];
   const compareHref = `/${locale}${guide.compareHref}`;
+  const latestDataTimestamp = latestRouteDataTimestamp(guide.type);
+  const latestDataIso = latestDataTimestamp?.toISOString();
+  const latestDataLabel = latestDataTimestamp ? new Intl.DateTimeFormat(locale === 'th' ? 'th-TH' : locale === 'zh' ? 'zh-CN' : 'en-US', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(latestDataTimestamp) : null;
   const relatedGuides = routeGuides
     .filter((item) => item.slug !== guide.slug && item.type === guide.type)
     .slice(0, 3);
@@ -126,11 +181,13 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
     { name: guideTitle, item: withLocalePath(locale, `/routes/${guide.slug}`) },
   ]);
   const faqLd = guideFaqs.length ? faqJsonLd(guideFaqs) : null;
+  const pageLd = webPageJsonLd(locale, guide.slug, guideTitle, guideSummary, latestDataIso);
 
   return (
     <div className="space-y-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {faqLd ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} /> : null}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }} />
       <section className="frontend-hero overflow-hidden p-6 sm:p-8 lg:p-10">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div className="space-y-5">
@@ -147,6 +204,13 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
           <div className="card-panel p-6">
             <p className="text-sm uppercase tracking-[0.22em] text-stone-500">{c.noteTitle}</p>
             <p className="mt-3 text-base text-stone-300">{c.noteBody}</p>
+            {latestDataLabel ? (
+              <div className="mt-4 rounded-2xl border border-white/8 bg-surface-900/70 px-4 py-4">
+                <p className="text-sm font-semibold text-white">{c.updatedLabel}</p>
+                <p className="mt-2 text-sm text-stone-300">{latestDataLabel}</p>
+                <p className="mt-2 text-sm text-stone-400">{guide.type === 'cash' ? c.updatedCash : c.updatedCrypto}</p>
+              </div>
+            ) : null}
             {guide.type === 'cash' ? (
               <div className="mt-4 rounded-2xl border border-brand-500/20 bg-brand-500/8 px-4 py-4">
                 <p className="text-sm font-semibold text-brand-200">{c.supportTitleCash}</p>
