@@ -711,24 +711,28 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   if (!isLocale(locale)) return {};
   const contentLocale = resolveContentLocale(locale);
   const title = locale === 'th'
-    ? 'วิธีที่ดีที่สุดในการเปลี่ยน Crypto หรือเงินสดเป็น THB'
+    ? 'เปรียบเทียบ Exchange ไทย, คริปโต และร้านแลกเงินเป็น THB'
     : locale === 'zh'
-      ? '将加密货币或现金换成 THB 的最佳方式'
+      ? '泰国加密交易所与曼谷换汇店 THB 比较'
       : locale === 'ja'
         ? 'タイバーツ換金の最適ルート比較 | ExchangeTHB'
         : locale === 'ko'
           ? '태국 바트로 바꾸는 최적 경로 비교 | ExchangeTHB'
           : locale === 'de'
             ? 'Beste Wege in THB | Krypto und Bargeldvergleich'
-            : 'Best Ways to Convert Crypto or Cash to THB';
-  const description = copy[contentLocale].heroBody;
+            : 'Thailand Crypto Exchange and Bangkok Money Changer Comparison';
+  const description = locale === 'th'
+    ? 'เปรียบเทียบ exchange ไทย, ร้านแลกเงินกรุงเทพ และเส้นทางแปลง Crypto เป็น THB พร้อมค่าธรรมเนียม สภาพคล่อง และข้อมูลอ้างอิงที่ตรวจสอบได้'
+    : locale === 'zh'
+      ? '比较泰国加密交易所、曼谷换汇店与 THB 兑换路径，查看手续费、流动性、营业信息与参考链接。'
+      : 'Compare Thailand crypto exchanges, Bangkok money changers, and THB conversion routes with fees, liquidity, opening hours, and source-backed reference links.';
   return {
     title,
     description,
     alternates: localeMetadataAlternates(locale),
     robots: localeRobots(locale),
     keywords: locale === 'en'
-      ? ['Thailand crypto exchange comparison', 'THB conversion', 'Bangkok money changer', 'crypto to baht', 'cash exchange Thailand', 'Japan to Thailand money exchange', 'Germany to Thailand money exchange', 'Europe to Thailand money exchange']
+      ? ['Thailand crypto exchange', 'Bangkok money changer', 'cash exchange Thailand', 'Thailand exchange rates', 'crypto to THB', 'money exchange Bangkok', 'THB conversion', 'SIA money exchange']
       : undefined,
     openGraph: {
       title,

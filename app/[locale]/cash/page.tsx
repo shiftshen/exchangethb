@@ -856,8 +856,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
           ? '방콕 현금 환전 비교 | USD·EUR·JPY·GBP -> THB'
           : locale === 'de'
             ? 'Bargeldwechsel zu THB in Bangkok | USD, EUR, JPY, GBP'
-            : 'Best Cash Exchange to THB in Bangkok | USD, EUR, JPY, GBP';
-  const description = c.description;
+            : 'Bangkok Money Changer Rates to THB | USD, EUR, JPY, GBP, CNY';
+  const description = locale === 'en'
+    ? 'Compare Bangkok cash exchange rates to THB for USD, EUR, JPY, GBP, and CNY. See branch hours, map links, and estimated best cash-to-baht options.'
+    : c.description;
   return {
     title,
     description,

@@ -281,8 +281,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     ? `${exchange.name} รีวิวและเปรียบเทียบแลก THB`
     : locale === 'zh'
       ? `${exchange.name} 交易所详情与 THB 比较`
-      : `${exchange.name} exchange profile and THB comparison`;
-  const description = t(exchange.summary, locale);
+      : `${exchange.name} Thailand Review | Crypto Exchange to THB`;
+  const description = locale === 'en'
+    ? `Review ${exchange.name} for Thailand THB conversion. Compare supported coins, fee structure, THB access, and exchange-specific risks before trading.`
+    : t(exchange.summary, locale);
   const path = `/exchanges/${slug}`;
 
   return {

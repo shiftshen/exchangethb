@@ -304,12 +304,29 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const provider = cashProviders.find((item) => item.slug === slug);
   if (!provider) return {};
 
+  const isSia = provider.slug === 'sia';
   const title = locale === 'th'
-    ? `${provider.name} เรทเงินสดและข้อมูลจุดอ้างอิง`
+    ? isSia
+      ? 'SIA Money Exchange เรทวันนี้และคู่มือร้านแลกเงินกรุงเทพ'
+      : `${provider.name} เรทเงินสดและข้อมูลร้านแลกเงินกรุงเทพ`
     : locale === 'zh'
-      ? `${provider.name} 汇率与门店参考信息`
-      : `${provider.name} cash rates and branch reference info`;
-  const description = t(provider.summary, locale);
+      ? isSia
+        ? 'SIA Money Exchange 汇率与曼谷门店参考'
+        : `${provider.name} 汇率与曼谷换汇门店参考`
+      : isSia
+        ? 'SIA Money Exchange Bangkok Rates and Branch Guide'
+        : `${provider.name} Bangkok rates and branch guide`;
+  const description = locale === 'th'
+    ? isSia
+      ? 'ดูเรท SIA Money Exchange, จุดอ้างอิงสาขาในกรุงเทพ, เวลาเปิดทำการ และลิงก์หน้าอ้างอิงเพื่อเทียบก่อนแลก THB'
+      : `${provider.name} พร้อมเรทตัวอย่าง จุดอ้างอิงสาขาในกรุงเทพ เวลาเปิดทำการ และลิงก์หน้าอ้างอิงก่อนแลก THB`
+    : locale === 'zh'
+      ? isSia
+        ? '查看 SIA Money Exchange 汇率样本、曼谷门店参考点、营业信息与官网链接，再决定如何换入 THB。'
+        : `查看 ${provider.name} 汇率样本、曼谷门店参考点、营业信息与官网链接，再决定如何换入 THB。`
+      : isSia
+        ? 'Check SIA Money Exchange rate samples, Bangkok branch references, opening hours, and official links before converting cash to THB.'
+        : `Check ${provider.name} rate samples, Bangkok branch references, opening hours, and official links before converting cash to THB.`;
   const path = `/money-changers/${slug}`;
 
   return {
@@ -318,7 +335,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     alternates: localeMetadataAlternates(locale, path),
     robots: localeRobots(locale),
     keywords: locale === 'en'
-      ? [`${provider.name} Bangkok`, `${provider.name} exchange rate`, 'Bangkok money changer', 'cash exchange Thailand']
+      ? isSia
+        ? ['SIA Money Exchange', 'SIA money exchange Bangkok', 'SIA exchange rate', 'Bangkok money changer', 'cash exchange Thailand']
+        : [`${provider.name} Bangkok`, `${provider.name} exchange rate`, 'Bangkok money changer', 'cash exchange Thailand']
       : undefined,
     openGraph: {
       title,

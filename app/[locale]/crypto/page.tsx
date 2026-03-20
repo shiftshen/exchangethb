@@ -694,8 +694,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
           ? '태국 암호화폐 THB 비교 | BTC·ETH·USDT'
           : locale === 'de'
             ? 'Krypto zu THB Vergleich in Thailand | BTC, ETH, USDT'
-            : 'Best Crypto to THB Comparison in Thailand | BTC, ETH, USDT';
-  const description = c.description;
+            : 'Thailand Crypto Exchange to THB Comparison | BTC, ETH, USDT, XRP, SOL';
+  const description = locale === 'en'
+    ? 'Compare Thailand crypto exchanges for BTC, ETH, USDT, XRP, DOGE, and SOL to THB. Review estimated baht received, fees, and market depth before converting.'
+    : c.description;
   return {
     title,
     description,

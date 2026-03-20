@@ -6,7 +6,7 @@ import { googleSiteVerification, organizationJsonLd, siteUrl } from '@/lib/seo';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'ExchangeTHB',
+    default: 'Thailand Crypto Exchange and Bangkok Money Changer Comparison | ExchangeTHB',
     template: '%s | ExchangeTHB',
   },
   icons: {
@@ -14,12 +14,12 @@ export const metadata: Metadata = {
     apple: [{ url: '/icon.svg', type: 'image/svg+xml' }],
     shortcut: ['/icon.svg'],
   },
-  description: 'ExchangeTHB compares crypto and cash routes into Thai baht with source transparency and risk disclosures.',
+  description: 'Compare crypto exchanges and Bangkok money changers for THB conversion with transparent fees, rate context, and branch references.',
   openGraph: {
     type: 'website',
     siteName: 'ExchangeTHB',
-    title: 'ExchangeTHB',
-    description: 'Compare Crypto → THB and Cash / FX → THB with transparent source status.',
+    title: 'Thailand Crypto Exchange and Bangkok Money Changer Comparison | ExchangeTHB',
+    description: 'Compare crypto exchanges and Bangkok money changers for THB conversion with transparent fees, rate context, and branch references.',
     url: siteUrl,
     images: [
       {
@@ -32,8 +32,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ExchangeTHB',
-    description: 'Compare routes into Thai baht with transparent source labels.',
+    title: 'Thailand Crypto Exchange and Bangkok Money Changer Comparison | ExchangeTHB',
+    description: 'Compare crypto exchanges and Bangkok money changers for THB conversion with transparent fees, rate context, and branch references.',
     images: ['/brand-logo.svg'],
   },
   verification: {
