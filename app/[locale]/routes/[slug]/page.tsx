@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { TrackLink } from '@/components/track-link';
-import { cashRates, exchanges, marketSnapshots } from '@/data/site';
+import { cashRates, exchanges, marketSnapshots, publicCashProviders } from '@/data/site';
 import { Pill, Section } from '@/components/ui';
 import { indexableLocales, t } from '@/lib/i18n';
-import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, itemListJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { getRouteGuide, routeGuides, routeGuideSlugs } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
 
@@ -188,18 +188,55 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
   const relatedGuides = routeGuides
     .filter((item) => item.slug !== guide.slug && item.type === guide.type)
     .slice(0, 3);
+  const relatedProfiles = guide.type === 'cash'
+    ? ['sia', 'superrich-thailand', 'ratchada']
+        .map((providerSlug) => publicCashProviders.find((provider) => provider.slug === providerSlug))
+        .filter((provider): provider is typeof publicCashProviders[number] => Boolean(provider))
+        .map((provider) => ({
+          href: `/${locale}/money-changers/${provider.slug}`,
+          title: provider.name,
+          body: t(provider.summary, locale),
+        }))
+    : ['binance-th', 'bitkub', 'upbit-thailand']
+        .map((exchangeSlug) => exchanges.find((exchange) => exchange.slug === exchangeSlug))
+        .filter((exchange): exchange is typeof exchanges[number] => Boolean(exchange))
+        .map((exchange) => ({
+          href: `/${locale}/exchanges/${exchange.slug}`,
+          title: exchange.name,
+          body: t(exchange.summary, locale),
+        }));
   const breadcrumbLd = breadcrumbJsonLd([
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
     { name: guideTitle, item: withLocalePath(locale, `/routes/${guide.slug}`) },
   ]);
   const faqLd = guideFaqs.length ? faqJsonLd(guideFaqs) : null;
   const pageLd = webPageJsonLd(locale, guide.slug, guideTitle, guideSummary, latestDataIso);
+  const relatedProfilesLd = relatedProfiles.length
+    ? itemListJsonLd(
+        relatedProfiles.map((item) => ({
+          name: item.title,
+          url: withLocalePath(locale, item.href.replace(`/${locale}`, '')),
+        })),
+        guide.type === 'cash'
+          ? locale === 'th'
+            ? 'โปรไฟล์ร้านแลกเงินที่เกี่ยวข้อง'
+            : locale === 'zh'
+              ? '相关换汇品牌'
+              : 'Related money changer profiles'
+          : locale === 'th'
+            ? 'โปรไฟล์แพลตฟอร์มที่เกี่ยวข้อง'
+            : locale === 'zh'
+              ? '相关交易所资料页'
+              : 'Related exchange profiles',
+      )
+    : null;
 
   return (
     <div className="space-y-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {faqLd ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} /> : null}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }} />
+      {relatedProfilesLd ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(relatedProfilesLd) }} /> : null}
       <section className="frontend-hero overflow-hidden p-6 sm:p-8 lg:p-10">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div className="space-y-5">
@@ -258,6 +295,61 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
                 <h2 className="text-lg font-semibold text-white">{item.question}</h2>
                 <p className="mt-3 text-sm text-stone-300">{item.answer}</p>
               </div>
+            ))}
+          </div>
+        </Section>
+      ) : null}
+
+      {relatedProfiles.length ? (
+        <Section
+          title={guide.type === 'cash'
+            ? locale === 'th'
+              ? 'โปรไฟล์ร้านแลกเงินที่ควรดูต่อ'
+              : locale === 'zh'
+                ? '下一步最该看的换汇品牌页'
+                : locale === 'ja'
+                  ? '次に見るべき両替ブランド'
+                  : locale === 'ko'
+                    ? '다음에 볼 환전 브랜드'
+                    : locale === 'de'
+                      ? 'Nächste Wechselstuben-Profile'
+                      : 'Money changer profiles to check next'
+            : locale === 'th'
+              ? 'โปรไฟล์แพลตฟอร์มที่ควรดูต่อ'
+              : locale === 'zh'
+                ? '下一步最该看的交易所资料页'
+                : locale === 'ja'
+                  ? '次に見るべき取引所プロフィール'
+                  : locale === 'ko'
+                    ? '다음에 볼 거래소 프로필'
+                    : locale === 'de'
+                      ? 'Nächste Börsenprofile'
+                      : 'Exchange profiles to check next'}
+          description={guide.type === 'cash'
+            ? locale === 'th'
+              ? 'ส่วนนี้ช่วยเชื่อมจาก route intent ไปยังโปรไฟล์ร้านจริง เช่น SIA Money Exchange และแบรนด์สำคัญอื่นในกรุงเทพ'
+              : locale === 'zh'
+                ? '这一组品牌页把路线意图继续推进到真实的曼谷换汇实体页。'
+                : 'These profile pages help cash-route visitors move into real Bangkok money changer entity pages such as SIA Money Exchange.'
+            : locale === 'th'
+              ? 'ส่วนนี้ช่วยเชื่อมจาก route intent ไปยังหน้าโปรไฟล์แพลตฟอร์มจริง'
+              : locale === 'zh'
+                ? '这一组资料页把路线意图继续推进到真实的交易所实体页。'
+                : 'These profile pages help crypto-route visitors move into real Thailand crypto exchange entity pages.'}
+        >
+          <div className="grid gap-4 md:grid-cols-3">
+            {relatedProfiles.map((item) => (
+              <TrackLink
+                key={item.href}
+                href={item.href}
+                eventName="route_guide_related_profile_click"
+                eventParams={{ route: guide.slug, href: item.href, type: guide.type }}
+                className="card card-interactive p-5"
+              >
+                <p className="text-sm text-stone-400">{guide.type === 'cash' ? 'Money changer profile' : 'Exchange profile'}</p>
+                <h2 className="mt-2 text-lg font-semibold text-white">{item.title}</h2>
+                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
+              </TrackLink>
             ))}
           </div>
         </Section>
