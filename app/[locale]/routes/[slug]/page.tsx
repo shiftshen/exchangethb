@@ -167,6 +167,18 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
   const guideChecks = localizeList(guide.checks, locale);
   const guideFaqs = guide.faqs ? localizeList(guide.faqs, locale) : [];
   const compareHref = `/${locale}${guide.compareHref}`;
+  const entityHubHref = guide.type === 'cash' ? `/${locale}/money-changers` : `/${locale}/exchanges`;
+  const entityHubLabel = guide.type === 'cash'
+    ? locale === 'th'
+      ? 'ดูหน้ารวมร้านแลกเงิน'
+      : locale === 'zh'
+        ? '查看换汇品牌总览'
+        : 'Browse money changer hub'
+    : locale === 'th'
+      ? 'ดูหน้ารวมแพลตฟอร์ม'
+      : locale === 'zh'
+        ? '查看交易所总览'
+        : 'Browse exchange hub';
   const latestDataTimestamp = latestRouteDataTimestamp(guide.type);
   const latestDataIso = latestDataTimestamp?.toISOString();
   const latestDataLabel = latestDataTimestamp ? new Intl.DateTimeFormat(locale === 'th' ? 'th-TH' : locale === 'zh' ? 'zh-CN' : 'en-US', {
@@ -198,6 +210,7 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
             </div>
             <div className="flex flex-wrap gap-3">
               <TrackLink href={compareHref} eventName="route_guide_compare_click" eventParams={{ route: guide.slug }} className="rounded-full bg-brand-500 px-6 py-3 font-medium text-surface-950 hover:bg-brand-400">{c.compareCta}</TrackLink>
+              <TrackLink href={entityHubHref} eventName="route_guide_entity_hub_click" eventParams={{ route: guide.slug, type: guide.type }} className="rounded-full border border-white/10 bg-surface-800 px-6 py-3 font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{entityHubLabel}</TrackLink>
               <TrackLink href={`/${locale}/legal/methodology`} eventName="route_guide_methodology_click" eventParams={{ route: guide.slug }} className="rounded-full border border-white/10 bg-surface-800 px-6 py-3 font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{c.methodologyCta}</TrackLink>
             </div>
           </div>

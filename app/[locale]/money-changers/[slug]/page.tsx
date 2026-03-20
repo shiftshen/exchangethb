@@ -317,6 +317,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
             <div className="flex flex-wrap gap-3">
               <TrackAnchor href={provider.officialUrl} target="_blank" rel="noreferrer" eventName="affiliate_click" eventParams={{ provider: provider.slug, status: provider.affiliate.status }} className="inline-flex rounded-full bg-brand-500 px-5 py-3 font-semibold text-surface-950 transition hover:bg-brand-400">{c.official}</TrackAnchor>
               <TrackLink href={primaryGuideHref} eventName="cash_provider_compare_click" eventParams={{ provider: provider.slug }} className="inline-flex rounded-full border border-surface-600 px-5 py-3 font-medium text-stone-200 transition hover:border-brand-500 hover:text-brand-300">{c.compareRoute}</TrackLink>
+              <TrackLink href={`/${locale}/money-changers`} eventName="cash_provider_hub_click" eventParams={{ provider: provider.slug }} className="inline-flex rounded-full border border-surface-600 px-5 py-3 font-medium text-stone-200 transition hover:border-brand-500 hover:text-brand-300">{locale === 'th' ? 'ดูหน้ารวมร้านแลกเงิน' : locale === 'zh' ? '查看换汇品牌总览' : 'Browse money changer hub'}</TrackLink>
             </div>
           </div>
           <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">

@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { exchanges } from '@/data/site';
 import { exchangeAdapters } from '@/lib/adapters/exchanges';
-import { TrackAnchor } from '@/components/track-link';
+import { TrackAnchor, TrackLink } from '@/components/track-link';
 import { resolveAffiliateLink } from '@/lib/affiliate';
 import { readAdminConfig } from '@/lib/content-store';
 import { describeMarketSource } from '@/lib/market-data';
@@ -187,7 +187,8 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
             </div>
             <div className="flex flex-wrap gap-3">
               <TrackAnchor href={outboundUrl} target="_blank" rel="noreferrer" eventName="affiliate_click" eventParams={{ exchange: exchange.slug, status: affiliate.effectiveStatus }} className="inline-flex rounded-full bg-brand-500 px-5 py-3 font-semibold text-surface-950 transition hover:bg-brand-400">{c.openTracked}</TrackAnchor>
-              <TrackAnchor href={`/${locale}/crypto?symbol=BTC&amount=0.01&side=buy`} eventName="exchange_detail_compare_click" eventParams={{ exchange: exchange.slug }} className="inline-flex rounded-full border border-surface-600 px-5 py-3 font-medium text-stone-200 transition hover:border-brand-500 hover:text-brand-300">{c.compareRoute}</TrackAnchor>
+              <TrackLink href={`/${locale}/crypto?symbol=BTC&amount=0.01&side=buy`} eventName="exchange_detail_compare_click" eventParams={{ exchange: exchange.slug }} className="inline-flex rounded-full border border-surface-600 px-5 py-3 font-medium text-stone-200 transition hover:border-brand-500 hover:text-brand-300">{c.compareRoute}</TrackLink>
+              <TrackLink href={`/${locale}/exchanges`} eventName="exchange_detail_hub_click" eventParams={{ exchange: exchange.slug }} className="inline-flex rounded-full border border-surface-600 px-5 py-3 font-medium text-stone-200 transition hover:border-brand-500 hover:text-brand-300">{locale === 'th' ? 'ดูหน้ารวมแพลตฟอร์ม' : locale === 'zh' ? '查看交易所总览' : 'Browse exchange hub'}</TrackLink>
             </div>
           </div>
           <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">

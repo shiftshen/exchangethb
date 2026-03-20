@@ -477,6 +477,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     { label: 'EUR→THB', href: `/${locale}/routes/eur-cash-to-thb` },
     { label: 'GBP→THB', href: `/${locale}/routes/gbp-cash-to-thb` },
   ];
+  const exchangeHubLabel = locale === 'th'
+    ? 'ดูหน้ารวมแพลตฟอร์ม'
+    : locale === 'zh'
+      ? '查看全部交易所'
+      : 'Browse all exchanges';
+  const moneyChangerHubLabel = locale === 'th'
+    ? 'ดูหน้ารวมร้านแลกเงิน'
+    : locale === 'zh'
+      ? '查看全部换汇品牌'
+      : 'Browse all money changers';
   const webSiteLd = websiteJsonLd(locale, '', c.heroBody);
   const collectionLd = collectionPageJsonLd(locale, '', c.heroTitle, c.heroBody);
   const breadcrumbLd = breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }]);
@@ -763,24 +773,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {[
               'btc-to-thb',
-              'eth-to-thb',
               'usdt-to-thb',
               'usd-cash-to-thb',
               'eur-cash-to-thb',
-              'gbp-cash-to-thb',
-              'us-to-thailand-money-exchange',
-              'uk-to-thailand-money-exchange',
-              'japan-to-thailand-money-exchange',
-              'germany-to-thailand-money-exchange',
-              'europe-to-thailand-money-exchange',
-              'korea-to-thailand-money-exchange',
               'bangkok-airport-money-exchange-guide',
               'suvarnabhumi-money-exchange-guide',
-              'don-mueang-money-exchange-guide',
               'pratunam-money-exchange-guide',
               'central-bangkok-money-exchange-guide',
-              'sukhumvit-money-exchange-guide',
-              'silom-money-exchange-guide',
               'bangkok-money-changer-near-me-guide',
             ].map((slug) => {
               const guide = routeGuides.find((item) => item.slug === slug);
@@ -806,7 +805,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <Section title={c.trustedTitle} description={c.trustedDescription}>
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="card p-6">
-            <h3 className="text-xl font-semibold text-white">{c.exchangesTitle}</h3>
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="text-xl font-semibold text-white">{c.exchangesTitle}</h3>
+              <TrackLink href={`/${locale}/exchanges`} eventName="homepage_exchange_hub_click" eventParams={{ locale }} className="text-sm font-medium text-brand-300 transition hover:text-brand-200">{exchangeHubLabel}</TrackLink>
+            </div>
             <div className="mt-4 grid gap-3">
               {exchanges.map((exchange) => (
                 <TrackLink key={exchange.slug} href={`/${locale}/exchanges/${exchange.slug}`} eventName="homepage_exchange_profile_click" eventParams={{ exchange: exchange.slug }} className="flex items-center justify-between gap-4 rounded-2xl border border-white/8 bg-surface-800/70 px-4 py-3 transition duration-200 hover:-translate-y-0.5 hover:border-brand-500/40">
@@ -820,7 +822,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             </div>
           </div>
           <div className="card p-6">
-            <h3 className="text-xl font-semibold text-white">{c.changersTitle}</h3>
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="text-xl font-semibold text-white">{c.changersTitle}</h3>
+              <TrackLink href={`/${locale}/money-changers`} eventName="homepage_money_changer_hub_click" eventParams={{ locale }} className="text-sm font-medium text-brand-300 transition hover:text-brand-200">{moneyChangerHubLabel}</TrackLink>
+            </div>
             <div className="mt-4 grid gap-3">
               {publicCashProviders.map((provider) => (
                 <TrackLink key={provider.slug} href={`/${locale}/money-changers/${provider.slug}`} eventName="homepage_money_changer_profile_click" eventParams={{ provider: provider.slug }} className="flex items-center justify-between gap-4 rounded-2xl border border-white/8 bg-surface-800/70 px-4 py-3 transition duration-200 hover:-translate-y-0.5 hover:border-brand-500/40">
