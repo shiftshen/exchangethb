@@ -2,6 +2,7 @@
 node_modules/
 .env
 .env.local
+.secrets/
 package-lock.json
 npm-debug.log*
 tsconfig.tsbuildinfo

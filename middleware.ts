@@ -11,9 +11,14 @@ export function middleware(request: NextRequest) {
   const segments = nextUrl.pathname.split('/').filter(Boolean);
   const firstSegment = segments[0];
 
+  if (firstSegment === 'en' && segments.length === 1) {
+    nextUrl.pathname = '/';
+    return NextResponse.redirect(nextUrl, 308);
+  }
+
   if (firstSegment && isLocale(firstSegment) && !isIndexableLocale(firstSegment)) {
     segments[0] = resolveContentLocale(firstSegment);
-    nextUrl.pathname = `/${segments.join('/')}`;
+    nextUrl.pathname = segments.length === 1 && segments[0] === 'en' ? '/' : `/${segments.join('/')}`;
     return NextResponse.redirect(nextUrl, 308);
   }
 

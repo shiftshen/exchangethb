@@ -1,17 +1,19 @@
 import Link from 'next/link';
 import { navigation, resolveContentLocale, t } from '@/lib/i18n';
+import { localeRoutePath } from '@/lib/seo';
 import { Locale } from '@/lib/types';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { Logo } from '@/components/logo';
 
 export function SiteHeader({ locale }: { locale: Locale }) {
   const hrefLocale = resolveContentLocale(locale);
+  const homeHref = localeRoutePath(hrefLocale);
 
   return (
     <header className="sticky top-0 z-30 border-b border-white/8 bg-surface-950/88 backdrop-blur-xl">
       <div className="container-shell flex flex-col gap-4 py-4">
         <div className="flex items-center justify-between gap-6">
-          <Link href={`/${hrefLocale}`}><Logo /></Link>
+          <Link href={homeHref}><Logo /></Link>
           <div className="hidden min-w-0 flex-1 items-center justify-center lg:flex">
             <div className="flex items-center gap-2 rounded-full border border-brand-500/20 bg-surface-900 px-4 py-2 text-xs font-medium text-stone-300 shadow-soft">
               <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400" />
@@ -27,7 +29,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
             {navigation.map((item) => (
               <Link
                 key={item.href}
-                href={item.href.startsWith('/admin') ? item.href : `/${hrefLocale}${item.href}`}
+                href={item.href.startsWith('/admin') ? item.href : localeRoutePath(hrefLocale, item.href)}
                 className="whitespace-nowrap rounded-full border border-white/8 bg-surface-900 px-4 py-2 hover:border-brand-500/40 hover:text-brand-300"
               >
                 {t(item.label, locale)}
@@ -43,7 +45,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           {navigation.map((item) => (
             <Link
               key={item.href}
-              href={item.href.startsWith('/admin') ? item.href : `/${hrefLocale}${item.href}`}
+              href={item.href.startsWith('/admin') ? item.href : localeRoutePath(hrefLocale, item.href)}
               className="whitespace-nowrap rounded-full border border-white/8 bg-surface-900 px-3 py-1.5 hover:border-brand-500/40 hover:text-brand-300"
             >
               {t(item.label, locale)}

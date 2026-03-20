@@ -16,6 +16,11 @@
     "worker": "tsx worker/index.ts",
     "worker:daemon": "WORKER_LOOP=1 tsx worker/index.ts",
     "health:prod": "bash ./scripts/check-prod-health.sh",
+    "gsc:authorize": "node ./scripts/gsc.mjs authorize",
+    "gsc:sites": "node ./scripts/gsc.mjs sites",
+    "gsc:analytics": "node ./scripts/gsc.mjs search-analytics",
+    "gsc:sitemaps": "node ./scripts/gsc.mjs sitemaps",
+    "gsc:inspect": "node ./scripts/gsc.mjs inspect-url",
     "test:smoke:market": "tsx scripts/smoke-market.ts",
     "test": "vitest run",
     "test:watch": "vitest"

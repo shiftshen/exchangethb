@@ -12,7 +12,11 @@ export const siteUrl = configuredSiteUrl && /^https?:\/\//.test(configuredSiteUr
 export const googleSiteVerification = googleVerification || undefined;
 
 export function withLocalePath(locale: Locale, path = '') {
-  return `${siteUrl}/${locale}${path}`;
+  const normalizedPath = !path || path === '/' ? '' : (path.startsWith('/') ? path : `/${path}`);
+  if (locale === 'en' && normalizedPath === '') {
+    return siteUrl;
+  }
+  return `${siteUrl}/${locale}${normalizedPath}`;
 }
 
 export function localeAlternates(path = '') {
@@ -47,7 +51,11 @@ export function localeRobots(locale: Locale): Metadata['robots'] | undefined {
 }
 
 export function localeRoutePath(locale: Locale, path = '') {
-  return `/${locale}${path}`;
+  const normalizedPath = !path || path === '/' ? '' : (path.startsWith('/') ? path : `/${path}`);
+  if (locale === 'en' && normalizedPath === '') {
+    return '/';
+  }
+  return `/${locale}${normalizedPath}`;
 }
 
 export function breadcrumbJsonLd(items: Array<{ name: string; item: string }>) {

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { resolveContentLocale } from '@/lib/i18n';
+import { localeRoutePath } from '@/lib/seo';
 import { Locale } from '@/lib/types';
 
 const footerCopy = {
@@ -19,9 +20,9 @@ export function SiteFooter({ locale }: { locale: Locale }) {
           <p className="mt-1">{copy.rights}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={`/${hrefLocale}/legal/methodology`}>{copy.methodology}</Link>
-          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={`/${hrefLocale}/legal/disclaimer`}>{copy.disclaimer}</Link>
-          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={`/${hrefLocale}/legal/privacy-policy`}>{copy.privacy}</Link>
+          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/legal/methodology')}>{copy.methodology}</Link>
+          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/legal/disclaimer')}>{copy.disclaimer}</Link>
+          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/legal/privacy-policy')}>{copy.privacy}</Link>
         </div>
       </div>
     </footer>
