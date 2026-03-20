@@ -1,5 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { ReactNode } from 'react';
 import { googleSiteVerification, organizationJsonLd, siteUrl } from '@/lib/seo';
 
@@ -41,10 +42,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
   const organization = organizationJsonLd();
+  const requestHeaders = await headers();
+  const locale = requestHeaders.get('x-resolved-locale');
+  const htmlLang = locale === 'th' || locale === 'zh' || locale === 'en' ? locale : 'en';
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={htmlLang} suppressHydrationWarning>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
         {children}

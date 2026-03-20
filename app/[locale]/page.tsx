@@ -690,8 +690,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       </Section>
 
       <Section
-        title={locale === 'th' ? 'คำถามที่พบบ่อย' : locale === 'zh' ? '常见问题' : locale === 'ja' ? 'よくある質問' : locale === 'ko' ? '자주 묻는 질문' : locale === 'de' ? 'Häufige Fragen' : 'Frequently asked questions'}
-        description={locale === 'th' ? 'ส่วนนี้ช่วยให้ผู้ใช้ใหม่และ search engine เข้าใจขอบเขตของเว็บไซต์ได้เร็วขึ้น' : locale === 'zh' ? '这一部分帮助新用户和搜索引擎更快理解网站用途与边界。' : locale === 'ja' ? 'このセクションは、サイトの役割と境界を新規ユーザーと検索エンジンに明確に伝えるためのものです。' : locale === 'ko' ? '이 섹션은 사이트의 역할과 범위를 신규 사용자와 검색엔진에 더 명확히 전달합니다.' : locale === 'de' ? 'Dieser Abschnitt erklärt neuen Besuchern und Suchmaschinen schneller, wofür die Website gedacht ist.' : 'This section helps new visitors and search engines understand the site scope faster.'}
+        title={locale === 'th' ? 'คำถามที่พบบ่อย' : locale === 'zh' ? '常见问题' : 'Frequently asked questions'}
+        description={locale === 'th' ? 'ส่วนนี้ช่วยให้ผู้ใช้ใหม่และ search engine เข้าใจขอบเขตของเว็บไซต์ได้เร็วขึ้น' : locale === 'zh' ? '这一部分帮助新用户和搜索引擎更快理解网站用途与边界。' : 'This section helps new visitors and search engines understand the site scope faster.'}
       >
         <div className="grid gap-4 lg:grid-cols-3">
           {homeFaqs[locale].map((item) => (
@@ -714,13 +714,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     ? 'เปรียบเทียบ Exchange ไทย, คริปโต และร้านแลกเงินเป็น THB'
     : locale === 'zh'
       ? '泰国加密交易所与曼谷换汇店 THB 比较'
-      : locale === 'ja'
-        ? 'タイバーツ換金の最適ルート比較 | ExchangeTHB'
-        : locale === 'ko'
-          ? '태국 바트로 바꾸는 최적 경로 비교 | ExchangeTHB'
-          : locale === 'de'
-            ? 'Beste Wege in THB | Krypto und Bargeldvergleich'
-            : 'Thailand Crypto Exchange and Bangkok Money Changer Comparison';
+      : 'Thailand Crypto Exchange and Bangkok Money Changer Comparison';
   const description = locale === 'th'
     ? 'เปรียบเทียบ exchange ไทย, ร้านแลกเงินกรุงเทพ และเส้นทางแปลง Crypto เป็น THB พร้อมค่าธรรมเนียม สภาพคล่อง และข้อมูลอ้างอิงที่ตรวจสอบได้'
     : locale === 'zh'

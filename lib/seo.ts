@@ -39,7 +39,7 @@ export function localeMetadataAlternates(locale: Locale, path = ''): NonNullable
 }
 
 export function localeRobots(locale: Locale): Metadata['robots'] | undefined {
-  if (indexableLocales.includes(locale)) return undefined;
+  if (indexableLocales.includes(locale as (typeof indexableLocales)[number])) return undefined;
   return {
     index: false,
     follow: true,

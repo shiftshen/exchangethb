@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { resolveContentLocale } from '@/lib/i18n';
 import { localeRoutePath } from '@/lib/seo';
-import { Locale } from '@/lib/types';
+import { ContentLocale, Locale } from '@/lib/types';
 
 const footerCopy = {
   th: { note: 'ข้อมูลทั้งหมดมีไว้เพื่อการเปรียบเทียบและการอ้างอิงเท่านั้น', rights: 'ExchangeTHB. สงวนลิขสิทธิ์ทุกประการ', methodology: 'วิธีการ', disclaimer: 'ข้อจำกัดความรับผิดชอบ', privacy: 'นโยบายความเป็นส่วนตัว' },
@@ -9,7 +9,7 @@ const footerCopy = {
   zh: { note: '所有信息仅供比较与参考使用。', rights: 'ExchangeTHB 版权所有。', methodology: '方法论', disclaimer: '免责声明', privacy: '隐私政策' },
 };
 
-export function SiteFooter({ locale }: { locale: Locale }) {
+export function SiteFooter({ locale }: { locale: ContentLocale | Locale }) {
   const hrefLocale = resolveContentLocale(locale);
   const copy = footerCopy[hrefLocale];
   return (

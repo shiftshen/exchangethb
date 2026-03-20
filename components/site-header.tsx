@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { navigation, resolveContentLocale, t } from '@/lib/i18n';
 import { localeRoutePath } from '@/lib/seo';
-import { Locale } from '@/lib/types';
+import { ContentLocale, Locale } from '@/lib/types';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { Logo } from '@/components/logo';
 
-export function SiteHeader({ locale }: { locale: Locale }) {
+export function SiteHeader({ locale }: { locale: ContentLocale | Locale }) {
   const hrefLocale = resolveContentLocale(locale);
   const homeHref = localeRoutePath(hrefLocale);
 
@@ -21,7 +21,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <LanguageSwitcher locale={locale} />
+            <LanguageSwitcher locale={hrefLocale} />
           </div>
         </div>
         <div className="hidden items-center justify-between gap-4 lg:flex">

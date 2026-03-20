@@ -12,7 +12,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function IndexPage() {
   return (
     <>
-      <Script id="locale-html-lang" strategy="beforeInteractive">{'document.documentElement.lang = "en";'}</Script>
       <SiteHeader locale="en" />
       <main className="container-shell py-10">
         <LocaleHomePage params={Promise.resolve({ locale: 'en' })} />

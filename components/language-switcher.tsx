@@ -5,14 +5,14 @@ import { usePathname } from 'next/navigation';
 import { trackEvent } from '@/lib/analytics-client';
 import { indexableLocales } from '@/lib/i18n';
 import { localeRoutePath } from '@/lib/seo';
-import { Locale } from '@/lib/types';
+import { ContentLocale } from '@/lib/types';
 
-export function LanguageSwitcher({ locale }: { locale: Locale }) {
+export function LanguageSwitcher({ locale }: { locale: ContentLocale }) {
   const pathname = usePathname();
   const options = indexableLocales;
   const currentPath = pathname || '/';
   const suffix = currentPath === '/' ? '' : (currentPath.replace(/^\/(th|en|zh|ja|ko|de)/, '') || '');
-  const labels: Record<Locale, string> = { th: 'TH', en: 'EN', zh: 'ZH', ja: 'JA', ko: 'KO', de: 'DE' };
+  const labels: Record<ContentLocale, string> = { th: 'TH', en: 'EN', zh: 'ZH' };
 
   return (
     <div className="flex items-center gap-1 rounded-full border border-surface-700 bg-surface-900/90 p-1 text-sm shadow-soft">

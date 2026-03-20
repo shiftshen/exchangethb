@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isIndexableLocale, isLocale, resolveContentLocale } from '@/lib/i18n';
+import { isLegacyLocale, isLocale, resolveContentLocale } from '@/lib/i18n';
 
 function resolveLocale(pathname: string) {
   const firstSegment = pathname.split('/').filter(Boolean)[0];
-  return firstSegment && isLocale(firstSegment) ? resolveContentLocale(firstSegment) : 'en';
+  if (!firstSegment) return 'en';
+  if (isLocale(firstSegment)) return firstSegment;
+  if (isLegacyLocale(firstSegment)) return resolveContentLocale(firstSegment);
+  return 'en';
 }
 
 export function middleware(request: NextRequest) {
@@ -16,14 +19,20 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(nextUrl, 308);
   }
 
-  if (firstSegment && isLocale(firstSegment) && !isIndexableLocale(firstSegment)) {
+  if (firstSegment && isLegacyLocale(firstSegment)) {
     segments[0] = resolveContentLocale(firstSegment);
     nextUrl.pathname = segments.length === 1 && segments[0] === 'en' ? '/' : `/${segments.join('/')}`;
     return NextResponse.redirect(nextUrl, 308);
   }
 
   const locale = resolveLocale(nextUrl.pathname);
-  const response = NextResponse.next();
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-resolved-locale', locale);
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
   response.headers.set('Content-Language', locale);
   return response;
 }

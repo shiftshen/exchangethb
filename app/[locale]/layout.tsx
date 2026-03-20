@@ -21,18 +21,6 @@ const localeMeta = {
     title: '比较换入 THB 路径',
     description: '透明展示 Crypto → THB 与 Cash / FX → THB 的来源状态与回退信息。',
   },
-  ja: {
-    title: 'タイバーツへの交換ルート比較',
-    description: 'Crypto -> THB と Cash / FX -> THB を、データ状態を明示しながら比較します。',
-  },
-  ko: {
-    title: '태국 바트 전환 경로 비교',
-    description: 'Crypto -> THB 및 Cash / FX -> THB 경로를 데이터 상태와 함께 비교합니다.',
-  },
-  de: {
-    title: 'Vergleich von THB-Wechselrouten',
-    description: 'Vergleiche Krypto- und Bargeldrouten in THB mit transparenten Datenstatus-Hinweisen.',
-  },
 } as const;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -67,7 +55,6 @@ export default async function LocaleLayout({ children, params }: { children: Rea
 
   return (
     <>
-      <Script id="locale-html-lang" strategy="beforeInteractive">{`document.documentElement.lang = ${JSON.stringify(locale)};`}</Script>
       <SiteHeader locale={locale} />
       <main className="container-shell py-10">{children}</main>
       <SiteFooter locale={locale} />
