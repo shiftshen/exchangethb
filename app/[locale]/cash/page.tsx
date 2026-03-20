@@ -774,6 +774,41 @@ export default async function CashPage({ params, searchParams }: { params: Promi
       </Section>
 
       {contentLocale === 'en' ? (
+        <Section title="Featured Bangkok money changer profiles" description="These brand pages are useful when users search directly for a money changer name and still need rate, location, and opening-hour context before converting cash to THB.">
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                slug: 'sia',
+                title: 'SIA Money Exchange Bangkok rates and branch guide',
+                body: 'Check SIA Money Exchange rate samples, Pratunam location, opening hours, and compare SIA with other Bangkok money changers.',
+              },
+              {
+                slug: 'superrich-thailand',
+                title: 'SuperRich Thailand Bangkok rate and branch guide',
+                body: 'Review SuperRich Thailand rate context, reference location, and official links before choosing a THB cash exchange stop.',
+              },
+              {
+                slug: 'ratchada',
+                title: 'Ratchada Exchange Bangkok rate and branch guide',
+                body: 'See whether Ratchada Exchange is worth comparing on rate, route convenience, and current data-state quality.',
+              },
+            ].map((item) => (
+              <TrackLink
+                key={item.slug}
+                href={`/${locale}/money-changers/${item.slug}`}
+                eventName="cash_featured_brand_click"
+                eventParams={{ provider: item.slug }}
+                className="card card-interactive p-5"
+              >
+                <h2 className="text-lg font-semibold text-white">{item.title}</h2>
+                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
+              </TrackLink>
+            ))}
+          </div>
+        </Section>
+      ) : null}
+
+      {contentLocale === 'en' ? (
         <Section title="English search questions this page answers" description="These blocks strengthen long-tail relevance for travelers and international users searching for Bangkok cash exchange routes.">
           <div className="grid gap-4 lg:grid-cols-3">
             {[

@@ -6,7 +6,7 @@ import { localizeCashText, localizeScrapeNote } from '@/lib/cash-text';
 import { readAdminConfig } from '@/lib/content-store';
 import { resolveContentLocale, t } from '@/lib/i18n';
 import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
-import { TrackAnchor } from '@/components/track-link';
+import { TrackAnchor, TrackLink } from '@/components/track-link';
 import { Locale } from '@/lib/types';
 import { Pill, Section } from '@/components/ui';
 
@@ -139,6 +139,57 @@ const copy = {
   },
 } as const;
 
+function faqJsonLd(entries: Array<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: entries.map((entry) => ({
+      '@type': 'Question',
+      name: entry.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: entry.answer,
+      },
+    })),
+  };
+}
+
+function financialServiceJsonLd(
+  locale: Locale,
+  provider: { slug: string; name: string; officialUrl: string },
+  branch: {
+    name: string;
+    address: string;
+    mapsUrl: string;
+    hours: string;
+    latitude?: number;
+    longitude?: number;
+  } | undefined,
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FinancialService',
+    name: provider.name,
+    url: withLocalePath(locale, `/money-changers/${provider.slug}`),
+    sameAs: provider.officialUrl,
+    image: withLocalePath('en', '/brand-logo.svg'),
+    areaServed: 'Bangkok',
+    address: branch ? {
+      '@type': 'PostalAddress',
+      streetAddress: branch.address,
+      addressLocality: 'Bangkok',
+      addressCountry: 'TH',
+    } : undefined,
+    openingHours: branch?.hours,
+    geo: branch?.latitude && branch?.longitude ? {
+      '@type': 'GeoCoordinates',
+      latitude: branch.latitude,
+      longitude: branch.longitude,
+    } : undefined,
+    hasMap: branch?.mapsUrl,
+  };
+}
+
 function isGoogleMapsUrl(url: string) {
   return /google\.[^/]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps|maps\.google\.com/i.test(url);
 }
@@ -188,22 +239,72 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
   const c = copy[resolveContentLocale(locale)];
   const reviewModeLabel = reviewMode === 'force_fallback' ? c.modeForceFallback : reviewMode === 'force_live' ? c.modeForceLive : c.modeAuto;
   const rateSummary = scrape?.ok ? c.liveSummary : c.fallbackSummary;
+  const isSia = provider.slug === 'sia';
+  const heroSummary = locale === 'th'
+    ? isSia
+      ? 'SIA Money Exchange เป็นร้านแลกเงินย่านประตูน้ำในกรุงเทพ หน้านี้ช่วยเช็กเรทตัวอย่าง เวลาเปิดทำการ จุดอ้างอิงสาขา และลิงก์ทางการก่อนแลกเงินสดเป็น THB'
+      : t(provider.summary, locale)
+    : locale === 'zh'
+      ? isSia
+        ? '如果你在找 SIA Money Exchange Bangkok，这个页面会集中展示汇率样本、Pratunam 参考位置、营业时间，以及换入 THB 前可用的官网与地图链接。'
+        : t(provider.summary, locale)
+      : isSia
+        ? 'Looking for SIA Money Exchange Bangkok? This page helps you check SIA rate samples, Pratunam branch details, opening hours, and official links before changing cash to THB.'
+        : t(provider.summary, locale);
   const breadcrumbLd = breadcrumbJsonLd([
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
     { name: locale === 'th' ? 'เงินสด/ฟอเร็กซ์เป็นบาท' : locale === 'zh' ? '现金换泰铢' : 'Cash / FX to THB', item: withLocalePath(locale, '/cash') },
     { name: provider.name, item: withLocalePath(locale, `/money-changers/${provider.slug}`) },
   ]);
+  const primaryBranch = branches[0];
+  const faqEntries = locale === 'th'
+    ? isSia
+      ? [
+          { question: 'SIA Money Exchange อยู่ตรงไหนในกรุงเทพ', answer: 'จุดอ้างอิงปัจจุบันของหน้านี้คือสำนักงานใหญ่ SIA Money Exchange ย่านประตูน้ำ พร้อมที่อยู่ เวลาเปิดทำการ และลิงก์แผนที่สำหรับตรวจสอบก่อนเดินทางจริง' },
+          { question: 'หน้านี้มีเรท SIA Money Exchange แบบสดหรือไม่', answer: 'หน้านี้แสดง rate samples พร้อมสถานะแหล่งข้อมูลและเวลาที่สังเกตล่าสุด แต่เรทหน้าร้านจริงควรยืนยันกับผู้ให้บริการอีกครั้งเสมอ' },
+          { question: 'ควรเทียบ SIA กับร้านอื่นอย่างไร', answer: 'ให้ดูเรทตัวอย่าง เวลาเปิดทำการ ระยะอ้างอิง และความสะดวกของเส้นทางร่วมกัน ไม่ควรดูแค่ตัวเลขเรทเพียงอย่างเดียว' },
+        ]
+      : [
+          { question: `${provider.name} อยู่ตรงไหน`, answer: 'หน้านี้รวมจุดอ้างอิงสาขา ลิงก์แผนที่หรือหน้าอ้างอิง และเวลาเปิดทำการเพื่อช่วยตรวจสอบก่อนเดินทางจริง' },
+          { question: 'เรทในหน้านี้ใช้ตัดสินใจได้อย่างไร', answer: 'ใช้เพื่อเปรียบเทียบเส้นทางแลก THB ร่วมกับระยะทาง เวลาเปิดทำการ และสถานะข้อมูล แล้วค่อยยืนยันกับผู้ให้บริการอีกครั้ง' },
+        ]
+    : locale === 'zh'
+      ? isSia
+        ? [
+            { question: 'SIA Money Exchange 在曼谷哪里', answer: '当前数据中的参考点是位于 Pratunam 一带的 SIA Money Exchange HQ，页面提供地址、营业时间和地图链接供你出发前再次确认。' },
+            { question: '这里展示的是 SIA 实时汇率吗', answer: '这里展示的是经过审核的汇率样本和来源状态，最终门店汇率仍应以 SIA 官方页面或现场为准。' },
+            { question: '如何判断 SIA 是否适合换入 THB', answer: '建议把 SIA 与其他曼谷换汇店一起比较，看汇率样本、营业时间、位置和路程是否都适合你。' },
+          ]
+        : [
+            { question: `${provider.name} 在哪里`, answer: '这个页面汇总了品牌参考点、地图或参考页，以及营业时间，帮助你在前往前再次确认。' },
+            { question: '如何使用这里的汇率样本', answer: '应把这里的样本与距离、营业时间和数据状态一起看，再决定是否前往该品牌换入 THB。' },
+          ]
+      : isSia
+        ? [
+            { question: 'What is SIA Money Exchange in Bangkok?', answer: 'SIA Money Exchange is a Bangkok money changer in the Pratunam area. This page shows reference rates, branch details, and official links for THB cash exchange decisions.' },
+            { question: 'Where is SIA Money Exchange located?', answer: 'The current reference location in this dataset is SIA Money Exchange HQ in Pratunam, with address, map link, and opening hours shown on the page.' },
+            { question: 'Is SIA Money Exchange good for THB cash exchange?', answer: 'It can be a practical option, but users should compare SIA with other Bangkok money changers based on rate samples, opening hours, and travel convenience.' },
+            { question: 'Does this page show live SIA Money Exchange rates?', answer: 'It shows reviewed rate samples and source status. Final in-store rates should still be confirmed with SIA directly.' },
+          ]
+        : [
+            { question: `What does this ${provider.name} page show?`, answer: 'It shows reference locations, rate samples, source status, opening hours, and outbound official links for users comparing cash exchange routes into THB.' },
+            { question: `How should I compare ${provider.name} with other Bangkok money changers?`, answer: 'Check the rate sample, source state, location accuracy, opening hours, and route convenience together before choosing a branch.' },
+          ];
+  const faqLd = faqJsonLd(faqEntries);
+  const businessLd = financialServiceJsonLd(locale, provider, primaryBranch);
 
   return (
     <div className="space-y-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(businessLd) }} />
       <section className="card overflow-hidden border-brand-500/20 bg-gradient-to-br from-surface-900 via-surface-850 to-surface-900 p-6 sm:p-8">
         <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
           <div className="space-y-5">
             <Pill>{c.heroKicker}</Pill>
             <div className="space-y-3">
               <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">{provider.name}</h1>
-              <p className="max-w-3xl text-base text-stone-300">{t(provider.summary, locale)}</p>
+              <p className="max-w-3xl text-base text-stone-300">{heroSummary}</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <TrackAnchor href={provider.officialUrl} target="_blank" rel="noreferrer" eventName="affiliate_click" eventParams={{ provider: provider.slug, status: provider.affiliate.status }} className="inline-flex rounded-full bg-brand-500 px-5 py-3 font-semibold text-surface-950 transition hover:bg-brand-400">{c.official}</TrackAnchor>
@@ -269,6 +370,50 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
         </div>
       </Section>
 
+      <Section
+        title={locale === 'th' ? 'คำถามที่คนค้นหาหน้านี้มักอยากรู้' : locale === 'zh' ? '搜索这个品牌时最常见的问题' : 'Questions users ask before choosing this Bangkok money changer'}
+        description={locale === 'th' ? 'ส่วนนี้ช่วยให้ทั้งผู้ใช้และ search engine เข้าใจว่าหน้านี้ตอบเรื่องเรท เวลาเปิดทำการ ตำแหน่ง และการเทียบร้านอื่นอย่างไร' : locale === 'zh' ? '这一部分明确说明页面回答的是汇率、营业时间、位置和与其他曼谷换汇店的比较问题。' : 'This section helps search users understand rates, opening hours, location, and how to compare this provider with other Bangkok money changers.'}
+      >
+        <div className="grid gap-4 lg:grid-cols-2">
+          {faqEntries.map((item) => (
+            <div key={item.question} className="card p-6">
+              <h2 className="text-lg font-semibold text-white">{item.question}</h2>
+              <p className="mt-3 text-sm text-stone-400">{item.answer}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section
+        title={locale === 'th' ? 'ลิงก์ที่ควรเทียบต่อ' : locale === 'zh' ? '继续比较时最有用的入口' : 'Where to compare next'}
+        description={locale === 'th' ? 'หากกำลังเทียบร้านแลกเงินในกรุงเทพ ให้ไหลต่อไปยังหน้าคอมแพร์และคู่มือย่านที่เกี่ยวข้องกับประตูน้ำ' : locale === 'zh' ? '如果你在比较曼谷换汇路径，下面这些入口最接近 Pratunam 与现金换入 THB 的真实决策流程。' : 'If you are deciding between Bangkok money changers, these pages are the closest next step after checking this provider.'}
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          {[
+            {
+              href: `/${locale}/cash?currency=USD&amount=1000&maxDistanceKm=10`,
+              label: locale === 'th' ? 'เทียบ SIA กับร้านอื่นทันที' : locale === 'zh' ? '立即把 SIA 与其他换汇店一起比较' : 'Compare SIA with other Bangkok money changers',
+              body: locale === 'th' ? 'เปิดหน้าคอมแพร์เงินสดพร้อมค่าเริ่มต้นที่ใช้บ่อยที่สุด' : locale === 'zh' ? '直接进入 USD 现金换 THB 的实际比较页。' : 'Open the live USD cash to THB compare flow with a practical starting amount.',
+            },
+            {
+              href: `/${locale}/routes/pratunam-money-exchange-guide`,
+              label: locale === 'th' ? 'คู่มือร้านแลกเงินย่านประตูน้ำ' : locale === 'zh' ? 'Pratunam 换汇路线指南' : 'Pratunam money exchange guide',
+              body: locale === 'th' ? 'เหมาะกับผู้ที่กำลังหาจุดแลกเงินใกล้ย่านประตูน้ำ' : locale === 'zh' ? '适合需要在 Pratunam 一带换入 THB 的用户。' : 'Useful if you are comparing Pratunam-area exchange stops before changing cash to THB.',
+            },
+            {
+              href: `/${locale}/routes/bangkok-money-changer-near-me-guide`,
+              label: locale === 'th' ? 'ร้านแลกเงินใกล้ฉันในกรุงเทพ' : locale === 'zh' ? '曼谷附近换汇店指南' : 'Bangkok money changer near me guide',
+              body: locale === 'th' ? 'ต่อยอดจากการดูแบรนด์ ไปสู่การตัดสินใจตามทำเลและระยะทาง' : locale === 'zh' ? '把品牌搜索继续转成按位置与路程比较的决策。' : 'Turn a brand search into a location-based Bangkok money changer decision.',
+            },
+          ].map((item) => (
+            <TrackLink key={item.href} href={item.href} eventName="money_changer_related_link_click" eventParams={{ provider: provider.slug, href: item.href }} className="card card-interactive p-5">
+              <h2 className="text-lg font-semibold text-white">{item.label}</h2>
+              <p className="mt-3 text-sm text-stone-400">{item.body}</p>
+            </TrackLink>
+          ))}
+        </div>
+      </Section>
+
       <Section title={c.rates} description={c.ratesDesc}>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {rates.map((rate) => {
@@ -307,25 +452,25 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const isSia = provider.slug === 'sia';
   const title = locale === 'th'
     ? isSia
-      ? 'SIA Money Exchange เรทวันนี้และคู่มือร้านแลกเงินกรุงเทพ'
+      ? 'SIA Money Exchange กรุงเทพ | เรท เวลาเปิดทำการ และพิกัดร้านแลกเงิน'
       : `${provider.name} เรทเงินสดและข้อมูลร้านแลกเงินกรุงเทพ`
     : locale === 'zh'
       ? isSia
-        ? 'SIA Money Exchange 汇率与曼谷门店参考'
+        ? 'SIA Money Exchange Bangkok | 汇率、营业时间与门店位置'
         : `${provider.name} 汇率与曼谷换汇门店参考`
       : isSia
-        ? 'SIA Money Exchange Bangkok Rates and Branch Guide'
+        ? 'SIA Money Exchange Bangkok | Rates, Hours, Location, Cash Exchange to THB'
         : `${provider.name} Bangkok rates and branch guide`;
   const description = locale === 'th'
     ? isSia
-      ? 'ดูเรท SIA Money Exchange, จุดอ้างอิงสาขาในกรุงเทพ, เวลาเปิดทำการ และลิงก์หน้าอ้างอิงเพื่อเทียบก่อนแลก THB'
+      ? 'เช็กเรท SIA Money Exchange, เวลาเปิดทำการ, พิกัดย่านประตูน้ำ และลิงก์ทางการก่อนเทียบร้านแลกเงินกรุงเทพเพื่อแลกเป็น THB'
       : `${provider.name} พร้อมเรทตัวอย่าง จุดอ้างอิงสาขาในกรุงเทพ เวลาเปิดทำการ และลิงก์หน้าอ้างอิงก่อนแลก THB`
     : locale === 'zh'
       ? isSia
-        ? '查看 SIA Money Exchange 汇率样本、曼谷门店参考点、营业信息与官网链接，再决定如何换入 THB。'
+        ? '查看 SIA Money Exchange Bangkok 汇率样本、Pratunam 位置、营业时间与官网链接，再决定如何把现金换入 THB，并与其他曼谷换汇店比较。'
         : `查看 ${provider.name} 汇率样本、曼谷门店参考点、营业信息与官网链接，再决定如何换入 THB。`
       : isSia
-        ? 'Check SIA Money Exchange rate samples, Bangkok branch references, opening hours, and official links before converting cash to THB.'
+        ? 'Check SIA Money Exchange Bangkok rate samples, opening hours, Pratunam location, and official site links before changing cash to THB. Compare SIA with other Bangkok money changers.'
         : `Check ${provider.name} rate samples, Bangkok branch references, opening hours, and official links before converting cash to THB.`;
   const path = `/money-changers/${slug}`;
 
@@ -336,7 +481,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     robots: localeRobots(locale),
     keywords: locale === 'en'
       ? isSia
-        ? ['SIA Money Exchange', 'SIA money exchange Bangkok', 'SIA exchange rate', 'Bangkok money changer', 'cash exchange Thailand']
+        ? ['SIA Money Exchange', 'SIA Money Exchange Bangkok', 'SIA exchange', 'SIA exchange rate', 'SIA branch guide', 'Bangkok money changer', 'cash exchange Thailand', 'Pratunam money exchange']
         : [`${provider.name} Bangkok`, `${provider.name} exchange rate`, 'Bangkok money changer', 'cash exchange Thailand']
       : undefined,
     openGraph: {

@@ -79,7 +79,7 @@ const copy = {
     startCnyCash: 'แลกเงินสด 5000 CNY',
     missionEyebrow: 'เหตุผลที่คนใช้หน้านี้',
     missionTitle: 'ตัดสินใจก่อนออกไปยังแพลตฟอร์มหรือร้านจริง',
-    missionBody: 'ดูต้นทุนรวม ค่าธรรมเนียม ความลึกของตลาด สถานะข้อมูล และลิงก์ออกจริงในหน้าที่ออกแบบมาเพื่อการตัดสินใจ ไม่ใช่หน้าแสดงตัวเลขอย่างเดียว',
+    missionBody: 'ดูต้นทุนรวม ค่าธรรมเนียม ความลึกของตลาด สถานะข้อมูล ร้านแลกเงินกรุงเทพ และลิงก์ออกจริงในหน้าที่ออกแบบมาเพื่อการตัดสินใจ ไม่ใช่หน้าแสดงตัวเลขอย่างเดียว',
     proofOneTitle: 'ข้อมูลสดที่เปิดสถานะชัด',
     proofOneBody: 'ทุกหน้าระบุ live, hybrid, fallback ให้เห็นตรงๆ',
     proofTwoTitle: 'ลิงก์ออกพร้อมใช้งาน',
@@ -98,8 +98,8 @@ const copy = {
     coverageValue: '{exchangeCount} Exchanges / {cashCount} Cash Brands',
     coverageHint: 'Launch scope is frozen for quality',
     localeTitle: 'Default Locale',
-    localeValue: 'TH',
-    localeHint: 'One-tap switch to EN / 中文',
+    localeValue: 'EN',
+    localeHint: 'One-tap switch to TH / 中文',
     mapsTitle: 'Maps',
     mapsValue: 'Maps / reference',
     mapsHint: 'Open a real map when available, otherwise go to the provider reference page.',
@@ -160,8 +160,8 @@ const copy = {
     coverageValue: '{exchangeCount} 家交易所 / {cashCount} 家现金品牌',
     coverageHint: '首发范围已锁定以保证质量',
     localeTitle: '默认语言',
-    localeValue: 'TH',
-    localeHint: '一键切换 EN / 中文',
+    localeValue: 'ZH',
+    localeHint: '一键切换 TH / EN',
     mapsTitle: '地图',
     mapsValue: '地图 / 参考页',
     mapsHint: '有真实地图就直接跳地图，没有时跳到品牌参考页',
@@ -404,16 +404,19 @@ const homeFaqs = {
     { question: 'ExchangeTHB ใช้ทำอะไร', answer: 'เว็บไซต์นี้ใช้เปรียบเทียบเส้นทางที่คุ้มกว่าสำหรับการเปลี่ยนเป็นเงินบาท ไม่ว่าจะผ่านคริปโตหรือร้านแลกเงินสดในกรุงเทพ' },
     { question: 'เว็บไซต์นี้ทำรายการแทนผู้ใช้หรือไม่', answer: 'ไม่ เว็บไซต์นี้ไม่รับฝากเงิน ไม่ถือครองสินทรัพย์ และไม่เป็นคู่สัญญาในการซื้อขายหรือการแลกเงิน' },
     { question: 'ข้อมูลสดครอบคลุมอะไรบ้าง', answer: 'คริปโตเปรียบเทียบจากแพลตฟอร์มไทยที่รองรับ และเงินสดสดตอนนี้ครอบคลุม USD, CNY, EUR, JPY และ GBP' },
+    { question: 'ถ้ากำลังหาร้านแลกเงินกรุงเทพควรเริ่มจากหน้าไหน', answer: 'เริ่มจากหน้าเปรียบเทียบเงินสดหรือโปรไฟล์ร้านแลกเงิน เช่น SIA Money Exchange และ SuperRich เพื่อเทียบเรท เวลาเปิดทำการ และระยะอ้างอิงก่อนออกเดินทาง' },
   ],
   en: [
     { question: 'What is ExchangeTHB for', answer: 'ExchangeTHB helps users find a stronger path into Thai baht, whether they are comparing crypto routes or Bangkok cash exchange options.' },
     { question: 'Does this site handle transactions', answer: 'No. The site does not custody funds or assets, and it does not execute exchange or trading transactions on behalf of users.' },
     { question: 'What live coverage is available now', answer: 'Crypto comparison uses supported Thai exchanges, and live cash comparison currently covers USD, CNY, EUR, JPY, and GBP.' },
+    { question: 'Where should I start if I need a Bangkok money changer', answer: 'Start with the cash compare page or a brand page like SIA Money Exchange, then compare rate samples, opening hours, and branch location before changing cash to THB.' },
   ],
   zh: [
     { question: 'ExchangeTHB 是做什么的', answer: '这个网站帮助用户比较更划算的泰铢兑换方式，包括加密兑换和曼谷线下现金换汇。' },
     { question: '网站会替用户完成交易吗', answer: '不会。本站不托管资金或资产，也不替用户执行交易或换汇。' },
     { question: '当前有哪些实时支持', answer: '加密比较使用已接入的泰国交易所，实时现金当前覆盖 USD、CNY、EUR、JPY、GBP。' },
+    { question: '如果我要找曼谷换汇店，应该从哪里开始', answer: '可以先看现金比较页，或直接看品牌页如 SIA Money Exchange，再按汇率样本、营业时间和位置决定是否前往。' },
   ],
   ja: [
     { question: 'ExchangeTHB は何のためのサイトですか', answer: '暗号資産ルートやバンコクの現金両替ルートを比較し、より良い THB への入り方を見つけるためのサイトです。' },
@@ -440,7 +443,40 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const coverageValue = c.coverageValue
     .replace('{exchangeCount}', String(exchanges.length))
     .replace('{cashCount}', String(publicCashProviders.length));
-  const homeRouteGuides = routeGuides;
+  const homeRouteGuides = contentLocale === 'en'
+    ? routeGuides
+    : routeGuides.filter((guide) => [
+        'btc-to-thb',
+        'usdt-to-thb',
+        'usd-cash-to-thb',
+        'cny-cash-to-thb',
+        'pratunam-money-exchange-guide',
+        'bangkok-money-changer-near-me-guide',
+        'central-bangkok-money-exchange-guide',
+        'suvarnabhumi-money-exchange-guide',
+      ].includes(guide.slug));
+  const startItems = [
+    { label: c.startBuyBtc, href: `/${locale}/routes/btc-to-thb` },
+    { label: c.startSellUsdt, href: `/${locale}/routes/usdt-to-thb` },
+    {
+      label: contentLocale === 'th' ? 'ซื้อ 0.1 ETH' : contentLocale === 'zh' ? '买入 0.1 ETH' : 'Buy 0.1 ETH',
+      href: `/${locale}/routes/eth-to-thb`,
+    },
+    {
+      label: contentLocale === 'th' ? 'ซื้อ 500 XRP' : contentLocale === 'zh' ? '买入 500 XRP' : 'Buy 500 XRP',
+      href: `/${locale}/routes/xrp-to-thb`,
+    },
+    { label: c.startUsdCash, href: `/${locale}/routes/usd-cash-to-thb` },
+    { label: c.startCnyCash, href: `/${locale}/routes/cny-cash-to-thb` },
+  ];
+  const popularRouteItems = [
+    { label: 'BTC/THB', href: `/${locale}/routes/btc-to-thb` },
+    { label: 'USDT/THB', href: `/${locale}/routes/usdt-to-thb` },
+    { label: 'ETH/THB', href: `/${locale}/routes/eth-to-thb` },
+    { label: 'USD→THB', href: `/${locale}/routes/usd-cash-to-thb` },
+    { label: 'EUR→THB', href: `/${locale}/routes/eur-cash-to-thb` },
+    { label: 'GBP→THB', href: `/${locale}/routes/gbp-cash-to-thb` },
+  ];
   const webSiteLd = websiteJsonLd(locale, '', c.heroBody);
   const breadcrumbLd = breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }]);
   const faqLd = faqJsonLd(homeFaqs[locale]);
@@ -509,20 +545,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
       <Section title={c.startTitle} description={c.startDescription}>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-          {[
-            { label: c.startBuyBtc, href: `/${locale}/crypto?symbol=BTC&amount=0.01&side=buy` },
-            { label: c.startSellUsdt, href: `/${locale}/crypto?symbol=USDT&amount=1000&side=sell` },
-            {
-              label: contentLocale === 'th' ? 'ซื้อ 0.1 ETH' : contentLocale === 'zh' ? '买入 0.1 ETH' : 'Buy 0.1 ETH',
-              href: `/${locale}/crypto?symbol=ETH&amount=0.1&side=buy`,
-            },
-            {
-              label: contentLocale === 'th' ? 'ซื้อ 500 XRP' : contentLocale === 'zh' ? '买入 500 XRP' : 'Buy 500 XRP',
-              href: `/${locale}/crypto?symbol=XRP&amount=500&side=buy`,
-            },
-            { label: c.startUsdCash, href: `/${locale}/cash?currency=USD&amount=1000&maxDistanceKm=10` },
-            { label: c.startCnyCash, href: `/${locale}/cash?currency=CNY&amount=5000&maxDistanceKm=10` },
-          ].map((item) => (
+          {startItems.map((item) => (
             <TrackLink key={item.label} href={item.href} eventName="homepage_prefilled_start_click" eventParams={{ label: item.label }} className="card card-interactive p-5">
               <p className="text-sm text-stone-400">{c.routeLabel}</p>
               <p className="mt-2 text-lg font-semibold text-white">{item.label}</p>
@@ -533,14 +556,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
       <Section title={c.routeTitle} description={c.routeDescription}>
         <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
-          {[
-            { label: 'BTC/THB', href: `/${locale}/crypto?symbol=BTC&amount=0.01&side=buy` },
-            { label: 'USDT/THB', href: `/${locale}/crypto?symbol=USDT&amount=1000&side=buy` },
-            { label: 'ETH/THB', href: `/${locale}/crypto?symbol=ETH&amount=0.1&side=buy` },
-            { label: 'USD→THB', href: `/${locale}/cash?currency=USD&amount=1000&maxDistanceKm=10` },
-            { label: 'EUR→THB', href: `/${locale}/cash?currency=EUR&amount=1000&maxDistanceKm=10` },
-            { label: 'GBP→THB', href: `/${locale}/cash?currency=GBP&amount=500&maxDistanceKm=10` },
-          ].map((route) => (
+          {popularRouteItems.map((route) => (
             <TrackLink key={route.label} href={route.href} eventName="homepage_popular_route_click" eventParams={{ route: route.label }} className="card card-interactive p-5">
               <p className="text-sm text-stone-400">{c.routeLabel}</p>
               <p className="mt-2 text-xl font-semibold text-white">{route.label}</p>
@@ -584,6 +600,111 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           ))}
         </div>
       </Section>
+
+      {contentLocale === 'en' ? (
+        <Section title="Featured Bangkok money changer pages" description="These brand pages help users who search directly for a money changer name move into a clearer compare flow instead of bouncing after one brand query.">
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                slug: 'sia',
+                title: 'SIA Money Exchange Bangkok rates and branch guide',
+                body: 'Check SIA Money Exchange Bangkok location, hours, and rate samples before changing cash to THB.',
+              },
+              {
+                slug: 'superrich-thailand',
+                title: 'SuperRich Thailand Bangkok branch and rate guide',
+                body: 'Compare SuperRich Thailand with other Bangkok money changers using hours, location context, and official links.',
+              },
+              {
+                slug: 'ratchada',
+                title: 'Ratchada Exchange Bangkok branch guide',
+                body: 'Use the Ratchada profile to compare route convenience and rate context before you travel.',
+              },
+            ].map((item) => (
+              <TrackLink
+                key={item.slug}
+                href={`/${locale}/money-changers/${item.slug}`}
+                eventName="homepage_featured_money_changer_click"
+                eventParams={{ provider: item.slug }}
+                className="card card-interactive p-5"
+              >
+                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
+                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
+              </TrackLink>
+            ))}
+          </div>
+        </Section>
+      ) : null}
+
+      {contentLocale === 'th' ? (
+        <Section title="ร้านแลกเงินกรุงเทพที่คนค้นหาบ่อย" description="ส่วนนี้ช่วยให้หน้าไทยมีสัญญาณหัวข้อชัดขึ้นสำหรับคำค้นที่เกี่ยวกับร้านแลกเงินในกรุงเทพและการเทียบก่อนแลก THB">
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                slug: 'sia',
+                title: 'SIA Money Exchange กรุงเทพ',
+                body: 'ดูเรท เวลาเปิดทำการ และพิกัดย่านประตูน้ำก่อนเทียบกับร้านอื่น',
+              },
+              {
+                slug: 'superrich-thailand',
+                title: 'SuperRich Thailand กรุงเทพ',
+                body: 'ดูข้อมูลเรทตัวอย่าง จุดอ้างอิง และลิงก์ทางการก่อนออกเดินทาง',
+              },
+              {
+                slug: 'ratchada',
+                title: 'Ratchada Exchange กรุงเทพ',
+                body: 'ใช้เป็นตัวเลือกเทียบตามเรท ระยะทาง และเวลาเปิดทำการ',
+              },
+            ].map((item) => (
+              <TrackLink
+                key={item.slug}
+                href={`/${locale}/money-changers/${item.slug}`}
+                eventName="homepage_featured_money_changer_click"
+                eventParams={{ provider: item.slug }}
+                className="card card-interactive p-5"
+              >
+                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
+                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
+              </TrackLink>
+            ))}
+          </div>
+        </Section>
+      ) : null}
+
+      {contentLocale === 'zh' ? (
+        <Section title="常被搜索的曼谷换汇品牌页" description="这组入口让中文页面更明确承接曼谷换汇店与品牌词搜索，再导向真实比较流程。">
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                slug: 'sia',
+                title: 'SIA Money Exchange Bangkok 汇率与门店指南',
+                body: '先看 SIA 的位置、营业时间和汇率样本，再决定是否换入 THB。',
+              },
+              {
+                slug: 'superrich-thailand',
+                title: 'SuperRich Thailand 曼谷门店与汇率指南',
+                body: '适合先看品牌，再进入现金比较流程。',
+              },
+              {
+                slug: 'ratchada',
+                title: 'Ratchada Exchange 曼谷门店指南',
+                body: '从品牌页继续比较路线便利度与汇率样本。',
+              },
+            ].map((item) => (
+              <TrackLink
+                key={item.slug}
+                href={`/${locale}/money-changers/${item.slug}`}
+                eventName="homepage_featured_money_changer_click"
+                eventParams={{ provider: item.slug }}
+                className="card card-interactive p-5"
+              >
+                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
+                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
+              </TrackLink>
+            ))}
+          </div>
+        </Section>
+      ) : null}
 
       {contentLocale === 'en' ? (
         <Section title="Who this site is built for" description="English search traffic is the fastest path to international discovery, so the homepage now explains the real use cases more clearly.">
@@ -711,23 +832,25 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   if (!isLocale(locale)) return {};
   const contentLocale = resolveContentLocale(locale);
   const title = locale === 'th'
-    ? 'เปรียบเทียบ Exchange ไทย, คริปโต และร้านแลกเงินเป็น THB'
+    ? 'เปรียบเทียบ Exchange ไทย คริปโต และร้านแลกเงินกรุงเทพเป็น THB'
     : locale === 'zh'
-      ? '泰国加密交易所与曼谷换汇店 THB 比较'
+      ? '泰国加密交易所、曼谷换汇店与 THB 路线比较'
       : 'Thailand Crypto Exchange and Bangkok Money Changer Comparison';
   const description = locale === 'th'
-    ? 'เปรียบเทียบ exchange ไทย, ร้านแลกเงินกรุงเทพ และเส้นทางแปลง Crypto เป็น THB พร้อมค่าธรรมเนียม สภาพคล่อง และข้อมูลอ้างอิงที่ตรวจสอบได้'
+    ? 'เปรียบเทียบ exchange ไทย ร้านแลกเงินกรุงเทพ และเส้นทางแปลงคริปโตเป็น THB พร้อมค่าธรรมเนียม สภาพคล่อง เวลาเปิดทำการ และลิงก์อ้างอิงของแต่ละร้าน'
     : locale === 'zh'
-      ? '比较泰国加密交易所、曼谷换汇店与 THB 兑换路径，查看手续费、流动性、营业信息与参考链接。'
+      ? '比较泰国加密交易所、曼谷换汇店与 THB 兑换路径，查看手续费、流动性、营业时间、品牌页与参考链接。'
       : 'Compare Thailand crypto exchanges, Bangkok money changers, and THB conversion routes with fees, liquidity, opening hours, and source-backed reference links.';
   return {
     title,
     description,
     alternates: localeMetadataAlternates(locale),
     robots: localeRobots(locale),
-    keywords: locale === 'en'
-      ? ['Thailand crypto exchange', 'Bangkok money changer', 'cash exchange Thailand', 'Thailand exchange rates', 'crypto to THB', 'money exchange Bangkok', 'THB conversion', 'SIA money exchange']
-      : undefined,
+    keywords: locale === 'th'
+      ? ['ร้านแลกเงินกรุงเทพ', 'เปรียบเทียบ exchange ไทย', 'คริปโตเป็นบาท', 'แลกเงินเป็น THB', 'SIA Money Exchange']
+      : locale === 'zh'
+        ? ['曼谷换汇店', '泰国加密交易所', '换入 THB', 'SIA Money Exchange Bangkok']
+        : ['Thailand crypto exchange', 'Bangkok money changer', 'cash exchange Thailand', 'Thailand exchange rates', 'crypto to THB', 'money exchange Bangkok', 'THB conversion', 'SIA money exchange'],
     openGraph: {
       title,
       description,
