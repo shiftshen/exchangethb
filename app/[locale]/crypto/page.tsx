@@ -3,13 +3,14 @@ import { AutoSubmitForm } from '@/components/auto-submit-form';
 import { TrackButton } from '@/components/track-button';
 import { TrackAnchor, TrackLink } from '@/components/track-link';
 import { ChoiceChip, Pill, Section } from '@/components/ui';
+import { exchanges } from '@/data/site';
 import { formatDisplayAmount, formatInputAmount, inspectPositiveDecimal } from '@/lib/amounts';
 import { compareCrypto } from '@/lib/compare';
 import { localizeExchangeLicense } from '@/lib/exchange-text';
 import { resolveContentLocale, t } from '@/lib/i18n';
 import { localizeMarketFallbackReason, localizeMarketFreshness, localizeMarketSource } from '@/lib/market-text';
 import { routeGuides } from '@/lib/route-guides';
-import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, itemListJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { CryptoSymbol, Locale } from '@/lib/types';
 
 function faqJsonLd(entries: ReadonlyArray<{ question: string; answer: string }>) {
@@ -355,11 +356,24 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
     { name: c.title, item: withLocalePath(locale, '/crypto') },
   ]);
   const faqLd = faqJsonLd(cryptoFaqs[locale]);
+  const exchangeListLd = itemListJsonLd(
+    exchanges.map((exchange) => ({
+      name: exchange.name,
+      url: withLocalePath(locale, `/exchanges/${exchange.slug}`),
+    })),
+    contentLocale === 'th' ? 'แพลตฟอร์มคริปโตที่เกี่ยวข้อง' : contentLocale === 'zh' ? '相关交易所列表' : 'Related Thai exchange profiles',
+  );
+  const exchangeHubLabel = contentLocale === 'th'
+    ? 'ดูหน้ารวมแพลตฟอร์ม'
+    : contentLocale === 'zh'
+      ? '查看交易所总览'
+      : 'Browse exchange hub';
 
   return (
     <div className="space-y-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(exchangeListLd) }} />
       <Section title={c.title} description={c.description}>
         <div className="grid gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
           <div className="card overflow-hidden border-brand-500/20 bg-gradient-to-br from-surface-900 via-surface-850 to-surface-900">
@@ -638,6 +652,30 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
       ) : null}
 
       <Section
+        title={contentLocale === 'th' ? 'โปรไฟล์แพลตฟอร์มที่เกี่ยวข้อง' : contentLocale === 'zh' ? '相关交易所详情页' : 'Related exchange profiles'}
+        description={contentLocale === 'th' ? 'หน้าคอมแพร์นี้ควรพาผู้ใช้ต่อไปยังหน้ารายละเอียดของแต่ละแพลตฟอร์ม เพื่อดูค่าธรรมเนียม ความเสี่ยง และลิงก์ทางการก่อนตัดสินใจ' : contentLocale === 'zh' ? '比较页之后，用户通常还需要进入交易所详情页，查看费用、风险和官网跳转信息。' : 'After comparing routes here, users often still need the exchange profile page for fees, risks, and the outbound official link.'}
+      >
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {exchanges.map((exchange) => (
+            <TrackLink
+              key={exchange.slug}
+              href={`/${locale}/exchanges/${exchange.slug}`}
+              eventName="crypto_exchange_profile_hub_click"
+              eventParams={{ exchange: exchange.slug }}
+              className="card card-interactive p-5"
+            >
+              <p className="text-sm text-stone-400">{localizeExchangeLicense(exchange.license, locale)}</p>
+              <h2 className="mt-2 text-lg font-semibold text-white">{exchange.name}</h2>
+              <p className="mt-3 text-sm text-stone-400">{t(exchange.summary, locale)}</p>
+            </TrackLink>
+          ))}
+        </div>
+        <div>
+          <TrackLink href={`/${locale}/exchanges`} eventName="crypto_exchange_hub_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{exchangeHubLabel}</TrackLink>
+        </div>
+      </Section>
+
+      <Section
         title={contentLocale === 'th' ? 'เส้นทางคริปโตที่เกี่ยวข้อง' : contentLocale === 'zh' ? '相关加密路线页' : 'Related crypto route guides'}
         description={contentLocale === 'th' ? 'หน้าพวกนี้ช่วยรองรับคำค้นเฉพาะของแต่ละเหรียญ แล้วพาผู้ใช้กลับเข้ามายัง flow เปรียบเทียบจริง' : contentLocale === 'zh' ? '这些页面承接更具体的币种搜索，再把用户带回真实比较流程。' : 'These landing pages target specific coin-to-THB search intent and feed users back into the live Thai comparison flow.'}
       >
@@ -656,8 +694,9 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
             </TrackLink>
           ))}
         </div>
-        <div>
+        <div className="flex flex-wrap gap-3">
           <TrackLink href={`/${locale}/routes`} eventName="crypto_route_index_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{c.routeIndex}</TrackLink>
+          <TrackLink href={`/${locale}/exchanges`} eventName="crypto_route_hub_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{exchangeHubLabel}</TrackLink>
         </div>
       </Section>
 

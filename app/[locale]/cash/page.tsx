@@ -10,7 +10,7 @@ import { compareCashLive } from '@/lib/cash-live';
 import { localizeCashText } from '@/lib/cash-text';
 import { resolveContentLocale, t } from '@/lib/i18n';
 import { routeGuides } from '@/lib/route-guides';
-import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, itemListJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
 import { CurrencyCode, Locale } from '@/lib/types';
 
 function faqJsonLd(entries: ReadonlyArray<{ question: string; answer: string }>) {
@@ -469,11 +469,24 @@ export default async function CashPage({ params, searchParams }: { params: Promi
     { name: c.title, item: withLocalePath(locale, '/cash') },
   ]);
   const faqLd = faqJsonLd(cashFaqs[locale]);
+  const moneyChangerListLd = itemListJsonLd(
+    publicCashProviders.map((provider) => ({
+      name: provider.name,
+      url: withLocalePath(locale, `/money-changers/${provider.slug}`),
+    })),
+    contentLocale === 'th' ? 'ร้านแลกเงินกรุงเทพที่เกี่ยวข้อง' : contentLocale === 'zh' ? '相关换汇品牌' : 'Related Bangkok money changer profiles',
+  );
+  const moneyChangerHubLabel = contentLocale === 'th'
+    ? 'ดูหน้ารวมร้านแลกเงิน'
+    : contentLocale === 'zh'
+      ? '查看换汇品牌总览'
+      : 'Browse money changer hub';
 
   return (
     <div className="space-y-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(moneyChangerListLd) }} />
       <Section title={c.title} description={c.description}>
         <div className="grid gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
           <div className="card overflow-hidden border-brand-500/20 bg-gradient-to-br from-surface-900 via-surface-850 to-surface-900">
@@ -805,6 +818,9 @@ export default async function CashPage({ params, searchParams }: { params: Promi
               </TrackLink>
             ))}
           </div>
+          <div>
+            <TrackLink href={`/${locale}/money-changers`} eventName="cash_money_changer_hub_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{moneyChangerHubLabel}</TrackLink>
+          </div>
         </Section>
       ) : null}
 
@@ -853,8 +869,9 @@ export default async function CashPage({ params, searchParams }: { params: Promi
             </TrackLink>
           ))}
         </div>
-        <div>
+        <div className="flex flex-wrap gap-3">
           <TrackLink href={`/${locale}/routes`} eventName="cash_route_index_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{c.routeIndex}</TrackLink>
+          <TrackLink href={`/${locale}/money-changers`} eventName="cash_route_hub_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{moneyChangerHubLabel}</TrackLink>
         </div>
       </Section>
 
