@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import { TrackLink } from '@/components/track-link';
 import { Locale } from '@/lib/types';
 import { t } from '@/lib/i18n';
 import { localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
@@ -146,6 +147,43 @@ export default async function LegalPage({ params }: { params: Promise<{ locale: 
   const { locale, slug } = await params;
   const page = legalPages[slug];
   if (!page) notFound();
+  const continueTitle = locale === 'th'
+    ? 'หน้าหลักที่ควรอ่านต่อ'
+    : locale === 'zh'
+      ? '建议继续查看的主页面'
+      : 'Core pages to continue with';
+  const continueDescription = locale === 'th'
+    ? 'หลังจากอ่านกฎหมายและวิธีการแล้ว คุณสามารถกลับไปยังหน้าหลักของการเปรียบเทียบหรือหน้ารวมแบรนด์เพื่อเข้าสู่ flow ที่ใช้งานจริง'
+    : locale === 'zh'
+      ? '读完方法论和披露信息后，可以继续进入比较页或品牌总览页，回到真实决策流程。'
+      : 'After reading the legal and methodology layer, continue into the comparison and entity pages that users actually use for THB decisions.';
+  const continueLinks = [
+    {
+      href: `/${locale}/crypto`,
+      label: locale === 'th' ? 'คริปโตเป็นบาท' : locale === 'zh' ? '加密换泰铢' : 'Crypto to THB',
+      body: locale === 'th' ? 'ดูเส้นทางซื้อหรือขายคริปโตเป็น THB พร้อมค่าธรรมเนียมและสภาพคล่อง' : locale === 'zh' ? '查看买入或卖出加密换 THB 的比较结果、费用和深度。' : 'Compare coin-to-THB routes with fees, liquidity, and source state.',
+    },
+    {
+      href: `/${locale}/cash`,
+      label: locale === 'th' ? 'เงินสดเป็นบาท' : locale === 'zh' ? '现金换泰铢' : 'Cash to THB',
+      body: locale === 'th' ? 'เปรียบเทียบร้านแลกเงินกรุงเทพตามเรต เวลาเปิด และระยะอ้างอิง' : locale === 'zh' ? '比较曼谷换汇品牌的汇率、营业时间和参考距离。' : 'Compare Bangkok money changers by rate, hours, and reference distance.',
+    },
+    {
+      href: `/${locale}/routes`,
+      label: locale === 'th' ? 'เส้นทาง THB' : locale === 'zh' ? '路线页' : 'Route Guides',
+      body: locale === 'th' ? 'เปิดหน้ารวมคำค้นหลัก เช่น BTC to THB หรือ USD cash to THB' : locale === 'zh' ? '进入 BTC to THB、USD cash to THB 等高意图路线页总览。' : 'Browse high-intent route guides such as BTC to THB or USD cash to THB.',
+    },
+    {
+      href: `/${locale}/exchanges`,
+      label: locale === 'th' ? 'หน้ารวมแพลตฟอร์ม' : locale === 'zh' ? '交易所总览' : 'Exchange Hub',
+      body: locale === 'th' ? 'ดูหน้ารวม exchange ไทยและหน้าโปรไฟล์รายตัว' : locale === 'zh' ? '查看泰国交易所总览与各实体详情页。' : 'Review the Thai exchange hub and individual profile pages.',
+    },
+    {
+      href: `/${locale}/money-changers`,
+      label: locale === 'th' ? 'หน้ารวมร้านแลกเงิน' : locale === 'zh' ? '换汇品牌总览' : 'Money Changer Hub',
+      body: locale === 'th' ? 'ดูหน้ารวมแบรนด์อย่าง SIA และ SuperRich ก่อนเทียบเส้นทางจริง' : locale === 'zh' ? '先查看 SIA、SuperRich 等品牌总览，再进入真实比较。' : 'Start from the money changer hub before comparing specific Bangkok cash routes.',
+    },
+  ];
 
   return (
     <article className="mx-auto max-w-5xl space-y-10">
@@ -175,6 +213,21 @@ export default async function LegalPage({ params }: { params: Promise<{ locale: 
           </section>
         ))}
       </div>
+
+      <section className="space-y-6 rounded-[2rem] border border-surface-700 bg-surface-900/85 p-8 shadow-soft">
+        <div className="space-y-2">
+          <h2 className="text-2xl font-semibold tracking-tight text-white">{continueTitle}</h2>
+          <p className="max-w-4xl text-stone-300">{continueDescription}</p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {continueLinks.map((item) => (
+            <TrackLink key={item.href} href={item.href} eventName="legal_continue_click" eventParams={{ slug, target: item.href }} className="rounded-[1.5rem] border border-surface-700 bg-surface-850/80 p-5 transition hover:border-brand-500/40 hover:bg-surface-850">
+              <h3 className="text-lg font-semibold text-white">{item.label}</h3>
+              <p className="mt-3 text-sm text-stone-400">{item.body}</p>
+            </TrackLink>
+          ))}
+        </div>
+      </section>
     </article>
   );
 }
