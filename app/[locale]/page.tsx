@@ -6,7 +6,7 @@ import { TrackLink } from '@/components/track-link';
 import { isLocale, resolveContentLocale, t } from '@/lib/i18n';
 import { routeGuides } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
-import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, websiteJsonLd, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, collectionPageJsonLd, itemListJsonLd, localeMetadataAlternates, localeRobots, websiteJsonLd, withLocalePath } from '@/lib/seo';
 import { Pill, Section, StatCard } from '@/components/ui';
 
 function faqJsonLd(entries: ReadonlyArray<{ question: string; answer: string }>) {
@@ -478,13 +478,39 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     { label: 'GBP→THB', href: `/${locale}/routes/gbp-cash-to-thb` },
   ];
   const webSiteLd = websiteJsonLd(locale, '', c.heroBody);
+  const collectionLd = collectionPageJsonLd(locale, '', c.heroTitle, c.heroBody);
   const breadcrumbLd = breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }]);
   const faqLd = faqJsonLd(homeFaqs[locale]);
+  const routeListLd = itemListJsonLd(
+    homeRouteGuides.slice(0, 12).map((guide) => ({
+      name: t(guide.title, locale),
+      url: withLocalePath(locale, `/routes/${guide.slug}`),
+    })),
+    locale === 'th' ? 'เส้นทาง THB แนะนำ' : locale === 'zh' ? '推荐 THB 路线' : 'Featured THB route guides',
+  );
+  const exchangeListLd = itemListJsonLd(
+    exchanges.map((exchange) => ({
+      name: exchange.name,
+      url: withLocalePath(locale, `/exchanges/${exchange.slug}`),
+    })),
+    locale === 'th' ? 'แพลตฟอร์มคริปโตที่แนะนำ' : locale === 'zh' ? '推荐交易所列表' : 'Featured Thai exchanges',
+  );
+  const moneyChangerListLd = itemListJsonLd(
+    publicCashProviders.map((provider) => ({
+      name: provider.name,
+      url: withLocalePath(locale, `/money-changers/${provider.slug}`),
+    })),
+    locale === 'th' ? 'ร้านแลกเงินกรุงเทพที่แนะนำ' : locale === 'zh' ? '推荐曼谷换汇品牌' : 'Featured Bangkok money changers',
+  );
   return (
     <div className="space-y-16">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(routeListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(exchangeListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(moneyChangerListLd) }} />
       <section className="frontend-hero overflow-hidden p-6 sm:p-8 lg:p-10">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-500/70 to-transparent" />
         <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">

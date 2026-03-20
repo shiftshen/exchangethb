@@ -203,6 +203,13 @@ function locationPrecisionLabel(
   return localeCopy.precisionReference;
 }
 
+function routeGuideHref(locale: Locale, providerSlug: string, branchArea?: string) {
+  const area = branchArea?.toLowerCase() || '';
+  if (providerSlug === 'sia' || area.includes('pratunam')) return `/${locale}/routes/pratunam-money-exchange-guide`;
+  if (area.includes('central bangkok')) return `/${locale}/routes/central-bangkok-money-exchange-guide`;
+  return `/${locale}/routes/bangkok-money-changer-near-me-guide`;
+}
+
 async function getScrapeCache() {
   return readCashCache() as Promise<{ generatedAt: string | null; results: Array<{ provider: string; ok: boolean; notes: string[]; rates?: Array<{ providerSlug: string; currency: string; denomination: string; buyRate: number; sellRate: number; observedAt: string; sourceUrl: string; }> }> }>;
 }
@@ -292,6 +299,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
           ];
   const faqLd = faqJsonLd(faqEntries);
   const businessLd = financialServiceJsonLd(locale, provider, primaryBranch);
+  const primaryGuideHref = routeGuideHref(locale, provider.slug, primaryBranch?.area);
 
   return (
     <div className="space-y-12">
@@ -308,7 +316,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
             </div>
             <div className="flex flex-wrap gap-3">
               <TrackAnchor href={provider.officialUrl} target="_blank" rel="noreferrer" eventName="affiliate_click" eventParams={{ provider: provider.slug, status: provider.affiliate.status }} className="inline-flex rounded-full bg-brand-500 px-5 py-3 font-semibold text-surface-950 transition hover:bg-brand-400">{c.official}</TrackAnchor>
-              <TrackAnchor href={`/${locale}/cash?currency=USD&amount=1000&maxDistanceKm=10`} eventName="cash_provider_compare_click" eventParams={{ provider: provider.slug }} className="inline-flex rounded-full border border-surface-600 px-5 py-3 font-medium text-stone-200 transition hover:border-brand-500 hover:text-brand-300">{c.compareRoute}</TrackAnchor>
+              <TrackLink href={primaryGuideHref} eventName="cash_provider_compare_click" eventParams={{ provider: provider.slug }} className="inline-flex rounded-full border border-surface-600 px-5 py-3 font-medium text-stone-200 transition hover:border-brand-500 hover:text-brand-300">{c.compareRoute}</TrackLink>
             </div>
           </div>
           <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
@@ -362,7 +370,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
                     </TrackAnchor>
                   </div>
                   <p className="mt-3 text-sm text-stone-300">{localizeCashText(branch.hours, locale)} · {c.referenceDistance} {branch.distanceKm} km · {locationPrecisionLabel(c, branch.locationPrecision)}</p>
-                  <TrackAnchor href={`/${locale}/cash?currency=USD&amount=1000&maxDistanceKm=${Math.max(1, Math.ceil(branch.distanceKm))}`} eventName="cash_branch_compare_click" eventParams={{ provider: provider.slug, branch: branch.id }} className="mt-3 inline-flex text-sm font-medium text-stone-300 transition hover:text-brand-300">{c.branchDetail}</TrackAnchor>
+                  <TrackLink href={routeGuideHref(locale, provider.slug, branch.area)} eventName="cash_branch_compare_click" eventParams={{ provider: provider.slug, branch: branch.id }} className="mt-3 inline-flex text-sm font-medium text-stone-300 transition hover:text-brand-300">{c.branchDetail}</TrackLink>
                 </div>
               ))}
             </div>
@@ -391,9 +399,9 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
         <div className="grid gap-4 md:grid-cols-3">
           {[
             {
-              href: `/${locale}/cash?currency=USD&amount=1000&maxDistanceKm=10`,
+              href: `/${locale}/routes/usd-cash-to-thb`,
               label: locale === 'th' ? 'เทียบ SIA กับร้านอื่นทันที' : locale === 'zh' ? '立即把 SIA 与其他换汇店一起比较' : 'Compare SIA with other Bangkok money changers',
-              body: locale === 'th' ? 'เปิดหน้าคอมแพร์เงินสดพร้อมค่าเริ่มต้นที่ใช้บ่อยที่สุด' : locale === 'zh' ? '直接进入 USD 现金换 THB 的实际比较页。' : 'Open the live USD cash to THB compare flow with a practical starting amount.',
+              body: locale === 'th' ? 'เปิดหน้า route หลักสำหรับการเทียบ USD เงินสดเป็น THB' : locale === 'zh' ? '直接进入稳定的 USD 现金换 THB 路线页。' : 'Open the main USD cash to THB landing page before drilling into the live compare flow.',
             },
             {
               href: `/${locale}/routes/pratunam-money-exchange-guide`,

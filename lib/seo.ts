@@ -93,3 +93,33 @@ export function websiteJsonLd(locale: Locale, path = '', description?: string) {
     description,
   };
 }
+
+export function collectionPageJsonLd(locale: Locale, path: string, name: string, description?: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name,
+    url: withLocalePath(locale, path),
+    inLanguage: locale,
+    description,
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'ExchangeTHB',
+      url: withLocalePath(locale),
+    },
+  };
+}
+
+export function itemListJsonLd(items: Array<{ name: string; url: string }>, name?: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name,
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: item.url,
+    })),
+  };
+}
