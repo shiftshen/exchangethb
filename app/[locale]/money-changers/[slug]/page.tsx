@@ -5,7 +5,7 @@ import { readCashCache } from '@/lib/cash-cache-store';
 import { localizeCashText, localizeScrapeNote } from '@/lib/cash-text';
 import { readAdminConfig } from '@/lib/content-store';
 import { resolveContentLocale, t } from '@/lib/i18n';
-import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, siteUrl, withLocalePath } from '@/lib/seo';
 import { TrackAnchor, TrackLink } from '@/components/track-link';
 import { Locale } from '@/lib/types';
 import { Pill, Section } from '@/components/ui';
@@ -172,7 +172,7 @@ function financialServiceJsonLd(
     name: provider.name,
     url: withLocalePath(locale, `/money-changers/${provider.slug}`),
     sameAs: provider.officialUrl,
-    image: withLocalePath('en', '/brand-logo.svg'),
+    image: `${siteUrl}/brand-logo.svg`,
     areaServed: 'Bangkok',
     address: branch ? {
       '@type': 'PostalAddress',
