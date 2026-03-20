@@ -91,10 +91,5 @@ export function websiteJsonLd(locale: Locale, path = '', description?: string) {
     url: withLocalePath(locale, path),
     inLanguage: locale,
     description,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: `${withLocalePath(locale)}/crypto?symbol={symbol}&amount={amount}`,
-      'query-input': ['required name=symbol', 'required name=amount'],
-    },
   };
 }
