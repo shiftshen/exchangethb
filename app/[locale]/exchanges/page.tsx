@@ -35,17 +35,17 @@ const copy = {
   },
   en: {
     kicker: 'Exchange index',
-    title: 'All Thai exchanges tracked for THB comparison',
-    description: 'This hub groups every crypto exchange profile used in ExchangeTHB so search engines and users can discover the main entity pages before moving into live THB comparison flows.',
+    title: 'Thailand Crypto Exchanges | Compare Thai Exchanges for THB',
+    description: 'Compare Thailand crypto exchanges by trading fees, supported THB pairs, liquidity context, and latest market updates before moving into a live THB comparison flow.',
     compareCta: 'Open crypto comparison',
     routesCta: 'Browse route guides',
     countLabel: 'Tracked exchanges',
     pairsLabel: 'Supported pairs',
     updatedLabel: 'Latest market update',
     whyTitle: 'Why this hub exists',
-    whyBody: 'This index tells crawlers and users which exchange pages are the primary authority pages on the site, then routes them into the right THB comparison or profile detail next.',
+    whyBody: 'This index gives users one clear place to compare Thailand crypto exchanges before jumping into the exact exchange profile or THB route that matches their trade.',
     listTitle: 'All exchange profiles',
-    listDescription: 'Each profile explains fees, supported THB pairs, source state, and the official outbound link before a user clicks through.',
+    listDescription: 'Each profile explains fees, supported THB pairs, source state, and the official outbound link before a user clicks through to a Thailand crypto exchange.',
     feeLabel: 'Trading fee',
     pairsCardLabel: 'Pairs compared now',
     reviewedLabel: 'Last reviewed',
@@ -270,6 +270,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: C
     description: c.description,
     alternates: localeMetadataAlternates(locale, path),
     robots: localeRobots(locale),
+    keywords: locale === 'en'
+      ? ['Thailand crypto exchange', 'exchange thailand', 'Thai exchange', 'Binance TH', 'Bitkub', 'Upbit Thailand', 'crypto to THB']
+      : undefined,
     openGraph: {
       title: c.title,
       description: c.description,

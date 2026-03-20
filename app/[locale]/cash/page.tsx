@@ -123,8 +123,8 @@ const copy = {
     noResultsBody: 'ลองเพิ่มระยะทางอ้างอิง หรือเปลี่ยนสกุลเงินและจำนวนเงิน',
   },
   en: {
-    title: 'Cash / FX to THB',
-    description: 'Compare Bangkok money changers by rate, distance, denomination, and branch availability.',
+    title: 'Bangkok money changer rates to THB',
+    description: 'Compare money exchange Bangkok options by rate, distance, denomination, branch availability, and estimated cash-to-THB outcome.',
     panel: 'Set your exchange route',
     panelHint: 'Pick the currency, amount, and reference distance. Results refresh automatically.',
     currency: 'Currency',
@@ -158,7 +158,7 @@ const copy = {
     submit: 'Update results',
     submitHint: 'This button is only a fallback. The page recalculates automatically when fields change.',
     autoRefresh: 'Results refresh automatically when you change any field.',
-    summary: 'Review the strongest routes first',
+    summary: 'Review the strongest Bangkok cash routes first',
     summaryHint: 'Balance the rate, data state, and reference distance together.',
     statProviders: 'Providers compared',
     statDistance: 'Distance mode',
@@ -910,7 +910,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
             ? 'Bargeldwechsel zu THB in Bangkok | USD, EUR, JPY, GBP'
             : 'Bangkok Money Changer Rates to THB | USD, EUR, JPY, GBP, CNY';
   const description = locale === 'en'
-    ? 'Compare Bangkok cash exchange rates to THB for USD, EUR, JPY, GBP, and CNY. See branch hours, map links, and estimated best cash-to-baht options.'
+    ? 'Compare Bangkok cash exchange rates to THB for USD, EUR, JPY, GBP, and CNY. See branch hours, map links, SIA and SuperRich profiles, and estimated best cash-to-baht options before changing money in Thailand.'
     : c.description;
   return {
     title,

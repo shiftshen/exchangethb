@@ -94,8 +94,8 @@ const copy = {
     feeLine: 'เทรด {trade} / เครือข่าย {network}',
   },
   en: {
-    title: 'Crypto to THB',
-    description: 'Depth-aware comparison with estimated receive, fees, and compliance context.',
+    title: 'Thailand crypto exchange comparison to THB',
+    description: 'Compare Thailand crypto exchange routes with market depth, estimated receive, fees, and source context before converting into THB.',
     panel: 'Set your crypto route',
     panelHint: 'Pick the coin, direction, and amount. Results refresh automatically.',
     pricingHintBuy: 'Buy mode uses the exchange ask side, and the total payment includes fees.',
@@ -111,7 +111,7 @@ const copy = {
     amountInvalid: 'Enter a normal decimal amount that is at least 0.00000001.',
     compare: 'Update results',
     compareHint: 'This button is only a fallback. The page recalculates automatically when fields change.',
-    summary: 'Review the strongest route first',
+    summary: 'Review the strongest Thailand crypto route first',
     summaryHint: 'Check the estimated outcome, fees, and data state before leaving for the exchange.',
     statMarkets: 'Markets compared',
     statMode: 'Comparison mode',
@@ -733,9 +733,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
           ? '태국 암호화폐 THB 비교 | BTC·ETH·USDT'
           : locale === 'de'
             ? 'Krypto zu THB Vergleich in Thailand | BTC, ETH, USDT'
-            : 'Thailand Crypto Exchange to THB Comparison | BTC, ETH, USDT, XRP, SOL';
+            : 'Thailand Crypto Exchange Comparison to THB | BTC, ETH, USDT, XRP, SOL';
   const description = locale === 'en'
-    ? 'Compare Thailand crypto exchanges for BTC, ETH, USDT, XRP, DOGE, and SOL to THB. Review estimated baht received, fees, and market depth before converting.'
+    ? 'Compare Thailand crypto exchange routes for BTC, ETH, USDT, XRP, DOGE, and SOL to THB. Review estimated baht received, fees, market depth, and exchange profile context before converting.'
     : c.description;
   return {
     title,

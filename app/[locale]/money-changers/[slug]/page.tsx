@@ -256,8 +256,11 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
         ? '如果你在找 SIA Money Exchange Bangkok，这个页面会集中展示汇率样本、Pratunam 参考位置、营业时间，以及换入 THB 前可用的官网与地图链接。'
         : t(provider.summary, locale)
       : isSia
-        ? 'Looking for SIA Money Exchange Bangkok? This page helps you check SIA rate samples, Pratunam branch details, opening hours, and official links before changing cash to THB.'
+        ? 'SIA Money Exchange is a Bangkok money changer in Pratunam, also searched as SIA Exchange. This page shows SIA rate samples, branch location, opening hours, map links, and official site details before changing cash to THB in Thailand.'
         : t(provider.summary, locale);
+  const providerDescription = locale === 'en' && isSia
+    ? 'SIA Money Exchange Bangkok is a Pratunam money changer with reviewed rate samples, opening hours, map access, and direct links for cash-to-THB decisions.'
+    : t(provider.summary, locale);
   const breadcrumbLd = breadcrumbJsonLd([
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
     { name: locale === 'th' ? 'เงินสด/ฟอเร็กซ์เป็นบาท' : locale === 'zh' ? '现金换泰铢' : 'Cash / FX to THB', item: withLocalePath(locale, '/cash') },
@@ -289,7 +292,9 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
       : isSia
         ? [
             { question: 'What is SIA Money Exchange in Bangkok?', answer: 'SIA Money Exchange is a Bangkok money changer in the Pratunam area. This page shows reference rates, branch details, and official links for THB cash exchange decisions.' },
+            { question: 'Is SIA Money Exchange the same as SIA Exchange?', answer: 'Yes. Searchers often shorten the brand to SIA Exchange, but this page is about SIA Money Exchange in Bangkok and its Pratunam reference location.' },
             { question: 'Where is SIA Money Exchange located?', answer: 'The current reference location in this dataset is SIA Money Exchange HQ in Pratunam, with address, map link, and opening hours shown on the page.' },
+            { question: 'What are SIA Money Exchange Bangkok opening hours?', answer: 'The current reference hours on this page are shown for the Pratunam location. Always confirm the latest opening hours with SIA before visiting.' },
             { question: 'Is SIA Money Exchange good for THB cash exchange?', answer: 'It can be a practical option, but users should compare SIA with other Bangkok money changers based on rate samples, opening hours, and travel convenience.' },
             { question: 'Does this page show live SIA Money Exchange rates?', answer: 'It shows reviewed rate samples and source status. Final in-store rates should still be confirmed with SIA directly.' },
           ]
@@ -340,7 +345,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
         </div>
       </section>
 
-      <Section title={provider.name} description={t(provider.summary, locale)}>
+      <Section title={provider.name} description={providerDescription}>
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="card p-6">
             <Pill>{c.coverage}</Pill>
@@ -468,7 +473,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
         ? 'SIA Money Exchange Bangkok | 汇率、营业时间与门店位置'
         : `${provider.name} 汇率与曼谷换汇门店参考`
       : isSia
-        ? 'SIA Money Exchange Bangkok | Rates, Hours, Location, Cash Exchange to THB'
+        ? 'SIA Money Exchange Bangkok Pratunam | Rates, Hours, Map, Cash to THB'
         : `${provider.name} Bangkok rates and branch guide`;
   const description = locale === 'th'
     ? isSia
@@ -479,7 +484,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
         ? '查看 SIA Money Exchange Bangkok 汇率样本、Pratunam 位置、营业时间与官网链接，再决定如何把现金换入 THB，并与其他曼谷换汇店比较。'
         : `查看 ${provider.name} 汇率样本、曼谷门店参考点、营业信息与官网链接，再决定如何换入 THB。`
       : isSia
-        ? 'Check SIA Money Exchange Bangkok rate samples, opening hours, Pratunam location, and official site links before changing cash to THB. Compare SIA with other Bangkok money changers.'
+        ? 'Check SIA Money Exchange Bangkok Pratunam rate samples, opening hours, map links, and official site details before changing cash to THB in Thailand. Compare SIA with other Bangkok money changers.'
         : `Check ${provider.name} rate samples, Bangkok branch references, opening hours, and official links before converting cash to THB.`;
   const path = `/money-changers/${slug}`;
 

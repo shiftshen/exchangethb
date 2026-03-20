@@ -88,12 +88,12 @@ const copy = {
     proofThreeBody: 'เปิดหน้าแล้วมี route พร้อมเทียบ ไม่ต้องเริ่มจากศูนย์',
   },
   en: {
-    heroKicker: 'Find a better path into Thai baht',
-    heroTitle: 'Compare crypto and money changers in one decision-friendly flow',
-    heroBody: 'ExchangeTHB compares estimated receive, fees, depth, central-Bangkok reference distance, and opening hours in one place.',
+    heroKicker: 'Thailand crypto exchange and Bangkok money changer search',
+    heroTitle: 'Compare Thailand crypto exchanges and Bangkok money changers for THB',
+    heroBody: 'ExchangeTHB helps you compare Thailand crypto exchange routes, Bangkok money changer rates, fees, distance, and opening hours before you convert into THB.',
     primary: 'Compare crypto',
     secondary: 'Compare cash / FX',
-    trust: 'Built on official APIs, official websites, and a reviewed rules engine.',
+    trust: 'Built on official Thai exchange APIs, official provider sites, and a reviewed rules engine.',
     coverageTitle: 'Coverage',
     coverageValue: '{exchangeCount} Exchanges / {cashCount} Cash Brands',
     coverageHint: 'Launch scope is frozen for quality',
@@ -107,13 +107,13 @@ const copy = {
     complianceValue: 'Estimated only',
     complianceHint: 'Never presented as guaranteed execution',
     quickTitle: 'Quick compare',
-    quickDescription: 'Choose the path that fits your next conversion decision.',
+    quickDescription: 'Choose the Thailand crypto or Bangkok cash route that fits your next THB conversion.',
     cryptoCardTitle: 'Depth-aware exchange comparison',
     cryptoCardBody: 'BTC, ETH, USDT, XRP, DOGE, SOL with fee breakdowns and estimated receive.',
-    cashCardTitle: 'Bangkok branch and rate comparison',
-    cashCardBody: 'Best rate, reference-distance ranking, branch hours, and direct map or reference-page links.',
+    cashCardTitle: 'Bangkok money changer comparison',
+    cashCardBody: 'Compare money exchange Bangkok options by best rate, reference-distance ranking, branch hours, and direct map or provider links.',
     routeTitle: 'Popular routes',
-    routeDescription: 'Common starting routes so users can compare faster without starting from zero.',
+    routeDescription: 'Common Thailand crypto exchange and Bangkok cash routes so users can compare faster without starting from zero.',
     routeLabel: 'Popular route',
     trustedTitle: 'Trusted coverage',
     trustedDescription: 'Traceable sources with transparent methodology and visible data-state labels.',
@@ -866,12 +866,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     ? 'เปรียบเทียบ Exchange ไทย คริปโต และร้านแลกเงินกรุงเทพเป็น THB'
     : locale === 'zh'
       ? '泰国加密交易所、曼谷换汇店与 THB 路线比较'
-      : 'Thailand Crypto Exchange and Bangkok Money Changer Comparison';
+      : 'ExchangeTHB | Thailand Crypto Exchange and Bangkok Money Changer Comparison';
   const description = locale === 'th'
     ? 'เปรียบเทียบ exchange ไทย ร้านแลกเงินกรุงเทพ และเส้นทางแปลงคริปโตเป็น THB พร้อมค่าธรรมเนียม สภาพคล่อง เวลาเปิดทำการ และลิงก์อ้างอิงของแต่ละร้าน'
     : locale === 'zh'
       ? '比较泰国加密交易所、曼谷换汇店与 THB 兑换路径，查看手续费、流动性、营业时间、品牌页与参考链接。'
-      : 'Compare Thailand crypto exchanges, Bangkok money changers, and THB conversion routes with fees, liquidity, opening hours, and source-backed reference links.';
+      : 'Compare Thailand crypto exchanges, Bangkok money changers, and cash-to-THB routes with fees, liquidity, opening hours, SIA and exchange profile pages, and source-backed links.';
   return {
     title,
     description,
@@ -881,7 +881,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       ? ['ร้านแลกเงินกรุงเทพ', 'เปรียบเทียบ exchange ไทย', 'คริปโตเป็นบาท', 'แลกเงินเป็น THB', 'SIA Money Exchange']
       : locale === 'zh'
         ? ['曼谷换汇店', '泰国加密交易所', '换入 THB', 'SIA Money Exchange Bangkok']
-        : ['Thailand crypto exchange', 'Bangkok money changer', 'cash exchange Thailand', 'Thailand exchange rates', 'crypto to THB', 'money exchange Bangkok', 'THB conversion', 'SIA money exchange'],
+        : ['Thailand crypto exchange', 'exchange thailand', 'Bangkok money changer', 'cash exchange Thailand', 'Thailand exchange rates', 'crypto to THB', 'money exchange Bangkok', 'THB conversion', 'SIA money exchange', 'SIA money exchange bangkok'],
     openGraph: {
       title,
       description,
