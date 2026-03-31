@@ -8,36 +8,43 @@ const checks = [
     path: '/',
     mustInclude: ['/en/crypto', '/en/cash', '/en/routes', '/en/exchanges', '/en/money-changers'],
     mustMatch: [/@type":"CollectionPage"/, /Featured Thai exchanges/, /Featured Bangkok money changers/],
+    canonical: '/',
   },
   {
     path: '/en/crypto',
     mustInclude: ['/en/exchanges', '/en/exchanges/binance-th', '/en/routes'],
     mustMatch: [/Related exchange profiles/, /Browse exchange hub/, /@type":"ItemList".*Related Thai exchange profiles/],
+    canonical: '/en/crypto',
   },
   {
     path: '/en/cash',
     mustInclude: ['/en/money-changers', '/en/money-changers/sia', '/en/routes'],
     mustMatch: [/Browse money changer hub/, /@type":"ItemList".*Related Bangkok money changer profiles/],
+    canonical: '/en/cash',
   },
   {
     path: '/en/routes',
     mustInclude: ['/en/routes/btc-to-thb', '/en/routes/usd-cash-to-thb'],
     mustMatch: [/All THB route guides in one crawlable index/, /@type":"ItemList"/],
+    canonical: '/en/routes',
   },
   {
     path: '/en/routes/usd-cash-to-thb',
     mustInclude: ['/en/money-changers', '/en/cash?currency=USD'],
     mustMatch: [/Latest data reference/, /@type":"WebPage"/],
+    canonical: '/en/routes/usd-cash-to-thb',
   },
   {
     path: '/en/exchanges',
     mustInclude: ['/en/exchanges/binance-th', '/en/exchanges/bitkub'],
     mustMatch: [/Thailand Crypto Exchanges/, /Compare Thai Exchanges for THB/, /@type":"CollectionPage"/, /@type":"ItemList"/],
+    canonical: '/en/exchanges',
   },
   {
     path: '/en/money-changers',
     mustInclude: ['/en/money-changers/sia', '/en/money-changers/superrich-thailand'],
     mustMatch: [/Bangkok Money Changers/, /Compare Rates, Branches, and Hours/, /@type":"CollectionPage"/, /@type":"ItemList"/],
+    canonical: '/en/money-changers',
   },
   {
     path: '/robots.txt',
@@ -50,6 +57,15 @@ const checks = [
     mustMatch: [/<priority>0\.88<\/priority>/, /<priority>0\.9<\/priority>/, /<lastmod>/],
   },
 ];
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function canonicalUrl(path) {
+  if (!path || path === '/') return baseUrl;
+  return `${baseUrl}${path}`;
+}
 
 async function fetchText(url) {
   const controller = new AbortController();
@@ -86,10 +102,15 @@ async function main() {
 
     const missingIncludes = check.mustInclude.filter((snippet) => !result.text.includes(snippet));
     const missingMatches = check.mustMatch.filter((pattern) => !pattern.test(result.text)).map((pattern) => pattern.toString());
+    const expectedCanonical = check.canonical ? canonicalUrl(check.canonical) : undefined;
+    const canonicalPattern = expectedCanonical
+      ? new RegExp(`<link[^>]+rel=["']canonical["'][^>]+href=["']${escapeRegex(expectedCanonical)}["']`, 'i')
+      : undefined;
+    const canonicalMissing = canonicalPattern ? !canonicalPattern.test(result.text) : false;
 
-    if (missingIncludes.length || missingMatches.length) {
-      failures.push(`${check.path}: missing includes=${missingIncludes.join(', ') || '-'} missing patterns=${missingMatches.join(', ') || '-'}`);
-      console.log(`FAIL ${check.path} includes=${missingIncludes.length} patterns=${missingMatches.length}`);
+    if (missingIncludes.length || missingMatches.length || canonicalMissing) {
+      failures.push(`${check.path}: missing includes=${missingIncludes.join(', ') || '-'} missing patterns=${missingMatches.join(', ') || '-'} canonical=${canonicalMissing ? expectedCanonical : '-'}`);
+      console.log(`FAIL ${check.path} includes=${missingIncludes.length} patterns=${missingMatches.length} canonical=${canonicalMissing ? 'missing' : 'ok'}`);
       continue;
     }
 

@@ -284,9 +284,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: C
     description: c.description,
     alternates: localeMetadataAlternates(locale, path),
     robots: localeRobots(locale),
-    keywords: locale === 'en'
-      ? ['Thailand crypto exchange', 'exchange thailand', 'Thai exchange', 'Binance TH', 'Bitkub', 'Upbit Thailand', 'crypto to THB']
-      : undefined,
+    keywords: locale === 'th'
+      ? ['เว็บเทรดคริปโตไทย', 'เปรียบเทียบ exchange ไทย', 'คริปโตเป็นบาท', 'Binance TH', 'Bitkub', 'Upbit Thailand']
+      : locale === 'zh'
+        ? ['泰国加密交易所', '泰国交易所比较', '加密换泰铢', 'Binance TH', 'Bitkub', 'Upbit Thailand']
+        : ['Thailand crypto exchange', 'exchange thailand', 'Thai exchange', 'Binance TH', 'Bitkub', 'Upbit Thailand', 'crypto to THB'],
     openGraph: {
       title: c.title,
       description: c.description,

@@ -512,11 +512,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     description,
     alternates: localeMetadataAlternates(locale, path),
     robots: localeRobots(locale),
-    keywords: locale === 'en'
+    keywords: locale === 'th'
       ? isSia
-        ? ['SIA Money Exchange', 'SIA Money Exchange Bangkok', 'SIA exchange', 'SIA exchange rate', 'SIA branch guide', 'Bangkok money changer', 'cash exchange Thailand', 'Pratunam money exchange']
-        : [`${provider.name} Bangkok`, `${provider.name} exchange rate`, 'Bangkok money changer', 'cash exchange Thailand']
-      : undefined,
+        ? ['SIA Money Exchange', 'SIA Exchange', 'SIA Money Exchange กรุงเทพ', 'ร้านแลกเงินประตูน้ำ', 'ร้านแลกเงินกรุงเทพ', 'แลกเงินสดเป็น THB']
+        : [`${provider.name} กรุงเทพ`, `${provider.name} ร้านแลกเงิน`, 'ร้านแลกเงินกรุงเทพ', 'แลกเงินสดเป็น THB']
+      : locale === 'zh'
+        ? isSia
+          ? ['SIA Money Exchange Bangkok', 'SIA 换汇', 'SIA Exchange', 'Pratunam 换汇', '曼谷换汇店', '现金换 THB']
+          : [`${provider.name} 曼谷`, `${provider.name} 换汇`, '曼谷换汇店', '现金换 THB']
+        : isSia
+          ? ['SIA Money Exchange', 'SIA Money Exchange Bangkok', 'SIA exchange', 'SIA exchange rate', 'SIA branch guide', 'Bangkok money changer', 'cash exchange Thailand', 'Pratunam money exchange']
+          : [`${provider.name} Bangkok`, `${provider.name} exchange rate`, 'Bangkok money changer', 'cash exchange Thailand'],
     openGraph: {
       title,
       description,

@@ -289,9 +289,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: C
     description: c.description,
     alternates: localeMetadataAlternates(locale, path),
     robots: localeRobots(locale),
-    keywords: locale === 'en'
-      ? ['Bangkok money changer', 'money exchange Bangkok', 'SIA Money Exchange Bangkok', 'SuperRich Thailand', 'cash exchange Thailand', 'Bangkok exchange rates']
-      : undefined,
+    keywords: locale === 'th'
+      ? ['ร้านแลกเงินกรุงเทพ', 'ร้านแลกเงินประตูน้ำ', 'เปรียบเทียบร้านแลกเงิน', 'SIA Money Exchange', 'SuperRich Thailand', 'แลกเงินสดเป็น THB']
+      : locale === 'zh'
+        ? ['曼谷换汇店', '曼谷现金换汇', 'Pratunam 换汇', 'SIA Money Exchange Bangkok', 'SuperRich Thailand', '现金换 THB']
+        : ['Bangkok money changer', 'money exchange Bangkok', 'SIA Money Exchange Bangkok', 'SuperRich Thailand', 'cash exchange Thailand', 'Bangkok exchange rates'],
     openGraph: {
       title: c.title,
       description: c.description,

@@ -18,6 +18,8 @@ const footerCopy = {
     changers: 'ร้านแลกเงิน',
     featured: 'แบรนด์เด่น',
     sia: 'SIA Money Exchange',
+    sitemap: 'Sitemap',
+    llms: 'LLMs / AI',
   },
   en: {
     note: 'All information is for comparison and reference only.',
@@ -33,6 +35,8 @@ const footerCopy = {
     changers: 'Money Changers',
     featured: 'Featured brand',
     sia: 'SIA Money Exchange',
+    sitemap: 'Sitemap',
+    llms: 'LLMs / AI',
   },
   zh: {
     note: '所有信息仅供比较与参考使用。',
@@ -48,6 +52,8 @@ const footerCopy = {
     changers: '换汇品牌',
     featured: '重点品牌',
     sia: 'SIA Money Exchange',
+    sitemap: '站点地图',
+    llms: 'LLMs / AI',
   },
 };
 
@@ -75,6 +81,8 @@ export function SiteFooter({ locale }: { locale: ContentLocale | Locale }) {
           <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/legal/methodology')}>{copy.methodology}</Link>
           <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/legal/disclaimer')}>{copy.disclaimer}</Link>
           <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/legal/privacy-policy')}>{copy.privacy}</Link>
+          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href="/sitemap.xml">{copy.sitemap}</Link>
+          <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href="/llms.txt">{copy.llms}</Link>
           <Link className="rounded-full border border-brand-500/30 px-4 py-2 text-brand-300 transition hover:border-brand-500 hover:text-brand-200" href={localeRoutePath(hrefLocale, '/money-changers/sia')}>{copy.featured}: {copy.sia}</Link>
         </div>
       </div>

@@ -7,7 +7,7 @@ import { stdin as input, stdout as output, stderr } from 'node:process';
 import { spawn } from 'node:child_process';
 
 const DEFAULT_SCOPE = 'https://www.googleapis.com/auth/webmasters';
-const DEFAULT_CLIENT_FILE = process.env.GSC_OAUTH_CLIENT_FILE || '/Users/shift/Downloads/client_secret_2_1037442300148-48g8f6neapthbc977e7bm0qgkicltubo.apps.googleusercontent.com.json';
+const DEFAULT_CLIENT_FILE = process.env.GSC_OAUTH_CLIENT_FILE || '.secrets/gsc-client.json';
 const DEFAULT_TOKEN_FILE = process.env.GSC_OAUTH_TOKEN_FILE || '.secrets/gsc-token.json';
 const DEFAULT_PROPERTY = process.env.GSC_PROPERTY || 'sc-domain:exchangethb.com';
 
@@ -26,6 +26,12 @@ Defaults:
   client file: ${DEFAULT_CLIENT_FILE}
   token file:  ${DEFAULT_TOKEN_FILE}
   property:    ${DEFAULT_PROPERTY}
+
+Optional env fallbacks (if files are missing):
+  GSC_OAUTH_CLIENT_JSON
+  GSC_OAUTH_CLIENT_JSON_B64
+  GSC_OAUTH_TOKEN_JSON
+  GSC_OAUTH_TOKEN_JSON_B64
 `);
 }
 
@@ -74,14 +80,32 @@ function parseInstalledClient(raw) {
 
 async function loadClient(clientFile) {
   const filePath = resolve(clientFile || DEFAULT_CLIENT_FILE);
-  const raw = await readFile(filePath, 'utf8');
-  return { filePath, ...parseInstalledClient(raw) };
+  try {
+    const raw = await readFile(filePath, 'utf8');
+    return { filePath, ...parseInstalledClient(raw) };
+  } catch {
+    const envRaw = process.env.GSC_OAUTH_CLIENT_JSON
+      || (process.env.GSC_OAUTH_CLIENT_JSON_B64 ? Buffer.from(process.env.GSC_OAUTH_CLIENT_JSON_B64, 'base64').toString('utf8') : undefined);
+    if (!envRaw) {
+      throw new Error(`OAuth client JSON not found at ${filePath}. Provide --client, ${DEFAULT_CLIENT_FILE}, or GSC_OAUTH_CLIENT_JSON(_B64).`);
+    }
+    return { filePath: '[env:GSC_OAUTH_CLIENT_JSON]', ...parseInstalledClient(envRaw) };
+  }
 }
 
 async function loadToken(tokenFile) {
   const filePath = resolve(tokenFile || DEFAULT_TOKEN_FILE);
-  const raw = await readFile(filePath, 'utf8');
-  return { filePath, token: JSON.parse(raw) };
+  try {
+    const raw = await readFile(filePath, 'utf8');
+    return { filePath, token: JSON.parse(raw) };
+  } catch {
+    const envRaw = process.env.GSC_OAUTH_TOKEN_JSON
+      || (process.env.GSC_OAUTH_TOKEN_JSON_B64 ? Buffer.from(process.env.GSC_OAUTH_TOKEN_JSON_B64, 'base64').toString('utf8') : undefined);
+    if (!envRaw) {
+      throw new Error(`OAuth token JSON not found at ${filePath}. Provide --token, ${DEFAULT_TOKEN_FILE}, or GSC_OAUTH_TOKEN_JSON(_B64).`);
+    }
+    return { filePath: '[env:GSC_OAUTH_TOKEN_JSON]', token: JSON.parse(envRaw) };
+  }
 }
 
 async function saveToken(tokenFile, token) {

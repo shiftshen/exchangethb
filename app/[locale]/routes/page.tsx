@@ -240,6 +240,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     description: c.description,
     alternates: localeMetadataAlternates(locale, path),
     robots: localeRobots(locale),
+    keywords: locale === 'th'
+      ? ['เส้นทางแลกเงินบาท', 'คู่มือแลกเงินไทย', 'btc to thb', 'usd cash to thb', 'ร้านแลกเงินกรุงเทพ']
+      : locale === 'zh'
+        ? ['THB 路线指南', '泰铢兑换路线', 'btc to thb', 'usd cash to thb', '曼谷换汇指南']
+        : ['THB route guides', 'crypto to THB route', 'cash to THB route', 'btc to thb', 'usd cash to thb', 'bangkok money exchange guide'],
     openGraph: {
       title: c.title,
       description: c.description,
