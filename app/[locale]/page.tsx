@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { exchanges, publicCashProviders } from '@/data/site';
 import { TrackLink } from '@/components/track-link';
+import { compareCashLive } from '@/lib/cash-live';
+import { compareCrypto } from '@/lib/compare';
 import { isLocale, resolveContentLocale, t } from '@/lib/i18n';
 import { routeGuides } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
@@ -443,6 +445,28 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const coverageValue = c.coverageValue
     .replace('{exchangeCount}', String(exchanges.length))
     .replace('{cashCount}', String(publicCashProviders.length));
+  const [cryptoSnapshot, cashSnapshot] = await Promise.all([
+    compareCrypto({ symbol: 'BTC', side: 'buy', amount: 0.01, quoteMode: 'coin', includeWithdrawal: true }),
+    compareCashLive({ currency: 'USD', amount: 1000, maxDistanceKm: 30, locale }),
+  ]);
+  const topCryptoRows = cryptoSnapshot.slice(0, 4);
+  const topCashRows = cashSnapshot.all.slice(0, 4);
+  const thbFormatter = new Intl.NumberFormat(contentLocale === 'th' ? 'th-TH' : contentLocale === 'zh' ? 'zh-CN' : 'en-US', {
+    maximumFractionDigits: 2,
+  });
+  const numberFormatter = new Intl.NumberFormat(contentLocale === 'th' ? 'th-TH' : contentLocale === 'zh' ? 'zh-CN' : 'en-US', {
+    maximumFractionDigits: 4,
+  });
+  const snapshotTitle = contentLocale === 'th'
+    ? 'ตารางเปรียบเทียบทันที'
+    : contentLocale === 'zh'
+      ? '即时对比列表'
+      : 'Instant comparison snapshot';
+  const snapshotDescription = contentLocale === 'th'
+    ? 'เปิดหน้าแล้วเห็นผลลัพธ์ยอดนิยมทันที: ซื้อ 0.01 BTC และแลก 1000 USD'
+    : contentLocale === 'zh'
+      ? '打开页面就能看到默认结果：买入 0.01 BTC 与兑换 1000 USD。'
+      : 'See default results immediately: buy 0.01 BTC and exchange 1000 USD cash.';
   const homeRouteGuides = contentLocale === 'en'
     ? routeGuides
     : routeGuides.filter((guide) => [
@@ -468,14 +492,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     },
     { label: c.startUsdCash, href: `/${locale}/routes/usd-cash-to-thb` },
     { label: c.startCnyCash, href: `/${locale}/routes/cny-cash-to-thb` },
-  ];
-  const popularRouteItems = [
-    { label: 'BTC/THB', href: `/${locale}/routes/btc-to-thb` },
-    { label: 'USDT/THB', href: `/${locale}/routes/usdt-to-thb` },
-    { label: 'ETH/THB', href: `/${locale}/routes/eth-to-thb` },
-    { label: 'USD→THB', href: `/${locale}/routes/usd-cash-to-thb` },
-    { label: 'EUR→THB', href: `/${locale}/routes/eur-cash-to-thb` },
-    { label: 'GBP→THB', href: `/${locale}/routes/gbp-cash-to-thb` },
   ];
   const exchangeHubLabel = locale === 'th'
     ? 'ดูหน้ารวมแพลตฟอร์ม'
@@ -564,18 +580,46 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         </div>
       </section>
 
-      <Section title={c.quickTitle} description={c.quickDescription}>
-        <div className="grid gap-6 md:grid-cols-2">
-          <TrackLink href={`/${locale}/crypto`} eventName="homepage_route_click" eventParams={{ route: 'crypto' }} className="card card-interactive space-y-4 p-6">
-            <Pill>{c.quickCryptoPill}</Pill>
-            <h3 className="text-2xl font-semibold text-white">{c.cryptoCardTitle}</h3>
-            <p className="text-stone-400">{c.cryptoCardBody}</p>
-          </TrackLink>
-          <TrackLink href={`/${locale}/cash`} eventName="homepage_route_click" eventParams={{ route: 'cash' }} className="card card-interactive space-y-4 p-6">
-            <Pill>{c.quickCashPill}</Pill>
-            <h3 className="text-2xl font-semibold text-white">{c.cashCardTitle}</h3>
-            <p className="text-stone-400">{c.cashCardBody}</p>
-          </TrackLink>
+      <Section title={snapshotTitle} description={snapshotDescription}>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="card p-6">
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <h3 className="text-xl font-semibold text-white">BTC - THB (0.01 BTC)</h3>
+              <TrackLink href={`/${locale}/crypto?symbol=BTC&side=buy&amount=0.01`} eventName="homepage_snapshot_open_full" eventParams={{ type: 'crypto' }} className="text-sm font-medium text-brand-300 hover:text-brand-200">{c.primary}</TrackLink>
+            </div>
+            <div className="space-y-3">
+              {topCryptoRows.map((row) => (
+                <div key={row.slug} className="rounded-2xl border border-white/8 bg-surface-800/70 px-4 py-3">
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="font-medium text-white">{row.exchange}</p>
+                    <p className="text-sm font-semibold text-emerald-300">{thbFormatter.format(row.estimatedTotalCost)} THB</p>
+                  </div>
+                  <p className="mt-1 text-xs text-stone-400">
+                    {contentLocale === 'th' ? 'รวมค่าธรรมเนียม' : contentLocale === 'zh' ? '含费用总支付' : 'Total payment incl. fees'} · {numberFormatter.format(row.fillRatio * 100)}%
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="card p-6">
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <h3 className="text-xl font-semibold text-white">USD - THB (1000 USD)</h3>
+              <TrackLink href={`/${locale}/cash?currency=USD&amount=1000`} eventName="homepage_snapshot_open_full" eventParams={{ type: 'cash' }} className="text-sm font-medium text-brand-300 hover:text-brand-200">{c.secondary}</TrackLink>
+            </div>
+            <div className="space-y-3">
+              {topCashRows.map((row) => (
+                <div key={row.providerSlug} className="rounded-2xl border border-white/8 bg-surface-800/70 px-4 py-3">
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="font-medium text-white">{row.provider}</p>
+                    <p className="text-sm font-semibold text-emerald-300">{thbFormatter.format(row.estimatedThb)} THB</p>
+                  </div>
+                  <p className="mt-1 text-xs text-stone-400">
+                    {contentLocale === 'th' ? 'เรตรับซื้อ' : contentLocale === 'zh' ? '买入价' : 'Buy rate'} {numberFormatter.format(row.buyRate)} · {numberFormatter.format(row.distanceKm)} km
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </Section>
 
@@ -587,38 +631,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               <p className="mt-2 text-lg font-semibold text-white">{item.label}</p>
             </TrackLink>
           ))}
-        </div>
-      </Section>
-
-      <Section title={c.routeTitle} description={c.routeDescription}>
-        <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
-          {popularRouteItems.map((route) => (
-            <TrackLink key={route.label} href={route.href} eventName="homepage_popular_route_click" eventParams={{ route: route.label }} className="card card-interactive p-5">
-              <p className="text-sm text-stone-400">{c.routeLabel}</p>
-              <p className="mt-2 text-xl font-semibold text-white">{route.label}</p>
-            </TrackLink>
-          ))}
-        </div>
-      </Section>
-
-      <Section title={c.routeGuidesTitle} description={c.routeGuidesDescription}>
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-          {homeRouteGuides.map((guide) => (
-            <TrackLink
-              key={guide.slug}
-              href={`/${locale}/routes/${guide.slug}`}
-              eventName="homepage_route_guide_click"
-              eventParams={{ route: guide.slug }}
-              className="card card-interactive p-5"
-            >
-              <p className="text-sm text-stone-400">{guide.type === 'crypto' ? c.quickCryptoPill : c.quickCashPill}</p>
-              <p className="mt-2 text-xl font-semibold text-white">{t(guide.title, locale)}</p>
-              <p className="mt-3 text-sm text-stone-400">{t(guide.summary, locale)}</p>
-            </TrackLink>
-          ))}
-        </div>
-        <div>
-          <TrackLink href={`/${locale}/routes`} eventName="homepage_route_index_click" eventParams={{ locale }} className="inline-flex rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{c.routeGuidesBrowse}</TrackLink>
         </div>
       </Section>
 
@@ -637,170 +649,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         </div>
       </Section>
 
-      {contentLocale === 'en' ? (
-        <Section title="Featured Bangkok money changer pages" description="These brand pages help users who search directly for a money changer name move into a clearer compare flow instead of bouncing after one brand query.">
-          <div className="grid gap-4 md:grid-cols-3">
-            {[
-              {
-                slug: 'sia',
-                title: 'SIA Money Exchange Bangkok rates and branch guide',
-                body: 'Check SIA Money Exchange Bangkok location, hours, and rate samples before changing cash to THB.',
-              },
-              {
-                slug: 'superrich-thailand',
-                title: 'SuperRich Thailand Bangkok branch and rate guide',
-                body: 'Compare SuperRich Thailand with other Bangkok money changers using hours, location context, and official links.',
-              },
-              {
-                slug: 'ratchada',
-                title: 'Ratchada Exchange Bangkok branch guide',
-                body: 'Use the Ratchada profile to compare route convenience and rate context before you travel.',
-              },
-            ].map((item) => (
-              <TrackLink
-                key={item.slug}
-                href={`/${locale}/money-changers/${item.slug}`}
-                eventName="homepage_featured_money_changer_click"
-                eventParams={{ provider: item.slug }}
-                className="card card-interactive p-5"
-              >
-                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
-              </TrackLink>
-            ))}
-          </div>
-        </Section>
-      ) : null}
-
-      {contentLocale === 'th' ? (
-        <Section title="ร้านแลกเงินกรุงเทพที่คนค้นหาบ่อย" description="ส่วนนี้ช่วยให้หน้าไทยมีสัญญาณหัวข้อชัดขึ้นสำหรับคำค้นที่เกี่ยวกับร้านแลกเงินในกรุงเทพและการเทียบก่อนแลก THB">
-          <div className="grid gap-4 md:grid-cols-3">
-            {[
-              {
-                slug: 'sia',
-                title: 'SIA Money Exchange กรุงเทพ',
-                body: 'ดูเรท เวลาเปิดทำการ และพิกัดย่านประตูน้ำก่อนเทียบกับร้านอื่น',
-              },
-              {
-                slug: 'superrich-thailand',
-                title: 'SuperRich Thailand กรุงเทพ',
-                body: 'ดูข้อมูลเรทตัวอย่าง จุดอ้างอิง และลิงก์ทางการก่อนออกเดินทาง',
-              },
-              {
-                slug: 'ratchada',
-                title: 'Ratchada Exchange กรุงเทพ',
-                body: 'ใช้เป็นตัวเลือกเทียบตามเรท ระยะทาง และเวลาเปิดทำการ',
-              },
-            ].map((item) => (
-              <TrackLink
-                key={item.slug}
-                href={`/${locale}/money-changers/${item.slug}`}
-                eventName="homepage_featured_money_changer_click"
-                eventParams={{ provider: item.slug }}
-                className="card card-interactive p-5"
-              >
-                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
-              </TrackLink>
-            ))}
-          </div>
-        </Section>
-      ) : null}
-
-      {contentLocale === 'zh' ? (
-        <Section title="常被搜索的曼谷换汇品牌页" description="这组入口让中文页面更明确承接曼谷换汇店与品牌词搜索，再导向真实比较流程。">
-          <div className="grid gap-4 md:grid-cols-3">
-            {[
-              {
-                slug: 'sia',
-                title: 'SIA Money Exchange Bangkok 汇率与门店指南',
-                body: '先看 SIA 的位置、营业时间和汇率样本，再决定是否换入 THB。',
-              },
-              {
-                slug: 'superrich-thailand',
-                title: 'SuperRich Thailand 曼谷门店与汇率指南',
-                body: '适合先看品牌，再进入现金比较流程。',
-              },
-              {
-                slug: 'ratchada',
-                title: 'Ratchada Exchange 曼谷门店指南',
-                body: '从品牌页继续比较路线便利度与汇率样本。',
-              },
-            ].map((item) => (
-              <TrackLink
-                key={item.slug}
-                href={`/${locale}/money-changers/${item.slug}`}
-                eventName="homepage_featured_money_changer_click"
-                eventParams={{ provider: item.slug }}
-                className="card card-interactive p-5"
-              >
-                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
-              </TrackLink>
-            ))}
-          </div>
-        </Section>
-      ) : null}
-
-      {contentLocale === 'en' ? (
-        <Section title="Who this site is built for" description="English search traffic is the fastest path to international discovery, so the homepage now explains the real use cases more clearly.">
-          <div className="grid gap-4 lg:grid-cols-3">
-            {[
-              {
-                title: 'Travelers landing in Bangkok',
-                body: 'Use ExchangeTHB to compare USD, EUR, JPY, or CNY cash routes before choosing an in-city money changer.',
-              },
-              {
-                title: 'Expats and long-stay users',
-                body: 'Compare BTC or USDT routes into THB with fees, orderbook depth, and outbound links to regulated Thai exchanges.',
-              },
-              {
-                title: 'International search users',
-                body: 'Country-intent pages and route guides help users searching from Japan, Korea, Germany, or Europe move straight into a THB comparison flow.',
-              },
-            ].map((item) => (
-              <div key={item.title} className="card p-6">
-                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-3 text-sm text-stone-400">{item.body}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
-      ) : null}
-
-      {contentLocale === 'en' ? (
-        <Section title="High-intent route pages for international search" description="These landing pages are built to match real search intent from travelers, expats, and users comparing crypto or cash routes into Thai baht.">
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {[
-              'btc-to-thb',
-              'usdt-to-thb',
-              'usd-cash-to-thb',
-              'eur-cash-to-thb',
-              'bangkok-airport-money-exchange-guide',
-              'suvarnabhumi-money-exchange-guide',
-              'pratunam-money-exchange-guide',
-              'central-bangkok-money-exchange-guide',
-              'bangkok-money-changer-near-me-guide',
-            ].map((slug) => {
-              const guide = routeGuides.find((item) => item.slug === slug);
-              if (!guide) return null;
-              return (
-                <TrackLink
-                  key={guide.slug}
-                  href={`/${locale}/routes/${guide.slug}`}
-                  eventName="homepage_high_intent_route_click"
-                  eventParams={{ route: guide.slug }}
-                  className="card card-interactive p-5"
-                >
-                  <p className="text-sm text-stone-400">{guide.type === 'crypto' ? 'Crypto intent' : 'Cash intent'}</p>
-                  <p className="mt-2 text-xl font-semibold text-white">{guide.title.en}</p>
-                  <p className="mt-3 text-sm text-stone-400">{guide.summary.en}</p>
-                </TrackLink>
-              );
-            })}
-          </div>
-        </Section>
-      ) : null}
 
       <Section title={c.trustedTitle} description={c.trustedDescription}>
         <div className="grid gap-6 lg:grid-cols-2">
