@@ -368,6 +368,22 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
     : contentLocale === 'zh'
       ? '查看交易所总览'
       : 'Browse exchange hub';
+  const cryptoQuickRoutes = [
+    { label: 'BTC 0.01 Buy', href: `/${locale}/crypto?symbol=BTC&side=buy&amount=0.01` },
+    { label: 'USDT 1000 Sell', href: `/${locale}/crypto?symbol=USDT&side=sell&amount=1000` },
+    { label: 'ETH 0.1 Buy', href: `/${locale}/crypto?symbol=ETH&side=buy&amount=0.1` },
+    { label: 'XRP 500 Buy', href: `/${locale}/crypto?symbol=XRP&side=buy&amount=500` },
+  ];
+  const quickRoutesTitle = contentLocale === 'th'
+    ? 'ดูผลเปรียบเทียบยอดนิยมทันที'
+    : contentLocale === 'zh'
+      ? '直接查看主流币种对比'
+      : 'Jump straight to popular crypto routes';
+  const quickRoutesDescription = contentLocale === 'th'
+    ? 'แตะครั้งเดียวเพื่อเปิดผลลัพธ์ที่คนใช้บ่อย โดยไม่ต้องเริ่มจากค่ากลาง'
+    : contentLocale === 'zh'
+      ? '一键进入常用币种默认参数，直接看结果。'
+      : 'Open common BTC/USDT/ETH routes in one tap and see results immediately.';
 
   return (
     <div className="space-y-12">
@@ -375,6 +391,17 @@ export default async function CryptoPage({ params, searchParams }: { params: Pro
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(exchangeListLd) }} />
       <Section title={c.title} description={c.description}>
+        <div className="mb-5 rounded-2xl border border-brand-500/20 bg-brand-500/8 p-4">
+          <p className="text-sm font-medium text-brand-200">{quickRoutesTitle}</p>
+          <p className="mt-1 text-xs text-stone-400">{quickRoutesDescription}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {cryptoQuickRoutes.map((item) => (
+              <TrackLink key={item.label} href={item.href} eventName="crypto_quick_route_click" eventParams={{ label: item.label }} className="rounded-full border border-white/10 bg-surface-800 px-3 py-1.5 text-xs font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">
+                {item.label}
+              </TrackLink>
+            ))}
+          </div>
+        </div>
         <div className="grid gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
           <div className="card overflow-hidden border-brand-500/20 bg-gradient-to-br from-surface-900 via-surface-850 to-surface-900">
             <AutoSubmitForm action={`/${locale}/crypto`} className="grid gap-6 p-6" delayMs={150}>
@@ -733,9 +760,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
           ? '태국 암호화폐 THB 비교 | BTC·ETH·USDT'
           : locale === 'de'
             ? 'Krypto zu THB Vergleich in Thailand | BTC, ETH, USDT'
-            : 'Thailand Crypto Exchange Comparison to THB | BTC, ETH, USDT, XRP, SOL';
+            : 'BTC to THB & USDT to THB | Thailand Crypto Exchange Comparison';
   const description = locale === 'en'
-    ? 'Compare Thailand crypto exchange routes for BTC, ETH, USDT, XRP, DOGE, and SOL to THB. Review estimated baht received, fees, market depth, and exchange profile context before converting.'
+    ? 'Compare BTC to THB, USDT to THB, ETH to THB and more across Thailand exchanges. See estimated THB outcome, fees, and market depth before you trade.'
     : c.description;
   return {
     title,
@@ -743,7 +770,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     alternates: localeMetadataAlternates(locale, '/crypto'),
     robots: localeRobots(locale),
     keywords: locale === 'en'
-      ? ['BTC to THB', 'ETH to THB', 'USDT to THB', 'XRP to THB', 'DOGE to THB', 'SOL to THB', 'crypto exchange Thailand', 'buy crypto in Thailand', 'sell crypto for baht']
+      ? ['btc to thb', 'usdt to thb', 'bitcoin to thb', 'eth to thb', 'xrp to thb', 'crypto exchange thailand', 'buy crypto thailand', 'sell crypto for baht']
       : undefined,
     openGraph: {
       title,

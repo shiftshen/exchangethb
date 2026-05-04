@@ -481,6 +481,22 @@ export default async function CashPage({ params, searchParams }: { params: Promi
     : contentLocale === 'zh'
       ? '查看换汇品牌总览'
       : 'Browse money changer hub';
+  const cashQuickRoutes = [
+    { label: 'USD 1000', href: `/${locale}/cash?currency=USD&amount=1000&maxDistanceKm=30` },
+    { label: 'EUR 1000', href: `/${locale}/cash?currency=EUR&amount=1000&maxDistanceKm=30` },
+    { label: 'CNY 5000', href: `/${locale}/cash?currency=CNY&amount=5000&maxDistanceKm=30` },
+    { label: 'JPY 100000', href: `/${locale}/cash?currency=JPY&amount=100000&maxDistanceKm=30` },
+  ];
+  const quickRoutesTitle = contentLocale === 'th'
+    ? 'ดูผลลัพธ์หลักทันที'
+    : contentLocale === 'zh'
+      ? '直接查看主流对比'
+      : 'Jump straight to popular comparisons';
+  const quickRoutesDescription = contentLocale === 'th'
+    ? 'กดครั้งเดียวเพื่อเปิดผลลัพธ์ที่คนใช้บ่อย โดยไม่ต้องตั้งค่าจากศูนย์'
+    : contentLocale === 'zh'
+      ? '一键打开常用币种默认对比，不用从空白表单开始。'
+      : 'Open common cash routes with one tap instead of starting from an empty form.';
 
   return (
     <div className="space-y-12">
@@ -488,6 +504,17 @@ export default async function CashPage({ params, searchParams }: { params: Promi
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(moneyChangerListLd) }} />
       <Section title={c.title} description={c.description}>
+        <div className="mb-5 rounded-2xl border border-brand-500/20 bg-brand-500/8 p-4">
+          <p className="text-sm font-medium text-brand-200">{quickRoutesTitle}</p>
+          <p className="mt-1 text-xs text-stone-400">{quickRoutesDescription}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {cashQuickRoutes.map((item) => (
+              <TrackLink key={item.label} href={item.href} eventName="cash_quick_route_click" eventParams={{ label: item.label }} className="rounded-full border border-white/10 bg-surface-800 px-3 py-1.5 text-xs font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">
+                {item.label}
+              </TrackLink>
+            ))}
+          </div>
+        </div>
         <div className="grid gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
           <div className="card overflow-hidden border-brand-500/20 bg-gradient-to-br from-surface-900 via-surface-850 to-surface-900">
             <AutoSubmitForm action={`/${locale}/cash`} className="grid gap-6 p-6" delayMs={150}>
@@ -908,9 +935,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
           ? '방콕 현금 환전 비교 | USD·EUR·JPY·GBP -> THB'
           : locale === 'de'
             ? 'Bargeldwechsel zu THB in Bangkok | USD, EUR, JPY, GBP'
-            : 'Bangkok Money Changer Rates to THB | USD, EUR, JPY, GBP, CNY';
+            : 'Best Money Exchange in Bangkok | Live USD EUR GBP JPY CNY to THB';
   const description = locale === 'en'
-    ? 'Compare Bangkok cash exchange rates to THB for USD, EUR, JPY, GBP, and CNY. See branch hours, map links, SIA and SuperRich profiles, and estimated best cash-to-baht options before changing money in Thailand.'
+    ? 'Compare live Bangkok money changer rates for USD, EUR, GBP, JPY, and CNY to THB. See best route, branch hours, map links, and provider profiles before you exchange cash in Thailand.'
     : c.description;
   return {
     title,
@@ -918,7 +945,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     alternates: localeMetadataAlternates(locale, '/cash'),
     robots: localeRobots(locale),
     keywords: locale === 'en'
-      ? ['Bangkok money changer', 'cash to THB', 'USD to THB cash', 'EUR to THB cash', 'GBP to THB cash', 'JPY to THB cash', 'CNY to THB cash', 'Thailand exchange rate', 'Japan to Thailand money exchange', 'Germany to Thailand money exchange', 'Europe to Thailand money exchange', 'Korea to Thailand money exchange']
+      ? ['best money exchange in bangkok', 'bangkok currency exchange rate', 'bangkok money changer', 'cash to THB', 'USD to THB cash', 'EUR to THB cash', 'GBP to THB cash', 'JPY to THB cash', 'CNY to THB cash', 'Thailand exchange rate', 'money exchange thailand']
       : undefined,
     openGraph: {
       title,
