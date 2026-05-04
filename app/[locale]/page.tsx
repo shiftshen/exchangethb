@@ -537,6 +537,49 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(routeListLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(exchangeListLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(moneyChangerListLd) }} />
+      <Section title={snapshotTitle} description={snapshotDescription}>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <TrackLink href={`/${locale}/crypto?symbol=BTC&side=buy&amount=0.01`} eventName="homepage_snapshot_open_full" eventParams={{ type: 'crypto' }} className="card card-interactive border-brand-500/20 bg-gradient-to-br from-surface-900 via-surface-850 to-surface-900 p-6">
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <h3 className="text-xl font-semibold text-white">BTC - THB (0.01 BTC)</h3>
+              <span className="text-sm font-medium text-brand-300">{c.primary}</span>
+            </div>
+            <div className="space-y-3">
+              {topCryptoRows.map((row) => (
+                <div key={row.slug} className="rounded-2xl border border-white/8 bg-surface-800/70 px-4 py-3">
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="font-medium text-white">{row.exchange}</p>
+                    <p className="text-sm font-semibold text-emerald-300">{thbFormatter.format(row.estimatedTotalCost)} THB</p>
+                  </div>
+                  <p className="mt-1 text-xs text-stone-400">
+                    {contentLocale === 'th' ? 'รวมค่าธรรมเนียม' : contentLocale === 'zh' ? '含费用总支付' : 'Total payment incl. fees'} · {numberFormatter.format(row.fillRatio * 100)}%
+                  </p>
+                </div>
+              ))}
+            </div>
+          </TrackLink>
+          <TrackLink href={`/${locale}/cash?currency=USD&amount=1000`} eventName="homepage_snapshot_open_full" eventParams={{ type: 'cash' }} className="card card-interactive border-brand-500/20 bg-gradient-to-br from-surface-900 via-surface-850 to-surface-900 p-6">
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <h3 className="text-xl font-semibold text-white">USD - THB (1000 USD)</h3>
+              <span className="text-sm font-medium text-brand-300">{c.secondary}</span>
+            </div>
+            <div className="space-y-3">
+              {topCashRows.map((row) => (
+                <div key={row.providerSlug} className="rounded-2xl border border-white/8 bg-surface-800/70 px-4 py-3">
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="font-medium text-white">{row.provider}</p>
+                    <p className="text-sm font-semibold text-emerald-300">{thbFormatter.format(row.estimatedThb)} THB</p>
+                  </div>
+                  <p className="mt-1 text-xs text-stone-400">
+                    {contentLocale === 'th' ? 'เรตรับซื้อ' : contentLocale === 'zh' ? '买入价' : 'Buy rate'} {numberFormatter.format(row.buyRate)} · {numberFormatter.format(row.distanceKm)} km
+                  </p>
+                </div>
+              ))}
+            </div>
+          </TrackLink>
+        </div>
+      </Section>
+
       <section className="frontend-hero overflow-hidden p-6 sm:p-8 lg:p-10">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-500/70 to-transparent" />
         <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
@@ -579,49 +622,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           </div>
         </div>
       </section>
-
-      <Section title={snapshotTitle} description={snapshotDescription}>
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div className="card p-6">
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <h3 className="text-xl font-semibold text-white">BTC - THB (0.01 BTC)</h3>
-              <TrackLink href={`/${locale}/crypto?symbol=BTC&side=buy&amount=0.01`} eventName="homepage_snapshot_open_full" eventParams={{ type: 'crypto' }} className="text-sm font-medium text-brand-300 hover:text-brand-200">{c.primary}</TrackLink>
-            </div>
-            <div className="space-y-3">
-              {topCryptoRows.map((row) => (
-                <div key={row.slug} className="rounded-2xl border border-white/8 bg-surface-800/70 px-4 py-3">
-                  <div className="flex items-center justify-between gap-4">
-                    <p className="font-medium text-white">{row.exchange}</p>
-                    <p className="text-sm font-semibold text-emerald-300">{thbFormatter.format(row.estimatedTotalCost)} THB</p>
-                  </div>
-                  <p className="mt-1 text-xs text-stone-400">
-                    {contentLocale === 'th' ? 'รวมค่าธรรมเนียม' : contentLocale === 'zh' ? '含费用总支付' : 'Total payment incl. fees'} · {numberFormatter.format(row.fillRatio * 100)}%
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="card p-6">
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <h3 className="text-xl font-semibold text-white">USD - THB (1000 USD)</h3>
-              <TrackLink href={`/${locale}/cash?currency=USD&amount=1000`} eventName="homepage_snapshot_open_full" eventParams={{ type: 'cash' }} className="text-sm font-medium text-brand-300 hover:text-brand-200">{c.secondary}</TrackLink>
-            </div>
-            <div className="space-y-3">
-              {topCashRows.map((row) => (
-                <div key={row.providerSlug} className="rounded-2xl border border-white/8 bg-surface-800/70 px-4 py-3">
-                  <div className="flex items-center justify-between gap-4">
-                    <p className="font-medium text-white">{row.provider}</p>
-                    <p className="text-sm font-semibold text-emerald-300">{thbFormatter.format(row.estimatedThb)} THB</p>
-                  </div>
-                  <p className="mt-1 text-xs text-stone-400">
-                    {contentLocale === 'th' ? 'เรตรับซื้อ' : contentLocale === 'zh' ? '买入价' : 'Buy rate'} {numberFormatter.format(row.buyRate)} · {numberFormatter.format(row.distanceKm)} km
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </Section>
 
       <Section title={c.startTitle} description={c.startDescription}>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
