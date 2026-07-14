@@ -370,8 +370,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const guide = getRouteGuide(slug);
   if (!guide) return {};
 
-  const title = t(guide.title, locale);
-  const description = t(guide.summary, locale);
+  const baseTitle = t(guide.title, locale);
+  const baseDescription = t(guide.summary, locale);
+  const title = locale === 'en'
+    ? `${baseTitle} | Live Fees & Exchange Depth`
+    : baseTitle;
+  const description = locale === 'en'
+    ? `${baseDescription} Compare real route outcomes, not just headline rates, before choosing an exchange or money changer.`
+    : baseDescription;
   const path = `/routes/${guide.slug}`;
 
   return {

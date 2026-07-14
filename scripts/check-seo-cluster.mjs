@@ -9,28 +9,33 @@ const checks = [
     mustInclude: ['/en/crypto', '/en/cash', 'See what you actually get in THB'],
     mustMatch: [/Estimated net receive/, /Compare now/],
     mustNotInclude: ['/en/routes', 'Featured Thai exchanges', 'Featured Bangkok money changers'],
+    canonical: '/en',
   },
   {
     path: '/en/crypto',
     mustInclude: ['/en/exchanges/', 'Compare the outcome, not the headline price.'],
     mustMatch: [/Market depth filled/, /Show fee and depth calculation/, /Open official exchange/],
     mustNotInclude: ['Related crypto route guides', 'English search questions this page answers'],
+    canonical: '/en/crypto',
   },
   {
     path: '/en/cash',
     mustInclude: ['/en/money-changers/', 'Compare the rate and the trip.'],
     mustMatch: [/Use my location/, /Open now only/, /Verify official rate/],
     mustNotInclude: ['Related cash and country route guides', 'English search questions this page answers'],
+    canonical: '/en/cash',
   },
   {
     path: '/en/routes',
     mustInclude: ['noindex, follow'],
     mustMatch: [/<link rel="canonical" href="[^"]+\/en\/routes"/],
+    canonical: '/en/routes',
   },
   {
     path: '/en/routes/usd-cash-to-thb',
     mustInclude: ['/en/money-changers', '/en/cash?currency=USD'],
     mustMatch: [/Latest data reference/, /@type":"WebPage"/],
+    canonical: '/en/routes/usd-cash-to-thb',
   },
   {
     path: '/en/routes/eth-to-thb',
@@ -57,6 +62,14 @@ const checks = [
     expectedLocCount: 29,
   },
 ];
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function canonicalUrl(path) {
+  return `${baseUrl}${path}`;
+}
 
 async function fetchText(url, followRedirect = true) {
   const controller = new AbortController();
@@ -107,10 +120,15 @@ async function main() {
     const unexpectedMatches = (check.mustNotMatch || []).filter((pattern) => pattern.test(result.text)).map((pattern) => pattern.toString());
     const locCount = (result.text.match(/<loc>/g) || []).length;
     const wrongLocCount = check.expectedLocCount !== undefined && locCount !== check.expectedLocCount;
+    const expectedCanonical = check.canonical ? canonicalUrl(check.canonical) : undefined;
+    const canonicalPattern = expectedCanonical
+      ? new RegExp(`<link[^>]+rel=["']canonical["'][^>]+href=["']${escapeRegex(expectedCanonical)}["']`, 'i')
+      : undefined;
+    const canonicalMissing = canonicalPattern ? !canonicalPattern.test(result.text) : false;
 
-    if (missingIncludes.length || missingMatches.length || unexpectedIncludes.length || unexpectedMatches.length || wrongLocCount) {
-      failures.push(`${check.path}: missing includes=${missingIncludes.join(', ') || '-'} missing patterns=${missingMatches.join(', ') || '-'} unexpected includes=${unexpectedIncludes.join(', ') || '-'} unexpected patterns=${unexpectedMatches.join(', ') || '-'} loc count=${locCount}${wrongLocCount ? ` expected=${check.expectedLocCount}` : ''}`);
-      console.log(`FAIL ${check.path} includes=${missingIncludes.length} patterns=${missingMatches.length} unexpected=${unexpectedIncludes.length + unexpectedMatches.length} locs=${locCount}`);
+    if (missingIncludes.length || missingMatches.length || unexpectedIncludes.length || unexpectedMatches.length || wrongLocCount || canonicalMissing) {
+      failures.push(`${check.path}: missing includes=${missingIncludes.join(', ') || '-'} missing patterns=${missingMatches.join(', ') || '-'} unexpected includes=${unexpectedIncludes.join(', ') || '-'} unexpected patterns=${unexpectedMatches.join(', ') || '-'} loc count=${locCount}${wrongLocCount ? ` expected=${check.expectedLocCount}` : ''} canonical=${canonicalMissing ? expectedCanonical : '-'}`);
+      console.log(`FAIL ${check.path} includes=${missingIncludes.length} patterns=${missingMatches.length} unexpected=${unexpectedIncludes.length + unexpectedMatches.length} locs=${locCount} canonical=${canonicalMissing ? 'missing' : 'ok'}`);
       continue;
     }
 
