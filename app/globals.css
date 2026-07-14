@@ -54,3 +54,6 @@ a { @apply transition-colors; }
 .float-slow {
   animation: floatSlow 8s ease-in-out infinite;
 }
+.decision-input {
+  @apply w-full rounded-2xl border border-black/10 bg-white px-4 py-3 font-semibold text-[#11271e] outline-none ring-[#1c6b4a]/20 focus:ring-4;
+}

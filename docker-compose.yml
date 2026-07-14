@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    entrypoint: []
     command: sh ./scripts/docker-web-entrypoint.sh
     env_file:
       - .env
@@ -23,6 +24,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    entrypoint: []
     command: sh ./scripts/docker-web-entrypoint.sh
     env_file:
       - .env

@@ -3,7 +3,8 @@ import { TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
 import { exchanges, marketSnapshots } from '@/data/site';
 import { indexableLocales, t } from '@/lib/i18n';
-import { breadcrumbJsonLd, collectionPageJsonLd, itemListJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
+import { shouldIndexHub } from '@/lib/indexing-policy';
+import { breadcrumbJsonLd, collectionPageJsonLd, itemListJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { ContentLocale } from '@/lib/types';
 
 const copy = {
@@ -87,21 +88,6 @@ const copy = {
   },
 } as const;
 
-function faqJsonLd(entries: Array<{ question: string; answer: string }>) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: entries.map((entry) => ({
-      '@type': 'Question',
-      name: entry.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: entry.answer,
-      },
-    })),
-  };
-}
-
 function webPageJsonLd(locale: ContentLocale, title: string, description: string, dateModified?: string) {
   return {
     '@context': 'https://schema.org',
@@ -165,7 +151,6 @@ export default async function ExchangesIndexPage({ params }: { params: Promise<{
     })),
     c.title,
   );
-  const faqLd = faqJsonLd(faqEntries);
   const pageLd = webPageJsonLd(locale, c.title, c.description, latestExchangeUpdate);
 
   return (
@@ -173,7 +158,6 @@ export default async function ExchangesIndexPage({ params }: { params: Promise<{
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }} />
 
       <section className="frontend-hero overflow-hidden p-6 sm:p-8 lg:p-10">
@@ -282,8 +266,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: C
   return {
     title: c.title,
     description: c.description,
-    alternates: localeMetadataAlternates(locale, path),
-    robots: localeRobots(locale),
+    alternates: metadataAlternatesForPolicy(locale, path, []),
+    robots: robotsForPage(locale, shouldIndexHub()),
     keywords: locale === 'en'
       ? ['Thailand crypto exchange', 'exchange thailand', 'Thai exchange', 'Binance TH', 'Bitkub', 'Upbit Thailand', 'crypto to THB']
       : undefined,

@@ -13,11 +13,6 @@ const footerCopy = {
     explore: 'หน้าหลักที่ควรเริ่ม',
     crypto: 'คริปโตเป็นบาท',
     cash: 'เงินสดเป็นบาท',
-    routes: 'เส้นทาง THB',
-    exchanges: 'แพลตฟอร์ม',
-    changers: 'ร้านแลกเงิน',
-    featured: 'แบรนด์เด่น',
-    sia: 'SIA Money Exchange',
   },
   en: {
     note: 'All information is for comparison and reference only.',
@@ -28,11 +23,6 @@ const footerCopy = {
     explore: 'Core pages to start with',
     crypto: 'Crypto to THB',
     cash: 'Cash to THB',
-    routes: 'Route Guides',
-    exchanges: 'Exchanges',
-    changers: 'Money Changers',
-    featured: 'Featured brand',
-    sia: 'SIA Money Exchange',
   },
   zh: {
     note: '所有信息仅供比较与参考使用。',
@@ -43,11 +33,6 @@ const footerCopy = {
     explore: '建议先看的主页面',
     crypto: '加密换泰铢',
     cash: '现金换泰铢',
-    routes: '路线页',
-    exchanges: '交易所',
-    changers: '换汇品牌',
-    featured: '重点品牌',
-    sia: 'SIA Money Exchange',
   },
 };
 
@@ -66,16 +51,12 @@ export function SiteFooter({ locale }: { locale: ContentLocale | Locale }) {
           <div className="mt-3 flex flex-wrap gap-3">
             <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/crypto')}>{copy.crypto}</Link>
             <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/cash')}>{copy.cash}</Link>
-            <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/routes')}>{copy.routes}</Link>
-            <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/exchanges')}>{copy.exchanges}</Link>
-            <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/money-changers')}>{copy.changers}</Link>
           </div>
         </div>
         <div className="flex flex-wrap gap-3 lg:justify-end">
           <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/legal/methodology')}>{copy.methodology}</Link>
           <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/legal/disclaimer')}>{copy.disclaimer}</Link>
           <Link className="rounded-full border border-surface-700 px-4 py-2 transition hover:border-brand-500 hover:text-brand-300" href={localeRoutePath(hrefLocale, '/legal/privacy-policy')}>{copy.privacy}</Link>
-          <Link className="rounded-full border border-brand-500/30 px-4 py-2 text-brand-300 transition hover:border-brand-500 hover:text-brand-200" href={localeRoutePath(hrefLocale, '/money-changers/sia')}>{copy.featured}: {copy.sia}</Link>
         </div>
       </div>
     </footer>

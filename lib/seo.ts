@@ -13,9 +13,6 @@ export const googleSiteVerification = googleVerification || undefined;
 
 export function withLocalePath(locale: Locale, path = '') {
   const normalizedPath = !path || path === '/' ? '' : (path.startsWith('/') ? path : `/${path}`);
-  if (locale === 'en' && normalizedPath === '') {
-    return siteUrl;
-  }
   return `${siteUrl}/${locale}${normalizedPath}`;
 }
 
@@ -38,6 +35,24 @@ export function localeMetadataAlternates(locale: Locale, path = ''): NonNullable
   };
 }
 
+export function metadataAlternatesForPolicy(
+  locale: Locale,
+  path: string,
+  indexedLocales: Locale[],
+): NonNullable<Metadata['alternates']> {
+  if (!indexedLocales.length) {
+    return { canonical: withLocalePath(locale, path) };
+  }
+  const canonicalLocale = indexedLocales.includes(locale) ? locale : indexedLocales[0];
+  return {
+    canonical: withLocalePath(canonicalLocale, path),
+    languages: Object.fromEntries([
+      ...indexedLocales.map((indexedLocale) => [indexedLocale, withLocalePath(indexedLocale, path)]),
+      ['x-default', withLocalePath(indexedLocales.includes('en') ? 'en' : indexedLocales[0], path)],
+    ]),
+  };
+}
+
 export function localeRobots(locale: Locale): Metadata['robots'] | undefined {
   if (indexableLocales.includes(locale as (typeof indexableLocales)[number])) return undefined;
   return {
@@ -50,11 +65,20 @@ export function localeRobots(locale: Locale): Metadata['robots'] | undefined {
   };
 }
 
+export function robotsForPage(locale: Locale, shouldIndex: boolean): Metadata['robots'] | undefined {
+  if (shouldIndex) return localeRobots(locale);
+  return {
+    index: false,
+    follow: true,
+    googleBot: {
+      index: false,
+      follow: true,
+    },
+  };
+}
+
 export function localeRoutePath(locale: Locale, path = '') {
   const normalizedPath = !path || path === '/' ? '' : (path.startsWith('/') ? path : `/${path}`);
-  if (locale === 'en' && normalizedPath === '') {
-    return '/';
-  }
   return `/${locale}${normalizedPath}`;
 }
 

@@ -20,14 +20,6 @@ export interface ScrapeResult {
   rates?: ScrapedCashRate[];
 }
 
-function stripText(html: string) {
-  return html
-    .replace(/&nbsp;/g, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 function extractRatchadaRates(html: string): ScrapedCashRate[] {
   const observedAt = new Date().toISOString();
   const rows = [...html.matchAll(/id="(USD|EUR|GBP|JPY|CNY)"[^>]*>\s*<td[^>]*>([^<]+)<\/td>\s*<td[^>]*>(\d+\.\d{2,4})<\/td>\s*<td[^>]*>(\d+\.\d{2,4})<\/td>/gi)];
@@ -302,7 +294,16 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
       const existing = mergedRows.get(rowKey);
       if (!existing || candidate.__ts > existing.__ts) mergedRows.set(rowKey, candidate);
     }
-    const rates = [...mergedRows.values()].map(({ __ts, ...row }) => row);
+    const rates = [...mergedRows.values()].map((row): ScrapedCashRate => ({
+      providerSlug: row.providerSlug,
+      currency: row.currency,
+      denomination: row.denomination,
+      buyRate: row.buyRate,
+      sellRate: row.sellRate,
+      observedAt: row.observedAt,
+      sourceUrl: row.sourceUrl,
+      sourceKind: row.sourceKind,
+    }));
     const latestDynUpdate = (locationsPayload.data?.content || [])
       .map((row) => row.dynLastUpdate)
       .filter((value): value is string => Boolean(value))

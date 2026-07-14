@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
 import { indexableLocales, t } from '@/lib/i18n';
+import { shouldIndexHub } from '@/lib/indexing-policy';
 import { RouteGuide, routeGuides } from '@/lib/route-guides';
-import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
+import { breadcrumbJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { Locale } from '@/lib/types';
 
 const copy = {
@@ -238,8 +239,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title: c.title,
     description: c.description,
-    alternates: localeMetadataAlternates(locale, path),
-    robots: localeRobots(locale),
+    alternates: metadataAlternatesForPolicy(locale, path, []),
+    robots: robotsForPage(locale, shouldIndexHub()),
     openGraph: {
       title: c.title,
       description: c.description,

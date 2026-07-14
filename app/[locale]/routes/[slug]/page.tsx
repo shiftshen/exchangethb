@@ -4,7 +4,8 @@ import { TrackLink } from '@/components/track-link';
 import { cashRates, exchanges, marketSnapshots, publicCashProviders } from '@/data/site';
 import { Pill, Section } from '@/components/ui';
 import { indexableLocales, t } from '@/lib/i18n';
-import { breadcrumbJsonLd, itemListJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
+import { isIndexedRouteSlug, shouldIndexRoute } from '@/lib/indexing-policy';
+import { breadcrumbJsonLd, itemListJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { getRouteGuide, routeGuides, routeGuideSlugs } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
 
@@ -101,21 +102,6 @@ const uiCopy = {
   },
 } as const;
 
-function faqJsonLd(entries: Array<{ question: string; answer: string }>) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: entries.map((entry) => ({
-      '@type': 'Question',
-      name: entry.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: entry.answer,
-      },
-    })),
-  };
-}
-
 function latestRouteDataTimestamp(guideType: 'crypto' | 'cash') {
   if (guideType === 'crypto') {
     const latestMarket = marketSnapshots
@@ -209,7 +195,6 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
     { name: guideTitle, item: withLocalePath(locale, `/routes/${guide.slug}`) },
   ]);
-  const faqLd = guideFaqs.length ? faqJsonLd(guideFaqs) : null;
   const pageLd = webPageJsonLd(locale, guide.slug, guideTitle, guideSummary, latestDataIso);
   const relatedProfilesLd = relatedProfiles.length
     ? itemListJsonLd(
@@ -234,7 +219,6 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
   return (
     <div className="space-y-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
-      {faqLd ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} /> : null}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }} />
       {relatedProfilesLd ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(relatedProfilesLd) }} /> : null}
       <section className="frontend-hero overflow-hidden p-6 sm:p-8 lg:p-10">
@@ -393,8 +377,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: localeMetadataAlternates(locale, path),
-    robots: localeRobots(locale),
+    alternates: metadataAlternatesForPolicy(locale, path, isIndexedRouteSlug(slug) ? ['en'] : []),
+    robots: robotsForPage(locale, shouldIndexRoute(locale, slug)),
     keywords: locale === 'en' ? guide.keywords : undefined,
     openGraph: {
       title,

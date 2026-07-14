@@ -2,6 +2,7 @@ import { cashBranches, cashProviders, cashRates, publicCashProviderSlugs } from 
 import { readCashCache, rollbackCashCache, writeCashCache } from '@/lib/cash-cache-store';
 import { getBangkokReferenceDistanceKm, getUserDistanceKm } from '@/lib/cash-entities';
 import { readAdminConfig } from '@/lib/content-store';
+import { getBangkokOpenState } from '@/lib/opening-hours';
 import { CurrencyCode, Locale } from '@/lib/types';
 import { runCashScrapers, ScrapeResult } from '@/lib/scrapers/cash';
 
@@ -109,7 +110,7 @@ export async function compareCashLive(input: {
       distanceKm: branch.distanceKm,
       distanceOrigin: userLocation ? 'user' : 'reference',
       locationPrecision: branch.locationPrecision || 'reference',
-      isOpen: branch.isOpen,
+      isOpen: getBangkokOpenState(branch.hours) ?? branch.isOpen,
       hours: branch.hours,
       buyRate: rate.buyRate,
       estimatedThb: rate.buyRate * input.amount,

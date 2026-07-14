@@ -3,7 +3,8 @@ import { Metadata } from 'next';
 import { TrackLink } from '@/components/track-link';
 import { Locale } from '@/lib/types';
 import { t } from '@/lib/i18n';
-import { localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
+import { shouldIndexLegalPage } from '@/lib/indexing-policy';
+import { metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { CopyGroup } from '@/lib/types';
 
 type LocalizedText = CopyGroup;
@@ -241,8 +242,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: localeMetadataAlternates(locale, `/legal/${slug}`),
-    robots: localeRobots(locale),
+    alternates: metadataAlternatesForPolicy(
+      locale,
+      `/legal/${slug}`,
+      shouldIndexLegalPage(locale, slug) ? ['en', 'th', 'zh'] : [],
+    ),
+    robots: robotsForPage(locale, shouldIndexLegalPage(locale, slug)),
     openGraph: {
       title,
       description,

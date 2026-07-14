@@ -6,8 +6,8 @@ BASE_URL="${1:-https://www.exchangethb.com}"
 MAX_TIME="${MAX_TIME:-15}"
 
 endpoints=(
-  "/|200|"
-  "/en|308|/"
+  "/|308|/en"
+  "/en|200|"
   "/robots.txt|200|"
   "/sitemap.xml|200|"
   "/api/health|200|"
