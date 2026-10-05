@@ -44,7 +44,8 @@
 
 - **软链会被采集 helper 拒绝**：共享 helper 的 `proxy_fetch.py:output_slot()` 用 `O_RDONLY|O_DIRECTORY|O_NOFOLLOW` 逐级固定路径组件。plist 一旦传旧软链路径 `/Volumes/M2USB/Projects/exchangethb.com`，三源全部 `output_rejected`、零 HTML 落盘，而**进程仍然 `state=running`**。当日因此静默断更 8h48m。
 - **进程活着 ≠ 采集健康**：判据看轮次结果，不看进程。项目探针 `npm run health:cash`（`scripts/check-cash-collector-health.ts`）在「连续 3 轮三源全挂」或「超过 30 分钟无新轮次」时退出非 0。
-  - 该探针**尚未**接入基座 `health-watch`：接入需改工作区外的 uchg 保护文件 `~/.agents/skills/host-infrastructure/scripts/healthcheck.sh`（该目录非 git 仓库、无 PR 通道），本次未获批准，保持未改。
+  - 该探针已由 fujane 于 **2026-10-06** 接入基座每日体检 `daily-maintenance` §14（`control/bin/daily-maintenance-check.py:154`：每天 09:03 在本项目跑该探针，rc≠0 计入 problems 并经 notify 发 Telegram 告警；探针文件缺失则跳过）。**无需**再改 `health-watch` 的 uchg 文件。
+  - Google 流量（GSC/GA4/SEO）自 2026-10-06 起由 fujane 统一管理；本项目的 GA4/AdSense 发现写进 `lark-status.json` 交 fujane，不自行改动平台配置。
 - **工作区禁止粗暴清理**：不得 `git reset --hard`、`git clean`、批量提交或覆盖他人改动。
 
 ## 常用命令
