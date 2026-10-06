@@ -76,5 +76,21 @@
       "生产侧（不在项目内，本轮未动）：/opt/exchangethb/runtime/backups/ 的 DB 快照与 runtime 受限秘密、发布镜像 sha256:f6ccf3d2e068…（exchangethb:codex-tenlang-20261006）"
     ],
     "后续规则": "单文件/目录 >100MB、数据库/数据/备份、发布包(apk/aab/ipa/release)、模型、视频成片一律只列清单不动；本项目无模型与成片，本地无数据库文件（生产库在服务器 Docker volume）"
+  },
+  "浏览器空间_20261006": {
+    "checked_at": "2026-10-06T21:40:00+07:00",
+    "agent_owned_exchangethb_spaces_closed": 0,
+    "note": "listTaskSpaces() 共 22 个空间；按名字认，本项目（exchangethb）**没有** agent-owned 空间需要关闭——历史 exchangethb 空间（Space6/16/20/21/23/74/80/85/86/147 等）此前已全部 finish/交还，本次列表确认已不存在。",
+    "user_owned_exchangethb_space": {
+      "id": 2,
+      "name": "ExchangeTHB Google Cloud billing handoff",
+      "ownership": "user",
+      "state": "user has taken control and ended the agent task",
+      "tabs": "Google Cloud 结算控制台（XmanX Site Operations）",
+      "action": "未关闭、未登记：user-owned 且已被老板接管，规则要求不得自行 claim 收回；如需关闭需老板本人或明确授权后 claimTaskSpace(2) 再 finish。",
+      "judgement": "相关 Maps/结算事项登记显示已通过备用账号解决，此窗口疑为历史遗留，但不自行处置。"
+    },
+    "registered_for_owner": 0,
+    "existing_handoff": "ego-handoff list 当前仅 1 条（31 号窗口 boardgame_hub），与本项目无关。"
   }
 }
