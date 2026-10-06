@@ -17,17 +17,24 @@ export function isIndexedRouteSlug(slug: string) {
   return indexedRouteSlugs.includes(slug as typeof indexedRouteSlugs[number]);
 }
 
+// Detail-page locales that carry fully localized copy (verified against the rendered pages):
+// exchange profiles have complete Chinese copy; money changer profiles complete Thai and Chinese copy.
+export const indexedExchangeLocales: Locale[] = ['en', 'zh'];
+export const indexedMoneyChangerLocales: Locale[] = ['en', 'th', 'zh'];
+export const indexedMoneyChangerSlugs = ['ratchada', 'superrich-thailand', 'twelve-victory'] as const;
+
 export function shouldIndexExchangeProfile(locale: Locale) {
-  return locale === 'en';
+  return indexedExchangeLocales.includes(locale);
 }
 
 export function shouldIndexMoneyChangerProfile(locale: Locale, slug: string) {
   if (locale === 'en') return true;
-  return locale === 'th' && ['ratchada', 'sia', 'superrich-thailand'].includes(slug);
+  return indexedMoneyChangerLocales.includes(locale)
+    && indexedMoneyChangerSlugs.includes(slug as typeof indexedMoneyChangerSlugs[number]);
 }
 
 export function shouldIndexLegalPage(locale: Locale, slug: string) {
-  return ['en', 'th', 'zh'].includes(locale)
+  return ['th', 'en', 'zh', 'ja', 'ru', 'ko', 'fr', 'de', 'id', 'vi'].includes(locale)
     && indexedLegalSlugs.includes(slug as typeof indexedLegalSlugs[number]);
 }
 
@@ -35,4 +42,4 @@ export function shouldIndexHub() {
   return false;
 }
 
-export const coreIndexLocales: ContentLocale[] = ['en', 'th', 'zh'];
+export const coreIndexLocales: ContentLocale[] = ['th', 'en', 'zh', 'ja', 'ru', 'ko', 'fr', 'de', 'id', 'vi'];

@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { TrackAnchor, TrackLink } from '@/components/track-link';
 import { exchanges } from '@/data/site';
+import { ExchangeBackground } from '@/components/exchange-background';
 import { resolveAffiliateLink } from '@/lib/affiliate';
 import { compareCrypto } from '@/lib/compare';
 import { readAdminConfig } from '@/lib/content-store';
@@ -10,6 +11,7 @@ import { resolveContentLocale, t } from '@/lib/i18n';
 import { shouldIndexExchangeProfile } from '@/lib/indexing-policy';
 import { breadcrumbJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { Locale } from '@/lib/types';
+import { ProviderContext } from '@/components/provider-context';
 
 const copy = {
   en: {
@@ -83,7 +85,7 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
   const exchange = exchanges.find((item) => item.slug === slug);
   if (!exchange) notFound();
   const contentLocale = resolveContentLocale(locale);
-  const c = copy[contentLocale];
+  const c = copy[contentLocale === 'th' || contentLocale === 'zh' ? contentLocale : 'en'];
 
   const [config, comparison] = await Promise.all([
     readAdminConfig(),
@@ -96,7 +98,7 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
       withdrawThb: true,
     }).catch(() => []),
   ]);
-  const current = comparison.find((row) => row.slug === exchange.slug);
+  const current = comparison.find((row) => row.slug === exchange.slug && row.live);
   const affiliate = resolveAffiliateLink(config.affiliateLinks[exchange.slug] || exchange.affiliate);
   const breadcrumbLd = breadcrumbJsonLd([
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
@@ -106,6 +108,7 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
 
   return (
     <div className="space-y-6">
+      <ProviderContext mode="crypto" slug={slug} locale={contentLocale}/>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <header className="grid gap-6 rounded-[32px] bg-[#0f2e22] p-6 text-white sm:p-9 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
@@ -119,6 +122,8 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
           <TrackLink href={`/${locale}/crypto?symbol=USDT&side=sell&amount=1000`} eventName="exchange_profile_compare_click" eventParams={{ exchange: exchange.slug }} className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white">{c.compare}</TrackLink>
         </div>
       </header>
+
+      <section className="rounded-[28px] border border-black/10 bg-white p-6 text-[#11271e]"><ExchangeBackground slug={slug} locale={contentLocale}/></section>
 
       {current ? (
         <section className="overflow-hidden rounded-[28px] border border-white/10 bg-[#151a18]">
@@ -199,7 +204,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: metadataAlternatesForPolicy(locale, path, ['en']),
+    alternates: metadataAlternatesForPolicy(locale, path, ['en', 'zh']),
     robots: robotsForPage(locale, shouldIndexExchangeProfile(locale)),
     openGraph: { title, description, url: withLocalePath(locale, path) },
   };

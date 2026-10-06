@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation';
+import { ProviderContext } from '@/components/provider-context';
 import type { Metadata } from 'next';
 import { TrackAnchor, TrackLink } from '@/components/track-link';
-import { cashBranches, cashProviders, publicCashProviderSlugs } from '@/data/site';
+import { cashProviders, publicCashProviderSlugs } from '@/data/site';
 import { compareCashLive } from '@/lib/cash-live';
+import { getEffectiveCashBranches } from '@/lib/cash-entities';
 import { resolveContentLocale, t } from '@/lib/i18n';
 import { shouldIndexMoneyChangerProfile } from '@/lib/indexing-policy';
 import { getBangkokOpenState } from '@/lib/opening-hours';
@@ -105,7 +107,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
   const provider = cashProviders.find((item) => item.slug === slug);
   if (!provider) notFound();
   const contentLocale = resolveContentLocale(locale);
-  const c = copy[contentLocale];
+  const c = copy[contentLocale === 'th' || contentLocale === 'zh' ? contentLocale : 'en'];
 
   const comparisons = await Promise.all(currencies.map(async (currency) => {
     const result = await compareCashLive({ currency, amount: 1000, maxDistanceKm: 100, locale: contentLocale }).catch(() => null);
@@ -114,13 +116,13 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
   }));
   const rateRows = comparisons.filter((item): item is NonNullable<typeof item> => Boolean(item));
   const primary = rateRows.find((item) => item.currency === 'USD')?.row || rateRows[0]?.row;
-  const staticBranch = cashBranches.find((item) => item.providerSlug === slug);
+  const staticBranch = (await getEffectiveCashBranches()).find((item) => item.providerSlug === slug);
   const branchName = primary?.branchName || staticBranch?.name || provider.name;
   const address = staticBranch?.address || '';
   const hours = primary?.hours || staticBranch?.hours || '';
   const mapsUrl = primary?.mapsUrl || staticBranch?.mapsUrl || provider.officialUrl;
   const openState = primary?.isOpen ?? (getBangkokOpenState(hours) ?? staticBranch?.isOpen ?? false);
-  const sourceType = primary?.sourceType || 'fallback';
+  const sourceType = primary?.current ? 'live' : primary?.sourceType === 'hybrid' ? 'hybrid' : 'fallback';
 
   const faqEntries = contentLocale === 'th'
     ? [
@@ -156,6 +158,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
 
   return (
     <div className="space-y-6">
+      <ProviderContext mode="cash" slug={slug} branchId={staticBranch?.id} locale={contentLocale}/>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faqEntries)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(businessLd) }} />
@@ -192,7 +195,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
           </div>
           <div className="grid grid-cols-2 gap-px border-t border-white/10 bg-white/10 sm:grid-cols-4">
             <Metric label={c.rate} value={formatNumber(primary.buyRate, 4)} />
-            <Metric label={c.distance} value={`${formatNumber(primary.distanceKm, 1)} km`} />
+            <Metric label={c.distance} value={primary.distanceKnown===false?'-':`${formatNumber(primary.distanceKm, 1)} km`} />
             <Metric label={c.denomination} value={primary.denomination} />
             <Metric label={c.observed} value={new Date(primary.observedAt).toLocaleString()} />
           </div>
@@ -206,7 +209,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
           <div className="mt-5 space-y-4 text-sm">
             <Fact label={c.address} value={address || '-'} />
             <Fact label={c.hours} value={hours || '-'} />
-            <Fact label={c.distance} value={primary ? `${formatNumber(primary.distanceKm, 1)} km` : '-'} />
+            <Fact label={c.distance} value={primary && primary.distanceKnown!==false ? `${formatNumber(primary.distanceKm, 1)} km` : '-'} />
           </div>
         </div>
         <div className="rounded-[28px] border border-white/10 bg-[#151a18] p-6">
@@ -253,7 +256,7 @@ function Fact({ label, value }: { label: string; value: string }) {
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
   const provider = cashProviders.find((item) => item.slug === slug);
-  if (!provider) return {};
+  if (!provider || !publicCashProviderSlugs.includes(slug as typeof publicCashProviderSlugs[number])) return {};
   const isRatchada = slug === 'ratchada';
   const isSia = slug === 'sia';
   const title = locale === 'th'
@@ -272,7 +275,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: metadataAlternatesForPolicy(locale, path, ['en', 'th']),
+    alternates: metadataAlternatesForPolicy(locale, path, ['en', 'th', 'zh']),
     robots: robotsForPage(locale, shouldIndexMoneyChangerProfile(locale, slug)),
     openGraph: { title, description, url: withLocalePath(locale, path) },
   };

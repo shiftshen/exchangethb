@@ -1,27 +1,46 @@
 #!/usr/bin/env node
 
 const baseUrl = (process.argv[2] || process.env.BASE_URL || 'https://www.exchangethb.com').replace(/\/+$/, '');
+// A local/canary fetch address must still advertise the public canonical URL.
+const canonicalBaseUrl = (process.argv[3] || process.env.NEXT_PUBLIC_SITE_URL || 'https://www.exchangethb.com').replace(/\/+$/, '');
 const maxTimeMs = Number(process.env.SEO_CLUSTER_TIMEOUT_MS || 15000);
 
 const checks = [
+  ...['en', 'th', 'zh', 'ja', 'ru', 'ko', 'fr', 'de', 'id', 'vi'].flatMap(locale => ['', '/cash', '/crypto'].map(path => ({
+    path: `/${locale}${path}`,
+    canonical: `/${locale}${path}`,
+    mustInclude: [`<html lang="${locale}"`, 'id="main-content" class="simple-main"', `hrefLang="ja"`, 'google-adsense-account', 'ca-pub-8386341379958173'],
+    mustMatch: [/<section class="exchange-guide">/],
+    mustNotInclude: ['noindex, follow'],
+  }))),
+  ...Object.entries({ru:'Обмен',ko:'바트',fr:'baht',de:'Baht',id:'baht',vi:'baht'}).flatMap(([locale, text]) => [
+    {path:`/${locale}/cash`,canonical:`/${locale}/cash`,mustInclude:[text,`hrefLang="${locale}"`],mustMatch:[],mustNotInclude:['Where to exchange your cash?']},
+    {path:`/${locale}/legal/disclaimer`,canonical:`/${locale}/legal/disclaimer`,mustInclude:[`<html lang="${locale}"`,'simple-main'],mustMatch:[],mustNotInclude:['noindex, follow']},
+    {path:`/${locale}/exchanges/bitkub`,expectedStatus:307,expectedLocation:'/en/exchanges/bitkub',followRedirect:false},
+  ]),
+  { path: '/ja/legal/disclaimer', canonical: '/ja/legal/disclaimer', mustInclude: ['第三者サービス', '両替、暗号資産取引、入金受付', 'hrefLang="en"'], mustMatch: [], mustNotInclude: ['noindex, follow'] },
+  { path: '/ja/cash', canonical: '/ja/cash', mustInclude: ['日本円からタイバーツ', '選択すると自動で比較', '日本語'], mustMatch: [/aria-label="通貨"/], mustNotInclude: ['Where to exchange your cash?'] },
+  { path: '/ja/exchanges/bitkub', expectedStatus: 307, expectedLocation: '/en/exchanges/bitkub', followRedirect: false },
+  { path: '/change-lang/ja', expectedStatus: 308, expectedLocation: '/ja', followRedirect: false },
+  { path: '/ads.txt', mustInclude: ['google.com, pub-8386341379958173, DIRECT, f08c47fec0942fa0'], mustMatch: [], mustNotInclude: ['<html'] },
   {
     path: '/',
-    mustInclude: ['/en/crypto', '/en/cash', 'See what you actually get in THB'],
-    mustMatch: [/Estimated net receive/, /Compare now/],
+    mustInclude: ['/en/crypto', '/en/cash', 'Thai baht. An easier choice.'],
+    mustMatch: [/aria-label="Currency"/, /inputMode="decimal"/, /Options update automatically as you choose/],
     mustNotInclude: ['/en/routes', 'Featured Thai exchanges', 'Featured Bangkok money changers'],
     canonical: '/en',
   },
   {
     path: '/en/crypto',
-    mustInclude: ['/en/exchanges/', 'Compare the outcome, not the headline price.'],
-    mustMatch: [/Market depth filled/, /Show fee and depth calculation/, /Open official exchange/],
+    mustInclude: ['Buy or sell. See the final amount.', 'Buy with THB', 'Sell for THB'],
+    mustMatch: [/aria-label="Asset"/, /inputMode="decimal"/, /Options update automatically as you choose/],
     mustNotInclude: ['Related crypto route guides', 'English search questions this page answers'],
     canonical: '/en/crypto',
   },
   {
     path: '/en/cash',
-    mustInclude: ['/en/money-changers/', 'Compare the rate and the trip.'],
-    mustMatch: [/Use my location/, /Open now only/, /Verify official rate/],
+    mustInclude: ['Where to exchange your cash?', 'Currency'],
+    mustMatch: [/Use my location/, /Open now only/, /Options update automatically as you choose/],
     mustNotInclude: ['Related cash and country route guides', 'English search questions this page answers'],
     canonical: '/en/cash',
   },
@@ -45,8 +64,24 @@ const checks = [
   },
   {
     path: '/zh/exchanges/bitkub',
-    mustInclude: ['noindex, follow', '/en/exchanges/bitkub'],
-    mustMatch: [/<link rel="alternate" hrefLang="en"/],
+    canonical: '/zh/exchanges/bitkub',
+    mustInclude: ['/en/exchanges/bitkub'],
+    mustMatch: [/<link rel="alternate" hrefLang="en"/, /<link rel="alternate" hrefLang="zh"/],
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
+    path: '/zh/money-changers/ratchada',
+    canonical: '/zh/money-changers/ratchada',
+    mustInclude: ['hrefLang="th"', 'hrefLang="en"'],
+    mustMatch: [],
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
+    path: '/th/money-changers/ratchada',
+    canonical: '/th/money-changers/ratchada',
+    mustInclude: ['hrefLang="zh"'],
+    mustMatch: [],
+    mustNotInclude: ['noindex, follow'],
   },
   {
     path: '/robots.txt',
@@ -55,11 +90,11 @@ const checks = [
   },
   {
     path: '/sitemap.xml',
-    mustInclude: ['/en/exchanges/bitkub', '/en/money-changers/ratchada', '/en/routes/usd-cash-to-thb'],
+    mustInclude: ['/en/exchanges/bitkub', '/zh/exchanges/bitkub', '/en/money-changers/ratchada', '/zh/money-changers/ratchada', '/en/routes/usd-cash-to-thb'],
     mustMatch: [/<priority>1<\/priority>/, /<priority>0\.95<\/priority>/, /<lastmod>/],
     mustNotInclude: ['/en/exchanges</loc>', '/en/money-changers</loc>', '/en/routes</loc>', '/en/routes/eth-to-thb', '/zh/legal/privacy-policy'],
     mustNotMatch: [/<loc>https?:\/\/[^<]+\/<\/loc>/],
-    expectedLocCount: 29,
+    expectedLocCount: 71,
   },
 ];
 
@@ -68,7 +103,7 @@ function escapeRegex(value) {
 }
 
 function canonicalUrl(path) {
-  return `${baseUrl}${path}`;
+  return `${canonicalBaseUrl}${path}`;
 }
 
 async function fetchText(url, followRedirect = true) {
@@ -99,7 +134,9 @@ async function main() {
     const result = await fetchText(url, check.followRedirect !== false);
 
     if (check.expectedStatus !== undefined) {
-      if (result.status !== check.expectedStatus || result.location !== check.expectedLocation) {
+      const location = result.location ? new URL(result.location, baseUrl) : null;
+      const actualLocation = location ? `${location.pathname}${location.search}` : null;
+      if (result.status !== check.expectedStatus || actualLocation !== check.expectedLocation) {
         failures.push(`${check.path}: expected status=${check.expectedStatus} location=${check.expectedLocation} but got status=${result.status} location=${result.location || '-'}`);
         console.log(`FAIL ${check.path} status=${result.status} location=${result.location || '-'}`);
       } else {

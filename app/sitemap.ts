@@ -25,10 +25,19 @@ function englishOnly(path: string) {
   };
 }
 
-function englishThai(path: string) {
+function englishAndChinese(path: string) {
+  return {
+    en: `${siteUrl}/en${path}`,
+    zh: `${siteUrl}/zh${path}`,
+    'x-default': `${siteUrl}/en${path}`,
+  };
+}
+
+function englishThaiAndChinese(path: string) {
   return {
     en: `${siteUrl}/en${path}`,
     th: `${siteUrl}/th${path}`,
+    zh: `${siteUrl}/zh${path}`,
     'x-default': `${siteUrl}/en${path}`,
   };
 }
@@ -41,8 +50,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'components/home-comparison.tsx',
     'components/cash-decision-tool.tsx',
     'components/crypto-decision-tool.tsx',
+    'components/exchange-picker.tsx',
+    'components/exchange-guide.tsx',
   ]);
-  const legalUpdated = fileDate(['app/[locale]/legal/[slug]/page.tsx']);
+  const legalUpdated = fileDate(['app/[locale]/legal/[slug]/page.tsx', 'lib/japanese-legal.ts', 'lib/additional-languages.json', 'lib/locale-preferences.ts']);
   const exchangeUpdated = fileDate(['app/[locale]/exchanges/[slug]/page.tsx', 'data/site.ts']);
   const moneyChangerUpdated = fileDate(['app/[locale]/money-changers/[slug]/page.tsx', 'data/site.ts']);
   const routeUpdated = fileDate(['app/[locale]/routes/[slug]/page.tsx', 'lib/route-guides.ts']);
@@ -79,13 +90,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     alternates: { languages: localeAlternates(`/legal/${slug}`) },
   })));
 
-  const exchangeProfiles = exchanges.map((exchange) => ({
-    url: `${siteUrl}/en/exchanges/${exchange.slug}`,
-    priority: 0.72,
-    changeFrequency: 'weekly' as const,
-    lastModified: exchangeUpdated,
-    alternates: { languages: englishOnly(`/exchanges/${exchange.slug}`) },
-  }));
+  const exchangeProfiles = exchanges.flatMap((exchange) => [
+    {
+      url: `${siteUrl}/en/exchanges/${exchange.slug}`,
+      priority: 0.72,
+      changeFrequency: 'weekly' as const,
+      lastModified: exchangeUpdated,
+      alternates: { languages: englishAndChinese(`/exchanges/${exchange.slug}`) },
+    },
+    {
+      url: `${siteUrl}/zh/exchanges/${exchange.slug}`,
+      priority: 0.7,
+      changeFrequency: 'weekly' as const,
+      lastModified: exchangeUpdated,
+      alternates: { languages: englishAndChinese(`/exchanges/${exchange.slug}`) },
+    },
+  ]);
 
   const moneyChangerProfiles = publicCashProviders.flatMap((provider) => [
     {
@@ -93,14 +113,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.82,
       changeFrequency: 'daily' as const,
       lastModified: moneyChangerUpdated,
-      alternates: { languages: englishThai(`/money-changers/${provider.slug}`) },
+      alternates: { languages: englishThaiAndChinese(`/money-changers/${provider.slug}`) },
     },
     {
       url: `${siteUrl}/th/money-changers/${provider.slug}`,
       priority: 0.78,
       changeFrequency: 'daily' as const,
       lastModified: moneyChangerUpdated,
-      alternates: { languages: englishThai(`/money-changers/${provider.slug}`) },
+      alternates: { languages: englishThaiAndChinese(`/money-changers/${provider.slug}`) },
+    },
+    {
+      url: `${siteUrl}/zh/money-changers/${provider.slug}`,
+      priority: 0.78,
+      changeFrequency: 'daily' as const,
+      lastModified: moneyChangerUpdated,
+      alternates: { languages: englishThaiAndChinese(`/money-changers/${provider.slug}`) },
     },
   ]);
 
