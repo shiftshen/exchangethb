@@ -1,0 +1,28 @@
+{
+  "checked_at": "2026-10-06T02:02:30.000Z",
+  "local_time": "2026-10-06T09:02:30+07:00",
+  "rules_sha": "c5ad3c6980e3ac645ef4f0da0b703dfd88bcc1e0aedd69d3d16202e36d0dc364",
+  "foundation_git": "4ba3580aeb57d7b216ce2b03a4b5a9d062ababb8",
+  "https": "www health:prod passed; / 308->/en 200; /en 200; /robots.txt 200; /sitemap.xml 200 (64 loc); /api/health 200; /ads.txt 200",
+  "compare": "cash SGD 200 ok with bestRate (SuperRich Thailand); crypto USDT sell 200 ok (Bitkub); crypto BTC buy 200 ok (Bitkub)",
+  "cash": "collector probe exit 0; three sources current 31/31/5; latest local cycle 2026-10-06T01:56:17Z (08:56 +07), 4 minutes before check",
+  "production_health": "status ok; storage mode=database databaseReachable=true; dataStatus=current; cash sources superrich-thailand 31 / ratchada 31 / twelve-victory 5 with quote times 2026-10-06T01:55-01:56Z",
+  "containers": "four healthy on exchangethb:codex-tenlang-20261006 (web, web_canary, worker) + postgres:16-alpine; up 8 hours since the 01:04 release, no restart observed",
+  "worker": "latest cycle status ok; marketHealth binance/bitkub/upbitThailand/orbix all true; BTC current on all four; fallbackOnly=false. USDT source checks remain unavailable (pre-existing, worker code byte-identical to previous production image); public USDT API still returns ok with quotes",
+  "ga4": "measurement id G-HHPM4E9QGY present in the production layout chunk (/_next/static/chunks/app/[locale]/layout-9d1c3195447f65d6.js) => build-time injection live; not present in SSR HTML as expected (loads only after consent). Platform-side reception NOT verified this round",
+  "adsense": "/ads.txt live with google.com, pub-8386341379958173, DIRECT, f08c47fec0942fa0; adsbygoogle.js loader present site-wide with client=ca-pub-8386341379958173; no ad slot (data-ad-slot) rendered; review status NOT read this round (platform side managed by fujane)",
+  "cmp": "no tcf/__tcfapi markers in served HTML; site-scoped CMP runtime still unverified (previous finding stands)",
+  "cash_licence": "BOT licence check page still returns 200 with maintenance body => current cash shop licence remains unverifiable (unchanged)",
+  "google_browser": "not used this round; GSC/GA4/Cloudflare dashboards and AdSense review not re-read (owner decision 2026-10-06: Google traffic centrally managed by fujane; project reports findings only)",
+  "unverified": [
+    "Search Console index/search clicks",
+    "GA4 platform-side reception and funnel events",
+    "Cloudflare dashboard traffic/performance",
+    "AdSense latest review status",
+    "CMP actual consent dialog runtime",
+    "promotion link/expiry recheck (no paid campaign running; outbound links official_only)",
+    "phone real-device 390px regression"
+  ],
+  "production_changes": "none this round; production still image codex-tenlang-20261006 released 2026-10-06T18:04Z (01:04 +07); no version switch, payment, restart, exit-switch or outbound send",
+  "notification": "no new actionable failure; one unchanged state (BOT licence maintenance) and Google-side items are handled centrally; release stability after 8 hours confirmed"
+}
