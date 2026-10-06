@@ -17,6 +17,7 @@
     "worker:daemon": "WORKER_LOOP=1 tsx worker/index.ts",
     "health:prod": "bash ./scripts/check-prod-health.sh",
     "health:cash": "tsx ./scripts/check-cash-collector-health.ts",
+    "health:market": "tsx ./scripts/check-market-sources.ts",
     "seo:cluster": "node ./scripts/check-seo-cluster.mjs",
     "gsc:authorize": "node ./scripts/gsc.mjs authorize",
     "gsc:sites": "node ./scripts/gsc.mjs sites",
@@ -30,7 +31,7 @@
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "clsx": "^2.1.1",
-    "next": "^15.5.20",
+    "next": "^15.5.24",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "zod": "^3.24.2"
@@ -42,9 +43,9 @@
     "@types/react-dom": "^19.0.4",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.39.5",
-    "eslint-config-next": "^15.5.20",
+    "eslint-config-next": "^15.5.24",
     "playwright": "^1.61.1",
-    "postcss": "^8.5.19",
+    "postcss": "^8.5.23",
     "prisma": "^6.5.0",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.23.1",
@@ -52,6 +53,8 @@
     "vitest": "^4.1.10"
   },
   "overrides": {
-    "postcss": "$postcss"
+    "postcss": "$postcss",
+    "nanoid": "^3.3.18",
+    "sharp": "^0.35.4"
   }
 }
