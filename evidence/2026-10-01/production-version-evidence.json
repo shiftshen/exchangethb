@@ -1,0 +1,134 @@
+{
+  "checkedAt": "2026-10-01 Asia/Bangkok",
+  "productionHead": "ae40915c9cbe6a3fde624a57ef59d23a243dd675",
+  "githubHead": "873beb68d200824fc5e66d29d57818d223474d82",
+  "patchSha256": "93006e5b0aa1746538dad821c53f173635ed860cbf24c5a55e4e1dd85fbbf766",
+  "rows": [
+    {
+      "path": "app/[locale]/cash/page.tsx",
+      "productionBlob": "0503a10c1160b4f727525acb12e3a80babc02334",
+      "githubBlob": "f9c20bd5c37ce8f9c9d497daa4dcff72e767b59e",
+      "same": false
+    },
+    {
+      "path": "app/[locale]/crypto/page.tsx",
+      "productionBlob": "c0c6d0ebbc7ba5547308ee90d682d3f8fc616fe6",
+      "githubBlob": "27a0b9c4b617e37bb90086d52c9218901f4b7c1d",
+      "same": false
+    },
+    {
+      "path": "app/[locale]/exchanges/page.tsx",
+      "productionBlob": "e62408dc227d8b0e19309483b7d0f1664b4a465c",
+      "githubBlob": "ae934795894bbf3c40834f4e697af55822a381f6",
+      "same": false
+    },
+    {
+      "path": "app/[locale]/money-changers/[slug]/page.tsx",
+      "productionBlob": "454d4397888ed37bc79dfc74533962bf2ff8a582",
+      "githubBlob": "0303692c949bf7cd3e8178b8aee4a84dc1a0cf7b",
+      "same": false
+    },
+    {
+      "path": "app/[locale]/money-changers/page.tsx",
+      "productionBlob": "72216900c623ff5932679f3efe2d5ef8d8b69c43",
+      "githubBlob": "54a37c1f1cb51d361c10cc742fc3ed490f317566",
+      "same": false
+    },
+    {
+      "path": "app/[locale]/page.tsx",
+      "productionBlob": "8acd619a3d857c196a4e2415c59107f9add0bbfd",
+      "githubBlob": "5fd24ccff951f4f390b61623ca4a477516f077d1",
+      "same": false
+    },
+    {
+      "path": "app/[locale]/routes/[slug]/page.tsx",
+      "productionBlob": "edfe7c95465aebfd7f84682965b1ba9d710af26c",
+      "githubBlob": "a2cf0c33a7addfda0ee3f73442306bc13334f6c0",
+      "same": false
+    },
+    {
+      "path": "app/[locale]/routes/page.tsx",
+      "productionBlob": "1566ea47bc35aa8ab8971d3fd8654ecd1d547d79",
+      "githubBlob": "98c92de875ce0c6305331d3e7a2a54005a340433",
+      "same": false
+    },
+    {
+      "path": "app/llms.txt/route.ts",
+      "productionBlob": "892c9be31d734aeea86fae942b42f9ca7da59cce",
+      "githubBlob": "368a1ff01bae97cc2c032a8b0ce207de8013546f",
+      "same": false
+    },
+    {
+      "path": "app/page.tsx",
+      "productionBlob": "5b7c317a56862dc01ca6ff44461ff1a9fac77640",
+      "githubBlob": "5b7c317a56862dc01ca6ff44461ff1a9fac77640",
+      "same": true
+    },
+    {
+      "path": "app/robots.ts",
+      "productionBlob": "335d90ac4e5f5eee8af472ab9dcd8bf1508afe31",
+      "githubBlob": "253f55d285d8f587d09d5307440f4c99cd7cf9de",
+      "same": false
+    },
+    {
+      "path": "app/sitemap.ts",
+      "productionBlob": "970404b6effc8f419eb9324e12b32a0b8830b3b9",
+      "githubBlob": "60ae1687c8aa04689b786f96beab78237d64b227",
+      "same": false
+    },
+    {
+      "path": "components/site-footer.tsx",
+      "productionBlob": "d485caa043cc05b517a75e0fe9d60f9cc944f138",
+      "githubBlob": "58f4300383c60a789d437a098bbf0b3d187a0c9a",
+      "same": false
+    },
+    {
+      "path": "docker-compose.yml",
+      "productionBlob": "09af2e7b2a2ae0e559e32776fb07c731d2607b94",
+      "githubBlob": "09af2e7b2a2ae0e559e32776fb07c731d2607b94",
+      "same": true
+    },
+    {
+      "path": "lib/seo.ts",
+      "productionBlob": "c13df9a0b9c4fee2c22ee32fc1ba65851f761f56",
+      "githubBlob": "88d29792f458c31384eb36c6efc2724b34810df1",
+      "same": false
+    },
+    {
+      "path": "middleware.ts",
+      "productionBlob": "3534d972bfdf6a57ea39bae3f5746c074af67be5",
+      "githubBlob": "df14afa60f93509f15a1ecd6f7c27062810feeee",
+      "same": false
+    },
+    {
+      "path": "next.config.ts",
+      "productionBlob": "afc137876198a8bf3c7e046b6f2df4e76b0420a9",
+      "githubBlob": "1d339e63b03e8165ba2cbf9b3690a4592e090520",
+      "same": false
+    },
+    {
+      "path": "scripts/check-prod-health.sh",
+      "productionBlob": "21ab595ad46d4116837e5a892ed1af0f0f3548f4",
+      "githubBlob": "17fcba5523afab4d7b0f3844168b886c476c4683",
+      "same": false
+    },
+    {
+      "path": "scripts/check-seo-cluster.mjs",
+      "productionBlob": "7aa30572d53d4b85f9a7e32a390e018b79d68bed",
+      "githubBlob": "f44c24d7ca760d33fa33f2d417e93dbb1074dd25",
+      "same": false
+    },
+    {
+      "path": "scripts/gsc.mjs",
+      "productionBlob": "4e6bb9d8fff2a4364dc82dacf972c1e57e35405a",
+      "githubBlob": "137d6878c37e6d6e7400fc776f6bd402d60c5609",
+      "same": false
+    },
+    {
+      "path": "tests/locale.test.ts",
+      "productionBlob": "73ed159bd93beb1e1fab856b65f95ee4e0bfaa31",
+      "githubBlob": "73ed159bd93beb1e1fab856b65f95ee4e0bfaa31",
+      "same": true
+    }
+  ]
+}

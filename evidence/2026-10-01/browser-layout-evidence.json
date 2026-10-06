@@ -1,0 +1,132 @@
+{
+  "testedAt": "2026-10-01T16:56:51.834Z",
+  "image": "exchangethb:codex-20261001",
+  "checks": [
+    {
+      "width": 360,
+      "locale": "zh",
+      "route": "",
+      "overflow": false,
+      "compareBottom": 699.390625
+    },
+    {
+      "width": 360,
+      "locale": "zh",
+      "route": "/cash",
+      "overflow": false,
+      "compareBottom": 610.390625
+    },
+    {
+      "width": 360,
+      "locale": "zh",
+      "route": "/crypto",
+      "overflow": false,
+      "compareBottom": 646.7890625
+    },
+    {
+      "width": 360,
+      "locale": "en",
+      "route": "",
+      "overflow": false,
+      "compareBottom": 782.0859375
+    },
+    {
+      "width": 360,
+      "locale": "en",
+      "route": "/cash",
+      "overflow": false,
+      "compareBottom": 670.5859375
+    },
+    {
+      "width": 360,
+      "locale": "en",
+      "route": "/crypto",
+      "overflow": false,
+      "compareBottom": 670.5859375
+    },
+    {
+      "width": 360,
+      "locale": "th",
+      "route": "",
+      "overflow": false,
+      "compareBottom": 699.390625
+    },
+    {
+      "width": 360,
+      "locale": "th",
+      "route": "/cash",
+      "overflow": false,
+      "compareBottom": 610.390625
+    },
+    {
+      "width": 360,
+      "locale": "th",
+      "route": "/crypto",
+      "overflow": false,
+      "compareBottom": 634.1875
+    },
+    {
+      "width": 390,
+      "locale": "zh",
+      "route": "",
+      "overflow": false,
+      "compareBottom": 699.390625
+    },
+    {
+      "width": 390,
+      "locale": "zh",
+      "route": "/cash",
+      "overflow": false,
+      "compareBottom": 610.390625
+    },
+    {
+      "width": 390,
+      "locale": "zh",
+      "route": "/crypto",
+      "overflow": false,
+      "compareBottom": 610.390625
+    },
+    {
+      "width": 390,
+      "locale": "en",
+      "route": "",
+      "overflow": false,
+      "compareBottom": 723.1875
+    },
+    {
+      "width": 390,
+      "locale": "en",
+      "route": "/cash",
+      "overflow": false,
+      "compareBottom": 670.5859375
+    },
+    {
+      "width": 390,
+      "locale": "en",
+      "route": "/crypto",
+      "overflow": false,
+      "compareBottom": 670.5859375
+    },
+    {
+      "width": 390,
+      "locale": "th",
+      "route": "",
+      "overflow": false,
+      "compareBottom": 699.390625
+    },
+    {
+      "width": 390,
+      "locale": "th",
+      "route": "/cash",
+      "overflow": false,
+      "compareBottom": 610.390625
+    },
+    {
+      "width": 390,
+      "locale": "th",
+      "route": "/crypto",
+      "overflow": false,
+      "compareBottom": 610.390625
+    }
+  ]
+}

@@ -73,7 +73,23 @@ npm run health:prod                                       # 生产端点只读�
 
 - **禁止**为汇报、复盘、合并、对照、交接新建 `*_REPORT_*`、`*_SUMMARY_*`、`LEGACY_*`、`*_v2` 之类文档；汇报写聊天 + `lark-status.json`。
 - 临时文件放 `/Volumes/M2USB/_scratch/exchangethb/<日期>/`，用完归档；**任何文件不删除**，归档到 `/Volumes/M2USB/archive/`。`artifacts/` 是历史遗留，不再新增文件，后续整理需 fujane 确认。
-- 遗留根文档（`DELIVERY_RECEIPT.md`、`CURRENT_ACCEPTANCE_AUDIT.md`、`FINAL_ACCEPTANCE_MATRIX.md`、`PROMOTION_OPERATIONS_PLAN.md`、`MONETIZATION_IMPLEMENTATION_2026-10-02.md`、`REFERRAL_VERIFICATION_2026-10-02.md`、`DATA_DELIVERY_RECEIPT.md`、`IMPLEMENTATION_PLAN.md`、`RECONSTRUCTION_PLAN_2026-10-01_CN.md`、`SERVICE_VALUE_PLAN.md`、`PRODUCTION_VERSION_REVIEW.md`、`FOUNDATION_CAPABILITY_HANDOFF.md`）仍被 registry 或 09:00 每日任务引用，本轮未动；确认引用改完后再统一归档，不擅自移动他人文档。
+- 遗留根文档已按 2026-10-06 文件规范整理（见下节「目录规范」）；引用它们的 registry / 09:00 任务指针由 fujane 侧更新，本文件不再逐个列举。
+
+## 目录规范（老板 2026-10-06 / 底座规则第 20 节；2026-10-06 已整理）
+
+| 位置 | 放什么 |
+|---|---|
+| 项目根 | `AGENTS.md`、`README.md`、`lark-status.json`、`DEVELOPMENT_PLAN.md`（唯一计划）、`SITE_OPERATIONS_EVIDENCE.md`（业务事实）、工具链必需配置（`package*.json`、`tsconfig/next/tailwind/postcss/eslint/vitest` 配置、`middleware.ts`、`Dockerfile`、`docker-compose.yml`、`.env.example`、`.gitignore`、`.dockerignore`、`.nvmrc`）与源码子目录（`app/ components/ lib/ content/ data/ prisma/ public/ scripts/ tests/ worker/`） |
+| `docs/` | 固定文档：交付回执、验收矩阵、推广/SOP/runbook/模板/handoff、SEO 研究等 23 个（09:00 每日任务要读的 `PROMOTION_OPERATIONS_PLAN.md`、`FINAL_ACCEPTANCE_MATRIX.md` 也在 `docs/`） |
+| `evidence/<日期>/` | 证据原件，**新证据只写这里**（如 `evidence/2026-10-06/`、`evidence/2026-10-01/`） |
+| `tmp/` | 截图、草稿、一次性文件；14 天不用自动归档 |
+| `artifacts/` | 历史遗留：只保留 JSON/PNG/LOG/TXT 类旧证据（826 个、16M），不再新增；原始抓取已归档 |
+| `/Volumes/M2USB/_scratch/exchangethb/` | 编译产物与缓存（`.next` 已移出，构建时自动重建） |
+| `/Volumes/M2USB/archive/exchangethb-cleanup-20261006/` | 本次整理归档：原始抓取 html/js/gz 1803 个（256M）+ 早前归档 | 
+
+- 本项目是单一 Next.js 应用，无子项目，故不建 `其他/`；模型与成片不在本项目（成片走 NAS seek），数据库数据在生产服务器 Docker volume `/opt/exchangethb`，本地无库文件可迁。
+- **任何文件不删除**；`tmp/` 与归档由 fujane/老板按规则清理。
+- 整理后实测：`npm run test` 127/39 通过、`tsc --noEmit` 干净、`eslint` 0 问题、`health:cash` exit 0（采集正常）。
 
 ## 收工
 
