@@ -1,0 +1,71 @@
+# 夜间改进：行情源瞬时失败有界重试 + 行情源健康探针（2026-10-07 03:00-03:12 +07）
+
+## 起因（实测）
+worker 周期在 degraded/ok 间抖动。10-07 03:10 重启后首轮：
+  bitkub BTC = source_timeout；upbit USDT = source_timeout；upbit BTC = stale_orderbook
+容器内直连同三源 3 次：200，延迟 361ms / 4315ms / 2879ms（波动大，8s 超时内多数可达）。
+结论：不是配对映射错误（USDT/BTC 端点本身 200）；是瞬时超时/DNS 抖动。stale_orderbook 是校验器按「交易所自身时间戳 >2 分钟」正确拒绝，不放宽（宁缺毋滥）。
+
+## 改动（提交 fcb5e8d）
+- lib/market-data.ts：新增 isTransientMarketFailure + sourceJsonWithRetry，四个行情源改用「同主机同路径、最多重试 1 次」；
+  只重试 AbortError/Timeout、EAI_AGAIN/ENOTFOUND/ECONNRESET/ECONNREFUSED/ETIMEDOUT、HTTP 5xx；403/4xx 不重试（策略拒绝即失败）。
+- lib/market-probe.ts + scripts/check-market-sources.ts + npm run health:market：行情源健康探针，对生产 /api/compare/crypto 取 BTC/USDT，
+  live 源 < 2 个退出非 0（可接入基座每日体检 §14，当前未接，等 fujane）。
+- tests/market-retry.test.ts（4 条：DNS 重试一次/403 不重试/超时重试后放弃/5xx 重试一次不超过两次）、tests/market-probe.test.ts（4 条）。
+
+## 门禁（工作区）
+vitest 142 tests / 42 files 通过；tsc 干净；eslint 0；next build exit 0。
+
+## 发布（03:06-03:11 +07，夜间无客户外发）
+- 镜像 exchangethb:v0.1.0-20261007-market-retry = sha256:45ea920c4f3f…（版本号标签，符合 PM 标准 #2）；构建日志 runtime/backups/build-20261007b.log（BUILD_EXIT=0）
+- canary 独立容器：BTC 4 源 live、USDT 3 源 live、ETH 4 源 live，zh 详情页仍无 noindex
+- 切换后：web/web_canary/worker 同镜像 restarts=0；health:prod passed；health:market「BTC 3/3 | USDT 3/3」；SEO 集群脚本对公网 exit 0
+- 回退：compose.release-20261007.yml（镜像 exchangethb:v0.1.0-20261007-zh-detail = sha256:80fe5f014aab…）
+
+## 备份（PM 标准 #1/#4）
+NAS：fnas:/vol1/@team/_ops/dev-backups/exchangethb/opt-exchangethb-source-20261007-0300-prefx.tgz（515,667 B）
+sha256 = 08472cda0926ea478dae60926138c959025db00c8079f806feefc6329d73885d（NAS 端回读一致）
+方式：服务器 tar 流式直写 NAS，未在服务器落盘。
+
+## 未验证
+重试是否让 worker 稳定到 status=ok，需观察多个 10 分钟周期（见 lark-status 复核记录）；upbit BTC 的 stale_orderbook 属交易所盘口本身，预期仍会间歇出现。
+
+## 追加：DNS 根因调查（03:20-03:35 +07）——结论是宿主级问题，不是本项目代码
+
+### 更正一条自己的错误测量
+首次 DNS 对照用了 `dns.Resolver().resolve4(host)` 的 promise 写法（该 API 只接受回调），四条解析器全部「0ms 失败」是**测试缺陷**，不是真实结论，已作废。
+
+### 正确测量（`dns.promises.Resolver`，每台 12 次解析）
+| 目标 | ok/fail | 中位 | max |
+|---|---|---|---|
+| Docker 内嵌 127.0.0.11 | 11/12 | 2034ms | 5005ms |
+| 1.1.1.1 | 12/12 | 1034ms | 11047ms |
+| **8.8.8.8** | **12/12** | **1032ms** | **2034ms** |
+| 9.9.9.9 | 11/12 | 1036ms | 5004ms |
+| 宿主第二个上游 47.84.83.155 | 9/12 | 2046ms | **28027ms** |
+
+宿主 `resolvectl`：上游 = `47.84.83.155`(阿里云) + `1.1.1.1`。命中 47.84.83.155 时解析停顿 5-28 秒 → 这就是 worker/行情源 `EAI_AGAIN` 与 `source_timeout` 的来源。
+
+### 试过并撤销的项目级修复（同样条件 A/B，一次性容器）
+- A 默认（宿主解析器）：ok=11 fail=1 中位 2848ms
+- B 固定 `--dns 8.8.8.8 --dns 1.1.1.1`：ok=11 fail=1 中位 2538ms
+→ **无实质差异**（瓶颈在 Docker 内嵌解析器→宿主 systemd-resolved 这条链路，不在上游选择）。因此已把生产容器与仓库 compose 的 `dns:` 覆盖**全部撤销**（`HostConfig.Dns` 现为空，回到 compose.release-20261007b.yml），不留无效配置；容器名解析与 /api/health(databaseReachable=true) 已复验正常。
+
+### 需要宿主/基座处理（属 PM/fujane 车道，未自行改宿主 DNS）
+- 从宿主 systemd-resolved 上游列表移除或降权 `47.84.83.155`（或为其加超时/健康检查）；这会影响**所有**项目的容器外网解析。
+- 参考证据：A/B 表、`resolvectl status`、容器内 12 次解析明细，均在本次会话命令输出中，可复现命令：
+  `ssh 1panel-happy 'docker run --rm --network exchangethb_net -v /tmp/dnsbench2.js:/b.js:ro node:20-alpine node /b.js'`
+
+## 重试上线后的周期对比（实测 worker 日志）
+| 时间(UTC) | status | unavailable 数 |
+|---|---|---|
+| 20:10:06（重试上线前） | degraded | 3 |
+| 20:20:23（重试上线前） | degraded | 6 |
+| 20:30:44（重试上线后） | **ok** | 1 |
+| 20:40:59（重试上线后） | **ok** | 2 |
+
+剩余 unavailable 的两类原因已分别查实：
+- `upbit-thailand / USDT / stale_orderbook`：Upbit TH 的 THB-USDT 盘口时间戳 **656 秒前**（同交易所 THB-BTC 仅 16 秒）→ 交易所自身数据旧，校验器按「>2 分钟」正确拒绝，站点以 fallback 标注，**不是本项目缺陷，无需放宽**。
+- `orbix / BTC / source_dns_failure`：宿主 DNS 链路（见上节）导致的瞬时失败，重试未能救回第二次。
+
+小样本说明：连续 2 个周期 ok，样本仍少，需继续观察；不据此宣称「已彻底解决」。
