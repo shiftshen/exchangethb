@@ -49,6 +49,8 @@
   - 该探针已由 fujane 于 **2026-10-06** 接入基座每日体检 `daily-maintenance` §14（`control/bin/daily-maintenance-check.py:154`：每天 09:03 在本项目跑该探针，rc≠0 计入 problems 并经 notify 发 Telegram 告警；探针文件缺失则跳过）。**无需**再改 `health-watch` 的 uchg 文件。
   - Google 流量（GSC/GA4/SEO）自 2026-10-06 起由 fujane 统一管理；本项目的 GA4/AdSense 发现写进 `lark-status.json` 交 fujane，不自行改动平台配置。
 - **工作区禁止粗暴清理**：不得 `git reset --hard`、`git clean`、批量提交或覆盖他人改动。
+- **生产扫描拦截规则（2026-10-07 上线，易被覆盖）**：在 1Panel openresty 容器 `1Panel-openresty-inz6` 的 `/www/sites/exchangethb.com/proxy/root.conf` 的 `location ^~ /` 内，有两条 `if ($request_uri ~* "\.(php[0-9]?|phar|asp|aspx|jsp|cgi|sql|zip|gz|tar|tgz|bak|old|swp|env|ini)($|\?)") { return 403; }` 与 `^/(wp-|wordpress|xmlrpc|uploads?/|sites/default|phpmyadmin|pma/|vendor/|composer\.|cgi-bin/|telescope|actuator|@fs|\.git|\.svn|\.aws|\.ssh|adminer|alfa\.|chosen\.|simple\.|file\.php|edit\.php|gecko\.|goods\.php|classwithtostring|this_is_a_new_hello_world)`。规则必须写在 location 内（`^~ /` 会跳过正则 location 求值，服务器块里既有的 .env/.git 正则规则此前从未生效）。**若在 1Panel 面板重新保存该站点反向代理，root.conf 会被重写，需重新应用**。备份见同目录 `root.conf.bak.20261007-probe-block`；证据 `evidence/2026-10-07/`。
+- **详情页索引策略**：交易所详情仅 en/zh 可索引、门店详情 en/th/zh（`lib/indexing-policy.ts`），改动后必须同步 `app/sitemap.ts` 的 hreflang 与 `scripts/check-seo-cluster.mjs` 的期望条数（当前 sitemap 71 条）。
 
 ## 常用命令
 
