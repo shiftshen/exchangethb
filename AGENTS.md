@@ -7,7 +7,7 @@
 ## 唯一目录（硬性）
 
 - 项目实体**只有一个**：`/Volumes/M2USB/dev/exchangethb`
-- `/Volumes/M2USB/Projects/exchangethb.com` → 上述实体的**兼容软链**，不是第二份副本
+- `/Volumes/M2USB/dev/exchangethb` → 上述实体的**兼容软链**，不是第二份副本
 - 禁止在旧路径或别处新建、复制同名项目/目录/服务；清理旧软链必须等所有引用改完（见 registry `migration_discipline`）
 - 采集 plist 与脚本里的路径一律写**真实路径**，不写旧软链（原因见下方「已知坑」）
 
@@ -38,11 +38,13 @@
 ## 凭据
 
 - 密码 / Key 只经 `agent-control` 与登记的受限位置取用；**不进**代码、文档、日志、URL、argv 或全局环境变量
+- **统一默认密码（老板 2026-10-06）**：新建的后台/管理员账号与新注册平台账号一律用老板指定的统一默认密码，禁止自创随机密码。取值只经 `agent-control credential pipe default-account-password -- /绝对路径消费程序`（钥匙串注入；项目里用环境变量或首次启动注入），**不得**写进代码、配置、种子文件、文档、日志、聊天或命令参数；建好即按 `accounts.yaml` 风格登记（id/平台/网址/账号名/钥匙串服务名）并报 fujane。改密须老板授权。
+- 账号现状（2026-10-06 盘点）：站点后台 `admin@exchangethb.com` 是统一默认密码之前自建的——明文未登记任何受限位置，只剩生产 `.env` 的 scrypt 哈希，且与统一默认不一致；待老板授权后用统一默认密码重置并登记。其余平台资产走既有 Google SSO 或 API key，无自建密码。
 - Google 环境：Profile 16 / `fujane110@gmail.com`。Places key 只按 registry 引用使用，不读取、不复制、不分发
 
 ## 已知坑（2026-10-05 实测）
 
-- **软链会被采集 helper 拒绝**：共享 helper 的 `proxy_fetch.py:output_slot()` 用 `O_RDONLY|O_DIRECTORY|O_NOFOLLOW` 逐级固定路径组件。plist 一旦传旧软链路径 `/Volumes/M2USB/Projects/exchangethb.com`，三源全部 `output_rejected`、零 HTML 落盘，而**进程仍然 `state=running`**。当日因此静默断更 8h48m。
+- **软链会被采集 helper 拒绝**：共享 helper 的 `proxy_fetch.py:output_slot()` 用 `O_RDONLY|O_DIRECTORY|O_NOFOLLOW` 逐级固定路径组件。plist 一旦传旧软链路径 `/Volumes/M2USB/dev/exchangethb`，三源全部 `output_rejected`、零 HTML 落盘，而**进程仍然 `state=running`**。当日因此静默断更 8h48m。
 - **进程活着 ≠ 采集健康**：判据看轮次结果，不看进程。项目探针 `npm run health:cash`（`scripts/check-cash-collector-health.ts`）在「连续 3 轮三源全挂」或「超过 30 分钟无新轮次」时退出非 0。
   - 该探针已由 fujane 于 **2026-10-06** 接入基座每日体检 `daily-maintenance` §14（`control/bin/daily-maintenance-check.py:154`：每天 09:03 在本项目跑该探针，rc≠0 计入 problems 并经 notify 发 Telegram 告警；探针文件缺失则跳过）。**无需**再改 `health-watch` 的 uchg 文件。
   - Google 流量（GSC/GA4/SEO）自 2026-10-06 起由 fujane 统一管理；本项目的 GA4/AdSense 发现写进 `lark-status.json` 交 fujane，不自行改动平台配置。
