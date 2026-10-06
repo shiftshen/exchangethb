@@ -1,0 +1,36 @@
+original	new	size_bytes	size_human	symlink_left	note
+/Volumes/M2USB/dev/exchangethb/RELEASE_2026-10-06.md	/Volumes/M2USB/archive/exchangethb-docs-20261006/RELEASE_2026-10-06.md	5667	5.5K	no	文档纪律轮；正文已并入 SITE_OPERATIONS_EVIDENCE.md
+/Volumes/M2USB/dev/exchangethb/artifacts/heartbeat-audit-20261006.json	/Volumes/M2USB/dev/exchangethb/evidence/2026-10-06/heartbeat-audit-20261006.json	3125	3.1K	no	git mv
+/Volumes/M2USB/dev/exchangethb/CURRENT_ACCEPTANCE_AUDIT.md	/Volumes/M2USB/dev/exchangethb/docs/CURRENT_ACCEPTANCE_AUDIT.md	34202	33.4K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/DATA_DELIVERY_RECEIPT.md	/Volumes/M2USB/dev/exchangethb/docs/DATA_DELIVERY_RECEIPT.md	5810	5.7K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/DELIVERY_RECEIPT.md	/Volumes/M2USB/dev/exchangethb/docs/DELIVERY_RECEIPT.md	77555	75.7K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/DEPLOYMENT_HANDOFF.md	/Volumes/M2USB/dev/exchangethb/docs/DEPLOYMENT_HANDOFF.md	4261	4.2K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/FINAL_ACCEPTANCE_MATRIX.md	/Volumes/M2USB/dev/exchangethb/docs/FINAL_ACCEPTANCE_MATRIX.md	3748	3.7K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/FOUNDATION_CAPABILITY_HANDOFF.md	/Volumes/M2USB/dev/exchangethb/docs/FOUNDATION_CAPABILITY_HANDOFF.md	9463	9.2K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/GO_LIVE_CHECKLIST_CN.md	/Volumes/M2USB/dev/exchangethb/docs/GO_LIVE_CHECKLIST_CN.md	1993	1.9K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/IMPLEMENTATION_PLAN.md	/Volumes/M2USB/dev/exchangethb/docs/IMPLEMENTATION_PLAN.md	3963	3.9K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/INTERNATIONAL_SEO_PLAN.md	/Volumes/M2USB/dev/exchangethb/docs/INTERNATIONAL_SEO_PLAN.md	2299	2.2K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/MONETIZATION_IMPLEMENTATION_2026-10-02.md	/Volumes/M2USB/dev/exchangethb/docs/MONETIZATION_IMPLEMENTATION_2026-10-02.md	3329	3.3K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/OPS_SOP_CN.md	/Volumes/M2USB/dev/exchangethb/docs/OPS_SOP_CN.md	2487	2.4K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/PRODUCTION_VERSION_REVIEW.md	/Volumes/M2USB/dev/exchangethb/docs/PRODUCTION_VERSION_REVIEW.md	2954	2.9K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/PROD_INPUT_TEMPLATE_CN.md	/Volumes/M2USB/dev/exchangethb/docs/PROD_INPUT_TEMPLATE_CN.md	1210	1.2K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/PROMOTION_OPERATIONS_PLAN.md	/Volumes/M2USB/dev/exchangethb/docs/PROMOTION_OPERATIONS_PLAN.md	5760	5.6K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/RECONSTRUCTION_PLAN_2026-10-01_CN.md	/Volumes/M2USB/dev/exchangethb/docs/RECONSTRUCTION_PLAN_2026-10-01_CN.md	22092	21.6K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/REFERRAL_VERIFICATION_2026-10-02.md	/Volumes/M2USB/dev/exchangethb/docs/REFERRAL_VERIFICATION_2026-10-02.md	3033	3.0K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/RELEASE_CANDIDATE_2026-07-14.md	/Volumes/M2USB/dev/exchangethb/docs/RELEASE_CANDIDATE_2026-07-14.md	3424	3.3K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/RELEASE_RUNBOOK_CN.md	/Volumes/M2USB/dev/exchangethb/docs/RELEASE_RUNBOOK_CN.md	2935	2.9K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/SEO_14_DAY_RECOVERY_PLAN_CN.md	/Volumes/M2USB/dev/exchangethb/docs/SEO_14_DAY_RECOVERY_PLAN_CN.md	3246	3.2K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/SEO_REDESIGN_RESEARCH_PLAN_CN.md	/Volumes/M2USB/dev/exchangethb/docs/SEO_REDESIGN_RESEARCH_PLAN_CN.md	18375	17.9K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/SEO_URL_DISPOSITION_CN.md	/Volumes/M2USB/dev/exchangethb/docs/SEO_URL_DISPOSITION_CN.md	2688	2.6K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/SERVICE_VALUE_PLAN.md	/Volumes/M2USB/dev/exchangethb/docs/SERVICE_VALUE_PLAN.md	2210	2.2K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/V1_ACCEPTANCE_MATRIX.md	/Volumes/M2USB/dev/exchangethb/docs/V1_ACCEPTANCE_MATRIX.md	2694	2.6K	no	固定文档→docs/
+/Volumes/M2USB/dev/exchangethb/browser-layout-evidence.json	/Volumes/M2USB/dev/exchangethb/evidence/2026-10-01/browser-layout-evidence.json	2571	2.5K	no	散落证据→evidence/2026-10-01/
+/Volumes/M2USB/dev/exchangethb/desktop-preview.png	/Volumes/M2USB/dev/exchangethb/evidence/2026-10-01/desktop-preview.png	124151	121.2K	no	散落证据→evidence/2026-10-01/
+/Volumes/M2USB/dev/exchangethb/mobile-first-screen.png	/Volumes/M2USB/dev/exchangethb/evidence/2026-10-01/mobile-first-screen.png	50747	49.6K	no	散落证据→evidence/2026-10-01/
+/Volumes/M2USB/dev/exchangethb/mobile-preview.png	/Volumes/M2USB/dev/exchangethb/evidence/2026-10-01/mobile-preview.png	169144	165.2K	no	散落证据→evidence/2026-10-01/
+/Volumes/M2USB/dev/exchangethb/production-version-evidence.json	/Volumes/M2USB/dev/exchangethb/evidence/2026-10-01/production-version-evidence.json	4590	4.5K	no	散落证据→evidence/2026-10-01/
+/Volumes/M2USB/dev/exchangethb/.next	/Volumes/M2USB/_scratch/exchangethb/build-cache/.next-20261006	208515072	0.2M(dir)	no	⚠>100MB，补充规则发布前移动；按②保持已移动，构建时已自动重建（当前在项目内 199M，未再移动）
+/Volumes/M2USB/dev/exchangethb/tsconfig.tsbuildinfo	/Volumes/M2USB/_scratch/exchangethb/build-cache/tsconfig.tsbuildinfo-20261006	138248	135.0K	no	编译产物
+/Volumes/M2USB/dev/exchangethb/tsconfig.tsbuildinfo(再生)	/Volumes/M2USB/_scratch/exchangethb/build-cache/tsconfig.tsbuildinfo-20261006-rerun	135711	132.5K	no	typecheck 再生，重复移出
+/Volumes/M2USB/dev/exchangethb/tsconfig.tsbuildinfo(build 再生)	/Volumes/M2USB/_scratch/exchangethb/build-cache/tsconfig.tsbuildinfo-20261006-build	0	?	no	build 再生，重复移出
+/Volumes/M2USB/dev/exchangethb/artifacts/**/*.html|js|gz（1803 个）	/Volumes/M2USB/archive/exchangethb-cleanup-20261006/artifacts-raw-captures	268095488	0.2M(dir)	no	⚠256M 聚合，补充规则发布前移动；按②保持已移动，目录结构保留
