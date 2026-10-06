@@ -1,0 +1,14 @@
+host	path	size_bytes	modified	purpose	sha256
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/exchangethb-20261002-1813.dump	14159	2026-10-02 18:12	DB 快照 pg_dump -Fc（10-02 上手前）	4645c1f3d2bb3d67a14b49301e5b57787107a8f8e27771ba41596cf520e9316f
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/exchangethb-20261002-1813.toc	1916	2026-10-02 18:12	pg_restore 目录清单（配合上条）	-
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/exchangethb-20261002-1813.sha256	130	2026-10-02 18:12	上条 dump 的校验记录	-
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/exchangethb-20261006-0105.dump	14151	2026-10-06 00:59	10-06 发布前 DB 快照	60b1e21b9c5640ddbfe436777c6440023cb4e651f075646edd55203f23459f0d
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/exchangethb-20261006-0105.sha256	113	2026-10-06 00:59	上条校验记录	-
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/opt-exchangethb-source-20261006-0105.tgz	255570	2026-10-06 00:59	10-06 发布前 源码+compose 快照	505579e19dc78e64843d96a22ed28d914b0a11801d59277abff685a941e0ce0e
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/opt-exchangethb-source-20261006-0105.sha256	123	2026-10-06 00:59	上条校验记录	-
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/opt-exchangethb-source-20261007-0100.tgz	515563	2026-10-07 00:43	10-07 发布前 源码+compose 快照	21569c255522aa3bd56cd915fe0b7550826c236b5a6712684df0a8519ccd93d8
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/opt-exchangethb-source-20261007-0100.sha256	123	2026-10-07 00:43	上条校验记录	-
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/rollback-image-20261006-0105.txt	72	2026-10-06 00:59	回退镜像 ID 记录（非备份体）	-
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/rollback-image-20261007-0100.txt	72	2026-10-07 00:43	回退镜像 ID 记录（非备份体）	-
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/build-20261006.log	10930	2026-10-06 01:03	构建日志（非备份体）	-
+1panel-happy(192.168.1.83)	/opt/exchangethb/runtime/backups/build-20261007.log	9876	2026-10-07 00:44	构建日志（非备份体）	-

@@ -151,5 +151,81 @@
       "比较结果旁的费用/时效/来源摘要（转化优化）未做"
     ],
     "caveat": "1Panel 面板重新保存反代配置会覆盖扫描拦截规则，需重新应用（已写入 AGENTS.md）"
+  },
+  "备份清单_20261007": {
+    "standard_ref": "registry.owner_decisions_20261007_0121_backups（PM 2026-10-07 01:21）",
+    "status": "只读清点完成，未移动/未删除任何原件；等 PM/审核确认后拷贝到 NAS 并校验 sha256",
+    "server_backup_bodies": [
+      {
+        "host": "1panel-happy(192.168.1.83)",
+        "path": "/opt/exchangethb/runtime/backups/exchangethb-20261002-1813.dump",
+        "bytes": 14159,
+        "mtime": "2026-10-02 18:12",
+        "purpose": "DB 快照（10-02）",
+        "sha256": "4645c1f3d2bb3d67a14b49301e5b57787107a8f8e27771ba41596cf520e9316f"
+      },
+      {
+        "host": "1panel-happy(192.168.1.83)",
+        "path": "/opt/exchangethb/runtime/backups/exchangethb-20261006-0105.dump",
+        "bytes": 14151,
+        "mtime": "2026-10-06 00:59",
+        "purpose": "10-06 发布前 DB 快照",
+        "sha256": "60b1e21b9c5640ddbfe436777c6440023cb4e651f075646edd55203f23459f0d"
+      },
+      {
+        "host": "1panel-happy(192.168.1.83)",
+        "path": "/opt/exchangethb/runtime/backups/opt-exchangethb-source-20261006-0105.tgz",
+        "bytes": 255570,
+        "mtime": "2026-10-06 00:59",
+        "purpose": "10-06 发布前 源码+compose",
+        "sha256": "505579e19dc78e64843d96a22ed28d914b0a11801d59277abff685a941e0ce0e"
+      },
+      {
+        "host": "1panel-happy(192.168.1.83)",
+        "path": "/opt/exchangethb/runtime/backups/opt-exchangethb-source-20261007-0100.tgz",
+        "bytes": 515563,
+        "mtime": "2026-10-07 00:43",
+        "purpose": "10-07 发布前 源码+compose",
+        "sha256": "21569c255522aa3bd56cd915fe0b7550826c236b5a6712684df0a8519ccd93d8"
+      },
+      {
+        "host": "1panel-happy(192.168.1.83)",
+        "path": "/opt/exchangethb/runtime/backups/exchangethb-20261002-1813.toc",
+        "bytes": 1916,
+        "mtime": "2026-10-02 18:12",
+        "purpose": "pg_restore 目录",
+        "sha256": null
+      },
+      {
+        "host": "1panel-happy(192.168.1.83)",
+        "path": "/opt/exchangethb/runtime/backups/*.sha256 (3 个)",
+        "bytes": 366,
+        "mtime": "2026-10-02/06/07",
+        "purpose": "校验记录",
+        "sha256": null
+      },
+      {
+        "host": "1panel-happy(192.168.1.83)",
+        "path": "/opt/exchangethb/runtime/backups/rollback-image-*.txt (2 个) + build-*.log (2 个)",
+        "bytes": 20950,
+        "mtime": "2026-10-06/07",
+        "purpose": "回退镜像记录与构建日志（非备份体）",
+        "sha256": null
+      }
+    ],
+    "image_tarballs_on_server": "无（本次未做 docker save；镜像以 tag 形式保留）",
+    "local_backups": "Mac 工作区与 _scratch 下无 exchangethb 备份体（已 find 确认）",
+    "nas_readiness": {
+      "path": "fnas:/vol1/@team/_ops/dev-backups/exchangethb/",
+      "writable": "yes（/vol1 9.1T 总，7.6T 可用）",
+      "verified_at": "2026-10-07T01:30+07:00"
+    },
+    "docker_tags": {
+      "current": "exchangethb:v0.1.0-20261007-zh-detail（= sha256:80fe5f014aab…，另保留原 tag codex-zh-detail-20261007）",
+      "rollback": "exchangethb:v0.1.0-20261006-tenlang（sha256:f6ccf3d2e068…）、exchangethb:v0.1.0-20261003-visible-costs（sha256:69a9d68213bf…）",
+      "convention": "今后用 <project>:v<major.minor.patch>-<YYYYMMDD>-<slug>，compose 仍引用原 tag 以保证可复现"
+    },
+    "next": "PM/审核确认后：拷贝 4 个备份体到 NAS 并逐一 sha256 复核 → 原件按归档规则处理（不删除）",
+    "evidence": "evidence/2026-10-07/backup-inventory.tsv"
   }
 }
