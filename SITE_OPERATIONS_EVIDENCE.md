@@ -109,3 +109,9 @@ Final11:35TH: DNS retry release236ba9… all three containers healthy;92tests/32
 - 发布前现场核对：`/opt/exchangethb`（当时 HEAD `ae40915`，21 个 modified + 33 个 compose 覆盖）逐项 diff 未发现工作区缺失的独有修复（`lib/seo.ts`、`middleware.ts` 工作区为超集；`sitemap.ts` 的 `/en` 规范已含；首页即时对比改为客户端组件 `components/home-comparison.tsx`；门店 FAQ 改为按 provider 动态生成）；发布后 live 源码目录同步为 `cbc153f`（rsync 不带 `--delete`）。
 - 遗留（不标完成）：worker 首轮 `degraded` 已定性为容器重启后 DNS 预热（第二轮 `status=ok`、四家交易所 BTC `current`；USDT 源 `unavailable` 属发布前既有行为，旧镜像内 worker 代码与本次逐字节相同）；手机真机 390px、GA4 平台侧接收、AdSense 审核/CMP、现金店当前牌照未验收。发布不等于 AdSense 获批或排名变化。
 - 证据原件：`evidence/2026-10-06/heartbeat-audit-20261006.json`；原 `RELEASE_2026-10-06.md` 归档到 `/Volumes/M2USB/archive/exchangethb-docs-20261006/`。
+
+## 2026-10-07 00:37-00:46 TH 两项线上优化（老板批准「优化掉」）
+
+**① 漏洞扫描防护（生产 nginx）**：`/www/sites/exchangethb.com/proxy/root.conf` 的 `location ^~ /` 内加入两条 `if ($request_uri ~* ...) { return 403; }`（扩展名族与探测目录族；必须写在 location 内，因为 `^~ /` 会跳过正则 location 求值 —— 既有 .env/.git 正则规则此前实际从未生效）。备份 `root.conf.bak.20261007-probe-block`。上线依据：10-06 当天 3,199 请求中 2,502 为 404（78%），其中 .php 结尾 1,621 个，每个打 Next 渲染 11.7KB。上线后实测 200=170、403=10（全为探测路径）、404=1。合法路径（/en /zh/cash /th /robots.txt /sitemap.xml /ads.txt /llms.txt /api/health /admin/login /google*.html）全部 200，`/.well-known/acme-challenge` 未被拦（证书续期不受影响）。注意：1Panel 面板若重新保存该站点反代会覆盖此规则。
+
+**② 中文详情页纳入索引（发布 codex-zh-detail-20261007）**：zh 的门店/交易所详情页此前被 noindex（页面本身已有完整中文文案：CJK 278-298 字），而 th 门店详情已可索引。现按 th 先例开放 zh：`lib/indexing-policy.ts` 增加 indexedExchangeLocales=['en','zh']、indexedMoneyChangerLocales=['en','th','zh']；两处页面 alternates 扩为 en/zh 与 en/th/zh；sitemap 增加 7 条中文详情 URL（64→71）并互指 hreflang；SEO 集群脚本与新增 tests/indexing-policy.test.ts 同步。门禁：134 tests/40 files、tsc 干净、eslint 0、next build 0、canary SEO 脚本 exit 0。发布：镜像 sha256:80fe5f014aab…，web/web_canary/worker 同版本 restarts=0、health:prod passed；回退镜像 sha256:f6ccf3d2e068…（compose.release-20261006.yml）。未改数据库。证据 evidence/2026-10-07/。

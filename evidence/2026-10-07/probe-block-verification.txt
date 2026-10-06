@@ -1,0 +1,23 @@
+# ExchangeTHB 生产优化：拦截漏洞扫描探测（2026-10-07 00:37 +07）
+
+## 改动
+文件：/www/sites/exchangethb.com/proxy/root.conf（容器 1Panel-openresty-inz6 内；宿主机 1Panel 站点反代配置）
+备份：root.conf.bak.20261007-probe-block（同目录，未删除）
+方式：在 `location ^~ /` 内加入两条 `if ($request_uri ~* ...) { return 403; }`
+  1) 扩展名族：\.(php[0-9]?|phar|asp|aspx|jsp|cgi|sql|zip|gz|tar|tgz|bak|old|swp|env|ini)($|\?)
+  2) 探测目录族：^/(wp-|wordpress|xmlrpc|uploads?/|sites/default|phpmyadmin|pma/|vendor/|composer\.|cgi-bin/|telescope|actuator|@fs|\.git|\.svn|\.aws|\.ssh|adminer|alfa\.|chosen\.|simple\.|file\.php|edit\.php|gecko\.|goods\.php|classwithtostring|this_is_a_new_hello_world)
+说明：必须写在 location 内，因为 `location ^~ /` 会跳过正则 location 求值（服务器块里既有的 .env/.git 正则规则实际从未生效）。
+`nginx -t` 通过；`nginx -s reload` 完成。
+
+## 上线依据（2026-10-06 生产 access.log 实测）
+- 总请求 3,199；404 = 2,502（78%）；其中 .php 结尾 1,621 个、.env 108 个
+- 404 页每个耗 11.7KB（Next 渲染），约 29MB/天白流量
+
+## 验证（2026-10-07 00:38 +07，公网实测）
+合法路径全部 200：/en /zh/cash /th /robots.txt /sitemap.xml /ads.txt /llms.txt /api/health /admin/login /google27d67ef3554303ff.html
+探测路径全部 403（不再进应用）：/.env /wp-login.php /admin.php /1.php /wp-content/x /uploads/xx.php /xmlrpc.php /.git/config /gecko.php /api/v1/.env
+ACME 保留可用：/.well-known/acme-challenge/nonexistent-test → 404（未被拦截，证书续期不受影响）
+
+## 影响与注意
+- 探测器现在收到 403（而非应用 404），访问日志仍会记录这些请求但不再触发 Next 渲染；日志噪声下降、egress 下降。
+- 若日后在 1Panel 面板重新保存该站点反向代理，root.conf 会被面板重写 —— 需重新应用上述两条规则（已写入项目 AGENTS.md）。

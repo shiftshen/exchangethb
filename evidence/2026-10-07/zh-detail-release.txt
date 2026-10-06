@@ -1,0 +1,35 @@
+# ExchangeTHB 生产发布：中文详情页索引 + 扫描防护（2026-10-07 00:43-00:46 +07）
+
+## 目标（老板 2026-10-07 "优化掉" 批准）
+1. 拦掉漏洞扫描噪声（前一天 78% 请求）
+2. 把已有完整中文文案、却被 noindex 的中文门店/交易所详情页纳入索引
+
+## 代码改动（工作区提交 ba0be0f）
+- lib/indexing-policy.ts：新增 indexedExchangeLocales=['en','zh']、indexedMoneyChangerLocales=['en','th','zh']、indexedMoneyChangerSlugs（3 家公开门店）
+- app/[locale]/exchanges/[slug]/page.tsx：alternates ['en'] → ['en','zh']
+- app/[locale]/money-changers/[slug]/page.tsx：alternates ['en','th'] → ['en','th','zh']
+- app/sitemap.ts：新增 zh 交易所详情 4 条 + zh 门店详情 3 条，hreflang 互指（en/th/zh + x-default）
+- scripts/check-seo-cluster.mjs：更新 /zh/exchanges/bitkub 预期（改为可索引）、新增 zh/th 门店详情检查、sitemap 期望条数 64 → 71
+- tests/indexing-policy.test.ts（新增）：策略 + sitemap 互指断言
+
+## 发布前门禁（本工作区实测）
+- vitest 134 tests / 40 files 通过；tsc --noEmit 干净；eslint 0 问题；next build exit 0
+- canary 独立容器 + SEO 集群脚本 exit 0（含新增 zh/th 检查）
+
+## 制品与回滚
+- 新镜像 exchangethb:codex-zh-detail-20261007 = sha256:80fe5f014aab…（构建日志 runtime/backups/build-20261007.log，BUILD_EXIT=0）
+- compose：/opt/exchangethb/compose.release-20261007.yml
+- 回退镜像 sha256:f6ccf3d2e068…（codex-tenlang-20261006，记录 runtime/backups/rollback-image-20261007-0100.txt）
+- 源码快照 runtime/backups/opt-exchangethb-source-20261007-0100.tgz（sha256 21569c255522aa3b…）
+- 回滚命令：cd /opt/exchangethb && docker compose -f docker-compose.yml -f compose.release-20261006.yml up -d --no-build web web_canary worker
+- 未改数据库 schema
+
+## 验证（公网）
+- health:prod passed；web / web_canary / worker 全部 codex-zh-detail-20261007，restarts=0，web healthy，worker heartbeat exit 0
+- /zh/money-changers/ratchada、/zh/exchanges/bitkub、/th/money-changers/ratchada：200、无 noindex、canonical 自指
+- sitemap 64 → 71 条（新增 7 条中文详情页），SEO 集群脚本对公网 exit 0
+- 扫描防护：00:37 上线后至今 200=170、403=10（全部为探测路径）、404=1（对比前一日 2,501）
+
+## 未验证 / 注意
+- Google 侧的重新抓取与索引变化需 GSC 观察（属 fujane 车道）；本轮只改站点可索引性与 hreflang
+- 若在 1Panel 面板重新保存该站点反向代理配置，root.conf 的扫描拦截规则会被覆盖，需重新应用（已写入 AGENTS.md）
