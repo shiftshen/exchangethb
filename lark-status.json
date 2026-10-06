@@ -92,5 +92,49 @@
     },
     "registered_for_owner": 0,
     "existing_handoff": "ego-handoff list 当前仅 1 条（31 号窗口 boardgame_hub），与本项目无关。"
+  },
+  "访问量_20261006": {
+    "source": "生产 openresty access.log /www/sites/exchangethb.com/log/access.log（含 CF-Connecting-IP 末字段）；非 Google 平台数据，不与 GA4/GSC 相加",
+    "checked_at": "2026-10-06T23:59+07:00",
+    "today": {
+      "requests": 3199,
+      "status_200": 385,
+      "status_404": 2501,
+      "status_5xx": 0,
+      "human_page_views": 188,
+      "unique_client_ips_with_page": 135,
+      "total_unique_client_ips": 329
+    },
+    "yesterday_20261005": {
+      "human_page_views": 185,
+      "unique_client_ips_with_page": 109
+    },
+    "scanner_share": "404 占 78%（2,501/3,199）；前 5 个客户端 IP 占总请求 38%（top1 351 次）；404 页面 11.7KB 打到 Next 渲染",
+    "locale_split_200_human": {
+      "zh": 79,
+      "en": 79,
+      "th": 7,
+      "id": 7,
+      "fr": 5,
+      "de": 4,
+      "ja": 2,
+      "ru": 1
+    },
+    "top_pages": {
+      "en": 48,
+      "zh/cash": 24,
+      "en/cash": 11,
+      "zh/crypto": 9,
+      "zh": 8,
+      "legal_zh合计": 17
+    },
+    "sitemap": "64 条：en 16（含 5 交易所详情+4 路线）、th 8（含 3 门店详情）、zh 及其他 7 语各 5（无门店/交易所/路线详情）",
+    "optimization_actions": [
+      "①在 Cloudflare/nginx 拦常见 PHP/WordPress/Drupal 探测路径（78% 请求），属生产变更待批准",
+      "②多语言深度补齐：先 th 门店/路线详情，再评估 zh（今日 PV 与 en 持平却缺详情页）",
+      "③按 GSC 高展示低点击查询（ratchada exchange，10-02 口径 3,684 展示/5 点击）重写标题摘要——GSC 数据属 fujane 车道",
+      "④比较结果旁加费用/时效/来源状态摘要（法律/方法页访问占比高，说明信任信息被需要）"
+    ],
+    "platform_gap": "Cloudflare Web Analytics 与 GA4 需登录（默认 Profile 无 CF 登录；Google 侧由 fujane 统管），权威访客/会话数未由本会话复核"
   }
 }
