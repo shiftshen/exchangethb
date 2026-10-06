@@ -1,0 +1,60 @@
+{
+  "负责智能体": "Codex ExchangeTHB（DSH 工作区主会话 /Volumes/M2USB/dev/exchangethb）",
+  "当前进度": "已完成：①2026-10-06 01:04-01:05 +07 完成生产发布：新镜像 exchangethb:codex-tenlang-20261006（sha256:f6ccf3d2e068…，源码=cbc153f）已切到 web/web_canary/worker 三容器，restarts=0、web healthy、worker heartbeat exit 0、公网 health:prod passed；发布前门禁 vitest 127/39 通过、tsc 干净、eslint 0 问题（修 artifacts 误入 lint，提交 cbc153f）、next build 0；canary 预验证十语 200 + compare/cash 200 + SEO 集群脚本 exit 0；/ads.txt 已随本次上线（google.com, pub-8386341379958173, DIRECT, f08c47fec0942fa0）。②发布前已备份：DB dump 60b1e21b…、源码+compose 归档 505579e1…、回退镜像 sha256:69a9d68213bf…；回滚=切回 compose.visible-costs-20261003.yml，发布记录正文见 SITE_OPERATIONS_EVIDENCE.md 的「2026-10-06 生产发布记录」节。③生产现场 21 项未提交修改逐项核对无工作区缺失的独有修复，发布后 /opt/exchangethb 源码目录已同步为 cbc153f（保留 33 个 compose 覆盖与 .env/content）。④现金采集 3 官方源（SuperRich Thailand/Ratchada/Twelve Victory）固定 127.0.0.1:18888 不换出口，最新三源 31/31/5（2026-10-05T18:18:02Z）。⑤现金健康探针已由 fujane 接入基座每日体检 daily-maintenance §14（daily-maintenance-check.py:154，每日 09:03 跑本项目探针，rc≠0 计入 problems 并 Telegram 告警）；按基座完全相同的调用实测 exit 0。⑥定时任务已迁入本会话：schedule-4bc336ee-4bda-4bf5-84bb-7b8bb63ea2d8 每日 09:00 Asia/Bangkok。进行中：worker 首轮 degraded 已定性（重启后 DNS 预热瞬时态；第二轮 status=ok、四家交易所 marketHealth 全 true、BTC 四源 current、fallbackOnly=false、restarts=0）；USDT 四源 unavailable 属发布前既有行为（生产旧镜像 worker/index.ts 与本发布源码逐字节相同），非本次回归。下一步：跟踪 USDT 源可用性、BOT 牌照源恢复后核实现金店当前资质、手机真机 390px 回归；Google 流量相关按 fujane 统一管理口径只上报发现。⑦每日只读核验（2026-10-06 09:02 +07，发布后 8 小时稳定性复核）：四容器 healthy 无重启、/api/health status=ok + storage=database + dataStatus=current、现金三源 31/31/5（报价 01:55–01:56Z）、sitemap 64 条、/ads.txt 在线、公开现金 SGD 与加密 USDT/BTC 接口 200 有报价；worker 最新轮次 status=ok、四家交易所 BTC current；无新可行动故障。",
+  "卡点": "①worker BTC 四源正常（第二轮 status=ok），USDT 四源 unavailable 为发布前既有行为、需继续跟踪源可用性；②BOT 牌照查询页维护中，现金店当前资质只能记 unknown；③手机真机 390px 回归与真实业务流量未验收；④Google 流量（GSC/GA4/SEO）自 2026-10-06 起由 fujane 统一管理，本项目只上报发现、不改平台配置。",
+  "Google流量发现（交 fujane）": "①GA4：衡量 ID G-HHPM4E9QGY 已在生产 layout chunk（/_next/static/chunks/app/[locale]/layout-9d1c3195447f65d6.js）实测存在，构建期注入在线上生效；HTML 内不出现属预期（仅在用户同意统计后加载）。平台侧真实接收本轮未复验（需 Profile 16 授权会话），不声称已收到业务流量。②AdSense：线上页面已存在 adsbygoogle.js loader（client=ca-pub-8386341379958173），但无 ad slot 渲染；本次发布已上线 /ads.txt（内容 google.com, pub-8386341379958173, DIRECT, f08c47fec0942fa0），此前生产无该文件；站点所有权验证与审核请求为 10-02 已提交状态，平台仍显示“正在准备”，未获批、无收入资格声明。③CMP：站点限定 6 语配置此前已发布，但运行时 __tcfapi undefined、无同意弹窗，未验收。④SEO 侧本轮实测（canary + 公网）：十语页面 200、hreflang 互指、sitemap/robots 200、SEO 集群脚本 exit 0；本轮未读取 GSC 索引/点击数据，未做排名或收录结论。⑤本轮发布未改任何 Google 平台配置（未开广告、未启用付费 API、未改计费）。",
+  "账号清单_摘要": "自建且老板可能不知道密码的后台/账号：1 个（站点 admin@exchangethb.com）。其余平台资产走既有 Google SSO 或为 API key/token，无自建密码。",
+  "账号清单": [
+    {
+      "平台": "ExchangeTHB 站点后台（本项目自建 Next.js admin）",
+      "网址": "https://www.exchangethb.com/admin/login",
+      "账号名": "admin@exchangethb.com",
+      "密码现在存在哪": "只在生产主机 /opt/exchangethb/.env 的 ADMIN_PASSWORD_HASH（scrypt，0600 happy:）——仅哈希、无明文；ADMIN_PASSWORD 明文键为空。钥匙串 304 条 service 中无 exchangethb 条目，accounts.yaml / ACCOUNT-INDEX.md / 项目文档与 artifacts / 服务器文档模板（PROD_INPUT_TEMPLATE_CN.md 仍为占位）均无明文。",
+      "是否老板统一默认密码": "否。已用 agent-control credential pipe default-account-password 在生产容器内做 scrypt 比对：default_password_matches_hash=false。",
+      "老板是否知道": "未知；明文未登记任何受限位置且只剩哈希，基本不可能被找回。",
+      "状态": "未登记进 accounts.yaml；本轮未改密（按规定等老板授权）。",
+      "建议": "授权后用统一默认密码重置（本地生成 scrypt 哈希写入服务器 .env）并在 accounts.yaml 登记 exchangethb-site-admin。"
+    },
+    {
+      "平台": "Travelpayouts（联盟）",
+      "网址": "https://app.travelpayouts.com/",
+      "账号名": "fujane110@gmail.com（Google SSO）",
+      "密码现在存在哪": "无自建密码；走既有 Google 账号（凭据在钥匙串 mail-fujane110 / Google 会话）",
+      "状态": "注册已建 marker784381 / project580269，安装未做"
+    },
+    {
+      "平台": "Google AdSense",
+      "网址": "https://adsense.google.com/（pub-8386341379958173）",
+      "账号名": "fujane110@gmail.com（Google SSO）",
+      "密码现在存在哪": "无自建密码；走既有 Google 账号",
+      "状态": "站点审核仍“正在准备”；/ads.txt 已于 2026-10-06 上线"
+    },
+    {
+      "平台": "Google Cloud 项目 exchangethb-maps",
+      "网址": "https://console.cloud.google.com/",
+      "账号名": "shiftshen521@gmail.com / fujane110@gmail.com（Google 登录）",
+      "密码现在存在哪": "无自建密码；走既有 Google 账号",
+      "状态": "项目已建但 billing 未启用；Places 走 xmanx-site-operations"
+    },
+    {
+      "平台": "Google Places API key（非账号密码）",
+      "网址": "https://console.cloud.google.com/apis/credentials",
+      "账号名": "key: ExchangeTHB Places Server（35be2a2f…）",
+      "密码现在存在哪": "受限凭据位置（registry 引用的 secrets/exchangethb-google-places-fujane.key 与服务器 /opt/exchangethb/runtime/google-places-fujane.env）",
+      "状态": "非密码，属 API key，按登记引用使用"
+    },
+    {
+      "平台": "Cloudflare（DNS/Web Analytics）",
+      "网址": "https://dash.cloudflare.com/",
+      "账号名": "既有站点资产（zone a28cae90fc75e24f5e0202025e1177bd）",
+      "密码现在存在哪": "既有登记 token（非本项目自建密码）",
+      "状态": "本轮未变"
+    },
+    {
+      "平台": "非账号凭据：ADMIN_SESSION_SECRET（会话签名密钥）",
+      "网址": "生产 /opt/exchangethb/.env",
+      "密码现在存在哪": "服务器 .env（0600），非账号密码",
+      "状态": "与站点 admin 同一处置范围，未改"
+    }
+  ]
+}

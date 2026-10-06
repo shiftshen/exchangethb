@@ -59,6 +59,22 @@ npm run health:cash                                       # 本机现金采集�
 npm run health:prod                                       # 生产端点只读核验
 ```
 
+## 文档纪律（老板 2026-10-06；fujane 转达）
+
+本项目**只维护**这五类文件，其余一律不再新建：
+
+| 文件 | 用途 |
+|---|---|
+| `AGENTS.md` | 项目规则（规则改动直接改对应条目，不新开文档） |
+| `SITE_OPERATIONS_EVIDENCE.md` | 业务事实（运维/SEO/平台实测、发布记录正文） |
+| `DEVELOPMENT_PLAN.md` | 唯一计划文件（追加小节，不建 `_v2`） |
+| `lark-status.json` | 进度 / 卡点 / 待老板确认 / 账号清单 |
+| `evidence/<日期>/` | 证据原件（按日期分目录，替代旧的散落 `artifacts/` 新文件） |
+
+- **禁止**为汇报、复盘、合并、对照、交接新建 `*_REPORT_*`、`*_SUMMARY_*`、`LEGACY_*`、`*_v2` 之类文档；汇报写聊天 + `lark-status.json`。
+- 临时文件放 `/Volumes/M2USB/_scratch/exchangethb/<日期>/`，用完归档；**任何文件不删除**，归档到 `/Volumes/M2USB/archive/`。`artifacts/` 是历史遗留，不再新增文件，后续整理需 fujane 确认。
+- 遗留根文档（`DELIVERY_RECEIPT.md`、`CURRENT_ACCEPTANCE_AUDIT.md`、`FINAL_ACCEPTANCE_MATRIX.md`、`PROMOTION_OPERATIONS_PLAN.md`、`MONETIZATION_IMPLEMENTATION_2026-10-02.md`、`REFERRAL_VERIFICATION_2026-10-02.md`、`DATA_DELIVERY_RECEIPT.md`、`IMPLEMENTATION_PLAN.md`、`RECONSTRUCTION_PLAN_2026-10-01_CN.md`、`SERVICE_VALUE_PLAN.md`、`PRODUCTION_VERSION_REVIEW.md`、`FOUNDATION_CAPABILITY_HANDOFF.md`）仍被 registry 或 09:00 每日任务引用，本轮未动；确认引用改完后再统一归档，不擅自移动他人文档。
+
 ## 收工
 
 事实、证据、验证时间与未完成项回写 registry `site_operations.websites["exchangethb.com"]` 与 `DSH-HANDOFF.md`；只报实测过的结论。
