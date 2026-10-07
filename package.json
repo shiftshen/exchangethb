@@ -26,7 +26,8 @@
     "gsc:inspect": "node ./scripts/gsc.mjs inspect-url",
     "test:smoke:market": "tsx scripts/smoke-market.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "health:worker": "tsx ./scripts/check-worker-alive.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",

@@ -1,0 +1,10 @@
+# BOT money-changer licence matches - evidence extract, 2026-10-07
+# Source: listauth.pdf = รายชื่อและสถานที่ตั้งสำนักงานใหญ่ของบุคคลรับอนุญาต, ณ 31 สิงหาคม 2569 (=2026-08-31), printed 23/9/2026, 110 pages, 2083 entries
+# URL: https://www.bot.or.th/content/dam/bot/documents/th/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-business/money-changer/listauthorized.pdf
+# PDF sha256: f2f111e323f4ae9371ffc295b1a77d88bfbda503bbf1f9c594ed6d29b528d8c2
+# CAVEAT: the Thai columns are copied verbatim from the PDF text layer (pdftotext -layout). That layer renders the vowel า (and า+ง) as ำ in this font, e.g. the file prints รัชดำ for รัชดา and ประชำรำษฎร์บำเพ็ญ for ประชาราษฎร์บำเพ็ญ. Do not treat the Thai as a clean legal spelling; the address match is what carries the conclusion.
+# latin_legal_name / latin_address are the site's own recorded Latin forms, verified character-for-character against the Thai address in the same row.
+# site_provider_slug	licence_no	list_ordinal	pdf_page	legal_name_th_raw	head_office_th_raw	latin_legal_name	latin_head_office	site_branch_id
+superrich-thailand	125470152	54	2	บริษัท ซุปเปอร์ริช (ไทยแลนด์) จำกัด	SuperRich (Thailand) Co., Ltd.	45-45/1-2 ซอย รำชดำริ 1 ถนน รำชดำริ แขวงลุมพินี เขตปทุมวัน กรุงเทพมหำนคร 10330	45-45/1-2 Soi Ratchadamri 1, Lumphini, Pathum Wan, Bangkok 10330	sr-th-pratunam
+twelve-victory	125470175	60	3	บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน จำกัด	Twelve Victory Exchange Co., Ltd.	231 ถนน ประดิพัทธ์ แขวงพญำไท เขตพญำไท กรุงเทพมหำนคร 10400	231 Pradipat Rd, Phaya Thai, Bangkok 10400	twelve-pradipat
+ratchada	MC125490056	172	9	บริษัท รัชดำ เอ็กซ์เชนจ์ จำกัด	Ratchada Exchange Co., Ltd.	78/13 ถนน ประชำรำษฎร์บำเพ็ญ แขวงห้วยขวำง เขตห้วยขวำง กรุงเทพมหำนคร	78/13 Pracharat Bamphen Rd, Huai Khwang, Bangkok	ratchada-main

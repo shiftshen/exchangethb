@@ -1,0 +1,47 @@
+{
+  "checked_at": "2026-10-07T10:44:00+07:00",
+  "item": "lark-status 卡点④ 手机真机 390px 回归",
+  "device": {
+    "model": "HONOR BVL-N49",
+    "serial": "A5CS024313004533",
+    "transport": "usb (adb devices: device)",
+    "physical": "1280x2800 @ density 560 => native CSS viewport 365.7px",
+    "browser": "Chrome/154.0.8037.126 (com.android.chrome), driven over adb forward tcp:9222 localabstract:chrome_devtools_remote",
+    "display_settings_modified": false
+  },
+  "method": "CDP over the real device's Chrome: Page.navigate, 6.5s settle, Runtime.evaluate measuring documentElement.clientWidth / scrollWidth, body.scrollWidth, window.innerWidth, devicePixelRatio and any element whose getBoundingClientRect().right exceeds the viewport; Page.captureScreenshot for each page. Exact-390 pass uses Emulation.setDeviceMetricsOverride(390x844, dsf 3, mobile) which is per-tab emulation, cleared afterwards - no device display change. Script: evidence/2026-10-07/phone390-probe.mjs",
+  "passes": {
+    "native_real_device_365px": {
+      "note": "narrower than the 390px target, therefore a stricter check",
+      "pages": [
+        { "url": "https://www.exchangethb.com/zh?amount=1000&side=sell&currency=CNY", "clientWidth": 365, "scrollWidth": 365, "overflow": false, "offenders": [] },
+        { "url": "https://www.exchangethb.com/th/cash", "clientWidth": 365, "scrollWidth": 365, "overflow": false, "offenders": [] },
+        { "url": "https://www.exchangethb.com/zh/crypto?symbol=USDT&amount=1000&side=sell", "clientWidth": 365, "scrollWidth": 365, "overflow": false, "offenders": [] },
+        { "url": "https://www.exchangethb.com/th/money-changers/superrich-thailand", "clientWidth": 365, "scrollWidth": 365, "overflow": false, "offenders": [] },
+        { "url": "https://www.exchangethb.com/zh/exchanges/orbix", "clientWidth": 365, "scrollWidth": 365, "overflow": false, "offenders": [] },
+        { "url": "https://www.exchangethb.com/th/legal/disclaimer", "clientWidth": 365, "scrollWidth": 365, "overflow": false, "offenders": [] },
+        { "url": "https://www.exchangethb.com/zh/money-changers/ratchada", "clientWidth": 365, "scrollWidth": 365, "overflow": false, "offenders": [] }
+      ]
+    },
+    "exact_390px_emulation_on_real_device": {
+      "pages": [
+        { "url": "https://www.exchangethb.com/zh?amount=1000&side=sell&currency=CNY", "clientWidth": 390, "scrollWidth": 390, "bodyScrollWidth": 390, "overflow": false, "offenders": [] },
+        { "url": "https://www.exchangethb.com/th/cash", "clientWidth": 390, "scrollWidth": 390, "bodyScrollWidth": 390, "overflow": false, "offenders": [] },
+        { "url": "https://www.exchangethb.com/zh/crypto?symbol=USDT&amount=1000&side=sell", "clientWidth": 390, "scrollWidth": 390, "bodyScrollWidth": 390, "overflow": false, "offenders": [] },
+        { "url": "https://www.exchangethb.com/th/money-changers/superrich-thailand", "clientWidth": 390, "scrollWidth": 390, "bodyScrollWidth": 390, "overflow": false, "offenders": [] }
+      ]
+    }
+  },
+  "screenshots": {
+    "native_365px": "evidence/2026-10-07/phone390/*.png (7 pages)",
+    "exact_390px": "evidence/2026-10-07/phone390-exact-390/*.png (4 pages)"
+  },
+  "visual_check": "zh cash comparison screenshot read back through the local OCR/vision intake: language switcher, cash/crypto tabs, currency CNY + amount 1000 and the THB direction control all render fully inside the viewport; no clipped or overlapping control observed.",
+  "server_side_lang_attributes": {
+    "method": "curl of production HTML",
+    "result": "/en=en /th=th /zh=zh /ja=ja /ru=ru /th/cash=th /th/crypto=th /th/money-changers/superrich-thailand=th /zh/legal/disclaimer=zh (all correct)"
+  },
+  "anomaly_recorded_not_concluded": "One phone-probe reading of /th/cash reported documentElement.lang='zh-CN' while the same page's server HTML is lang=\"th\" and the component only ever assigns the route locale (components/language-switcher.tsx:10 takes ContentLocale). Not reproduced by curl and not chased further; recorded here rather than reported as a defect. No page reported a false lang in server output.",
+  "conclusion": "No horizontal overflow on any of the 11 real-device page loads (7 at the device's native 365px, 4 at an exact 390px viewport). The 390px real-device regression item can be closed for the pages tested; it does not cover every one of the 71 sitemap URLs or a physical-device-only feature such as geolocation prompts.",
+  "actions": "read-only: no production change, no deploy, no device display setting changed"
+}

@@ -53,8 +53,16 @@
   },
   "host_disk_event": {
     "filesystem": "/dev/sda2 mounted on /",
-    "now": { "size": "117G", "used": "94G", "avail": "17G", "use_pct": "85%", "inodes_used_pct": "15%" },
-    "separate_mount": { "/dev/sdb1": "236G on /data, 102G used, 122G free (46%)" },
+    "now": {
+      "size": "117G",
+      "used": "94G",
+      "avail": "17G",
+      "use_pct": "85%",
+      "inodes_used_pct": "15%"
+    },
+    "separate_mount": {
+      "/dev/sdb1": "236G on /data, 102G used, 122G free (46%)"
+    },
     "window": "2026-10-07 03:30-03:56 +07:00",
     "journal_lines_in_window": 388484,
     "journal_lines_matching_no_space_left": 252752,
@@ -110,5 +118,56 @@
   "requested_approval": [
     "restart exchangethb worker (container state is inconsistent: docker ps stale, process gone) - exact command prepared, not executed",
     "shared-host docker reclamation of the 10.17GB reclaimable images / 699.7MB containers (affects other projects; fujane/PM lane)"
-  ]
+  ],
+  "recovery": {
+    "approved_by": "fujane 2026-10-07 10:00 「待审 A：执行（worker 用 compose.release-20261007c.yml 重建，--no-build）」",
+    "executed_at": "2026-10-07T10:01:30+07:00",
+    "command": "cd /opt/exchangethb && docker compose -f docker-compose.yml -f compose.release-20261007c.yml up -d --force-recreate --no-build worker",
+    "compose_output": [
+      "Container exchangethb-postgres-1 Running",
+      "Container exchangethb-worker-1 Recreate",
+      "Container exchangethb-worker-1 Recreated",
+      "Container exchangethb-postgres-1 Waiting",
+      "Container exchangethb-postgres-1 Healthy",
+      "Container exchangethb-worker-1 Starting",
+      "Container exchangethb-worker-1 Started"
+    ],
+    "verified_10_53_th": {
+      "docker_ps_line": "exchangethb-worker-1 | Up 52 minutes (healthy) | 52 minutes ago | exchangethb:v0.1.0-20261007-market-retry",
+      "inspect": "status=running running=true restarts=0 exit=0 started=2026-10-07T03:01:06.244905Z",
+      "healthcheck": {
+        "Status": "healthy",
+        "FailingStreak": 0,
+        "last_checks_exit": "ExitCode 0 at 10:48:11, 10:49:11, 10:50:11 +07"
+      },
+      "heartbeat": {
+        "updatedAt": "2026-10-07T03:52:38.948Z",
+        "status": "degraded",
+        "binance": true,
+        "bitkub": false,
+        "upbitThailand": true,
+        "orbix": true,
+        "fallbackOnly": false
+      },
+      "cycles_after_restart": "first cycle 03:01Z degraded (orbix false, DNS warm-up as before) then 03:11Z status=ok all four true"
+    },
+    "scope": "only worker recreated; web/web_canary/postgres untouched, image unchanged (v0.1.0-20261007-market-retry), no DB change",
+    "note_dns_asymmetry": "compose.release-20261007c.yml pins dns [8.8.8.8, 1.1.1.1] on all three services, so the recreated worker now has pinned DNS while the running web/web_canary (recreated earlier without that overlay) have none. Reported to fujane rather than changed unilaterally.",
+    "not_done": "licence evidence write (approved by fujane 10:00 as 待审 B, held after the 10:44 instruction to keep waiting); snapshot already taken"
+  },
+  "watchdog": {
+    "installed_at": "2026-10-07T10:49+07:00",
+    "why": "fujane 2026-10-07: worker 退出 5 分钟未拉起就写 for-fujane.md",
+    "script": "scripts/check-worker-alive.ts (npm run health:worker)",
+    "launchd": "~/Library/LaunchAgents/com.xmanx.exchangethb.worker-watch.plist (StartInterval 300, RunAtLoad)",
+    "invocation": "agent-control runtime exec node -- <project>/node_modules/tsx/dist/cli.mjs --tsconfig <project>/tsconfig.json <project>/scripts/check-worker-alive.ts (direct /bin/bash from launchd is denied on the USB volume, same reason the cash collector uses agent-control)",
+    "detection": "docker inspect State.Running plus container heartbeat /tmp/exchangethb-worker-heartbeat.json freshness; alerts when not running for >5 min or heartbeat older than 25 min; de-duplicated for 6h; clears on recovery",
+    "tested": [
+      "healthy worker -> hourly OK line in ~/Library/Logs/ExchangeTHB/worker-watch.log, no inbox write",
+      "stopped container (damov3-admin) -> DRY_RUN would alert after 4022 min",
+      "missing container -> first run records first_seen_down, second run with 6-min-old first_seen -> DRY_RUN would alert after 6 min",
+      "launchctl kickstart -> last exit status 0, no new stderr"
+    ],
+    "not_tested": "a real production outage with the live inbox write (deliberately not simulated against the real worker)"
+  }
 }

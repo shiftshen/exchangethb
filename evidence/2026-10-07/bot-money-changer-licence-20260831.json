@@ -22,34 +22,91 @@
     {
       "site_provider_slug": "ratchada",
       "site_provider_name": "Ratchada Exchange",
-      "site_branch": { "branchId": "ratchada-main", "name": "Ratchada Exchange", "address": "78/13 Prachatbamphen Rd., Huai Khwang, Bangkok 10310" },
-      "bot_entry": { "ordinal": 172, "licence_no": "MC125490056", "legal_name_th": "บริษัท รัชดา เอ็กซ์เชนจ์ จำกัด", "head_office_th": "78/13 ถนน ประชาราษฎร์บำเพ็ญ แขวงห้วยขวาง เขตห้วยขวาง กรุงเทพมหานคร", "pdf_page": 9 },
+      "site_branch": {
+        "branchId": "ratchada-main",
+        "name": "Ratchada Exchange",
+        "address": "78/13 Prachatbamphen Rd., Huai Khwang, Bangkok 10310"
+      },
+      "bot_entry": {
+        "ordinal": 172,
+        "licence_no": "MC125490056",
+        "legal_name_th": "บริษัท รัชดา เอ็กซ์เชนจ์ จำกัด",
+        "head_office_th": "78/13 ถนน ประชาราษฎร์บำเพ็ญ แขวงห้วยขวาง เขตห้วยขวาง กรุงเทพมหานคร",
+        "pdf_page": 9
+      },
       "match": "house number and street identical (78/13 Pracharat Bamphen, Huai Khwang)",
-      "state": "verified_current"
+      "state": "verified_current",
+      "legal_name_th": "บริษัท รัชดา เอ็กซ์เชนจ์ จำกัด",
+      "thai_spelling_caveat": "Thai copied verbatim from the PDF text layer, which renders า as ำ in this font (รัชดา prints as รัชดำ). The Latin forms in bot-licence-matches.tsv are the site's own spellings and are what was matched against the address."
     },
     {
       "site_provider_slug": "twelve-victory",
       "site_provider_name": "Twelve Victory Exchange",
-      "site_branch": { "branchId": "twelve-pradipat", "name": "Twelve Victory Pradipat Head Office", "address": "231 Pradipat Road, Pradipat 21, Phaya Thai, Bangkok 10400" },
-      "bot_entry": { "ordinal": 60, "licence_no": "125470175", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน จำกัด", "head_office_th": "231 ถนน ประดิพัทธ์ แขวงพญาไท เขตพญาไท กรุงเทพมหานคร 10400", "pdf_page": 3 },
+      "site_branch": {
+        "branchId": "twelve-pradipat",
+        "name": "Twelve Victory Pradipat Head Office",
+        "address": "231 Pradipat Road, Pradipat 21, Phaya Thai, Bangkok 10400"
+      },
+      "bot_entry": {
+        "ordinal": 60,
+        "licence_no": "125470175",
+        "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน จำกัด",
+        "head_office_th": "231 ถนน ประดิพัทธ์ แขวงพญาไท เขตพญาไท กรุงเทพมหานคร 10400",
+        "pdf_page": 3
+      },
       "chain_entries_also_present": [
-        { "licence_no": "MC125500012", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (ประเทศไทย) จำกัด", "head_office_th": "588 ห้องเอฟ16 ถนน กำแพงเพชร2 แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10330", "pdf_page": 9 },
-        { "licence_no": "MC125560074", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (9) จำกัด", "pdf_page": 14 },
-        { "licence_no": "MC125560123", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (8) จำกัด", "pdf_page": 15 },
-        { "licence_no": "MC125560192", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (18) จำกัด", "pdf_page": 15 },
-        { "licence_no": "MC425560260", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (นครพนม) จำกัด", "pdf_page": 107 }
+        {
+          "licence_no": "MC125500012",
+          "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (ประเทศไทย) จำกัด",
+          "head_office_th": "588 ห้องเอฟ16 ถนน กำแพงเพชร2 แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10330",
+          "pdf_page": 9
+        },
+        {
+          "licence_no": "MC125560074",
+          "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (9) จำกัด",
+          "pdf_page": 14
+        },
+        {
+          "licence_no": "MC125560123",
+          "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (8) จำกัด",
+          "pdf_page": 15
+        },
+        {
+          "licence_no": "MC125560192",
+          "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (18) จำกัด",
+          "pdf_page": 15
+        },
+        {
+          "licence_no": "MC425560260",
+          "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (นครพนม) จำกัด",
+          "pdf_page": 107
+        }
       ],
       "match": "house number and street identical (231 Pradipat Rd, Phaya Thai 10400)",
-      "state": "verified_current"
+      "state": "verified_current",
+      "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน จำกัด",
+      "thai_spelling_caveat": "Thai copied verbatim from the PDF text layer, which renders า as ำ in this font (รัชดา prints as รัชดำ). The Latin forms in bot-licence-matches.tsv are the site's own spellings and are what was matched against the address."
     },
     {
       "site_provider_slug": "superrich-thailand",
       "site_provider_name": "SuperRich Thailand",
-      "site_branch": { "branchId": "sr-th-pratunam", "name": "SuperRich Thailand Pratunam Area Reference (live rate row renders branchName 'SuperRich Thailand Ratchadamri')", "address": "reference-level: provider contact module, not a fixed public address" },
-      "bot_entry": { "ordinal": 54, "licence_no": "125470152", "legal_name_th": "บริษัท ซุปเปอร์ริช (ไทยแลนด์) จำกัด", "head_office_th": "45-45/1-2 ซอย ราชดำริ 1 ถนน ราชดำริ แขวงลุมพินี เขตปทุมวัน กรุงเทพมหานคร 10330", "pdf_page": 2 },
+      "site_branch": {
+        "branchId": "sr-th-pratunam",
+        "name": "SuperRich Thailand Pratunam Area Reference (live rate row renders branchName 'SuperRich Thailand Ratchadamri')",
+        "address": "reference-level: provider contact module, not a fixed public address"
+      },
+      "bot_entry": {
+        "ordinal": 54,
+        "licence_no": "125470152",
+        "legal_name_th": "บริษัท ซุปเปอร์ริช (ไทยแลนด์) จำกัด",
+        "head_office_th": "45-45/1-2 ซอย ราชดำริ 1 ถนน ราชดำริ แขวงลุมพินี เขตปทุมวัน กรุงเทพมหานคร 10330",
+        "pdf_page": 2
+      },
       "match": "legal entity brand match, and the provider's Ratchadamri head-office address matches the Ratchadamri branch the live rate row names; the site's own branch card is a Pratunam-area reference, not a fixed address",
       "state": "verified_current_entity_level",
-      "caveat": "brand name is shared by separate legal entities (e.g. ห้างหุ้นส่วนจำกัด โกลบอล ซุปเปอร์ ริช (ไทยแลนด์) MC225570221 in Phuket, บริษัท ซุปเปอร์ริช ลี่ พัทยา MC125500026); only 125470152 matches the Bangkok Ratchadamri operation used by this site"
+      "caveat": "brand name is shared by separate legal entities (e.g. ห้างหุ้นส่วนจำกัด โกลบอล ซุปเปอร์ ริช (ไทยแลนด์) MC225570221 in Phuket, บริษัท ซุปเปอร์ริช ลี่ พัทยา MC125500026); only 125470152 matches the Bangkok Ratchadamri operation used by this site",
+      "legal_name_th": "บริษัท ซุปเปอร์ริช (ไทยแลนด์) จำกัด",
+      "thai_spelling_caveat": "Thai copied verbatim from the PDF text layer, which renders า as ำ in this font (รัชดา prints as รัชดำ). The Latin forms in bot-licence-matches.tsv are the site's own spellings and are what was matched against the address."
     }
   ],
   "not_matched_on_purpose": {
@@ -58,5 +115,30 @@
   },
   "conclusion": "Current (as of 31 Aug 2026) official BOT evidence now exists for all three public cash providers; the previous 'unknown' state was due to the check page being unavailable, not to a missing licence.",
   "what_is_still_required": "Applying this to the site means writing the licence evidence entries (checkedAt/expiresAt/sourceUrl/note) in the admin content store and republishing the visible licence state - a production data change that needs approval.",
-  "limits": "Head-office list only; does not prove branch-level operation licences for every branch, and is a monthly-updated snapshot rather than a real-time register."
+  "limits": "Head-office list only; does not prove branch-level operation licences for every branch, and is a monthly-updated snapshot rather than a real-time register.",
+  "prepared_evidence_payload": {
+    "_note": "not written to production: awaiting fujane/boss go-ahead. Shape matches AdminConfigStore.evidence[slug].license (lib/content-store.ts adminConfigSchema).",
+    "checkedAt": "2026-10-07T10:50:00+07:00",
+    "expiresAt": "2026-11-21T10:50:00+07:00",
+    "expiry_reason": "45 days: the BOT list is republished monthly, so this forces re-verification before the next two cycles are missed",
+    "entries": {
+      "superrich-thailand": {
+        "status": "verified",
+        "sourceUrl": "https://www.bot.or.th/th/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-business/money-changer.html",
+        "note": "BOT authorized money changer list as of 31 Aug 2026 (printed 23/9/2026), entry 54: licence 125470152, SuperRich (Thailand) Co., Ltd., head office 45-45/1-2 Soi Ratchadamri 1, Lumphini, Pathum Wan, Bangkok 10330 - matches the Ratchadamri operation used by this site. Entity-level match; the site's branch card is a Pratunam-area reference."
+      },
+      "twelve-victory": {
+        "status": "verified",
+        "sourceUrl": "https://www.bot.or.th/th/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-business/money-changer.html",
+        "note": "BOT list as of 31 Aug 2026, entry 60: licence 125470175, Twelve Victory Exchange Co., Ltd., head office 231 Pradipat Rd, Phaya Thai, Bangkok 10400 - identical to this site's Twelve Victory Pradipat address. The same brand also holds MC125500012 and numbered branch licences."
+      },
+      "ratchada": {
+        "status": "verified",
+        "sourceUrl": "https://www.bot.or.th/th/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-business/money-changer.html",
+        "note": "BOT list as of 31 Aug 2026, entry 172: licence MC125490056, Ratchada Exchange Co., Ltd., head office 78/13 Pracharat Bamphen Rd, Huai Khwang, Bangkok - identical to this site's Ratchada Exchange address."
+      }
+    },
+    "rollback": "pre-change snapshot of AdminConfigState value='global' saved on the production host at /opt/exchangethb/runtime/backups/admin-config-state-20261007-1000.json (see evidence note); restoring it returns all three licences to unknown"
+  },
+  "evidence_extract": "evidence/2026-10-07/bot-licence-matches.tsv"
 }
