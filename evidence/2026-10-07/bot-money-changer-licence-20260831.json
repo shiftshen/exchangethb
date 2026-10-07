@@ -1,0 +1,62 @@
+{
+  "checked_at": "2026-10-07T09:09:00+07:00",
+  "purpose": "current official evidence for the cash money-changer licence acceptance item that was recorded as 'unknown' since 2026-10-01",
+  "source": {
+    "thai_list_page": "https://www.bot.or.th/th/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-business/money-changer.html",
+    "english_lookup_page_used_by_site": "https://www.bot.or.th/en/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-business/authorized-money-changers.html",
+    "english_lookup_page_status": "200 (title: Authorized Money Changers) - no longer a maintenance page",
+    "list_pdf_url": "https://www.bot.or.th/content/dam/bot/documents/th/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-business/money-changer/listauthorized.pdf",
+    "count_pdf_url": "https://www.bot.or.th/content/dam/bot/documents/th/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-business/money-changer/fxauthorized69.pdf",
+    "document_title_th": "รายชื่อและสถานที่ตั้งสำนักงานใหญ่ของบุคคลรับอนุญาต",
+    "as_of_th": "ณ 31 สิงหาคม 2569 (= 31 August 2026)",
+    "printed": "23/9/2026",
+    "pages": 110,
+    "entries": 2083,
+    "text_extraction": "pdftotext -layout; Thai extraction shows the common ำ/า substitution, matched after normalising whitespace and ำ->า"
+  },
+  "archived_evidence": {
+    "evidence/2026-10-07/bot-money-changer-list-20260831.pdf": "f2f111e323f4ae9371ffc295b1a77d88bfbda503bbf1f9c594ed6d29b528d8c2",
+    "evidence/2026-10-07/bot-money-changer-count-2569.pdf": "be477da9f2260066cf7a7a255be414062f92b94a29584fec8d18f446caa99ab0"
+  },
+  "matches": [
+    {
+      "site_provider_slug": "ratchada",
+      "site_provider_name": "Ratchada Exchange",
+      "site_branch": { "branchId": "ratchada-main", "name": "Ratchada Exchange", "address": "78/13 Prachatbamphen Rd., Huai Khwang, Bangkok 10310" },
+      "bot_entry": { "ordinal": 172, "licence_no": "MC125490056", "legal_name_th": "บริษัท รัชดา เอ็กซ์เชนจ์ จำกัด", "head_office_th": "78/13 ถนน ประชาราษฎร์บำเพ็ญ แขวงห้วยขวาง เขตห้วยขวาง กรุงเทพมหานคร", "pdf_page": 9 },
+      "match": "house number and street identical (78/13 Pracharat Bamphen, Huai Khwang)",
+      "state": "verified_current"
+    },
+    {
+      "site_provider_slug": "twelve-victory",
+      "site_provider_name": "Twelve Victory Exchange",
+      "site_branch": { "branchId": "twelve-pradipat", "name": "Twelve Victory Pradipat Head Office", "address": "231 Pradipat Road, Pradipat 21, Phaya Thai, Bangkok 10400" },
+      "bot_entry": { "ordinal": 60, "licence_no": "125470175", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน จำกัด", "head_office_th": "231 ถนน ประดิพัทธ์ แขวงพญาไท เขตพญาไท กรุงเทพมหานคร 10400", "pdf_page": 3 },
+      "chain_entries_also_present": [
+        { "licence_no": "MC125500012", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (ประเทศไทย) จำกัด", "head_office_th": "588 ห้องเอฟ16 ถนน กำแพงเพชร2 แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10330", "pdf_page": 9 },
+        { "licence_no": "MC125560074", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (9) จำกัด", "pdf_page": 14 },
+        { "licence_no": "MC125560123", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (8) จำกัด", "pdf_page": 15 },
+        { "licence_no": "MC125560192", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (18) จำกัด", "pdf_page": 15 },
+        { "licence_no": "MC425560260", "legal_name_th": "บริษัท ทเวลฟ์ วิคทอรี่ เอ็กเชน (นครพนม) จำกัด", "pdf_page": 107 }
+      ],
+      "match": "house number and street identical (231 Pradipat Rd, Phaya Thai 10400)",
+      "state": "verified_current"
+    },
+    {
+      "site_provider_slug": "superrich-thailand",
+      "site_provider_name": "SuperRich Thailand",
+      "site_branch": { "branchId": "sr-th-pratunam", "name": "SuperRich Thailand Pratunam Area Reference (live rate row renders branchName 'SuperRich Thailand Ratchadamri')", "address": "reference-level: provider contact module, not a fixed public address" },
+      "bot_entry": { "ordinal": 54, "licence_no": "125470152", "legal_name_th": "บริษัท ซุปเปอร์ริช (ไทยแลนด์) จำกัด", "head_office_th": "45-45/1-2 ซอย ราชดำริ 1 ถนน ราชดำริ แขวงลุมพินี เขตปทุมวัน กรุงเทพมหานคร 10330", "pdf_page": 2 },
+      "match": "legal entity brand match, and the provider's Ratchadamri head-office address matches the Ratchadamri branch the live rate row names; the site's own branch card is a Pratunam-area reference, not a fixed address",
+      "state": "verified_current_entity_level",
+      "caveat": "brand name is shared by separate legal entities (e.g. ห้างหุ้นส่วนจำกัด โกลบอล ซุปเปอร์ ริช (ไทยแลนด์) MC225570221 in Phuket, บริษัท ซุปเปอร์ริช ลี่ พัทยา MC125500026); only 125470152 matches the Bangkok Ratchadamri operation used by this site"
+    }
+  ],
+  "not_matched_on_purpose": {
+    "superrich-1965": "separate brand, not in the site's public cash provider set",
+    "sia / vasu": "not public cash providers on this site"
+  },
+  "conclusion": "Current (as of 31 Aug 2026) official BOT evidence now exists for all three public cash providers; the previous 'unknown' state was due to the check page being unavailable, not to a missing licence.",
+  "what_is_still_required": "Applying this to the site means writing the licence evidence entries (checkedAt/expiresAt/sourceUrl/note) in the admin content store and republishing the visible licence state - a production data change that needs approval.",
+  "limits": "Head-office list only; does not prove branch-level operation licences for every branch, and is a monthly-updated snapshot rather than a real-time register."
+}

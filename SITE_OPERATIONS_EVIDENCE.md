@@ -115,3 +115,27 @@ Final11:35TH: DNS retry release236ba9… all three containers healthy;92tests/32
 **① 漏洞扫描防护（生产 nginx）**：`/www/sites/exchangethb.com/proxy/root.conf` 的 `location ^~ /` 内加入两条 `if ($request_uri ~* ...) { return 403; }`（扩展名族与探测目录族；必须写在 location 内，因为 `^~ /` 会跳过正则 location 求值 —— 既有 .env/.git 正则规则此前实际从未生效）。备份 `root.conf.bak.20261007-probe-block`。上线依据：10-06 当天 3,199 请求中 2,502 为 404（78%），其中 .php 结尾 1,621 个，每个打 Next 渲染 11.7KB。上线后实测 200=170、403=10（全为探测路径）、404=1。合法路径（/en /zh/cash /th /robots.txt /sitemap.xml /ads.txt /llms.txt /api/health /admin/login /google*.html）全部 200，`/.well-known/acme-challenge` 未被拦（证书续期不受影响）。注意：1Panel 面板若重新保存该站点反代会覆盖此规则。
 
 **② 中文详情页纳入索引（发布 codex-zh-detail-20261007）**：zh 的门店/交易所详情页此前被 noindex（页面本身已有完整中文文案：CJK 278-298 字），而 th 门店详情已可索引。现按 th 先例开放 zh：`lib/indexing-policy.ts` 增加 indexedExchangeLocales=['en','zh']、indexedMoneyChangerLocales=['en','th','zh']；两处页面 alternates 扩为 en/zh 与 en/th/zh；sitemap 增加 7 条中文详情 URL（64→71）并互指 hreflang；SEO 集群脚本与新增 tests/indexing-policy.test.ts 同步。门禁：134 tests/40 files、tsc 干净、eslint 0、next build 0、canary SEO 脚本 exit 0。发布：镜像 sha256:80fe5f014aab…，web/web_canary/worker 同版本 restarts=0、health:prod passed；回退镜像 sha256:f6ccf3d2e068…（compose.release-20261006.yml）。未改数据库。证据 evidence/2026-10-07/。
+
+## 2026-10-07 09:00 TH 每日只读核验（生产事故 + 现金牌照突破）
+
+核验窗口 2026-10-07 09:00–09:20 +07（02:00–02:20Z），生产版本 `exchangethb:v0.1.0-20261007-market-retry`（`45ea920c4f3f`）。
+
+**站点与数据（正常）**：`health:prod` passed（`/` 308→`/en`、`/en`、`/robots.txt`、`/sitemap.xml`、`/api/health` 全 200）；`/api/health` status=ok、`storage=database`、`databaseReachable=true`、`dataStatus=current`；现金三源 SuperRich Thailand 31 / Ratchada 31 / Twelve Victory 5 全 current（最后尝试 01:53:5xZ）；现金比较 SGD1000 = 200，三家 `providerHealth` 均 `live_fresh`、`fallback 0`、bestRate 33.58/33.64；加密 USDT 卖出 200（10.6s，Orbix 为本次实时盘口）。sitemap **71** 条；`/ads.txt` 200；探测拦截仍生效（`/.env`、`/wp-login.php`、`/sites/default/`、`/phpmyadmin/`、`/xmlrpc.php`、`/adminer.php` 全 403，`/en /th /zh /sitemap.xml /robots.txt /ads.txt /api/health /admin/login /llms.txt` 全 200）。GA4 `G-HHPM4E9QGY` 在线上 chunk `/_next/static/chunks/app/[locale]/layout-9d1c3195447f65d6.js` 实测存在；页面有 adsbygoogle loader（`ca-pub-8386341379958173`）无 ad slot；HTML 仍无 `__tcfapi`/同意标记。
+
+**①生产事故：宿主磁盘写满，worker 停机 5 小时 10 分（未修复）**
+- 宿主 `1panel-happy`（192.168.1.83）根分区在 **2026-10-07 03:30–03:56 +07** 写满：该窗口 journal 38.8 万行，其中 25.3 万行 `no space left on device`，最后一条 03:56:24（rsyslogd 写 /var/log/syslog 失败），04:00 之后 0 条。
+- dockerd 报 `write /var/lib/docker/containers/<id>/.tmp-config.v2.json: no space left on device event=exit` —— 退出事件没能落盘，因此 `docker ps` 仍显示 `Up 6 hours (unhealthy)`，而 `docker inspect` 为 `exited / Running=false`，`docker top` 与宿主进程检查均证实**已停**。`docker system df`：镜像 23.69GB（10.17GB 可回收）、容器 1.928GB（699.7MB）、卷 27.13GB（1.221GB）、构建缓存 0B。现况 117G 总 / 94G 用 / **17G 可用（85%）**，inode 15%。
+- exchangethb-worker 容器（`5d2d6e01214e…`）`StartedAt 2026-10-06T20:30:40.997Z`、`FinishedAt 2026-10-06T20:51:33.599Z`、`ExitCode 1`、`RestartCount 1`、重启策略 `unless-stopped/0`；最后成功周期 20:40:59Z `status=ok`；崩溃为 `ENOSPC`，位置 `worker/index.ts:17 writeHeartbeat`。因 03:51 之后再未拉起，检查时停机约 5 小时 10 分。
+- 同宿主邻近项目容器同期退出（`vdamo-cloud-app/queue/scheduler/mysql/nginx`、`aiclient2api`），说明这是**宿主级共享问题**而非本项目回归。本会话未定位到压满磁盘的单一写入者（无 sudo），rsyslog/journald 刷屏是症状不是已证实根因；现存的 12GB 余量不是本会话释放的。
+- **影响面**：仅后台行情健康周期与心跳文件；站点、现金数据导入与按请求实时行情均不受影响。**未执行任何重启**（属生产变更）。
+- 恢复方案（已备好、等批准，不改镜像不改库）：`docker compose -f docker-compose.yml -f compose.release-20261007c.yml up -d --force-recreate --no-build worker`；若因状态不一致仍报 already running，先 `docker rm -f exchangethb-worker-1`。
+
+**②现金牌照：BOT 查询页恢复，三家公开现金商与当期官方法人+网点匹配（未写入站点）**
+- BOT 英文查询页（站点 `cashLicenseLookup` 指向的页）已 200，标题 `Authorized Money Changers`，**不再是 maintenance**；泰文页给出当期名录 `listauthorized.pdf`：`รายชื่อและสถานที่ตั้งสำนักงานใหญ่ของบุคคลรับอนุญาต ณ 31 สิงหาคม 2569`（=2026-08-31，2026-09-23 印制，110 页 2083 条）。
+- 逐条匹配（法人+地址）：`ratchada` = **MC125490056**「บริษัท รัชดา เอ็กซ์เชนจ์ จำกัด」78/13 ถนนประชาราษฎร์บำเพ็ญ ห้วยขวาง —— 与本站 `ratchada-main`「78/13 Prachatbamphen Rd., Huai Khwang, Bangkok 10310」逐字一致；`twelve-victory` = **125470175**「บริษัท ทเวลฟ์ วิคทอรี่ เอ็กซ์เชนจ์ จำกัด」231 ถนนประดิพัทธ์ พญาไท 10400 —— 与本站十二胜利总部地址逐字一致（该品牌另有 MC125500012 等多家分店法人）；`superrich-thailand` = **125470152**「บริษัท ซุปเปอร์ริช (ไทยแลนด์) จำกัด」45-45/1-2 ซอยราชดำริ 1 ลุมพินี ปทุมวัน 10330 —— 法人+拉差达里总部，与线上汇率行的 branchName「SuperRich Thailand Ratchadamri」一致（本站该 card 本身是水门区域参考地址）。
+- 结论修正：此前「现金店当前资质只能记 unknown」的**原因是该查询页当时维护中，而非缺牌照**；2023 年旧名录不再引用，改用本当期名录。限制：名录只列**总部**地址、为按月快照，不等于全部分店许可均已核验；同名品牌存在多个法人，只采用与本站营业地址匹配的那一个。
+- 落地（把 licence 证据写入 admin 内容存储并重新发布可见状态）属**生产数据变更**，等批准后执行。
+
+**本轮未验证**：GSC 索引与搜索点击、GA4 平台侧事件接收、Cloudflare 面板访问与性能（curl 未复现 `/cdn-cgi/rum`、curl 返回的 HTML 未见 cloudflareinsights 脚本，不足以下结论）、AdSense 审核状态与站点限定 CMP 实际弹窗、手机真机 390px 回归。
+
+**动作**：全程只读；未重启容器、未切版本、未回退、未付款、未外发、未换出口、未改数据库。证据：`evidence/2026-10-07/worker-outage-host-disk-20261007.json`、`evidence/2026-10-07/bot-money-changer-licence-20260831.json`、`evidence/2026-10-07/bot-money-changer-list-20260831.pdf`（sha256 `f2f111e323f4ae9371ffc295b1a77d88bfbda503bbf1f9c594ed6d29b528d8c2`）。

@@ -1,0 +1,114 @@
+{
+  "checked_at": "2026-10-07T09:00:00+07:00",
+  "checked_at_utc": "2026-10-07T02:00:00Z",
+  "scope": "daily read-only verification + incident evidence",
+  "host": {
+    "alias": "1panel-happy",
+    "ip": "192.168.1.83",
+    "project_dir": "/opt/exchangethb"
+  },
+  "release_in_production": {
+    "image": "exchangethb:v0.1.0-20261007-market-retry",
+    "image_id": "45ea920c4f3f",
+    "deployed_at_utc": "2026-10-06T20:09:00Z",
+    "deployed_at_th": "2026-10-07T03:09:00+07:00",
+    "container_ids": {
+      "web": "ef17bdcab7f340938ddcbb16b2fa4c6c3e75231319b3c98fe6b4f204010571f9",
+      "web_canary": "f677523d755ffe469d36e02d6b05db39f5eddc68aff2a0d18354cd3b0f0b5d9f",
+      "worker": "5d2d6e01214e96cd1daeff230b7b5a2734cf3aca337800717a265b9c8bfa1feb",
+      "postgres": "982d0e1a628caa4129c003e0b20015f2d262c7d9c7d822ff559a609c0fde5fce"
+    }
+  },
+  "found": {
+    "web": "healthy, restarts=0",
+    "web_canary": "healthy, restarts=0",
+    "postgres": "healthy",
+    "worker": "NOT RUNNING since 2026-10-07T03:51:33+07:00 (5h10m at check time)"
+  },
+  "worker_outage": {
+    "container_state_from_inspect": {
+      "Status": "exited",
+      "Running": false,
+      "StartedAt": "2026-10-06T20:30:40.997486431Z",
+      "FinishedAt": "2026-10-06T20:51:33.599292481Z",
+      "ExitCode": 1,
+      "RestartCount": 1,
+      "RestartPolicy": "unless-stopped/0"
+    },
+    "docker_ps_reports": "Up 6 hours (unhealthy) - STALE/inconsistent with inspect and with `docker top`",
+    "docker_top_result": "container 5d2d6e... is not running",
+    "host_process_check": "no tsx/node process for worker/index.ts on the host",
+    "last_successful_cycle": {
+      "ranAt": "2026-10-06T20:40:59.464Z",
+      "status": "ok",
+      "upbit_usdt": "unavailable (stale_orderbook)",
+      "orbix_btc": "unavailable (source_dns_failure)"
+    },
+    "crash": {
+      "error": "Error: ENOSPC: no space left on device, write",
+      "at": "worker/index.ts:17 writeHeartbeat",
+      "window": "2026-10-07T03:40-03:51 +07:00"
+    },
+    "impact": "background market-health cycle + heartbeat file only; public site, cash import and on-demand market quotes unaffected (web fetches live per request)"
+  },
+  "host_disk_event": {
+    "filesystem": "/dev/sda2 mounted on /",
+    "now": { "size": "117G", "used": "94G", "avail": "17G", "use_pct": "85%", "inodes_used_pct": "15%" },
+    "separate_mount": { "/dev/sdb1": "236G on /data, 102G used, 122G free (46%)" },
+    "window": "2026-10-07 03:30-03:56 +07:00",
+    "journal_lines_in_window": 388484,
+    "journal_lines_matching_no_space_left": 252752,
+    "last_enospc_message": "2026-10-07T03:56:24+07:00 (rsyslogd: /var/log/syslog write error)",
+    "after_04_00_count": 0,
+    "dockerd_errors": [
+      "Error writing log message driver=json-file error=write /var/lib/docker/containers/<id>-json.log: no space left on device",
+      "failed to process event container=<id> error=write /var/lib/docker/containers/<id>/.tmp-config.v2.json: no space left on device event=exit"
+    ],
+    "explanation_for_inconsistent_state": "dockerd could not persist the container exit event (config.v2.json write failed), so `docker ps` keeps showing the pre-exit running/unhealthy status while inspect/top report the true exited state",
+    "docker_system_df": {
+      "images": "23.69GB total, 10.17GB reclaimable (42%)",
+      "containers": "1.928GB total, 699.7MB reclaimable (36%)",
+      "local_volumes": "27.13GB total, 1.221GB reclaimable (4%)",
+      "build_cache": "0B"
+    },
+    "other_tenants_affected": [
+      "vdamo-cloud-app / vdamo-cloud-queue / vdamo-cloud-scheduler / vdamo-cloud-mysql / vdamo-cloud-nginx (exited 7h ago; 137 on queue+scheduler)",
+      "aiclient2api (exited 7h ago)"
+    ],
+    "note": "The single writer that consumed the last gigabyte was not identified with the access available (no sudo); rsyslog/journald flooding is a symptom, not the proven root cause. The 12GB of headroom now present was not freed by this session."
+  },
+  "verified_ok": {
+    "health_prod": "passed (/ 308 -> /en, /en 200, /robots.txt 200, /sitemap.xml 200, /api/health 200)",
+    "api_health": "ok, dataStatus=current, databaseReachable=true",
+    "cash_sources": "superrich-thailand 31 / ratchada 31 / twelve-victory 5, all current, last attempt 2026-10-07T01:53:5xZ",
+    "cash_compare_sgd_1000": "200, bestRate SuperRich Thailand Ratchadamri 33.58/33.64, live_fresh x3, liveProviderCount=3, fallback 0",
+    "crypto_compare_usdt_sell": "200 (10.6s), Orbix live orderbook for this comparison",
+    "sitemap_loc_count": 71,
+    "ads_txt": "200 google.com, pub-8386341379958173",
+    "probe_block": "/.env /wp-login.php /sites/default/ /phpmyadmin/ /xmlrpc.php /adminer.php -> 403; /en /th /zh /sitemap.xml /robots.txt /ads.txt /api/health /admin/login /llms.txt -> 200",
+    "adsense_loader": "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8386341379958173 present (no ad slot)",
+    "ga4_tag": "G-HHPM4E9QGY present in production chunk /_next/static/chunks/app/[locale]/layout-9d1c3195447f65d6.js (build-time injection confirmed)"
+  },
+  "unverified_this_round": [
+    "Search Console indexing/clicks (panel)",
+    "GA4 production event reception (panel)",
+    "Cloudflare panel visits/performance; /cdn-cgi/rum not reproduced via curl and no cloudflareinsights beacon found in the curl HTML (UA/edge behaviour not conclusive)",
+    "AdSense review status and site-specific CMP runtime (still no __tcfapi/consent markers in HTML)",
+    "phone 390px real-device regression",
+    "promo campaign expiry on Binance TH referral (VSHA3YP2 remains not a confirmed payout entry)"
+  ],
+  "outbound_link_check": {
+    "https://www.orbixtrade.com": 307,
+    "https://www.binance.com/th": 202,
+    "https://www.bitkub.com": 307,
+    "https://upbit.co.th": "000 (connection failed from this host; not treated as site-down)",
+    "https://www.superrichthailand.com": 200,
+    "https://www.ratchadaexchange.com": 200,
+    "https://www.twelvevictory.com/en": 200
+  },
+  "actions_taken": "read-only checks only; no restart, no redeploy, no rollback, no payment, no outbound messaging, no egress change",
+  "requested_approval": [
+    "restart exchangethb worker (container state is inconsistent: docker ps stale, process gone) - exact command prepared, not executed",
+    "shared-host docker reclamation of the 10.17GB reclaimable images / 699.7MB containers (affects other projects; fujane/PM lane)"
+  ]
+}
