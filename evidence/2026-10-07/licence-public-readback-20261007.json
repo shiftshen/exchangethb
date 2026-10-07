@@ -1,0 +1,75 @@
+{
+  "checked_at": "2026-10-07T11:12:00+07:00",
+  "what": "public read-back after writing the BOT money-changer licence evidence (approved by fujane 2026-10-07 11:04)",
+  "written": "2026-10-07T11:08+07:00 via readAdminConfig/writeAdminConfig inside exchangethb-web-1 (script kept at evidence/2026-10-07/apply-licence-evidence.ts)",
+  "api_readback": {
+    "endpoint": "GET https://www.exchangethb.com/api/providers/cash/<slug>",
+    "status_codes": {
+      "ratchada": 200,
+      "twelve-victory": 200,
+      "superrich-thailand": 200
+    },
+    "bodies": {
+      "ratchada": {
+        "key": "license",
+        "state": "verified",
+        "sourceUrl": "https://www.bot.or.th/th/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-business/money-changer.html",
+        "checkedAt": "2026-10-07T03:50:00.000Z",
+        "expiresAt": "2026-11-21T03:50:00.000Z",
+        "note": "BOT authorized money changer list as of 31 Aug 2026 (published 23/9/2026), entry 172: licence MC125490056, Ratchada Exchange Co., Ltd., head office 78/13 Pracharat Bamphen Rd, Huai Khwang, Bangkok - identical to this site's Ratchada Exchange address. Head-office list only; branch licences are not itemised in this document."
+      },
+      "twelve-victory": {
+        "key": "license",
+        "state": "verified",
+        "sourceUrl": "https://www.bot.or.th/th/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-business/money-changer.html",
+        "checkedAt": "2026-10-07T03:50:00.000Z",
+        "expiresAt": "2026-11-21T03:50:00.000Z",
+        "note": "BOT list as of 31 Aug 2026 (published 23/9/2026), entry 60: licence 125470175, Twelve Victory Exchange Co., Ltd., head office 231 Pradipat Rd, Phaya Thai, Bangkok 10400 - identical to this site's Twelve Victory Pradipat address. The same brand also holds MC125500012 and numbered branch licences."
+      },
+      "superrich-thailand": {
+        "key": "license",
+        "state": "verified",
+        "sourceUrl": "https://www.bot.or.th/th/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-business/money-changer.html",
+        "checkedAt": "2026-10-07T03:50:00.000Z",
+        "expiresAt": "2026-11-21T03:50:00.000Z",
+        "note": "BOT list as of 31 Aug 2026 (published 23/9/2026), entry 54: licence 125470152, SuperRich (Thailand) Co., Ltd., head office 45-45/1-2 Soi Ratchadamri 1, Lumphini, Pathum Wan, Bangkok 10330 - matches the Ratchadamri operation this site prices. Entity-level match: the site branch card is a Pratunam-area reference, not a fixed address."
+      }
+    }
+  },
+  "db_readback": {
+    "query": "SELECT value->'evidence'-><slug>->'license'->>'status' FROM \"AdminConfigState\" WHERE key='global'",
+    "result": {
+      "ratchada": "verified",
+      "twelve-victory": "verified",
+      "superrich-thailand": "verified",
+      "evidence_key_count": 7
+    },
+    "note": "7 evidence keys = the 4 pre-existing crypto exchanges (orbix, bitkub, binance-th, upbit-thailand) plus the 3 cash providers; nothing was dropped by the merge"
+  },
+  "rendered_rows_real_device": {
+    "method": "real phone (HONOR BVL-N49) Chrome over CDP, 390x900 viewport, expanded the 'Evidence and reviews' <details> on each money-changer detail page",
+    "zh_ratchada": "牌照核验 | 已核验 | 查看依据 ↗ | 核验时间: 2026/10/7",
+    "en_twelve_victory": "License check | Verified | View evidence ↗ | Verified on: 07/10/2026",
+    "th_superrich_thailand": "displayed translated into Chinese by the phone's Chrome auto-translate (this phone's UI language is Chinese), so the row read 检查许可证 | 已核实。| 检查日期：2569年7月10日; the underlying API response for the same page is the Thai copy. Recorded as a browser-translation artefact, not a site defect."
+  },
+  "screenshots": {
+    "zh": {
+      "path": "evidence/2026-10-07/licence-readback-zh-ratchada.png",
+      "sha256": "dda8edea3154bf584d23512af7068c06c53ac16b157690f032ca6cd4ec4c8f2f"
+    },
+    "th": {
+      "path": "evidence/2026-10-07/licence-readback-th-superrich-thailand.png",
+      "sha256": "61e6855f9c055415e3b75a997174f3bf2babfd899308d133a5021a897f9b3332"
+    },
+    "en": {
+      "path": "evidence/2026-10-07/licence-readback-en-twelve-victory.png",
+      "sha256": "02badfb47c71e6b39d50c04572b4d662712d19ec2a824d58f78bd85fbba32acb"
+    }
+  },
+  "rollback": "restore /opt/exchangethb/runtime/backups/admin-config-state-20261007-1000.json into AdminConfigState (key='global') -> the three licences return to unknown",
+  "limits": [
+    "Head-office register only: a licence in this list does not by itself prove every branch/point is licensed.",
+    "The list is a monthly snapshot (as of 31 Aug 2026, published 23 Sep 2026), so expiresAt was set to +45 days to force re-verification.",
+    "SuperRich Thailand is an entity-level match: the site's own branch card is a Pratunam-area reference, and the register lists only the Ratchadamri head office."
+  ]
+}

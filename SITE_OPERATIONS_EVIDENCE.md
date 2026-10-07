@@ -139,3 +139,19 @@ Final11:35TH: DNS retry release236ba9… all three containers healthy;92tests/32
 **本轮未验证**：GSC 索引与搜索点击、GA4 平台侧事件接收、Cloudflare 面板访问与性能（curl 未复现 `/cdn-cgi/rum`、curl 返回的 HTML 未见 cloudflareinsights 脚本，不足以下结论）、AdSense 审核状态与站点限定 CMP 实际弹窗、手机真机 390px 回归。
 
 **动作**：全程只读；未重启容器、未切版本、未回退、未付款、未外发、未换出口、未改数据库。证据：`evidence/2026-10-07/worker-outage-host-disk-20261007.json`、`evidence/2026-10-07/bot-money-changer-licence-20260831.json`、`evidence/2026-10-07/bot-money-changer-list-20260831.pdf`（sha256 `f2f111e323f4ae9371ffc295b1a77d88bfbda503bbf1f9c594ed6d29b528d8c2`）。
+
+## 2026-10-07 11:08 TH 写入现金牌照证据（fujane 批准后执行）
+
+**批准与快照**：fujane 2026-10-07 11:04「③licence 写入：写（证据条目，有快照即可；写完公网回读截图进 evidence）」。改动前快照 = 生产 `AdminConfigState`（key=`global`）整行 → `/opt/exchangethb/runtime/backups/admin-config-state-20261007-1000.json`；恢复该行即把三家牌照退回 `unknown`。
+
+**写入方式**：在 `exchangethb-web-1` 容器内用应用自己的 `readAdminConfig` / `writeAdminConfig`（`lib/content-store.ts`，zod 全量校验）合并 `evidence[<slug>].license`，只动这三条、其余字段原样透传；脚本留档 `evidence/2026-10-07/apply-licence-evidence.ts`，跑完已从容器删除。payload：`status=verified`、`checkedAt=2026-10-07T03:50:00.000Z`（10:50 +07）、`expiresAt=2026-11-21T03:50:00.000Z`（+45 天，名录按月更新，到期强制复验）、`sourceUrl` = BOT 泰文名录页、`note` 写明牌照号/名录条目/总部地址与匹配依据。
+
+**库内回读**：`SELECT value->'evidence'-><slug>->'license'->>'status' FROM "AdminConfigState" WHERE key='global'` → ratchada/twelve-victory/superrich-thailand 三条均 `verified`，`evidence` 共 **7** 个键（原 4 家加密交易所 + 新增 3 家现金商，合并未丢任何键）。
+
+**公网回读（2026-10-07 11:12 +07）**：`GET /api/providers/cash/{ratchada,twelve-victory,superrich-thailand}` 均 **200**，`state=verified`、`checkedAt=2026-10-07T03:50:00.000Z`、`expiresAt=2026-11-21T03:50:00.000Z`。真机（HONOR BVL-N49，390×900，展开「平台依据与口碑」）实渲染：zh `/zh/money-changers/ratchada` = 「牌照核验 | 已核验 | 查看依据 ↗ | 核验时间: 2026/10/7」；en `/en/money-changers/twelve-victory` = 「License check | Verified | View evidence ↗ | Verified on: 07/10/2026」；th 页因该机 Chrome 的自动翻译而显示为中文（浏览器行为，非站点缺陷，已在证据里注明）。截图与 sha256 见下。
+
+**限制**（写入不改结论强度）：该名录只列**总部**地址，持牌不等于每个网点均已核验；是 **2026-08-31 月度快照**（2026-09-23 印制）；SuperRich Thailand 属**实体级**匹配（站点自身门店卡是水门区域参考地址，名录只有拉差达里总部）。
+
+**证据**：`evidence/2026-10-07/licence-public-readback-20261007.json`（含 API 状态码与响应体、库内查询结果、实渲染行、三张截图 sha256）、`licence-readback-zh-ratchada.png`、`licence-readback-th-superrich-thailand.png`、`licence-readback-en-twelve-victory.png`、`apply-licence-evidence.ts`、`licence-readback-probe.mjs`、`bot-licence-matches.tsv`、`bot-money-changer-list-20260831.pdf`。
+
+**配套（同日）**：worker 已于 10:01 按 fujane 批准用 `compose.release-20261007c.yml` 重建并 healthy（记录在本文件「2026-10-07 09:00」节与 lark-status）；fujane 批准的低峰变更——把 web_canary/web 也统一到同一 DNS overlay（先 canary、通过再 web、失败回滚）——已排入 **2026-10-08 03:00 +07** 窗口，执行步骤与回滚写在该定时任务提示词与 lark-status 里。
