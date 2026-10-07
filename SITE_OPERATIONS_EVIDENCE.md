@@ -203,4 +203,12 @@ Final11:35TH: DNS retry release236ba9… all three containers healthy;92tests/32
 
 **脚本对本地实例的 1 项 FAIL 已定性**：`scripts/check-seo-cluster.mjs http://127.0.0.1:3210` → 30 项中仅 `/en/routes/usd-cash-to-thb` 缺 `/Latest data reference/`。原因是该块只在 `latestRouteDataTimestamp` 有值时才渲染，而本地**无现金缓存/行情数据**（本地 `/api/health` 的 `dataStatus.status=degraded`、现金源 unavailable），生产同页该文案存在（`grep -c` = 1）。**非本次改动引入**；该脚本是发布闸门，发布后需对 canary/生产重跑。
 
-**状态**：本地候选，**未发布、未改生产**；发布需先写 lark-status「待审」并报 fujane 得「执行」。证据：`evidence/2026-10-07/route-index-expansion-local.txt`（含 79 条计数、12 条路线 URL、canonical/alternates/robots、307/301 行为、脚本输出）。
+**状态**：本地候选，**未发布、未改生产**；用户已于 2026-10-07 22:42 +07 答「执行」，但现行流程仍须 fujane 独立审核并给 deploy-executor 发部署单。证据：`evidence/2026-10-07/route-index-expansion-local.txt`（含 79 条计数、12 条路线 URL、canonical/alternates/robots、307/301 行为、脚本输出）。
+
+## 2026-10-08 02:16 TH 发布候选再审：禁止从干净 HEAD 直接构建（未触生产）
+
+**生产只读回读**：`https://www.exchangethb.com/sitemap.xml` 仍为 **71** 个 `<loc>`；`/th/routes/usd-cash-to-thb` 仍输出 `robots=noindex, follow`、canonical → `/en/routes/usd-cash-to-thb`；`/api/health` HTTP 200。用户授权不等于已发布。
+
+**候选源差异**：`git show HEAD:app/[locale]/routes/[slug]/page.tsx` 仍将静态 `cashRates` 用于「Latest data reference」，相关现金商用 `['sia','superrich-thailand','ratchada']`，英文/泰文说明仍写 `SIA Money Exchange`；`HEAD:data/site.ts` 仍有 SIA。当前工作树里的同页改为 `readCashCache/getLiveMarketSnapshots` 和三家现行公开现金商，但属于**早前未提交的工作树内容**，与路线索引两行提交不是同一批。直接从干净 HEAD/c50f995 打包可能重现已下线 SIA 文案/旧数据；从整个脏工作树打包则会夹带大量未审改动。两者均不能作为可复现安全发布制品。
+
+**本轮门禁与处置**：工作树 `npm run typecheck`、`eslint . --max-warnings=0`、`npm run test`（146/42）、`npm run build` 均 exit 0；仅证明这份工作树可编译，不证明旧 HEAD 或现网同源。已通过 fujane 收件箱发送授权与更正：先对照现网运行镜像对应源码，审定保留现网修复且只增加路线索引的精确候选，再通过 Fable 审核和 deploy-executor 部署单执行。避开 03:00 已批准 DNS overlay 窗口；本开发会话不 SSH、不发布、不推 GitHub。
