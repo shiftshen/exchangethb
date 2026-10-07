@@ -371,7 +371,7 @@
       "事项": "发布路线页 th/zh 索引扩展（sitemap 71→79、th/zh 路线页由 noindex+canonical→en 改为可索引+自指 canonical）",
       "原因": "4 个现存路线页（btc-to-thb / usdt-to-thb / usd-cash-to-thb / bangkok-airport-money-exchange-guide）的 th 与 zh 变体实测 200、标题与正文均为原生译文，但 robots=noindex,follow 且 canonical 指向 en URL，等于把已有译文完全排除在索引外；门店详情页早已是 en/th/zh，路线页是最后一处不一致。",
       "拟执行": "发布包含本题改动的镜像（候选已在工作区完成并本地验证）：lib/indexing-policy.ts 新增 indexedRouteLocales/routeAlternateLocales、shouldIndexRoute 由仅 en 改为 en/th/zh；app/sitemap.ts 按策略生成 12 条路线 URL（含 en/th/zh hreflang）；路线页 metadata 用 routeAlternateLocales 取 alternates；同步 check-seo-cluster 期望条数与 AGENTS.md。不改数据库、不改报价逻辑、不改 DNS。",
-      "回退": "路线索引是纯代码策略：回退即把 indexedRouteLocales 改回 ['en'] 并重建（与上一镜像同版本号策略），sitemap 自动回到 71 条；不涉数据与前端口径。",
+      "回退": "路线索引是纯代码策略，但生产回退不能临时修改源码重建：先由部署窗口记录变更前运行中的固定镜像 digest 与实际 compose overlay，候选发布失败时用该旧镜像和对应 overlay 按先 canary 后 web 回切并分别核健康、sitemap 71、自指/索引策略恢复；不动数据库或 worker。03:00 DNS overlay 可能先改变 web/web_canary 的 compose 基线，部署前须重新 inspect 核对，不可假定仍用 b.yml、不可 base-only --no-build。",
       "证据": "evidence/2026-10-07/route-index-expansion-local.txt（sitemap 79 条计数、12 条路线 URL、canonical/alternates/robots、307/301 行为、SEO 集群脚本输出）；正文见 SITE_OPERATIONS_EVIDENCE.md「2026-10-07 14:50 TH 路线页索引扩展」",
       "状态": "用户 2026-10-07 22:42 +07 已明确「执行」；截至 2026-10-08 02:15 +07 尚缺生产审核/部署回读。本开发会话未发布、未改生产；避免与 03:00 已批 DNS overlay 任务并发。02:15 审查发现禁止直接用干净 HEAD/c50f995 构建发布：其 routes 页面仍引用已退出公开来源 SIA 和静态 cashRates；已再次通知 fujane 先以现网源码为基线核验、形成仅 SEO 变更且保留现网修复的候选，再发部署单。",
       "本地门禁": "typecheck 干净 / eslint --max-warnings=0 0 问题 / vitest 146 tests·42 files 全过 / next build exit 0 / 本地实例 sitemap 79 loc + th·zh 自指 canonical + noindex 消失",
