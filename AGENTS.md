@@ -1,13 +1,13 @@
 # ExchangeTHB 项目规则（项目级）
 
-> 本文件是本项目唯一项目级规则。工作区级规则见 `/Volumes/M2USB/dev/AGENTS.md`（软链到 `workspace/AGENTS.md`）；
+> 本文件是本项目唯一项目级规则。工作区级规则见 `/Volumes/M2USB/platform/shared-agents/AGENTS.md`（dev/ 下软链）；旧 `workspace/` 路径已停用；
 > 全局规则见 `$DSH_HOME/AGENTS.md` 与统一主本 `~/.local/state/dsh-infrastructure/control/AGENT-ENVIRONMENT-PROMPT.md`。
 > 事实主本仍是 registry 与 `DSH-HANDOFF.md`，本文件只写本项目的目录、环境与边界。
 
 ## 唯一目录（硬性）
 
 - 项目实体**只有一个**：`/Volumes/M2USB/dev/exchangethb`
-- `/Volumes/M2USB/dev/exchangethb` → 上述实体的**兼容软链**，不是第二份副本
+- 旧路径 `/Volumes/M2USB/workspace/exchangethb` 曾是兼容软链，已停用，不再引用
 - 禁止在旧路径或别处新建、复制同名项目/目录/服务；清理旧软链必须等所有引用改完（见 registry `migration_discipline`）
 - 采集 plist 与脚本里的路径一律写**真实路径**，不写旧软链（原因见下方「已知坑」）
 
@@ -44,7 +44,7 @@
 
 ## 已知坑（2026-10-05 实测）
 
-- **软链会被采集 helper 拒绝**：共享 helper 的 `proxy_fetch.py:output_slot()` 用 `O_RDONLY|O_DIRECTORY|O_NOFOLLOW` 逐级固定路径组件。plist 一旦传旧软链路径 `/Volumes/M2USB/dev/exchangethb`，三源全部 `output_rejected`、零 HTML 落盘，而**进程仍然 `state=running`**。当日因此静默断更 8h48m。
+- **软链会被采集 helper 拒绝**：共享 helper 的 `proxy_fetch.py:output_slot()` 用 `O_RDONLY|O_DIRECTORY|O_NOFOLLOW` 逐级固定路径组件，路径里任何一段是软链都会 `output_rejected`。历史故障（2026-10-05）：当年项目实体在 `/Volumes/M2USB/workspace/exchangethb`、`/Volumes/M2USB/dev/exchangethb` 是指向它的软链，plist 传了软链路径 → 三源全部 `output_rejected`、零 HTML 落盘，而**进程仍然 `state=running`**，当日静默断更 8h48m。现已统一为真实路径 `/Volumes/M2USB/dev/exchangethb`（plist 实测已用它，`WorkingDirectory=/Users/shift`）；**采集输出路径与 `--workspace` 必须是真实路径，不得经过任何软链**（含 2026-10-07 起 `.next`/`node_modules` 链到 `_scratch` 这类新增软链）。
 - **进程活着 ≠ 采集健康**：判据看轮次结果，不看进程。项目探针 `npm run health:cash`（`scripts/check-cash-collector-health.ts`）在「连续 3 轮三源全挂」或「超过 30 分钟无新轮次」时退出非 0。
   - 该探针已由 fujane 于 **2026-10-06** 接入基座每日体检 `daily-maintenance` §14（`control/bin/daily-maintenance-check.py:154`：每天 09:03 在本项目跑该探针，rc≠0 计入 problems 并经 notify 发 Telegram 告警；探针文件缺失则跳过）。**无需**再改 `health-watch` 的 uchg 文件。
   - Google 流量（GSC/GA4/SEO）自 2026-10-06 起由 fujane 统一管理；本项目的 GA4/AdSense 发现写进 `lark-status.json` 交 fujane，不自行改动平台配置。
@@ -82,11 +82,11 @@ npm run health:prod                                       # 生产端点只读�
 | 位置 | 放什么 |
 |---|---|
 | 项目根 | `AGENTS.md`、`README.md`、`lark-status.json`、`DEVELOPMENT_PLAN.md`（唯一计划）、`SITE_OPERATIONS_EVIDENCE.md`（业务事实）、工具链必需配置（`package*.json`、`tsconfig/next/tailwind/postcss/eslint/vitest` 配置、`middleware.ts`、`Dockerfile`、`docker-compose.yml`、`.env.example`、`.gitignore`、`.dockerignore`、`.nvmrc`）与源码子目录（`app/ components/ lib/ content/ data/ prisma/ public/ scripts/ tests/ worker/`） |
-| `docs/` | 固定文档：交付回执、验收矩阵、推广/SOP/runbook/模板/handoff、SEO 研究等 23 个（09:00 每日任务要读的 `PROMOTION_OPERATIONS_PLAN.md`、`FINAL_ACCEPTANCE_MATRIX.md` 也在 `docs/`） |
+| `docs/` | 只剩 4 个现用固定文档：`OPS_SOP_CN.md`、`RELEASE_RUNBOOK_CN.md`、`PROD_INPUT_TEMPLATE_CN.md`、`GO_LIVE_CHECKLIST_CN.md`。其余 19 份 PLAN/RECEIPT/HANDOFF/MATRIX 已于 2026-10-07 由 fujane 归档到 `/Volumes/M2USB/archive/exchangethb-docs-20261007/docs/`（只在溯源时读）。**唯一计划 = 根目录 `DEVELOPMENT_PLAN.md`**；09:00 每日任务只读它 + `SITE_OPERATIONS_EVIDENCE.md` + `lark-status.json` |
 | `evidence/<日期>/` | 证据原件，**新证据只写这里**（如 `evidence/2026-10-06/`、`evidence/2026-10-01/`） |
 | `tmp/` | 截图、草稿、一次性文件；14 天不用自动归档 |
 | `artifacts/` | 历史遗留：只保留 JSON/PNG/LOG/TXT 类旧证据（826 个、16M），不再新增；原始抓取已归档 |
-| `/Volumes/M2USB/_scratch/exchangethb/` | 编译产物与缓存（`.next` 已移出，构建时自动重建） |
+| `/Volumes/M2USB/_scratch/exchangethb/` | 编译产物与缓存：`build-cache/{.next,node_modules,tsconfig.tsbuildinfo}`（2026-10-07 按 fujane 清单移出并在项目根留软链，项目体积 780M→65M；移动后 typecheck/lint/vitest 142/42/health:cash 全过）＋ `20261006/` 一次性脚本 |
 | `/Volumes/M2USB/archive/exchangethb-cleanup-20261006/` | 本次整理归档：原始抓取 html/js/gz 1803 个（256M）+ 早前归档 | 
 
 - 本项目是单一 Next.js 应用，无子项目，故不建 `其他/`；模型与成片不在本项目（成片走 NAS seek），数据库数据在生产服务器 Docker volume `/opt/exchangethb`，本地无库文件可迁。

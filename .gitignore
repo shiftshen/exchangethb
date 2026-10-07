@@ -1,5 +1,7 @@
-.next/
-node_modules/
+# .next 与 node_modules 自 2026-10-07 起是链到 /Volumes/M2USB/_scratch/exchangethb/build-cache/ 的软链，
+# 不带斜杠才能同时忽略目录与软链两种形态
+.next
+node_modules
 .env
 .env.local
 .secrets/

@@ -337,5 +337,32 @@
     "限制": "名录只列总部地址、按月更新快照，不等于全部分店许可；同名品牌有多个法人（如 Phuket 的 โกลบอล ซุปเปอร์ ริช、Pattaya 的 ซุปเปอร์ริชลี่），只采用与本站营业地址匹配的那一个",
     "待办": "把 licence 证据写入站点（admin 内容存储 checkedAt/expiresAt/sourceUrl/note）并重新发布可见状态 —— 生产数据变更，等批准",
     "证据": "evidence/2026-10-07/bot-money-changer-licence-20260831.json（PDF sha256 f2f111e323f4ae9371ffc295b1a77d88bfbda503bbf1f9c594ed6d29b528d8c2）"
-  }
+  },
+  "整改_20261007_fujane清单": {
+    "时间": "2026-10-07 09:22-09:35 +07",
+    "①AGENTS.md 旧 workspace 引用": "已核验通过：第 3 行指向 /Volumes/M2USB/platform/shared-agents/AGENTS.md、第 10 行标注旧 /Volumes/M2USB/workspace/exchangethb 已停用。另修正「已知坑」里仍把 /Volumes/M2USB/dev/exchangethb 说成软链路径的过期表述（现在它是真实路径，并补上「采集 --workspace 与输出路径不得经过任何软链」）。采集 plist 实测：--workspace=/Volumes/M2USB/dev/exchangethb（真实路径）、WorkingDirectory=/Users/shift、node_modules/tsx 经软链可启动，无需改动。",
+    "②docs 归档 + 09:00 指针": "已核验：docs/ 只剩 OPS_SOP_CN.md / RELEASE_RUNBOOK_CN.md / PROD_INPUT_TEMPLATE_CN.md / GO_LIVE_CHECKLIST_CN.md，19 份在 /Volumes/M2USB/archive/exchangethb-docs-20261007/docs/。09:00 定时任务 schedule-4bc336ee-4bda-4bf5-84bb-7b8bb63ea2d8 的读取指针已改为根 DEVELOPMENT_PLAN.md + SITE_OPERATIONS_EVIDENCE.md + lark-status.json（已保存，下次 2026-10-08 09:00 +07 生效）；AGENTS.md 目录规范同步改。",
+    "③编译产物移出": "已执行：.next(134M)、node_modules(580M)、tsconfig.tsbuildinfo 移到 /Volumes/M2USB/_scratch/exchangethb/build-cache/ 并在项目根留软链（未删除任何文件，既有 .next-20261006 保持不动）。项目体积 780M→65M；移动后实测 typecheck exit 0、eslint 0 问题、vitest 142/142（42 文件）通过、health:cash exit 0（采集轮次 2026-10-07T02:24:25Z 正常）。",
+    "④发布闸门": "已接受并写进 09:00 任务提示词：发布/切镜像/回退/重启生产服务/写生产数据，先写 lark-status「待审」+ 报 fujane，得「执行」才做（紧急回滚除外）。当前两项待审见「待审_20261007」。"
+  },
+  "待审_20261007": [
+    {
+      "事项": "重启 exchangethb worker 容器（生产运维）",
+      "原因": "宿主 1panel-happy 在 2026-10-07 03:30-03:56 +07 磁盘写满，worker 于 03:51:33 +07 以 ENOSPC（worker/index.ts:17 writeHeartbeat）退出后未再拉起；docker ps 显示 Up/unhealthy 与 inspect exited 不一致（exit 事件未落盘）。检查时点 09:00 +07 已停机 5h10m。",
+      "影响": "仅后台行情健康巡检与心跳；正式站、现金数据与按请求实时行情均正常（health:prod passed）。",
+      "拟执行": "ssh 1panel-happy：cd /opt/exchangethb && docker compose -f docker-compose.yml -f compose.release-20261007c.yml up -d --force-recreate --no-build worker；若因状态不一致报 already running，先 docker rm -f exchangethb-worker-1。不改镜像、不改数据库。",
+      "回退": "worker 为后台进程，不涉版本切换；失败可保持现状，对外服务不受影响。当前镜像仍为 exchangethb:v0.1.0-20261007-market-retry（45ea920c4f3f）。",
+      "证据": "evidence/2026-10-07/worker-outage-host-disk-20261007.json；SITE_OPERATIONS_EVIDENCE.md「2026-10-07 09:00 TH 每日只读核验」",
+      "状态": "待 fujane 回「执行」",
+      "附注": "同宿主 vdamo-cloud-* 与 aiclient2api 同期退出，属宿主级问题；磁盘现 17G 可用/85%，可回收镜像 10.17GB（跨项目，需带 sudo 处理）。"
+    },
+    {
+      "事项": "把当期现金牌照证据写入站点并发布可见状态（生产数据变更）",
+      "原因": "BOT 查询页已恢复，当期名录（ณ 31 สิงหาคม 2569 / 2026-08-31，2026-09-23 印制）中三家公开现金商均与官方法人+网点地址逐字匹配：ratchada=MC125490056、twelve-victory=125470175、superrich-thailand=125470152，可解除长期 unknown。",
+      "拟执行": "把 licence 证据（checkedAt/expiresAt/sourceUrl/note）写入 admin 内容存储并重新发布站点可见的 licence 状态；改动范围仅证据条目，不改报价逻辑、不改数据库结构。",
+      "回退": "改前导出内容存储快照，一键恢复原 unknown 状态。",
+      "证据": "evidence/2026-10-07/bot-money-changer-licence-20260831.json（PDF sha256 f2f111e323f4ae9371ffc295b1a77d88bfbda503bbf1f9c594ed6d29b528d8c2）",
+      "状态": "待 fujane 回「执行」"
+    }
+  ]
 }
