@@ -373,7 +373,7 @@
       "拟执行": "发布包含本题改动的镜像（候选已在工作区完成并本地验证）：lib/indexing-policy.ts 新增 indexedRouteLocales/routeAlternateLocales、shouldIndexRoute 由仅 en 改为 en/th/zh；app/sitemap.ts 按策略生成 12 条路线 URL（含 en/th/zh hreflang）；路线页 metadata 用 routeAlternateLocales 取 alternates；同步 check-seo-cluster 期望条数与 AGENTS.md。不改数据库、不改报价逻辑、不改 DNS。",
       "回退": "路线索引是纯代码策略：回退即把 indexedRouteLocales 改回 ['en'] 并重建（与上一镜像同版本号策略），sitemap 自动回到 71 条；不涉数据与前端口径。",
       "证据": "evidence/2026-10-07/route-index-expansion-local.txt（sitemap 79 条计数、12 条路线 URL、canonical/alternates/robots、307/301 行为、SEO 集群脚本输出）；正文见 SITE_OPERATIONS_EVIDENCE.md「2026-10-07 14:50 TH 路线页索引扩展」",
-      "状态": "待 fujane「执行」；本轮未发布、未改生产；已于 2026-10-07 15:17 报 fujane 收件箱（同条含 DNS runbook 修正与 worker 根因/门槛）",
+      "状态": "用户 2026-10-07 22:42 +07 已明确「执行」；2026-10-08 02:10 +07 尚缺生产审核/部署回读，按现行发布闸门已报 fujane 收件箱请求独立审核与部署单。本开发会话未发布、未改生产；避免与 03:00 已批 DNS overlay 任务并发。",
       "本地门禁": "typecheck 干净 / eslint --max-warnings=0 0 问题 / vitest 146 tests·42 files 全过 / next build exit 0 / 本地实例 sitemap 79 loc + th·zh 自指 canonical + noindex 消失",
       "发布后必做": "对 canary 与生产重跑 scripts/check-seo-cluster.mjs（本地唯一 FAIL 是本地无现金数据导致，生产存在该文案），并在 GSC 侧观察收录（fujane 车道）"
     }
@@ -465,7 +465,15 @@
     "实现": "lib/indexing-policy.ts 新增 indexedRouteLocales/routeAlternateLocales、shouldIndexRoute 改为「slug 在集合内且语言在集合内」；app/sitemap.ts 按策略生成 4 slug × 3 语言 = 12 条（去掉只服务路线的 englishOnly，改用 englishThaiAndChinese）；路线页 metadata 改用 routeAlternateLocales(slug)；check-seo-cluster expectedLocCount 71→79 并增 mustInclude（/th|/zh routes）/mustNotInclude（/th/routes/eth-to-thb）；AGENTS.md 索引策略条目与条数同步",
     "本地验证": "typecheck 干净、eslint --max-warnings=0 0 问题、vitest 146 tests/42 files 全过、next build exit 0；本地实例 /sitemap.xml 79 个 <loc>、12 条路线 URL、eth-to-thb 未泄漏；/th/routes/usd-cash-to-thb 与 /zh/routes/btc-to-thb 200 + canonical 自指 + alternates en/th/zh + x-default + noindex 已消失；/ja/routes/... 仍 307 → /en、/en/routes/eth-to-thb 仍 301（别名行为未变）",
     "本地 SEO 脚本唯一 FAIL 的定性": "check-seo-cluster 对本地实例 30 项里仅 /en/routes/usd-cash-to-thb 缺 /Latest data reference/，原因是该块仅在 latestRouteDataTimestamp 有值才渲染、本地无现金数据（本地 dataStatus=degraded、现金源 unavailable），生产同页存在（grep -c = 1）→ 非本次改动引入；发布后需对 canary/生产重跑",
-    "状态": "本地候选，未发布、未改生产；已列入「待审_20261007」等 fujane「执行」",
+    "状态": "用户 2026-10-07 22:42 +07 明确答「执行」；截至 2026-10-08 02:10 +07 尚无生产发布/独立审核回执。本开发会话不直连生产，已向 fujane 收件箱送审并请其给唯一 deploy-executor 发部署单；避开 03:00 已批 DNS overlay 任务。不可把用户授权、候选构建或部署请求写作上线完成。",
     "证据": "evidence/2026-10-07/route-index-expansion-local.txt；SITE_OPERATIONS_EVIDENCE.md「2026-10-07 14:50 TH 路线页索引扩展」"
+  },
+  "收尾与GitHub一致性_20261008": {
+    "用户指示": "继续完成当前任务；如果项目确认完成则收尾，以后不要持续开发，GitHub 存档一致（2026-10-08 02:04 +07）。本会话暂停自行立新功能；只做已授权发布验收协调和收尾核验。",
+    "核验时间": "2026-10-08T02:10:00+07:00",
+    "本地与远端": "本地 codex/mobile-simplification HEAD=2ba7711，origin/main=873beb6；本地领先 26 个提交，工作区 53 个受版本控制文件修改、59 个未跟踪路径（展开为 1597 个文件，其中 artifacts/ 1539）；未推送、未清理、未覆盖他人改动。",
+    "门禁": "2026-10-08 02:09 +07：typecheck=0、eslint --max-warnings=0=0、vitest 146 tests/42 files 全过；先前 build=0 与本地页面检查已有证据，但不等于生产验收。",
+    "尚不能宣称完结的条件": "路线索引发布尚缺 fujane/Fable 审核、部署单、canary→web 生产回读；03:00 DNS overlay 尚未执行；AdSense 审核/CMP 实弹、GSC/GA4 平台实收仍未验；GitHub 远端与本地 26 提交及脏工作区不一致。先区分应该入档的代码与证据、旧 artifacts/ 和临时产物，再由授权的 GitHub 操作方决定审核/推送；不得整树提交或直接推 main。",
+    "后续纪律": "不再自动开展新产品功能；保留既有 09:00 只读站点运维监测直到明确交接/停用决定。项目确实达到发布、验收、存档一致且监控有接手人后，才标记完成并由会话管理方归档正式会话。"
   }
 }
