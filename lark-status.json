@@ -1,7 +1,7 @@
 {
   "负责智能体": "Codex ExchangeTHB（DSH 工作区主会话 /Volumes/M2USB/dev/exchangethb）",
   "当前进度": "已完成：①2026-10-06 01:04-01:05 +07 完成生产发布：新镜像 exchangethb:codex-tenlang-20261006（sha256:f6ccf3d2e068…，源码=cbc153f）已切到 web/web_canary/worker 三容器，restarts=0、web healthy、worker heartbeat exit 0、公网 health:prod passed；发布前门禁 vitest 127/39 通过、tsc 干净、eslint 0 问题（修 artifacts 误入 lint，提交 cbc153f）、next build 0；canary 预验证十语 200 + compare/cash 200 + SEO 集群脚本 exit 0；/ads.txt 已随本次上线（google.com, pub-8386341379958173, DIRECT, f08c47fec0942fa0）。②发布前已备份：DB dump 60b1e21b…、源码+compose 归档 505579e1…、回退镜像 sha256:69a9d68213bf…；回滚=切回 compose.visible-costs-20261003.yml，发布记录正文见 SITE_OPERATIONS_EVIDENCE.md 的「2026-10-06 生产发布记录」节。③生产现场 21 项未提交修改逐项核对无工作区缺失的独有修复，发布后 /opt/exchangethb 源码目录已同步为 cbc153f（保留 33 个 compose 覆盖与 .env/content）。④现金采集 3 官方源（SuperRich Thailand/Ratchada/Twelve Victory）固定 127.0.0.1:18888 不换出口，最新三源 31/31/5（2026-10-05T18:18:02Z）。⑤现金健康探针已由 fujane 接入基座每日体检 daily-maintenance §14（daily-maintenance-check.py:154，每日 09:03 跑本项目探针，rc≠0 计入 problems 并 Telegram 告警）；按基座完全相同的调用实测 exit 0。⑥定时任务已迁入本会话：schedule-4bc336ee-4bda-4bf5-84bb-7b8bb63ea2d8 每日 09:00 Asia/Bangkok。进行中：worker 首轮 degraded 已定性（重启后 DNS 预热瞬时态；第二轮 status=ok、四家交易所 marketHealth 全 true、BTC 四源 current、fallbackOnly=false、restarts=0）；USDT 四源 unavailable 属发布前既有行为（生产旧镜像 worker/index.ts 与本发布源码逐字节相同），非本次回归。下一步：跟踪 USDT 源可用性、BOT 牌照源恢复后核实现金店当前资质、手机真机 390px 回归；Google 流量相关按 fujane 统一管理口径只上报发现。⑦每日只读核验（2026-10-06 09:02 +07，发布后 8 小时稳定性复核）：四容器 healthy 无重启、/api/health status=ok + storage=database + dataStatus=current、现金三源 31/31/5（报价 01:55–01:56Z）、sitemap 64 条、/ads.txt 在线、公开现金 SGD 与加密 USDT/BTC 接口 200 有报价；worker 最新轮次 status=ok、四家交易所 BTC current；无新可行动故障。⑧2026-10-06 文件规范整理：根目录散落 50→21、项目体积 1.0G→608M（23 个固定文档进 docs/、散落证据进 evidence/2026-10-01/、.next 与 tsbuildinfo 移入 _scratch、1803 个原始抓取 html/js/gz 归档，未删除任何文件）；整理后 test 127/39、tsc、eslint、health:cash 全部通过。⑨整理补充规则已执行：移动清单 tmp/cleanup-moves-20261006.tsv（35 条，无软链）；>100MB 项只列不动；整理后 build exit 0、本地 start 冒烟 200、test 127/39、tsc、eslint、health:cash 全通过。⑩2026-10-07 两项优化上线：生产拦截扫描探测（前一日 78% 请求）+ 中文门店/交易所详情页开放索引（sitemap 64→71，镜像 codex-zh-detail-20261007，restarts=0，health:prod passed）；门禁 134 tests/40 files、tsc、eslint 0、build 0。 ⑪2026-10-07 09:00 +07 每日只读核验：正式站运行正常（web/web_canary healthy、health:prod passed、/api/health ok+current、现金三源 31/31/5 current、现金 SGD 1000 与加密 USDT 卖出 200 且有实时报价、sitemap 71 条、/ads.txt 与探测拦截 403 均在线、GA4 G-HHPM4E9QGY 在线上 layout chunk 实测存在）。本轮发现两件实质变化：①【生产事故】宿主 1panel-happy 于 2026-10-07 03:30-03:56 +07 磁盘写满（journal 该窗口 38.8 万行、其中 25.3 万行 no space left），dockerd 无法写容器状态文件，exchangethb-worker 容器在 03:51:33 +07 以 ENOSPC（worker/index.ts:17 writeHeartbeat）退出后未再拉起，检查时已停机 5 小时 10 分；`docker ps` 仍显示 Up/unhealthy 与 inspect exited 矛盾（exit 事件未落盘），实测 docker top 报 not running、宿主无该进程。同宿主 vdamo-cloud-* 与 aiclient2api 等容器也同期退出。站点对外功能与现金/行情数据未受影响（web 按请求实时抓取）。②【牌照突破】BOT 换汇商查询页已恢复正常（英文查询页 200，标题 Authorized Money Changers，不再是 maintenance），并给出当期名录 PDF（ณ 31 สิงหาคม 2569＝2026-08-31，2026-09-23 印制，110 页 2083 条）：三家公开现金商全部与当期官方法人及网点地址逐字匹配 —— ratchada＝MC125490056「บริษัท รัชดา เอ็กซ์เชนจ์ จำกัด」78/13 ประชาราษฎร์บำเพ็ญ ห้วยขวาง；twelve-victory＝125470175「ทเวลฟ์ วิคทอรี่ เอ็กซ์เชนจ์」231 ประดิพัทธ์ พญาไท；superrich-thailand＝125470152「ซุปเปอร์ริช (ไทยแลนด์)」45-45/1-2 ราชดำริ 1 ลุมพินี。原「现金店当前资质 unknown」的原因是该页当时维护中，而非缺牌照。落地到站点（写 licence 证据并重新发布可见状态）属生产数据变更，等批准。 ⑫2026-10-07 10:00-10:55 +07：①【worker 已恢复】按 fujane 10:00「待审 A：执行」用 compose.release-20261007c.yml `--no-build --force-recreate` 只重建 worker（web/web_canary/postgres 未动、镜像未变、未改库）；10:53 复核 `docker ps`＝`exchangethb-worker-1 | Up 52 minutes (healthy) | exchangethb:v0.1.0-20261007-market-retry`，inspect＝running=true/restarts=0/exit=0，healthcheck Log 连续 ExitCode 0（10:48/10:49/10:50），心跳 03:52:38Z 已更新；重启后首轮 degraded（orbix 预热）次轮 status=ok 四家全 true。已按你的要求把 docker ps 行与 healthcheck 写进本文件与 evidence。注：该 overlay 给三服务都加了 dns [8.8.8.8,1.1.1.1]，worker 现带 DNS 固定而 web/web_canary 没有（它们早前是无该 overlay 重建的），差异已报 fujane、未擅自统一。②【worker 告警已装】按 fujane 要求新增 launchd `com.xmanx.exchangethb.worker-watch`（每 5 分钟）＋ `scripts/check-worker-alive.ts`（`npm run health:worker`）：worker 退出超 5 分钟或心跳超 25 分钟未更新就写一条到 for-fujane.md，恢复自动清状态、同故障 6 小时内不重复；判据用 inspect 的 State.Running＋容器内心跳，不用会撒谎的 `docker ps`。已实测健康(每小时一行 OK 日志)/停止容器/容器被删/launchctl 退出码 0 四条路径，未对真实 worker 做压测式验证。③【④手机 390px 回归完成】HONOR BVL-N49 真机 Chrome 154 经 CDP 实测 11 次页面加载：真机原生视口 365px 下 7 页（zh 现金、th 现金、zh 加密、th 门店详情、zh 交易所详情、th 免责、zh 门店详情）与精确 390px（Emulation.setDeviceMetricsOverride，未改设备显示设置）下 4 页，全部 scrollWidth==clientWidth、无横向溢出、无越界元素；截图与探针脚本存 evidence/2026-10-07/phone390*。④【官方名录证据整理完成】三家公开现金商的当期 BOT 名录证据整理成 evidence/2026-10-07/bot-licence-matches.tsv（牌照号/条目序号/PDF 页码/泰文原名/拉丁名/对应站点网点），并写好可直接落库的 evidence payload（45 天有效期）；PDF 与 sha256 已存。Thai 那一列注明 pdftotext 的 ำ/า 字形问题，避免被当干净拼写引用。 ⑬2026-10-07 11:04-11:15 +07：①【现金牌照证据已写入生产】经 fujane 11:04 批准（「写，有快照即可，写完公网回读截图进 evidence」），在 web 容器内用应用自身 readAdminConfig/writeAdminConfig 合并三家现金商的 licence 证据（改动前 AdminConfigState 整行已快照）；库内回读三家属实=verified、evidence 键 4→7 无丢失；公网 `/api/providers/cash/{ratchada,twelve-victory,superrich-thailand}` 均 200 且 state=verified（checkedAt 2026-10-07T03:50Z，expiresAt 2026-11-21Z＝+45 天）；真机 390×900 展开「平台依据与口碑」实渲染 zh「牌照核验｜已核验」、en「License check｜Verified」，三张截图 sha256 与 API 响应体存 evidence/2026-10-07/licence-public-readback-20261007.json。长期「现金店资质 unknown」至此解除（限制：名录只列总部、2026-08-31 月度快照、SuperRich 属实体级匹配）。②【DNS overlay 统一已排低峰】fujane 已批（先 web_canary、健康检查通过再 web、任一失败回滚），已建定时任务 schedule-3674139c-8fff-44e3-a321-a7ce6b9eb661 于 2026-10-08 03:00 +07 执行，步骤/核对/回滚写在任务提示词里，做完写本文件「DNS overlay 统一_20261008」。",
-  "卡点": "①worker 已于 10:01 重建并 healthy；新装 launchd worker 告警（5 分钟周期）已实测健康/停止/缺失/退出码四条路径。②DNS overlay 差异（worker 有固定 DNS、web/web_canary 没有）fujane 已批统一，排在 2026-10-08 03:00 +07 低峰做，未做前不再动生产。③宿主级磁盘：fujane 已确认是自己容灾 docker save 所致并改成不落盘管道、清出 17G；可回收镜像 10.17GB/容器 699.7MB 仍待带 sudo 回收（fujane 侧）。④worker 单周期偶发 degraded（本轮 03:52Z bitkub 瞬时 false，前一轮四家全 true），由有界重试＋告警覆盖，继续观察。⑤Google 流量（GSC/GA4/SEO）自 2026-10-06 起由 fujane 统一管理，本项目只上报发现；⑥AdSense 审核与站点限定 CMP 弹窗仍未验收（旧结论未变，不重复通知）；⑦手机真机 390px 已回归（11 次加载抽样，不含全部 71 条 URL 与需人工授权的定位弹窗）；⑧Upbit TH 的 THB-USDT 盘口会旧，站点按设计标 fallback，非缺陷。",
+  "卡点": "①worker 已于 10:01 重建并 healthy；新装 launchd worker 告警（5 分钟周期）已实测健康/停止/缺失/退出码四条路径。②DNS overlay 差异（worker 有固定 DNS、web/web_canary 没有）fujane 已批统一，排在 2026-10-08 03:00 +07 低峰做，未做前不再动生产；runbook 已于 10-07 14:20 复核并**修正了回滚命令**（原写法解析不出镜像），详见「DNS_overlay_统一_20261008」。③宿主级磁盘：fujane 已确认是自己容灾 docker save 所致并改成不落盘管道、清出 17G；可回收镜像 10.17GB/容器 699.7MB 仍待带 sudo 回收（fujane 侧）。④worker 偶发 degraded **已定量定性**（PM 14:45 问）：重建后 4.1h/25 周期的 degraded 串 48% 是「全有全无」判定产物；真实成分 = upbit-thailand/USDT 盘口自身陈旧（8%，设计上不算缺陷）+ 逐源独立的出网超时/丢包（source_timeout 49、source_dns_failure 3），容器已直连 8.8.8.8 但解析中位 ≈2.5 秒、每 10 次错 1-3 次 → **不是代码缺陷，也不是宿主 resolver 单一因素**；改按可用率门槛观察 24h，详见「worker_质量门槛_20261007」。⑤路线页索引扩展已本地实现、**待 fujane 执行**（见「待审_20261007」第 3 条与「路线页索引_20261007」）。⑥Google 流量（GSC/GA4/SEO）自 2026-10-06 起由 fujane 统一管理，本项目只上报发现；⑦AdSense 审核与站点限定 CMP 弹窗仍未验收（旧结论未变，不重复通知）；⑧手机真机 390px 已回归（11 次加载抽样，不含全部 URL 与需人工授权的定位弹窗）；⑨Upbit TH 的 THB-USDT 盘口会旧，站点按设计标 fallback，非缺陷；⑩结果页聚合「缓存生成时间」未展示（cacheStale 已计算但 components/exchange-picker.tsx 未渲染）——已记为待办，本轮未改。",
   "Google流量发现（交 fujane）": "①GA4：衡量 ID G-HHPM4E9QGY 已在生产 layout chunk（/_next/static/chunks/app/[locale]/layout-9d1c3195447f65d6.js）实测存在，构建期注入在线上生效；HTML 内不出现属预期（仅在用户同意统计后加载）。平台侧真实接收本轮未复验（需 Profile 16 授权会话），不声称已收到业务流量。②AdSense：线上页面已存在 adsbygoogle.js loader（client=ca-pub-8386341379958173），但无 ad slot 渲染；本次发布已上线 /ads.txt（内容 google.com, pub-8386341379958173, DIRECT, f08c47fec0942fa0），此前生产无该文件；站点所有权验证与审核请求为 10-02 已提交状态，平台仍显示“正在准备”，未获批、无收入资格声明。③CMP：站点限定 6 语配置此前已发布，但运行时 __tcfapi undefined、无同意弹窗，未验收。④SEO 侧本轮实测（canary + 公网）：十语页面 200、hreflang 互指、sitemap/robots 200、SEO 集群脚本 exit 0；本轮未读取 GSC 索引/点击数据，未做排名或收录结论。⑤本轮发布未改任何 Google 平台配置（未开广告、未启用付费 API、未改计费）。",
   "账号清单_摘要": "自建且老板可能不知道密码的后台/账号：1 个（站点 admin@exchangethb.com）。其余平台资产走既有 Google SSO 或为 API key/token，无自建密码。",
   "账号清单": [
@@ -148,8 +148,8 @@
     "rollback": "docker compose -f docker-compose.yml -f compose.release-20261006.yml up -d --no-build web web_canary worker（回退镜像 sha256:f6ccf3d2e068…）",
     "remaining": [
       "Google 侧重新抓取/索引变化需 GSC 观察（fujane 车道）",
-      "泰语路线页（27 条已有 th 文案但仅 4 条 en 在 sitemap）是否扩展，待确认收敛决策",
-      "比较结果旁的费用/时效/来源摘要（转化优化）未做"
+      "路线页索引：已查实不是「27 条只有 4 条进 sitemap」（其中 23 条是 301 别名、不渲染页面），而是 4 个页面的 th/zh 变体 200 但 noindex 且 canonical 指向 en；已收敛为 en/th/zh 并本地实现（见「路线页索引_20261007」），待 fujane 执行",
+      "「比较结果旁的费用/时效/来源摘要」已核实为**已实现**（live 组件 components/exchange-picker.tsx 有逐行降级分组 + quote-warning + feeWarning + 来源/口径说明），此条不再算未做；唯一真缺口是结果页未展示聚合缓存生成时间（cacheStale/cacheGeneratedAt 已算未渲染）"
     ],
     "caveat": "1Panel 面板重新保存反代配置会覆盖扫描拦截规则，需重新应用（已写入 AGENTS.md）",
     "market_diagnosis": {
@@ -366,6 +366,16 @@
       "状态": "已完成（fujane 11:04 批准 → 11:08 写入，库内与公网回读均 verified，截图入 evidence）",
       "结果": "见「现金牌照写入_20261007」",
       "结果时间": "2026-10-07T11:12+07:00"
+    },
+    {
+      "事项": "发布路线页 th/zh 索引扩展（sitemap 71→79、th/zh 路线页由 noindex+canonical→en 改为可索引+自指 canonical）",
+      "原因": "4 个现存路线页（btc-to-thb / usdt-to-thb / usd-cash-to-thb / bangkok-airport-money-exchange-guide）的 th 与 zh 变体实测 200、标题与正文均为原生译文，但 robots=noindex,follow 且 canonical 指向 en URL，等于把已有译文完全排除在索引外；门店详情页早已是 en/th/zh，路线页是最后一处不一致。",
+      "拟执行": "发布包含本题改动的镜像（候选已在工作区完成并本地验证）：lib/indexing-policy.ts 新增 indexedRouteLocales/routeAlternateLocales、shouldIndexRoute 由仅 en 改为 en/th/zh；app/sitemap.ts 按策略生成 12 条路线 URL（含 en/th/zh hreflang）；路线页 metadata 用 routeAlternateLocales 取 alternates；同步 check-seo-cluster 期望条数与 AGENTS.md。不改数据库、不改报价逻辑、不改 DNS。",
+      "回退": "路线索引是纯代码策略：回退即把 indexedRouteLocales 改回 ['en'] 并重建（与上一镜像同版本号策略），sitemap 自动回到 71 条；不涉数据与前端口径。",
+      "证据": "evidence/2026-10-07/route-index-expansion-local.txt（69/79 计数、12 条 URL、canonical/alternates/robots、307/301 行为、SEO 集群脚本输出）；正文见 SITE_OPERATIONS_EVIDENCE.md「2026-10-07 14:50 TH 路线页索引扩展」",
+      "状态": "待 fujane「执行」；本轮未发布、未改生产",
+      "本地门禁": "typecheck 干净 / eslint --max-warnings=0 0 问题 / vitest 146 tests·42 files 全过 / next build exit 0 / 本地实例 sitemap 79 loc + th·zh 自指 canonical + noindex 消失",
+      "发布后必做": "对 canary 与生产重跑 scripts/check-seo-cluster.mjs（本地唯一 FAIL 是本地无现金数据导致，生产存在该文案），并在 GSC 侧观察收录（fujane 车道）"
     }
   ],
   "worker_恢复与告警_20261007": {
@@ -400,7 +410,7 @@
     "回滚": "改前快照 /opt/exchangethb/runtime/backups/admin-config-state-20261007-1000.json（AdminConfigState value='global'），恢复即回 unknown",
     "状态": "未写入生产，等确认"
   },
-  "_更新时间": "2026-10-07T11:16:00+07:00",
+  "_更新时间": "2026-10-07T15:05:00+07:00",
   "现金牌照写入_20261007": {
     "批准": "fujane 2026-10-07 11:04「③licence 写入：写（证据条目，有快照即可；写完公网回读截图进 evidence）」",
     "执行时间": "2026-10-07T11:08+07:00",
@@ -424,7 +434,38 @@
     "定时任务": "schedule-3674139c-8fff-44e3-a321-a7ce6b9eb661，触发 2026-10-08T03:00:00+07:00",
     "要做的事": "用 -f docker-compose.yml -f compose.release-20261007c.yml --no-build --force-recreate 依次重建 web_canary、web，使两者与 worker 一样带 dns [8.8.8.8,1.1.1.1]",
     "核对": "容器 healthy/restarts=0/HostConfig.Dns=[8.8.8.8 1.1.1.1]/容器内 /api/health dataStatus=current + 功能抽查十语首页与 compare 接口 200 + 公网 health:prod",
-    "回滚": "去掉 c.yml 再 --force-recreate 同服务，即回到无 DNS 固定原状",
-    "禁止": "不改镜像/数据库、不动 worker 与 postgres、不推远端、不同时重建两个服务"
+    "回滚（2026-10-07 14:20 复核修正）": "**不能用 base-only**。实测 base docker-compose.yml 里 web/web_canary/worker 只有 build: 没有 image:，base-only + --no-build 解析不出镜像。正确回滚 = 换回 compose.release-20261007b.yml（与 c.yml 逐字节只差三处 dns 块、镜像 pin 相同）：docker compose -f docker-compose.yml -f compose.release-20261007b.yml up -d --force-recreate --no-build <服务>；回滚后核对容器 healthy、restarts=0、HostConfig.Dns 恢复为空。",
+    "runbook 复核（2026-10-07 14:20 +07，只读）": "已核实现场基线：web/web_canary 由 base+b.yml 创建（config_files 标签）、HostConfig.Dns 为空；worker 由 base+c.yml 创建、Dns=[8.8.8.8 1.1.1.1]。canary 与 web 均不发布宿主端口、都在 exchangethb_net（172.30.0.13 / 172.30.0.10），公网入口 nginx proxy_pass http://exchangethb_pool → 重建 canary 为内部动作，重建 web 有数秒对外不可用（属已批准窗口）。另修正：固定等 70 秒改为轮询最多 180 秒（healthcheck interval 30s/retries 5/无 start_period；实测 Ready in 2.2s）；基线记录增加 config_files 标签；显式禁止 base-only 回滚。**该定时任务提示词已按上述改写。**",
+    "禁止": "不改镜像/数据库、不动 worker 与 postgres、不推远端、不同时重建两个服务、不用 base-only 命令回滚"
+  },
+  "worker_质量门槛_20261007": {
+    "来源": "fujane PM 2026-10-07 14:45「worker 偶发 degraded 请给出根因判断或继续观察 24h 的指标门槛」",
+    "观测窗口": "worker 于 2026-10-07T03:01:06Z 重建，故只有重建后日志：03:01Z-07:07Z，25 个周期 / 4.1 小时（不足 24h，不作 24h 结论）",
+    "为什么 degraded 串不能当故障率": "lib/data-status.ts:21 cycleStatus = 四家交易所各至少一个币种新鲜 且 现金源全部 current；全有全无，1/8 检查失败与 8/8 全失败同样显示 degraded（25 轮 13 ok/12 degraded = 48%）",
+    "逐检查可用率": "binance-th/BTC 80%、binance-th/USDT 72%、bitkub/BTC 84%、bitkub/USDT 48%、upbit-thailand/BTC 80%、upbit-thailand/USDT 8%、orbix/BTC 76%、orbix/USDT 76%",
+    "原因计数": "source_timeout 49、stale_orderbook 17、source_dns_failure 3；8 个检查同时失败仅 1 轮（06:36Z）",
+    "根因": "① upbit-thailand/USDT 8% 是该所盘口自身陈旧（同所 THB-BTC 仅 16 秒前）→ stale_orderbook 拒绝正确，设计上不算缺陷；② 其余超时/DNS 失败是出网解析与取回慢且丢包：容器 resolv.conf 已是 ExtServers [8.8.8.8 1.1.1.1]（c.yml 生效、已绕开宿主 systemd-resolved），但容器内实测 DNS 中位 ≈2.5s、每 10 次错 1-3 次，HTTPS 取回 bitkub 40ms/binance 111ms/upbit 2601ms/orbixtrade 3 次里 2 次失败；③ 失败逐源独立（BTC 仅 4/25 轮 ≥2 家同时失败）→ 逐请求超时丢包，非全局断网。**结论：不是 worker 代码缺陷；「宿主 resolver 含 47.84.83.155」不足以解释 worker 抖动，该 needs_owner 判断需收窄。**",
+    "用户侧影响": "过期行已被降级进「仅供参考」分组并附警告，主要后果是更多行被降级而不是展示错价；聚合缓存生成时间未展示（见卡点⑩）",
+    "现金源": "superrich-thailand 25/25 current、twelve-victory 25/25、ratchada 24/25（06:46Z 那轮 reference/0，次轮恢复，无跨轮连续陈旧）",
+    "24h 门槛（按可用率告警）": [
+      "除 upbit-thailand/USDT（设计性陈旧）外，任一检查 24h 可用率 <90% → 告警（当前基线 76-84%，说明需先改进再收紧）",
+      "出现「8 个检查同时失败」≥1 次/24h → 立即人工确认（真实断网信号，当前 4%）",
+      "任一现金源连续 2 轮（≈20 分钟）非 current → 告警",
+      "存活沿用现有 health:worker（退出 5 分钟 / 心跳 25 分钟）",
+      "观察期 24h；改进（DNS 结果缓存 / 降低并发）后按新基线收紧"
+    ],
+    "待办（本轮未做）": "结果页展示聚合缓存生成时间：cacheStale/cacheGeneratedAt 已由 API 计算并传至前端，但 components/exchange-picker.tsx 未渲染",
+    "证据": "evidence/2026-10-07/worker-quality-and-dns-runbook-20261007.json；SITE_OPERATIONS_EVIDENCE.md「2026-10-07 14:20 TH worker 偶发 degraded」"
+  },
+  "路线页索引_20261007": {
+    "动机": "lark-status 原记「泰语路线页 27 条已有 th 文案、仅 4 条 en 在 sitemap，待确认收敛决策」",
+    "查实纠正": "route-guides.ts 确有 27 条文案，但其中 23 条是 middleware.ts 里 routeRedirects 的 301 别名、根本不渲染页面（如 /en/routes/eth-to-thb → 301 /en/crypto?symbol=ETH&side=sell）；真正存在的路线页只有 4 个 slug（btc-to-thb/usdt-to-thb/usd-cash-to-thb/bangkok-airport-money-exchange-guide）。真问题不是「27 条要不要放开」，而是这 4 个页面只有 en 变体被索引。",
+    "生产实测（改动前 14:40 +07）": "/th/routes/* 与 /zh/routes/* 均 200、lang 与 h1 为原生 th/zh 文案，但 robots=noindex,follow 且 canonical 指向 en URL",
+    "收敛决策": "slug 集合不变，索引语言 ['en'] → ['en','th','zh']（与门店详情页 indexedMoneyChangerLocales 对齐）。依据：CopyGroup 强制要求 th/en/zh、路线页 uiCopy 有完整 th/zh 块、middleware 已限定详情页仅 en/th/zh。不放开更多 slug：模板化重叠内容 + 需 GSC 证据，属 fujane/老板车道。",
+    "实现": "lib/indexing-policy.ts 新增 indexedRouteLocales/routeAlternateLocales、shouldIndexRoute 改为「slug 在集合内且语言在集合内」；app/sitemap.ts 按策略生成 4 slug × 3 语言 = 12 条（去掉只服务路线的 englishOnly，改用 englishThaiAndChinese）；路线页 metadata 改用 routeAlternateLocales(slug)；check-seo-cluster expectedLocCount 71→79 并增 mustInclude（/th|/zh routes）/mustNotInclude（/th/routes/eth-to-thb）；AGENTS.md 索引策略条目与条数同步",
+    "本地验证": "typecheck 干净、eslint --max-warnings=0 0 问题、vitest 146 tests/42 files 全过、next build exit 0；本地实例 /sitemap.xml 79 个 <loc>、12 条路线 URL、eth-to-thb 未泄漏；/th/routes/usd-cash-to-thb 与 /zh/routes/btc-to-thb 200 + canonical 自指 + alternates en/th/zh + x-default + noindex 已消失；/ja/routes/... 仍 307 → /en、/en/routes/eth-to-thb 仍 301（别名行为未变）",
+    "本地 SEO 脚本唯一 FAIL 的定性": "check-seo-cluster 对本地实例 30 项里仅 /en/routes/usd-cash-to-thb 缺 /Latest data reference/，原因是该块仅在 latestRouteDataTimestamp 有值才渲染、本地无现金数据（本地 dataStatus=degraded、现金源 unavailable），生产同页存在（grep -c = 1）→ 非本次改动引入；发布后需对 canary/生产重跑",
+    "状态": "本地候选，未发布、未改生产；已列入「待审_20261007」等 fujane「执行」",
+    "证据": "evidence/2026-10-07/route-index-expansion-local.txt；SITE_OPERATIONS_EVIDENCE.md「2026-10-07 14:50 TH 路线页索引扩展」"
   }
 }

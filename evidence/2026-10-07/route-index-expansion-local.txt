@@ -1,0 +1,53 @@
+# 路线页 th/zh 索引扩展 - 本地候选验证（2026-10-07 14:54:41 +07）
+# 环境：本地 next start（PORT=3210），非生产
+
+## 1) sitemap <loc> 计数
+79
+
+## 2) sitemap 中的路线 URL
+https://www.exchangethb.com/en/routes/btc-to-thb
+https://www.exchangethb.com/th/routes/btc-to-thb
+https://www.exchangethb.com/zh/routes/btc-to-thb
+https://www.exchangethb.com/en/routes/usdt-to-thb
+https://www.exchangethb.com/th/routes/usdt-to-thb
+https://www.exchangethb.com/zh/routes/usdt-to-thb
+https://www.exchangethb.com/en/routes/usd-cash-to-thb
+https://www.exchangethb.com/th/routes/usd-cash-to-thb
+https://www.exchangethb.com/zh/routes/usd-cash-to-thb
+https://www.exchangethb.com/en/routes/bangkok-airport-money-exchange-guide
+https://www.exchangethb.com/th/routes/bangkok-airport-money-exchange-guide
+https://www.exchangethb.com/zh/routes/bangkok-airport-money-exchange-guide
+
+## 3) eth-to-thb 是否泄漏进 sitemap（期望 0）
+0
+
+## 4) /th/routes/usd-cash-to-thb
+HTTP=200
+<link rel="canonical" href="https://www.exchangethb.com/th/routes/usd-cash-to-thb"
+<link rel="alternate" hrefLang="en" href="https://www.exchangethb.com/en/routes/usd-cash-to-thb"
+<link rel="alternate" hrefLang="th" href="https://www.exchangethb.com/th/routes/usd-cash-to-thb"
+<link rel="alternate" hrefLang="zh" href="https://www.exchangethb.com/zh/routes/usd-cash-to-thb"
+<link rel="alternate" hrefLang="x-default" href="https://www.exchangethb.com/en/routes/usd-cash-to-thb"
+robots_meta_count=0
+
+## 5) /zh/routes/btc-to-thb
+HTTP=200
+<link rel="canonical" href="https://www.exchangethb.com/zh/routes/btc-to-thb"
+<link rel="alternate" hrefLang="en" href="https://www.exchangethb.com/en/routes/btc-to-thb"
+<link rel="alternate" hrefLang="th" href="https://www.exchangethb.com/th/routes/btc-to-thb"
+<link rel="alternate" hrefLang="zh" href="https://www.exchangethb.com/zh/routes/btc-to-thb"
+<link rel="alternate" hrefLang="x-default" href="https://www.exchangethb.com/en/routes/btc-to-thb"
+
+## 6) 别名与降级语言行为（期望 307 / 301）
+/ja/routes/usd-cash-to-thb HTTP=307 -> http://127.0.0.1:3210/en/routes/usd-cash-to-thb
+/en/routes/eth-to-thb HTTP=301 -> http://127.0.0.1:3210/en/crypto?symbol=ETH&side=sell
+
+## 7) SEO 集群脚本（BASE_URL=本地）
+OK   /zh/exchanges/bitkub
+OK   /zh/money-changers/ratchada
+OK   /th/money-changers/ratchada
+OK   /robots.txt
+OK   /sitemap.xml
+
+SEO cluster check failed:
+- /en/routes/usd-cash-to-thb: missing includes=- missing patterns=/Latest data reference/ unexpected includes=- unexpected patterns=- loc count=0 canonical=-

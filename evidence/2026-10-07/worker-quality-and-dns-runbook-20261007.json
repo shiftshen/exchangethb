@@ -1,0 +1,85 @@
+{
+  "checked_at": "2026-10-07T14:20:00+07:00",
+  "scope": "只读：docker logs / docker inspect / docker exec 内网探测 / docker compose config；未重启、未改容器、未发布、未改数据库",
+  "worker_degraded_analysis": {
+    "container": "exchangethb-worker-1",
+    "image": "exchangethb:v0.1.0-20261007-market-retry",
+    "window": {
+      "startUtc": "2026-10-07T03:01:08.000Z",
+      "endUtc": "2026-10-07T07:07:05.200Z",
+      "hours": 4.1,
+      "note": "容器于 2026-10-07T03:01:06Z（10:01 +07）按 fujane 批准重建，故可用日志只有重建之后的周期；不足 24h，需继续观察"
+    },
+    "cycles": 25,
+    "ok": 13,
+    "degraded": 12,
+    "degraded_rate": "48%",
+    "status_rule": "lib/data-status.ts:21 cycleStatus = 四家交易所各至少一个币种新鲜 且 现金源全部 current；全有全无，1/8 检查失败与 8/8 失败同样显示 degraded，不可当作故障率",
+    "per_check_availability": {
+      "binance-th/BTC": "20/25 = 80.0%",
+      "binance-th/USDT": "18/25 = 72.0%",
+      "bitkub/BTC": "21/25 = 84.0%",
+      "bitkub/USDT": "12/25 = 48.0%",
+      "upbit-thailand/BTC": "20/25 = 80.0%",
+      "upbit-thailand/USDT": "2/25 = 8.0%",
+      "orbix/BTC": "19/25 = 76.0%",
+      "orbix/USDT": "19/25 = 76.0%"
+    },
+    "reason_counts": { "source_timeout": 49, "stale_orderbook": 17, "source_dns_failure": 3 },
+    "cycles_with_all_8_checks_failing": 1,
+    "blackout_cycle_utc": "2026-10-07T06:36:19Z",
+    "cycles_with_2plus_exchanges_failing_BTC": 4,
+    "independent_failure_evidence": "BTC 仅 4/25 周期出现 >=2 家同时失败；USDT binance 与 bitkub 同时失败 5 次、单侧失败 10 次、都不失败 10 次 -> 逐源独立超时，非一次全局断网（唯一例外是 06:36Z 的 8/8 全失败）",
+    "cash_sources": {
+      "superrich-thailand": "25/25 current",
+      "twelve-victory": "25/25 current",
+      "ratchada": "24/25 current（06:46Z 那轮 status=reference、currentCount=0，次轮恢复；无跨轮连续陈旧）"
+    },
+    "dns_root_cause": {
+      "container_resolv_conf": "nameserver 127.0.0.11, options edns0 trust-ad ndots:0, ExtServers: [8.8.8.8 1.1.1.1]",
+      "web_container_resolv_conf": "ExtServers: [1.1.1.1 8.8.8.8 9.9.9.9]（尚未应用 c.yml 覆盖）",
+      "implication": "worker 已绕开宿主 systemd-resolved，直连 8.8.8.8/1.1.1.1，但 DNS 仍然慢且会失败 -> 「宿主 resolver 上游含 47.84.83.155」不是本轮 worker 抖动的充分解释",
+      "probe_from_worker_container": "node dns.lookup ×10 / fetch ×3 每主机",
+      "dns_lookup_ms": {
+        "api.binance.th": "err=2/10 med≈2546ms",
+        "api.bitkub.com": "err=3/10 med≈2586ms",
+        "th-api.upbit.com": "err=1/10 med≈2552ms",
+        "www.orbixtrade.com": "err=2/10 med≈2619ms"
+      },
+      "https_fetch_ms": {
+        "api.binance.th": "err=0/3 med≈111ms max≈4456ms",
+        "api.bitkub.com": "err=0/3 med≈40ms max≈283ms",
+        "th-api.upbit.com": "err=0/3 med≈2601ms max≈4327ms",
+        "www.orbixtrade.com": "err=2/3 失败"
+      }
+    },
+    "user_visible_impact": "结果页对过期行已有降级机制（进「仅供参考」分组并附警告），所以 degraded 的后果主要是更多行被降级而不会展示错价；聚合的缓存生成时间未展示（cacheStale 已计算但未被 components/exchange-picker.tsx 渲染）",
+    "thresholds_24h": [
+      "除 upbit-thailand/USDT（设计性 stale_orderbook）外，任一检查 24h 可用率 < 90% 告警（当前基线 76-84%，故需先改进再收紧）",
+      "出现 8/8 检查同时失败的周期 >=1 次/24h 立即人工确认（当前 4%，真实断网信号）",
+      "任一现金源连续 2 轮（约 20 分钟）非 current 告警",
+      "存活沿用现有 health:worker（退出 5 分钟 / 心跳 25 分钟）",
+      "观察期 24h；改进（DNS 结果缓存 / 降低并发）上线后按新基线收紧闭值"
+    ],
+    "not_claimed": "窗口仅 4.1h（重建后），不等于 24h 结论；3 次 source_dns_failure 与 49 次 source_timeout 的归因是「出网解析/取回慢且丢包」，未定位到具体网络设备"
+  },
+  "dns_overlay_runbook_review": {
+    "target": "2026-10-08T03:00:00+07:00 web_canary 然后 web 重建到 compose.release-20261007c.yml（dns [8.8.8.8,1.1.1.1]）",
+    "defect_found": "原回滚写法「去掉 c.yml、用 base docker-compose.yml 重建」不成立：docker compose config 显示 base 里 web/web_canary/worker 只有 build: 没有 image:，base-only + --no-build 解析不出镜像",
+    "correct_rollback": "docker compose -f docker-compose.yml -f compose.release-20261007b.yml up -d --force-recreate --no-build <服务>",
+    "rollback_proof": "diff compose.release-20261007b.yml compose.release-20261007c.yml 只差三处 dns 块；docker compose -f docker-compose.yml -f compose.release-20261007b.yml config 解析出的 image 仍为 exchangethb:v0.1.0-20261007-market-retry 且无 dns",
+    "live_baseline": {
+      "web": { "config_files": "docker-compose.yml,compose.release-20261007b.yml", "dns": null, "ip": "172.30.0.10" },
+      "web_canary": { "config_files": "docker-compose.yml,compose.release-20261007b.yml", "dns": null, "ip": "172.30.0.13" },
+      "worker": { "config_files": "docker-compose.yml,compose.release-20261007c.yml", "dns": "[8.8.8.8 1.1.1.1]", "started": "2026-10-07T03:01:06Z" }
+    },
+    "exposure": "web/web_canary 都不发布宿主端口；公网入口 nginx proxy_pass http://exchangethb_pool；重建 canary 为内部动作，重建 web 有数秒对外不可用（属已批准窗口）",
+    "other_fixes": [
+      "固定等 70 秒 -> 轮询最多 180 秒（healthcheck interval 30s / retries 5 / 无 start_period；实测 Ready in 2.2s）",
+      "基线记录加上 com.docker.compose.project.config_files 标签",
+      "回滚后核对 HostConfig.Dns 恢复为空",
+      "显式禁止 base-only 回滚"
+    ],
+    "applied_to": "session schedule-3674139c-8fff-44e3-a321-a7ce6b9eb661（提示词已改写）"
+  }
+}

@@ -155,3 +155,52 @@ Final11:35TH: DNS retry release236ba9… all three containers healthy;92tests/32
 **证据**：`evidence/2026-10-07/licence-public-readback-20261007.json`（含 API 状态码与响应体、库内查询结果、实渲染行、三张截图 sha256）、`licence-readback-zh-ratchada.png`、`licence-readback-th-superrich-thailand.png`、`licence-readback-en-twelve-victory.png`、`apply-licence-evidence.ts`、`licence-readback-probe.mjs`、`bot-licence-matches.tsv`、`bot-money-changer-list-20260831.pdf`。
 
 **配套（同日）**：worker 已于 10:01 按 fujane 批准用 `compose.release-20261007c.yml` 重建并 healthy（记录在本文件「2026-10-07 09:00」节与 lark-status）；fujane 批准的低峰变更——把 web_canary/web 也统一到同一 DNS overlay（先 canary、通过再 web、失败回滚）——已排入 **2026-10-08 03:00 +07** 窗口，执行步骤与回滚写在该定时任务提示词与 lark-status 里。
+
+## 2026-10-07 14:20 TH worker 偶发 degraded：定量根因与 24h 指标门槛（只读）
+
+**观测窗口**：worker 于 2026-10-07T03:01:06Z（10:01 +07）按批准重建，故容器日志只有重建之后的周期 —— 03:01Z–07:07Z，共 **25 个周期 / 4.1 小时**（导出 `/Volumes/M2USB/_scratch/exchangethb/20261007/worker-logs-full.jsonl`）。**不足 24h，以下不作为 24h 结论。**
+
+**周期判定是「全有全无」**：`lib/data-status.ts:21` 的 `cycleStatus` 要求「四家交易所各有至少一个币种新鲜 **且** 现金源全部 current」。所以 25 轮里 13 ok / 12 degraded（48%）这个串不能当故障率用 —— 1/8 检查失败与 8/8 全失败显示同一个 `degraded`。
+
+**逐检查可用率（25 周期 × 8 检查）**：binance-th/BTC 80%、binance-th/USDT 72%、bitkub/BTC 84%、bitkub/USDT 48%、upbit-thailand/BTC 80%、**upbit-thailand/USDT 8%**、orbix/BTC 76%、orbix/USDT 76%。失败原因计数：`source_timeout` **49**、`stale_orderbook` **17**、`source_dns_failure` **3**。8 个检查同时失败的周期只有 1 个（06:36Z）。
+
+**根因（实测）**：
+1. **upbit-thailand/USDT 的 8% 是设计性陈旧，不是故障**：该所 USDT 盘口本身更新极慢（同一时刻其 THB-BTC 仅 16 秒前），校验器按 >2 分钟拒绝 `stale_orderbook` 是正确的，前端按设计标 fallback。
+2. **其余 timeout 与 DNS 失败来自出网解析/取回慢且丢包**：worker 容器 `/etc/resolv.conf` 已是 `ExtServers: [8.8.8.8 1.1.1.1]`（c.yml 覆盖生效，**已绕开宿主 systemd-resolved**），但容器内实测 DNS 解析仍为**中位 ≈2.5 秒、每 10 次失败 1–3 次**（binance.th 2546ms/2 错、bitkub 2586ms/3 错、upbit 2552ms/1 错、orbixtrade 2619ms/2 错）；HTTPS 取回 bitkub 中位 40ms、binance 111ms、upbit 2601ms、orbixtrade **3 次里 2 次失败**。**故「宿主 resolver 上游含 47.84.83.155」不能作为 worker 抖动的充分解释**，此前那条 needs_owner 判断需收窄（它可能只影响仍在用宿主 resolver 的 web/web_canary）。
+3. **失败逐源独立**：BTC 只有 4/25 周期出现 ≥2 家同时失败；USDT 上 binance 与 bitkub 同时失败 5 次、单侧失败 10 次、都不失败 10 次 → 指向逐请求超时/丢包，而非一次全局断网（唯一例外是 06:36Z 那轮 8/8）。
+
+**用户可见影响**：结果页对过期行已有降级机制（进「仅供参考」分组 + 附警告），所以 degraded 的主要后果是**更多行被降级**，而不是展示错价。唯一缺口是聚合的「缓存生成时间」没展示：`cacheStale` 已由 API 计算并传进前端，但 `components/exchange-picker.tsx` 从未渲染（已记入待办，本轮未改）。
+
+**现金源**：superrich-thailand 与 twelve-victory 25/25 current；ratchada 24/25 —— 06:46Z 那轮 `status=reference, currentCount=0`（该轮采集未成功），次轮恢复，无跨轮连续陈旧。
+
+**建议的 24h 指标门槛（按可用率告警，不按 `degraded` 串）**：① 除 `upbit-thailand/USDT`（设计性陈旧）外，任一检查 24h 可用率 <90% 告警 —— 按当前基线 76–84% **现在就会触发**，说明要先改进再收紧门槛；② 出现「8 个检查同时失败」≥1 次/24h 立即人工确认（真实断网信号，当前 4%）；③ 任一现金源连续 2 轮（≈20 分钟）非 current 告警；④ 存活沿用 `health:worker`（退出 5 分钟 / 心跳 25 分钟）；⑤ 观察期 24h，改进（DNS 结果缓存、降低并发）上线后按新基线收紧。
+
+**动作**：全程只读（`docker logs`、`docker exec` 内跑的 DNS 探测、`docker inspect`、`docker compose config`）；未重启、未改容器、未发布、未改数据库。证据：`evidence/2026-10-07/worker-quality-and-dns-runbook-20261007.json`。
+
+## 2026-10-07 14:20 TH DNS overlay runbook 复核：回滚命令有缺陷，已修正
+
+**复核对象**：fujane 已批、排在 **2026-10-08 03:00 +07** 的 web_canary/web DNS overlay 统一（`compose.release-20261007c.yml`）。
+
+**发现的缺陷**：原回滚写法是「去掉 c.yml，用 base `docker-compose.yml` 重建」。`docker compose config` 实测：base 里 `web`/`web_canary`/`worker` **只有 `build:` 没有 `image:`**，base-only 配 `--no-build` 解析不出镜像（会失败，或起成 `exchangethb-web` 这类非发布镜像）。用这条命令回滚会在最需要它的时刻失败。
+
+**正确回滚（已核对）**：`docker compose -f docker-compose.yml -f compose.release-20261007b.yml up -d --force-recreate --no-build <服务>`。`b.yml` 与 `c.yml` 逐字节**只差三处 `dns:` 块**，`config` 解析出的 image 仍是 `exchangethb:v0.1.0-20261007-market-retry` 且无 dns。
+
+**现场基线（14:20 +07 实测）**：web / web_canary 由 `docker-compose.yml + compose.release-20261007b.yml` 创建（`com.docker.compose.project.config_files` 标签证实），`HostConfig.Dns` 为空；worker 由 base+c 创建，`HostConfig.Dns=[8.8.8.8 1.1.1.1]`。canary 与 web 都不发布宿主端口、都在 `exchangethb_net`（172.30.0.13 / 172.30.0.10），公网入口 nginx `proxy_pass http://exchangethb_pool` —— 重建 canary 是内部动作，重建 web 会有数秒对外不可用（属已批准窗口）。
+
+**runbook 其他修正**：固定「等 70 秒」改为**轮询最多 180 秒**（healthcheck interval 30s / retries 5 / 无 start_period；实测 `Ready in 2.2s`，但轮询更稳）；基线记录增加 `config_files` 标签；回滚后要核对 `HostConfig.Dns` 恢复为空；显式**禁止 base-only 回滚**。已同步改写定时任务 `schedule-3674139c-8fff-44e3-a321-a7ce6b9eb661` 的提示词，并在 lark-status 对应小节写明。
+
+## 2026-10-07 14:50 TH 路线页索引扩展（th/zh）—— 本地候选，未发布
+
+**据以纠正的旧说法**：lark-status 原记「泰语路线页 27 条已有 th 文案、仅 4 条 en 在 sitemap，待确认收敛决策」。查实后**该说法不准确**：`lib/route-guides.ts` 确有 27 条文案，但其中 **23 条是 `middleware.ts` 里 `routeRedirects` 的 301 别名**，根本不渲染页面（例：`/en/routes/eth-to-thb` → 301 `/en/crypto?symbol=ETH&side=sell`）；真正存在的路线页只有 4 个 slug（`btc-to-thb`、`usdt-to-thb`、`usd-cash-to-thb`、`bangkok-airport-money-exchange-guide`）。所以真问题不是「27 条要不要放开」，而是**这 4 个页面只有 en 变体被索引**。
+
+**生产实测（改动前，14:40 +07）**：`/th/routes/usd-cash-to-thb`、`/zh/routes/usd-cash-to-thb`、`/th/routes/btc-to-thb`、`/zh/routes/btc-to-thb` 均 **200**，`<html lang>` 与 `<h1>` 都是原生 th/zh 文案，但 `robots` = **`noindex, follow`**，且 **canonical 指向 en URL**（`metadataAlternatesForPolicy` 在 `['en']` 策略下把非 en 语言的 canonical 归到 en）。
+
+**收敛决策（本轮采纳）**：**slug 集合不变，只放已验证有完整译文的语言** —— 路线页索引语言由 `['en']` 扩为 `['en','th','zh']`，与门店详情页既有策略（`indexedMoneyChangerLocales = ['en','th','zh']`）对齐。依据：`CopyGroup` 类型**强制要求** th/en/zh；路线页 `uiCopy` 有完整 th/zh 块；middleware 也已限定详情页仅 en/th/zh（其他语言 307 回 en）。**不放开更多 slug**：27 条共用同一模板、内容高度重叠，放开会引入模板化薄页风险，且需要搜索侧（GSC）证据支持，属 fujane/老板车道。
+
+**实现**：`lib/indexing-policy.ts` 新增 `indexedRouteLocales` 与 `routeAlternateLocales(slug)`，`shouldIndexRoute` 由「仅 en」改为「slug 在集合内且语言在 `indexedRouteLocales`」；`app/sitemap.ts` 按策略生成 4 slug × 3 语言 = **12 条**（删掉只服务路线的 `englishOnly`，改用既有 `englishThaiAndChinese`）；路线页 metadata 改用 `routeAlternateLocales(slug)` 取 alternates，避免策略与页面漂移。sitemap **71 → 79** 条；`scripts/check-seo-cluster.mjs` 的 `expectedLocCount`（79）与 `mustInclude`/`mustNotInclude` 同步；`AGENTS.md` 的详情页索引策略条目与 sitemap 条数同步。
+
+**本地验证（全部实测，输出见证据文件）**：`npm run typecheck` 干净、`eslint . --max-warnings=0` 0 问题、`npm run test` **146 tests / 42 files** 全过（新增 4 条路线索引断言）；`npm run build` exit 0；本地 `next start`（PORT=3210）实测 `/sitemap.xml` **79** 个 `<loc>`、4 slug × en/th/zh 齐全、`eth-to-thb` 未泄漏；`/th/routes/usd-cash-to-thb` 与 `/zh/routes/btc-to-thb` 200、**canonical 已自指**、alternates = en/th/zh + x-default、**robots noindex 已消失**（`localeRobots` 对可索引语言返回 undefined = 默认可索引）；`/ja/routes/usd-cash-to-thb` 仍 307 → `/en/...`、`/en/routes/eth-to-thb` 仍 301 → `/en/crypto?...`（别名行为未变）。
+
+**脚本对本地实例的 1 项 FAIL 已定性**：`scripts/check-seo-cluster.mjs http://127.0.0.1:3210` → 30 项中仅 `/en/routes/usd-cash-to-thb` 缺 `/Latest data reference/`。原因是该块只在 `latestRouteDataTimestamp` 有值时才渲染，而本地**无现金缓存/行情数据**（本地 `/api/health` 的 `dataStatus.status=degraded`、现金源 unavailable），生产同页该文案存在（`grep -c` = 1）。**非本次改动引入**；该脚本是发布闸门，发布后需对 canary/生产重跑。
+
+**状态**：本地候选，**未发布、未改生产**；发布需先写 lark-status「待审」并报 fujane 得「执行」。证据：`evidence/2026-10-07/route-index-expansion-local.txt`（含 79 条计数、12 条路线 URL、canonical/alternates/robots、307/301 行为、脚本输出）。

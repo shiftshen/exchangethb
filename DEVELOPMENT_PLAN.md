@@ -133,3 +133,13 @@ docs/ 下 19 份 PLAN/RECEIPT/HANDOFF/MATRIX 已归档到 `/Volumes/M2USB/archiv
 发布闸门（fujane 2026-10-07 09:06，替代已撤销的 PM 窗口）：生产发布、切换镜像、回退、重启生产服务、写生产数据前，先把改动+证据写进 `lark-status.json` 的「待审」并报 fujane，得到「执行」才执行；紧急回滚除外。当前两项待审：①重启 `exchangethb-worker`（宿主 2026-10-07 03:30-03:56 磁盘写满，worker 03:51:33 ENOSPC 退出后未拉起，站点不受影响）；②把当期 BOT 名录（2026-08-31）中三家公开现金商的牌照证据写入站点并发布可见状态（ratchada MC125490056 / twelve-victory 125470175 / superrich-thailand 125470152）。
 
 编译产物 `.next`、`node_modules`、`tsconfig.tsbuildinfo` 已移到 `/Volumes/M2USB/_scratch/exchangethb/build-cache/` 并在项目根留软链，项目体积 780M→65M；移动后 typecheck、eslint、vitest 142/142、health:cash 全部通过。
+
+## 2026-10-07 14:20 worker 质量门槛 + 路线页索引收敛 + DNS runbook 修正
+
+**worker 偶发 degraded 的结论**（fujane PM 14:45 问；量化证据见 `SITE_OPERATIONS_EVIDENCE.md` 同日节与 `evidence/2026-10-07/worker-quality-and-dns-runbook-20261007.json`）：重建后 4.1h / 25 周期的 `degraded` 串（48%）是**全有全无判定**的产物，不能当故障率；真实成分是 ① upbit-thailand/USDT 盘口本身陈旧（8%，设计上不算缺陷）、② 逐源独立的出网超时/丢包（`source_timeout` 49 次、`source_dns_failure` 3 次），容器已直连 8.8.8.8/1.1.1.1 但解析中位仍 ≈2.5 秒。**不是 worker 代码缺陷**；用户侧由「过期行降级进仅供参考分组」兜住，不会展示错价。
+
+**后续监控口径（替代看 status 串）**：任一转播检查（除 upbit-thailand/USDT）24h 可用率 <90%、或出现 8/8 检查同时失败 ≥1 次/24h、或任一现金源连续 2 轮非 current → 告警；存活沿用 `health:worker`。**观察期 24h**，改进（DNS 结果缓存 / 降低并发）上线后按新基线收紧门槛。待办（本轮未做）：结果页展示聚合的缓存生成时间（`cacheStale` 已计算但 `components/exchange-picker.tsx` 未渲染）。
+
+**路线页索引收敛决策（本轮已实现，本地候选）**：路线页不是「27 条文案只有 4 条进 sitemap」——23 条是 middleware 的 301 别名、不渲染页面，实际只有 4 个 slug 存在页面，问题是**只有 en 变体被索引**（th/zh 页面 200 但 `noindex` 且 canonical 指向 en）。**收敛为：slug 集合不变，索引语言 `['en']` → `['en','th','zh']`**，与门店详情页策略对齐；不放开更多 slug（模板化重叠内容 + 需 GSC 证据，属 fujane/老板车道）。改动：`lib/indexing-policy.ts`（`indexedRouteLocales`/`routeAlternateLocales`）、`app/sitemap.ts`（71→79 条）、路线页 metadata alternates、`scripts/check-seo-cluster.mjs`、`AGENTS.md` 索引策略条目。本地门禁全过（typecheck / eslint 0 / vitest 146-42 / build exit 0 / 本地实例 79 loc + 自指 canonical + noindex 消失）。**未发布**：下次发布走闸门，发布后必须对 canary/生产重跑 `scripts/check-seo-cluster.mjs`。
+
+**DNS overlay runbook 已修正**：原回滚命令（去掉 c.yml 用 base 重建）**解析不出镜像**（base 只有 `build:` 没有 `image:`），正确回滚是换回 `compose.release-20261007b.yml`（与 c.yml 只差三处 dns 块、镜像 pin 相同）。2026-10-08 03:00 +07 定时任务提示词已改写（含轮询 180s、基线记 `config_files`、回滚后核对 Dns 为空、禁止 base-only）。
