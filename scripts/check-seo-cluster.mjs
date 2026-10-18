@@ -19,7 +19,7 @@ const checks = [
     {path:`/${locale}/exchanges/bitkub`,expectedStatus:307,expectedLocation:'/en/exchanges/bitkub',followRedirect:false},
   ]),
   { path: '/ja/legal/disclaimer', canonical: '/ja/legal/disclaimer', mustInclude: ['第三者サービス', '両替、暗号資産取引、入金受付', 'hrefLang="en"'], mustMatch: [], mustNotInclude: ['noindex, follow'] },
-  { path: '/ja/cash', canonical: '/ja/cash', mustInclude: ['日本円からタイバーツ', '選択すると自動で比較', '日本語'], mustMatch: [/aria-label="通貨"/], mustNotInclude: ['Where to exchange your cash?'] },
+  { path: '/ja/cash', canonical: '/ja/cash', mustInclude: ['日本円からタイバーツ', '選択すると自動で比較', '日本語', '/en/money-changers/ratchada', '両替店の店舗ページ'], mustMatch: [/aria-label="通貨"/], mustNotInclude: ['Where to exchange your cash?', '/ja/money-changers/ratchada'] },
   { path: '/ja/exchanges/bitkub', expectedStatus: 307, expectedLocation: '/en/exchanges/bitkub', followRedirect: false },
   { path: '/change-lang/ja', expectedStatus: 308, expectedLocation: '/ja', followRedirect: false },
   { path: '/ads.txt', mustInclude: ['google.com, pub-8386341379958173, DIRECT, f08c47fec0942fa0'], mustMatch: [], mustNotInclude: ['<html'] },
@@ -48,7 +48,8 @@ const checks = [
   },
   {
     path: '/en/cash',
-    mustInclude: ['Where to exchange your cash?', 'Currency'],
+    // The profile strip is the internal link path into the money changer pages in every locale.
+    mustInclude: ['Where to exchange your cash?', 'Currency', '/en/money-changers/ratchada', '/en/money-changers/superrich-thailand', '/en/money-changers/twelve-victory', 'Money changer profiles'],
     mustMatch: [/Use my location/, /Open now only/, /Options update automatically as you choose/],
     mustNotInclude: ['Related cash and country route guides', 'English search questions this page answers'],
     canonical: '/en/cash',
@@ -84,15 +85,39 @@ const checks = [
   {
     path: '/zh/money-changers/ratchada',
     canonical: '/zh/money-changers/ratchada',
-    mustInclude: ['hrefLang="th"', 'hrefLang="en"'],
-    mustMatch: [],
+    mustInclude: ['hrefLang="th"', 'hrefLang="en"', 'รัชดาเอ๊กซเชนจ์', '护照', '每天 09:00–20:30'],
+    mustMatch: [/"@type":\["LocalBusiness","FinancialService"\]/, /"@type":"FAQPage"/],
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
+    // Ratchada answers "where, when, rate, what to bring" above the fold and carries
+    // LocalBusiness/FinancialService + FAQPage + BreadcrumbList markup from verified data.
+    path: '/en/money-changers/ratchada',
+    canonical: '/en/money-changers/ratchada',
+    mustInclude: ['รัชดาเอ๊กซเชนจ์', 'Huai Khwang', '78/13 Prachatbamphen Rd', 'passport', 'Observed buy rate'],
+    mustMatch: [/"@type":\["LocalBusiness","FinancialService"\]/, /"@type":"FAQPage"/, /"@type":"BreadcrumbList"/, /"dayOfWeek":\["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"\]/],
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
+    // Chain profile: area-level location record must never become a postal street address.
+    path: '/zh/money-changers/superrich-thailand',
+    canonical: '/zh/money-changers/superrich-thailand',
+    mustInclude: ['SuperRich Thailand', '周一至周六 09:00–16:30', '周日休息'],
+    mustMatch: [/"@type":\["LocalBusiness","FinancialService"\]/],
+    mustNotInclude: ['noindex, follow', '"streetAddress"'],
+  },
+  {
+    path: '/zh/money-changers/twelve-victory',
+    canonical: '/zh/money-changers/twelve-victory',
+    mustInclude: ['Twelve Victory Exchange', '231 Pradipat Road', '周一至周五 08:30–17:00'],
+    mustMatch: [/"@type":\["LocalBusiness","FinancialService"\]/],
     mustNotInclude: ['noindex, follow'],
   },
   {
     path: '/th/money-changers/ratchada',
     canonical: '/th/money-changers/ratchada',
-    mustInclude: ['hrefLang="zh"'],
-    mustMatch: [],
+    mustInclude: ['hrefLang="zh"', 'รัชดาเอ๊กซเชนจ์', 'ทุกวัน 09:00–20:30', 'หนังสือเดินทาง'],
+    mustMatch: [/"@type":\["LocalBusiness","FinancialService"\]/, /"@type":"FAQPage"/],
     mustNotInclude: ['noindex, follow'],
   },
   {

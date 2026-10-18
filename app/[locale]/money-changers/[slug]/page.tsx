@@ -5,18 +5,23 @@ import { TrackAnchor, TrackLink } from '@/components/track-link';
 import { cashProviders, publicCashProviderSlugs } from '@/data/site';
 import { compareCashLive } from '@/lib/cash-live';
 import { getEffectiveCashBranches } from '@/lib/cash-entities';
-import { resolveContentLocale, t } from '@/lib/i18n';
+import { resolveContentLocale } from '@/lib/i18n';
 import { shouldIndexMoneyChangerProfile } from '@/lib/indexing-policy';
 import { getBangkokOpenState } from '@/lib/opening-hours';
-import { breadcrumbJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
+import {
+  buildMoneyChangerSeo,
+  currencyExchangeJsonLd,
+  formatOpeningHours,
+  getMoneyChangerProfile,
+  moneyChangerProfileSlugs,
+} from '@/lib/money-changer-seo';
+import { breadcrumbJsonLd, faqPageJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { CurrencyCode, Locale } from '@/lib/types';
 
 const currencies: CurrencyCode[] = ['USD', 'EUR', 'JPY', 'CNY', 'GBP'];
 
-const copy = {
+const labels = {
   en: {
-    eyebrow: 'Bangkok money changer profile',
-    current: 'Current practical status',
     rate: 'Observed buy rate',
     receive: 'Estimated THB for 1,000',
     distance: 'Reference distance',
@@ -27,19 +32,12 @@ const copy = {
     fallback: 'Fallback',
     open: 'Open now',
     closed: 'Closed now',
-    official: 'Verify on official site',
-    map: 'Open map',
-    compare: 'Compare with other money changers',
     rates: 'Observed currency examples',
-    sourceNote: 'Rates are observations from public sources, not guaranteed counter quotes.',
-    location: 'Branch and location',
-    hours: 'Opening hours',
-    address: 'Address',
-    questions: 'Useful checks before visiting',
+    practicalHeading: 'What makes this changer different',
+    officialRate: 'Official rate page',
+    rateEntry: 'Open the live comparison',
   },
   th: {
-    eyebrow: 'โปรไฟล์ร้านแลกเงินกรุงเทพ',
-    current: 'สถานะที่ใช้งานได้ตอนนี้',
     rate: 'เรตรับซื้อที่สังเกต',
     receive: 'THB โดยประมาณสำหรับ 1,000',
     distance: 'ระยะอ้างอิง',
@@ -50,21 +48,14 @@ const copy = {
     fallback: 'สำรอง',
     open: 'เปิดตอนนี้',
     closed: 'ปิดตอนนี้',
-    official: 'ยืนยันกับเว็บไซต์ทางการ',
-    map: 'เปิดแผนที่',
-    compare: 'เปรียบเทียบกับร้านอื่น',
     rates: 'ตัวอย่างเรตตามสกุลเงิน',
-    sourceNote: 'เรทเป็นค่าที่สังเกตจากแหล่งสาธารณะ ไม่ใช่เรทหน้าร้านที่รับประกัน',
-    location: 'สาขาและตำแหน่ง',
-    hours: 'เวลาเปิด',
-    address: 'ที่อยู่',
-    questions: 'สิ่งที่ควรเช็กก่อนเดินทาง',
+    practicalHeading: 'จุดต่างของร้านนี้',
+    officialRate: 'หน้าเรททางการ',
+    rateEntry: 'เปิดหน้าคอมแพร์สด',
   },
   zh: {
-    eyebrow: '曼谷换汇商实体页',
-    current: '当前实际状态',
     rate: '观测买入汇率',
-    receive: '1,000 现金预计获得 THB',
+    receive: '1,000 现钞预计获得 THB',
     distance: '参考距离',
     observed: '观测时间',
     denomination: '纸币条件',
@@ -73,148 +64,143 @@ const copy = {
     fallback: '备用',
     open: '营业中',
     closed: '已打烊',
-    official: '前往官网确认',
-    map: '打开地图',
-    compare: '与其他换汇店比较',
     rates: '不同币种观测示例',
-    sourceNote: '汇率来自公开来源观测，不代表保证柜台成交价。',
-    location: '门店与位置',
-    hours: '营业时间',
-    address: '地址',
-    questions: '前往门店前应确认',
+    practicalHeading: '这家店的差别',
+    officialRate: '官方汇率页',
+    rateEntry: '打开实时比较',
   },
 } as const;
 
-function faqJsonLd(entries: Array<{ question: string; answer: string }>) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: entries.map((entry) => ({
-      '@type': 'Question',
-      name: entry.question,
-      acceptedAnswer: { '@type': 'Answer', text: entry.answer },
-    })),
-  };
-}
-
 function formatNumber(value: number, digits = 2) {
   return new Intl.NumberFormat('en-US', { maximumFractionDigits: digits }).format(value);
+}
+
+function sundayLabel(value: boolean | null, content: { sundayYes: string; sundayNo: string; sundayUnknown: string }) {
+  if (value === null) return content.sundayUnknown;
+  return value ? content.sundayYes : content.sundayNo;
 }
 
 export default async function MoneyChangerDetailPage({ params }: { params: Promise<{ locale: Locale; slug: string }> }) {
   const { locale, slug } = await params;
   if (!publicCashProviderSlugs.includes(slug as typeof publicCashProviderSlugs[number])) notFound();
   const provider = cashProviders.find((item) => item.slug === slug);
-  if (!provider) notFound();
+  const seo = buildMoneyChangerSeo(slug, locale);
+  if (!provider || !seo) notFound();
+  const profile = seo.profile;
+
   const contentLocale = resolveContentLocale(locale);
-  const c = copy[contentLocale === 'th' || contentLocale === 'zh' ? contentLocale : 'en'];
+  const c = labels[locale === 'th' || locale === 'zh' ? locale : 'en'];
+  const content = seo.content;
 
   const comparisons = await Promise.all(currencies.map(async (currency) => {
     const result = await compareCashLive({ currency, amount: 1000, maxDistanceKm: 100, locale: contentLocale }).catch(() => null);
     const row = result?.all.find((item) => item.providerSlug === slug);
-    return row ? { currency, row } : null;
+    return row ? { currency, row, all: result?.all ?? [] } : null;
   }));
   const rateRows = comparisons.filter((item): item is NonNullable<typeof item> => Boolean(item));
-  const primary = rateRows.find((item) => item.currency === 'USD')?.row || rateRows[0]?.row;
+  const usdComparison = comparisons.find((item) => item?.currency === 'USD');
+  const primary = usdComparison?.row || rateRows[0]?.row;
   const staticBranch = (await getEffectiveCashBranches()).find((item) => item.providerSlug === slug);
-  const branchName = primary?.branchName || staticBranch?.name || provider.name;
-  const address = staticBranch?.address || '';
-  const hours = primary?.hours || staticBranch?.hours || '';
-  const mapsUrl = primary?.mapsUrl || staticBranch?.mapsUrl || provider.officialUrl;
+  const branchName = primary?.branchName || staticBranch?.name || profile.branchName;
+  const address = staticBranch?.address || profile.streetAddress || profile.addressNote || '';
+  const hours = content.hoursDisplay;
+  const mapsUrl = primary?.mapsUrl || staticBranch?.mapsUrl || profile.mapUrl;
   const openState = primary?.isOpen ?? (getBangkokOpenState(hours) ?? staticBranch?.isOpen ?? false);
   const sourceType = primary?.current ? 'live' : primary?.sourceType === 'hybrid' ? 'hybrid' : 'fallback';
 
-  const faqEntries = contentLocale === 'th'
-    ? [
-        { question: `${provider.name} อยู่ตรงไหน`, answer: `${branchName} อยู่ในพื้นที่ ${primary?.area || staticBranch?.area || 'Bangkok'} หน้าเว็บนี้มีที่อยู่ เวลาเปิด และลิงก์แผนที่สำหรับตรวจสอบก่อนเดินทาง` },
-        { question: `เรท ${provider.name} เป็นเรทสดหรือไม่`, answer: `หน้าเว็บแสดงสถานะแหล่งข้อมูลและเวลาที่สังเกตอย่างชัดเจน ควรยืนยันเรทล่าสุดกับร้านก่อนแลกเงินจริง` },
-      ]
-    : contentLocale === 'zh'
-      ? [
-          { question: `${provider.name} 在哪里`, answer: `${branchName} 位于 ${primary?.area || staticBranch?.area || 'Bangkok'}，页面提供地址、营业时间和地图入口。` },
-          { question: `${provider.name} 汇率是实时的吗`, answer: '页面会显示来源状态和观测时间，实际换汇前仍应向门店确认最新柜台汇率。' },
-        ]
-      : [
-          { question: `Where is ${provider.name}?`, answer: `${branchName} is in ${primary?.area || staticBranch?.area || 'Bangkok'}. This page shows the address, opening hours, and map link.` },
-          { question: `Are these ${provider.name} rates live?`, answer: 'The page labels the source state and observation time. Always verify the latest counter rate with the provider before exchanging money.' },
-        ];
+  // The three profiles shipped on this site share one comparison table so a visitor can
+  // see how the current changer differs from the other two we cover.
+  const peers = moneyChangerProfileSlugs.map((peerSlug) => {
+    const peerProfile = getMoneyChangerProfile(peerSlug);
+    const peerRow = usdComparison?.all.find((row) => row.providerSlug === peerSlug);
+    return peerProfile
+      ? {
+          profile: peerProfile,
+          row: peerRow,
+          current: peerSlug === slug,
+          hours: formatOpeningHours(peerProfile.hoursSpec, peerProfile.hours, seo.locale),
+        }
+      : null;
+  }).filter((item): item is NonNullable<typeof item> => Boolean(item));
 
   const breadcrumbLd = breadcrumbJsonLd([
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
     { name: locale === 'th' ? 'เงินสดเป็น THB' : locale === 'zh' ? '现金换 THB' : 'Cash to THB', item: withLocalePath(locale, '/cash') },
     { name: provider.name, item: withLocalePath(locale, `/money-changers/${provider.slug}`) },
   ]);
-  const businessLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FinancialService',
-    name: provider.name,
-    url: withLocalePath(locale, `/money-changers/${provider.slug}`),
-    sameAs: provider.officialUrl,
-    areaServed: 'Bangkok',
-    address: address ? { '@type': 'PostalAddress', streetAddress: address, addressLocality: 'Bangkok', addressCountry: 'TH' } : undefined,
-    openingHours: hours,
-    hasMap: mapsUrl,
-  };
+  const exchangeLd = currencyExchangeJsonLd({
+    name: profile.name,
+    url: withLocalePath(locale, `/money-changers/${profile.slug}`),
+    officialUrl: profile.officialUrl,
+    area: profile.area,
+    streetAddress: profile.streetAddress,
+    hoursSpec: profile.hoursSpec,
+    geo: profile.geo,
+    mapUrl: profile.mapUrl,
+  });
 
   return (
     <div className="space-y-6">
       <ProviderContext mode="cash" slug={slug} branchId={staticBranch?.id} locale={contentLocale}/>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faqEntries)) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(businessLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(content.faqs)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(exchangeLd) }} />
 
       <header className="grid gap-6 rounded-[32px] bg-[#0f2e22] p-6 text-white sm:p-9 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9fd0b1]">{c.eyebrow}</p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">{provider.name}</h1>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-[#d7e4dc]">{t(provider.summary, locale)}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9fd0b1]">{content.eyebrow}</p>
+          <h1 className="mt-4 text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">{seo.locale === 'th' && profile.brandThai ? profile.brandThai : provider.name}</h1>
+          {profile.brandThai ? <p className="mt-2 text-lg font-semibold text-[#9fd0b1]">{seo.locale === 'th' ? provider.name : profile.brandThai}</p> : null}
+          <p className="mt-4 max-w-3xl text-base leading-7 text-[#d7e4dc]">{content.answer}</p>
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <span className={`rounded-full px-3 py-1 text-xs font-semibold ${openState ? 'bg-emerald-400/15 text-emerald-200' : 'bg-stone-500/20 text-stone-300'}`}>{openState ? c.open : c.closed}</span>
-            <span className="rounded-full border border-white/15 px-3 py-1 text-xs text-stone-200">{c[sourceType]}</span>
+            {primary ? <span className="rounded-full border border-white/15 px-3 py-1 text-xs text-stone-200">{c[sourceType]}</span> : null}
+            <span className="rounded-full border border-white/15 px-3 py-1 text-xs text-stone-200">{hours}</span>
           </div>
         </div>
         <div className="flex flex-wrap gap-3">
-          <TrackAnchor href={mapsUrl} target="_blank" rel="noreferrer" eventName="money_changer_profile_map_click" eventParams={{ provider: provider.slug }} className="rounded-full bg-[#dcebdd] px-5 py-3 text-sm font-semibold text-[#18583d]">{c.map}</TrackAnchor>
-          <TrackAnchor href={provider.officialUrl} target="_blank" rel="noreferrer" eventName="money_changer_profile_official_click" eventParams={{ provider: provider.slug, source_type: sourceType }} className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white">{c.official}</TrackAnchor>
-          <TrackLink href={`/${locale}/cash?currency=USD&amount=1000`} eventName="money_changer_profile_compare_click" eventParams={{ provider: provider.slug }} className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white">{c.compare}</TrackLink>
+          <TrackAnchor href={mapsUrl} target="_blank" rel="noreferrer" eventName="money_changer_profile_map_click" eventParams={{ provider: provider.slug }} className="rounded-full bg-[#dcebdd] px-5 py-3 text-sm font-semibold text-[#18583d]">{content.mapCta}</TrackAnchor>
+          <TrackAnchor href={provider.officialUrl} target="_blank" rel="noreferrer" eventName="money_changer_profile_official_click" eventParams={{ provider: provider.slug, source_type: sourceType }} className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white">{content.officialCta}</TrackAnchor>
+          <TrackLink href={`/${locale}/cash?currency=USD&amount=1000`} eventName="money_changer_profile_compare_click" eventParams={{ provider: provider.slug }} className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white">{c.rateEntry}</TrackLink>
         </div>
       </header>
 
-      {primary ? (
-        <section className="overflow-hidden rounded-[28px] border border-white/10 bg-[#151a18]">
-          <div className="grid gap-5 p-6 lg:grid-cols-[1fr_auto]">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#76aa8b]">{c.current}</p>
-              <p className="mt-3 text-lg font-semibold text-white">{primary.area} · {primary.hours}</p>
-              <p className="mt-1 text-sm text-stone-400">{c.sourceNote}</p>
-            </div>
-            <div className="lg:text-right">
-              <p className="text-xs uppercase tracking-[0.18em] text-stone-500">{c.receive}</p>
-              <p className="mt-1 text-5xl font-semibold tracking-[-0.05em] text-white">฿{formatNumber(primary.estimatedThb, 0)}</p>
-            </div>
+      <section id="rate" className="overflow-hidden rounded-[28px] border border-white/10 bg-[#151a18]">
+        <div className="grid gap-5 p-6 lg:grid-cols-[1fr_auto]">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#76aa8b]">{content.rateHeading}</p>
+            <p className="mt-3 text-lg font-semibold text-white">{content.areaDisplay} · {content.hoursDisplay}</p>
+            <p className="mt-1 text-sm text-stone-400">{content.rateBody}</p>
           </div>
-          <div className="grid grid-cols-2 gap-px border-t border-white/10 bg-white/10 sm:grid-cols-4">
-            <Metric label={c.rate} value={formatNumber(primary.buyRate, 4)} />
-            <Metric label={c.distance} value={primary.distanceKnown===false?'-':`${formatNumber(primary.distanceKm, 1)} km`} />
-            <Metric label={c.denomination} value={primary.denomination} />
-            <Metric label={c.observed} value={new Date(primary.observedAt).toLocaleString()} />
+          <div className="lg:text-right">
+            <p className="text-xs uppercase tracking-[0.18em] text-stone-500">{c.receive}</p>
+            <p className="mt-1 text-5xl font-semibold tracking-[-0.05em] text-white">{primary ? `฿${formatNumber(primary.estimatedThb, 0)}` : '—'}</p>
           </div>
-        </section>
-      ) : null}
+        </div>
+        <div className="grid grid-cols-2 gap-px border-t border-white/10 bg-white/10 sm:grid-cols-4">
+          <Metric label={c.rate} value={primary ? formatNumber(primary.buyRate, 4) : '—'} />
+          <Metric label={c.distance} value={primary && primary.distanceKnown !== false ? `${formatNumber(primary.distanceKm, 1)} km` : '-'} />
+          <Metric label={c.denomination} value={primary?.denomination || '-'} />
+          <Metric label={c.observed} value={primary ? new Date(primary.observedAt).toLocaleString() : '-'} />
+        </div>
+        <p className="border-t border-white/10 px-6 py-4 text-xs text-stone-500">{content.verifyNote}</p>
+      </section>
 
       <section className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="rounded-[28px] border border-black/10 bg-[#ece8dc] p-6 text-[#11271e]">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#657169]">{c.location}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#657169]">{content.locationHeading}</p>
           <h2 className="mt-3 text-xl font-semibold">{branchName}</h2>
           <div className="mt-5 space-y-4 text-sm">
-            <Fact label={c.address} value={address || '-'} />
-            <Fact label={c.hours} value={hours || '-'} />
-            <Fact label={c.distance} value={primary && primary.distanceKnown!==false ? `${formatNumber(primary.distanceKm, 1)} km` : '-'} />
+            <Fact label={content.areaLabel} value={content.areaDisplay} />
+            <Fact label={content.addressLabel} value={address || '-'} />
+            <Fact label={content.hoursLabel} value={hours || '-'} />
+            <Fact label={content.tableSunday} value={sundayLabel(profile.sundayOpen, content)} />
+            <Fact label={c.distance} value={primary && primary.distanceKnown !== false ? `${formatNumber(primary.distanceKm, 1)} km` : '-'} />
           </div>
         </div>
         <div className="rounded-[28px] border border-white/10 bg-[#151a18] p-6">
           <h2 className="text-xl font-semibold text-white">{c.rates}</h2>
-          <p className="mt-2 text-sm text-stone-400">{c.sourceNote}</p>
+          <p className="mt-2 text-sm text-stone-400">{content.sourceNote}</p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {rateRows.map(({ currency, row }) => (
               <div key={currency} className="rounded-2xl border border-white/10 bg-[#111614] p-4">
@@ -231,9 +217,75 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
       </section>
 
       <section className="rounded-[28px] border border-white/10 bg-[#151a18] p-6">
-        <h2 className="text-xl font-semibold text-white">{c.questions}</h2>
+        <h2 className="text-xl font-semibold text-white">{content.compareTableHeading}</h2>
+        <p className="mt-2 max-w-3xl text-sm text-stone-400">{content.compareTableBody}</p>
+        <div className="mt-5 space-y-3 sm:hidden">
+          {peers.map((peer) => (
+            <div key={`card-${peer.profile.slug}`} className={`rounded-2xl border p-4 ${peer.current ? 'border-emerald-400/30 bg-white/[0.06]' : 'border-white/10 bg-[#111614]'}`}>
+              <p className="text-sm font-semibold text-white">
+                {peer.current ? <span className="mr-2 rounded-full bg-emerald-400/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-200">{content.currentBadge}</span> : null}
+                {peer.current
+                  ? peer.profile.name
+                  : <TrackLink href={`/${locale}/money-changers/${peer.profile.slug}`} eventName="money_changer_profile_peer_click" eventParams={{ provider: provider.slug, target: peer.profile.slug, position: 'mobile' }} className="underline decoration-white/30 underline-offset-4">{peer.profile.name}</TrackLink>}
+              </p>
+              <p className="mt-1 text-xs text-stone-400">{peer.profile.area} · {peer.hours}</p>
+              <p className="mt-2 text-sm text-stone-300">
+                {sundayLabel(peer.profile.sundayOpen, content)}
+                <span className="mx-2 text-stone-600">|</span>
+                {content.tableRate}: {peer.row ? formatNumber(peer.row.buyRate, 4) : '—'}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-5 hidden overflow-x-auto sm:block">
+          <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+            <thead>
+              <tr className="text-xs uppercase tracking-[0.14em] text-stone-500">
+                <th className="border-b border-white/10 py-2 pr-3 font-medium">{content.tableChanger}</th>
+                <th className="border-b border-white/10 py-2 pr-3 font-medium">{content.tableArea}</th>
+                <th className="border-b border-white/10 py-2 pr-3 font-medium">{content.tableHours}</th>
+                <th className="border-b border-white/10 py-2 pr-3 font-medium">{content.tableSunday}</th>
+                <th className="border-b border-white/10 py-2 font-medium">{content.tableRate}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {peers.map((peer) => (
+                <tr key={peer.profile.slug} className={peer.current ? 'bg-white/[0.06] text-white' : 'text-stone-300'}>
+                  <td className="border-b border-white/5 py-3 pr-3 font-semibold">
+                    {peer.current ? <span className="mr-2 rounded-full bg-emerald-400/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-200">{content.currentBadge}</span> : null}
+                    {peer.current
+                      ? peer.profile.name
+                      : <TrackLink href={`/${locale}/money-changers/${peer.profile.slug}`} eventName="money_changer_profile_peer_click" eventParams={{ provider: provider.slug, target: peer.profile.slug }} className="underline decoration-white/30 underline-offset-4">{peer.profile.name}</TrackLink>}
+                  </td>
+                  <td className="border-b border-white/5 py-3 pr-3">{peer.profile.area}</td>
+                  <td className="border-b border-white/5 py-3 pr-3">{peer.hours}</td>
+                  <td className="border-b border-white/5 py-3 pr-3">{sundayLabel(peer.profile.sundayOpen, content)}</td>
+                  <td className="border-b border-white/5 py-3">{peer.row ? formatNumber(peer.row.buyRate, 4) : '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="rounded-[28px] border border-white/10 bg-[#151a18] p-6">
+        <h2 className="text-xl font-semibold text-white">{c.practicalHeading}</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-stone-300">{seo.positioning}</p>
+        <ul className="mt-4 space-y-2 text-sm leading-6 text-stone-400">
+          {seo.practical.map((item) => (
+            <li key={item} className="border-l border-[#76aa8b]/40 pl-4">{item}</li>
+          ))}
+        </ul>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <TrackLink href={`/${locale}/cash?currency=USD&amount=1000`} eventName="money_changer_profile_compare_click" eventParams={{ provider: provider.slug, position: 'table' }} className="rounded-full bg-[#dcebdd] px-5 py-3 text-sm font-semibold text-[#18583d]">{content.compareCta}</TrackLink>
+          <TrackAnchor href={provider.officialUrl} target="_blank" rel="noreferrer" eventName="money_changer_profile_official_click" eventParams={{ provider: provider.slug, position: 'practical' }} className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white">{c.officialRate}</TrackAnchor>
+        </div>
+      </section>
+
+      <section className="rounded-[28px] border border-white/10 bg-[#151a18] p-6">
+        <h2 className="text-xl font-semibold text-white">{content.faqHeading}</h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          {faqEntries.map((item) => (
+          {content.faqs.map((item) => (
             <div key={item.question} className="border-l border-[#76aa8b]/40 pl-4">
               <h3 className="font-semibold text-white">{item.question}</h3>
               <p className="mt-2 text-sm leading-6 text-stone-400">{item.answer}</p>
@@ -255,22 +307,10 @@ function Fact({ label, value }: { label: string; value: string }) {
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const provider = cashProviders.find((item) => item.slug === slug);
-  if (!provider || !publicCashProviderSlugs.includes(slug as typeof publicCashProviderSlugs[number])) return {};
-  const isRatchada = slug === 'ratchada';
-  const isSia = slug === 'sia';
-  const title = locale === 'th'
-    ? `${provider.name} เรท เวลาเปิด และแผนที่`
-    : locale === 'zh'
-      ? `${provider.name} 曼谷｜汇率、营业时间与地图`
-      : isRatchada
-        ? 'Ratchada Exchange Rate, Hours & Map | Huai Khwang'
-        : isSia
-          ? 'SIA Money Exchange Bangkok | Rates, Hours & Map'
-          : `${provider.name} Bangkok | Rates, Hours & Map`;
-  const description = locale === 'en'
-    ? `Check ${provider.name} observed rates, estimated THB, opening status, Bangkok location, map, and official verification link.`
-    : t(provider.summary, locale);
+  if (!publicCashProviderSlugs.includes(slug as typeof publicCashProviderSlugs[number])) return {};
+  const seo = buildMoneyChangerSeo(slug, locale);
+  if (!seo) return {};
+  const { metaTitle: title, metaDescription: description } = seo.content;
   const path = `/money-changers/${slug}`;
   return {
     title,
