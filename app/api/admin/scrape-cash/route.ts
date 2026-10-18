@@ -6,6 +6,10 @@ import { refreshCashScrapeCache } from '@/lib/cash-live';
 export async function POST(request: Request) {
   const session = await getAdminSession();
   if (!session) return fail('unauthorized', 401);
+  if (process.env.CASH_COLLECTION_MODE === 'external') {
+    return fail('external_cash_collection', 409, undefined,
+      'Cash quotes are updated by the scheduled collector. Manual scraping is disabled.');
+  }
   try {
     const data = await refreshCashScrapeCache();
     const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined;

@@ -16,7 +16,8 @@ export async function POST(request: NextRequest) {
   if (!session) return fail('unauthorized', 401);
   try {
     const body = await request.json();
-    await writeAdminConfig(parseAdminConfig(body));
+    const current = await readAdminConfig();
+    await writeAdminConfig(parseAdminConfig({ ...current, ...body, evidence: { ...current.evidence, ...(body.evidence || {}) } }));
     const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined;
     await appendAuditLog({ actor: session, action: 'admin.config.updated', target: 'admin-config', ip });
     return ok(true);

@@ -23,6 +23,14 @@ type CashRow = {
   observedAt: string;
   denomination: string;
   sourceType: 'live' | 'hybrid' | 'fallback';
+  sellRate?: number;
+  current?: boolean;
+  fetchedAt?: string;
+  timestampKind?: 'published' | 'collected';
+  sourceUrl?: string;
+  branchId?: string;
+  distanceKnown?: boolean;
+  openingKnown?: boolean;
 };
 
 export type CashDecisionResult = {
@@ -169,7 +177,7 @@ export function CashDecisionTool({
   initialAmount: number;
   initialMaxDistance: number;
 }) {
-  const c = copy[locale];
+  const c = copy[locale === 'th' || locale === 'zh' ? locale : 'en'];
   const [currency, setCurrency] = useState<CurrencyCode>(initialCurrency);
   const [amount, setAmount] = useState(String(initialAmount));
   const [maxDistance, setMaxDistance] = useState(String(initialMaxDistance));

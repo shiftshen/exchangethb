@@ -39,7 +39,7 @@ describe('scrapeSuperrichThailand', () => {
 });
 
 describe('scrapeSuperrich1965', () => {
-  it('parses hybrid rows from guest booking feed', async () => {
+  it('rejects sell-only guest booking rows instead of inventing buy prices', async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce({
         ok: true,
@@ -84,13 +84,10 @@ describe('scrapeSuperrich1965', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const result = await scrapeSuperrich1965();
-    expect(result.ok).toBe(true);
+    expect(result.ok).toBe(false);
     expect(result.provider).toBe('superrich-1965');
-    expect((result.rates || []).length).toBeGreaterThan(1);
-    expect(new Set((result.rates || []).map((rate) => rate.currency)).has('EUR')).toBe(true);
-    expect((result.rates || [])[0].sourceKind).toBe('hybrid');
-    expect((result.rates || [])[0].buyRate).toBeLessThan((result.rates || [])[0].sellRate);
-    expect(result.notes[0]).toContain('Parsed');
+    expect(result.rates).toEqual([]);
+    expect(result.notes.join(' ')).toContain('no spread-derived prices');
   });
 });
 

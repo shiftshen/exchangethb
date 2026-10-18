@@ -41,13 +41,14 @@ function normalizeLocaleCode(value: string) {
   if (lower.startsWith('th')) return 'th';
   if (lower.startsWith('zh') || lower.startsWith('cn')) return 'zh';
   if (lower.startsWith('en')) return 'en';
+  if (isLocale(lower.split('-')[0])) return lower.split('-')[0];
   if (isLegacyLocale(lower)) return resolveContentLocale(lower);
   return 'en';
 }
 
 function isKnownLocaleCode(value: string) {
   const lower = value.toLowerCase();
-  return ['th', 'en', 'zh', 'ja', 'ko', 'de'].includes(lower);
+  return isLocale(lower);
 }
 
 function resolveLocale(pathname: string) {
@@ -106,6 +107,12 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(nextUrl, 308);
   }
 
+  if (firstSegment && !['en','th','zh'].includes(firstSegment) && isLocale(firstSegment) && ['exchanges', 'money-changers', 'routes'].includes(segments[1])) {
+    segments[0] = 'en';
+    nextUrl.pathname = `/${segments.join('/')}`;
+    return NextResponse.redirect(nextUrl, 307);
+  }
+
   if (firstSegment && isLegacyLocale(firstSegment)) {
     segments[0] = resolveContentLocale(firstSegment);
     nextUrl.pathname = `/${segments.join('/')}`;
@@ -132,6 +139,7 @@ export function middleware(request: NextRequest) {
   const locale = resolveLocale(nextUrl.pathname);
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-resolved-locale', locale);
+  requestHeaders.set('x-public-adsense', !firstSegment || isLocale(firstSegment) ? '1' : '0');
   const response = NextResponse.next({
     request: {
       headers: requestHeaders,

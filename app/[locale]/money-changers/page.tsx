@@ -1,7 +1,9 @@
+import { readCashCache } from '@/lib/cash-cache-store';
+export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import { TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
-import { cashBranches, cashRates, publicCashProviders } from '@/data/site';
+import { cashBranches, publicCashProviders } from '@/data/site';
 import { indexableLocales, t } from '@/lib/i18n';
 import { shouldIndexHub } from '@/lib/indexing-policy';
 import { breadcrumbJsonLd, collectionPageJsonLd, itemListJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
@@ -27,7 +29,7 @@ const copy = {
     whyTitle: 'ทำไมต้องมีหน้ารวมนี้',
     whyBody: 'หน้า hub นี้ช่วยรวบหมวด money changer ไว้เป็นโครงสร้างหลัก ทำให้ Google และผู้ใช้ใหม่เข้าใจได้เร็วขึ้นว่ามีแบรนด์ไหนบ้าง และควรเริ่มจากหน้าใด',
     reasonOneTitle: 'รวมลิงก์ไปยังแบรนด์สำคัญ',
-    reasonOneBody: 'หน้าเดียวนี้จะส่ง internal link ไปยังหน้า SIA, SuperRich Thailand, และผู้ให้บริการอื่นที่ควรสะสม authority มากขึ้น',
+    reasonOneBody: 'หน้าเดียวนี้จะส่ง internal link ไปยังหน้า Ratchada, SuperRich Thailand, และผู้ให้บริการอื่นที่ควรสะสม authority มากขึ้น',
     reasonTwoTitle: 'ลดภาระการเริ่มจากหน้าคอมแพร์เปล่า',
     reasonTwoBody: 'คนที่ยังไม่รู้จักร้านไหนมาก่อนสามารถเริ่มจาก index นี้ แล้วค่อยเลือกหน้ารายตัวหรือ route guide ที่เกี่ยวข้อง',
     reasonThreeTitle: 'ช่วย Google เข้าใจหมวดเงินสด',
@@ -37,7 +39,7 @@ const copy = {
   en: {
     kicker: 'Money changer index',
     title: 'Bangkok Money Changers | Compare Rates, Branches, and Hours',
-    description: 'Compare Bangkok money changers by rate samples, branch locations, opening hours, and official links before exchanging cash to THB. Explore SIA Money Exchange, SuperRich, and other core brands.',
+    description: 'Compare Bangkok money changers by rate samples, branch locations, opening hours, and official links before exchanging cash to THB. Explore Ratchada Exchange, SuperRich, and other core brands.',
     compareCta: 'Open cash comparison',
     routesCta: 'Browse route guides',
     providersLabel: 'Public brands tracked',
@@ -51,9 +53,9 @@ const copy = {
     detailCta: 'View money changer profile',
     compareOneCta: 'Back to cash compare',
     whyTitle: 'Why this hub exists',
-    whyBody: 'This page gives users one clear place to compare Bangkok money changers before drilling into SIA, SuperRich, and other provider pages for detailed rates, hours, and location checks.',
+    whyBody: 'This page gives users one clear place to compare Bangkok money changers before drilling into Ratchada, SuperRich, and other provider pages for detailed rates, hours, and location checks.',
     reasonOneTitle: 'Send stronger links into the key brands',
-    reasonOneBody: 'One hub page can route internal link equity into SIA, SuperRich Thailand, and the other provider profiles that matter for brand-intent searches.',
+    reasonOneBody: 'One hub page can route internal link equity into Ratchada, SuperRich Thailand, and the other provider profiles that matter for brand-intent searches.',
     reasonTwoTitle: 'Give users a better start than a blank compare tool',
     reasonTwoBody: 'Visitors who do not know which brand to trust can start here, then move into the exact provider page or route guide that fits their trip.',
     reasonThreeTitle: 'Clarify the cash-exchange topic for Google',
@@ -79,7 +81,7 @@ const copy = {
     whyTitle: '为什么需要这个 hub',
     whyBody: '它作为 Bangkok money changer 主题的上层入口页，让搜索引擎更容易理解这一类页面之间的关系。',
     reasonOneTitle: '把链接权重导向关键品牌',
-    reasonOneBody: '这个 hub 可以把内部链接更集中地导向 SIA、SuperRich Thailand 等更值得积累品牌权重的页面。',
+    reasonOneBody: '这个 hub 可以把内部链接更集中地导向 Ratchada、SuperRich Thailand 等更值得积累品牌权重的页面。',
     reasonTwoTitle: '给用户更好的起点',
     reasonTwoBody: '如果用户还不知道先看哪一家换汇店，可以先从索引页进入，再进入更具体的品牌页或路线页。',
     reasonThreeTitle: '让 Google 更清楚现金换汇主题',
@@ -103,6 +105,7 @@ function webPageJsonLd(locale: ContentLocale, title: string, description: string
 function formatLocaleDate(locale: ContentLocale, value?: string) {
   if (!value) return '-';
   return new Intl.DateTimeFormat(locale === 'th' ? 'th-TH' : locale === 'zh' ? 'zh-CN' : 'en-US', {
+    timeZone: 'Asia/Bangkok',
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(new Date(value));
@@ -114,26 +117,28 @@ export function generateStaticParams() {
 
 export default async function MoneyChangersIndexPage({ params }: { params: Promise<{ locale: ContentLocale }> }) {
   const { locale } = await params;
-  const c = copy[locale];
-  const latestRateUpdate = cashRates
+  const c = copy[locale === 'th' || locale === 'zh' ? locale : 'en'];
+  const cache = await readCashCache();
+  const sourceRates = cache.results.flatMap(result => result.rates || []);
+  const latestRateUpdate = sourceRates
     .map((rate) => rate.observedAt)
     .sort((left, right) => new Date(right).getTime() - new Date(left).getTime())[0];
 
   const faqEntries = locale === 'th'
     ? [
         { question: 'หน้านี้ต่างจากหน้าคอมแพร์เงินสดอย่างไร', answer: 'หน้ารวมนี้ใช้เพื่อดูว่ามีแบรนด์ไหนอยู่ในระบบ ส่วนหน้าคอมแพร์เงินสดใช้เพื่อคำนวณและจัดอันดับเส้นทางตามสกุลเงิน จำนวนเงิน และระยะอ้างอิง' },
-        { question: 'ถ้าจะหาร้านในประตูน้ำ ควรเริ่มจากไหน', answer: 'เริ่มจากหน้าแบรนด์อย่าง SIA หรือ SuperRich Thailand ได้เลย แล้วค่อยกดกลับไปหน้าเปรียบเทียบเงินสดเมื่อคุณอยากเทียบกับร้านอื่น' },
+        { question: 'ถ้าจะหาร้านในประตูน้ำ ควรเริ่มจากไหน', answer: 'เริ่มจากหน้าแบรนด์อย่าง Ratchada หรือ SuperRich Thailand ได้เลย แล้วค่อยกดกลับไปหน้าเปรียบเทียบเงินสดเมื่อคุณอยากเทียบกับร้านอื่น' },
         { question: 'หน้านี้ช่วย SEO อย่างไร', answer: 'มันทำหน้าที่เป็น parent page ของหมวด Bangkok money changer และรวมลิงก์ไปยัง brand pages หลักที่ต้องการสะสมความน่าเชื่อถือ' },
       ]
     : locale === 'zh'
       ? [
           { question: '这个页面和现金比较页有什么不同', answer: '索引页主要负责展示站内有哪些换汇品牌；真正的路线估算、距离排序和金额比较仍在现金比较页完成。' },
-          { question: '如果我想找水门一带的换汇店，该从哪里开始', answer: '可以先进入 SIA 或 SuperRich Thailand 这类品牌页，再决定是否回到现金比较页和其他品牌一起比较。' },
+          { question: '如果我想找水门一带的换汇店，该从哪里开始', answer: '可以先进入 Ratchada 或 SuperRich Thailand 这类品牌页，再决定是否回到现金比较页和其他品牌一起比较。' },
           { question: '这个 hub 对 SEO 有什么帮助', answer: '它把 Bangkok money changer 主题集中到一个可抓取入口，再把内部链接分发到更重要的品牌详情页。' },
         ]
       : [
           { question: 'How is this different from the cash compare page?', answer: 'This hub organizes which money changer brands are covered. The cash compare page is where users estimate routes by currency, amount, and reference distance.' },
-          { question: 'Where should I start if I need Pratunam exchange options?', answer: 'Start with a provider page like SIA or SuperRich Thailand, then move back into the live cash comparison once you want to compare brands side by side.' },
+          { question: 'Where should I start if I need Pratunam exchange options?', answer: 'Start with a provider page like Ratchada or SuperRich Thailand, then move back into the live cash comparison once you want to compare brands side by side.' },
           { question: 'Why does this help SEO?', answer: 'It gives Google one clean parent page for the Bangkok money changer topic and routes stronger internal links into the provider pages that should rank for brand intent.' },
         ];
 
@@ -207,8 +212,7 @@ export default async function MoneyChangersIndexPage({ params }: { params: Promi
         <div className="grid gap-4 lg:grid-cols-2">
           {publicCashProviders.map((provider) => {
             const branches = cashBranches.filter((branch) => branch.providerSlug === provider.slug);
-            const branchIds = new Set(branches.map((branch) => branch.id));
-            const rates = cashRates.filter((rate) => branchIds.has(rate.branchId));
+            const rates = sourceRates.filter((rate) => rate.providerSlug === provider.slug);
             const areas = [...new Set(branches.map((branch) => branch.area))];
             const latestObserved = rates
               .map((rate) => rate.observedAt)
@@ -265,7 +269,7 @@ export default async function MoneyChangersIndexPage({ params }: { params: Promi
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: ContentLocale }> }): Promise<Metadata> {
   const { locale } = await params;
-  const c = copy[locale];
+  const c = copy[locale === 'th' || locale === 'zh' ? locale : 'en'];
   const path = '/money-changers';
 
   return {
@@ -274,7 +278,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: C
     alternates: metadataAlternatesForPolicy(locale, path, []),
     robots: robotsForPage(locale, shouldIndexHub()),
     keywords: locale === 'en'
-      ? ['Bangkok money changer', 'money exchange Bangkok', 'SIA Money Exchange Bangkok', 'SuperRich Thailand', 'cash exchange Thailand', 'Bangkok exchange rates']
+      ? ['Bangkok money changer', 'money exchange Bangkok', 'Ratchada Exchange Bangkok', 'SuperRich Thailand', 'cash exchange Thailand', 'Bangkok exchange rates']
       : undefined,
     openGraph: {
       title: c.title,

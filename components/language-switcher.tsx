@@ -1,31 +1,21 @@
 'use client';
-
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { languageOptions, languageSwitchParams } from '@/lib/locale-preferences';
+import { additionalCopy, isAdditionalLocale } from '@/lib/additional-copy';
+import { useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { trackEvent } from '@/lib/analytics-client';
-import { indexableLocales } from '@/lib/i18n';
 import { localeRoutePath } from '@/lib/seo';
-import { ContentLocale } from '@/lib/types';
-
+import type { ContentLocale } from '@/lib/types';
 export function LanguageSwitcher({ locale }: { locale: ContentLocale }) {
+  useEffect(() => { document.documentElement.lang = locale; }, [locale]);
   const pathname = usePathname();
-  const options = indexableLocales;
-  const currentPath = pathname || '/';
-  const suffix = currentPath === '/' ? '' : (currentPath.replace(/^\/(th|en|zh|ja|ko|de)/, '') || '');
-  const labels: Record<ContentLocale, string> = { th: 'TH', en: 'EN', zh: 'ZH' };
-
-  return (
-    <div className="flex items-center gap-1 rounded-full border border-surface-700 bg-surface-900/90 p-1 text-sm shadow-soft">
-      {options.map((option) => (
-        <Link
-          key={option}
-          href={localeRoutePath(option, suffix)}
-          onClick={() => trackEvent('language_switch', { from: locale, to: option, path: suffix || '/' })}
-          className={`rounded-full px-3 py-1.5 transition ${option === locale ? 'bg-brand-500 text-surface-950' : 'text-stone-300 hover:bg-surface-800 hover:text-white'}`}
-        >
-          {labels[option]}
-        </Link>
-      ))}
-    </div>
-  );
+  const router = useRouter();
+  const suffix = pathname.replace(/^\/(th|en|zh|ja|ko|de|ru|fr|id|vi)/, '');
+  return <label className="simple-language"><span className="sr-only">{isAdditionalLocale(locale) ? additionalCopy[locale].ui.language : locale === 'ja' ? '言語' : locale === 'zh' ? '语言' : locale === 'th' ? 'ภาษา' : 'Language'}</span><select value={locale} onChange={event => {
+    const next = event.target.value as ContentLocale;
+    const params = languageSwitchParams(next, suffix, window.location.search);
+    const query = params.toString();
+    trackEvent('language_switch', { from_locale: locale, to_locale: next });
+    router.push(`${localeRoutePath(next, suffix)}${query ? `?${query}` : ''}`);
+  }}>{languageOptions.map(option => <option key={option.locale} value={option.locale}>{option.label}</option>)}</select></label>;
 }

@@ -1,0 +1,1256 @@
+{
+  "ru": {
+    "words": {
+      "cash": "Обмен наличных",
+      "crypto": "Криптовалюта",
+      "cashHint": "Найти обменный пункт",
+      "cryptoHint": "Сравнить биржи",
+      "currency": "Валюта",
+      "asset": "Актив",
+      "amount": "Сумма",
+      "assetAmount": "Количество актива",
+      "compare": "Сравнить",
+      "loading": "Сравниваем…",
+      "sell": "Продать за THB",
+      "buy": "Купить за THB",
+      "advanced": "Другие параметры",
+      "distance": "Макс. расстояние",
+      "location": "Моё местоположение",
+      "locating": "Определяем местоположение…",
+      "locationActive": "Используется ваше местоположение",
+      "reference": "Расстояние от центра Бангкока",
+      "locationError": "Местоположение недоступно. Можно сравнить справочные расстояния.",
+      "openOnly": "Только открытые пункты",
+      "nearest": "Сначала ближайшие",
+      "best": "По сумме",
+      "results": "Результаты",
+      "ready": "Выберите валюту и сумму.",
+      "changed": "Обновляем выбор. Введите корректную сумму.",
+      "error": "Не удалось обновить. Попробуйте ещё раз.",
+      "invalid": "Введите сумму больше 0.",
+      "empty": "Нет подходящих вариантов. Измените валюту или фильтры.",
+      "receive": "Примерно получите",
+      "payment": "Примерно заплатите",
+      "fresh": "Недавняя котировка",
+      "cached": "Справочные данные",
+      "referenceResults": "Только для справки",
+      "stale": "Эти котировки не позволяют выбрать лучший вариант. Проверьте актуальный курс на официальном сайте.",
+      "bestLabel": "Наибольшая сумма",
+      "cheapest": "Наименьшая оплата",
+      "closed": "Закрыто",
+      "open": "Открыто",
+      "map": "Открыть карту",
+      "official": "Официальный сайт",
+      "details": "Комиссии и источник",
+      "rate": "Курс",
+      "observed": "Время котировки",
+      "note": "Суммы приблизительные. Подтвердите итоговый курс у поставщика.",
+      "trading": "Торговая комиссия",
+      "withdraw": "Комиссия за вывод THB",
+      "network": "Комиссия за вывод актива",
+      "fill": "Доступная доля исполнения",
+      "banknote": "Номинал банкноты",
+      "hours": "Часы работы",
+      "gap": "Неисполненное количество",
+      "all": "Другие варианты",
+      "less": "Свернуть",
+      "rankNote": "Сначала учитываем полное исполнение, затем сумму.",
+      "buyNote": "Введите количество покупаемого актива. Оплата показана в THB.",
+      "valueRoute": "Обмен на тайские баты",
+      "assetReceive": "Примерно получите актива"
+    },
+    "extra": {
+      "cashBuy": "Купить иностранные наличные",
+      "cashSell": "Продать иностранные наличные",
+      "buyNote": "Введите нужную сумму иностранной валюты. Оплата оценивается в THB.",
+      "feeWarning": "Комиссии не проверены. Суммы приблизительные.",
+      "unknownWithdrawal": "Комиссия за вывод этого актива не проверена; неизвестные расходы не включены.",
+      "marketBest": "Выгодная котировка",
+      "unknownDistance": "Расстояние не проверено",
+      "published": "Опубликовано поставщиком",
+      "collected": "Собрано",
+      "auto": "Обновлять рынок каждые 30 секунд",
+      "feeAssumption": "Предполагаются стандартные торговые комиссии; при продаже учтён вывод THB, при покупке — вывод актива.",
+      "cashScope": "Курс головного офиса / указанного номинала. Уточните филиал и состояние банкнот."
+    },
+    "ui": {
+      "language": "Язык",
+      "nav": "Основное меню",
+      "siteInfo": "Информация о сайте",
+      "skip": "Перейти к содержимому",
+      "autoNote": "Результаты обновляются автоматически при выборе.",
+      "retry": "Повторить",
+      "disclaimer": "Мы сравниваем только информацию третьих лиц. Мы не обмениваем, не принимаем и не храним деньги. Сделки заключаются напрямую с поставщиком; оцените валютные, рыночные и контрагентские риски. Реферальные ссылки могут приносить нам комиссию, не влияя на порядок сравнения.",
+      "fullDisclaimer": "Полные условия",
+      "footer": "Для сравнения. Уточните итоговый курс у поставщика.",
+      "method": "Методика",
+      "privacy": "Конфиденциальность",
+      "dataStatus": "Состояние данных"
+    },
+    "pages": {
+      "home": {
+        "title": "Обмен валюты на тайские баты",
+        "body": "Выберите валюту и сумму. Сравните обменные пункты Бангкока и тайские криптобиржи."
+      },
+      "cash": {
+        "title": "Курсы обмена наличных на тайские баты в Бангкоке",
+        "body": "Сравните примерную сумму в THB, часы работы, номиналы банкнот и время котировки. RUB пока не поддерживается — по умолчанию выбран USD."
+      },
+      "crypto": {
+        "title": "USDT и BTC в THB: сравнение тайских бирж",
+        "body": "Сравните приблизительные суммы покупки и продажи и предполагаемые комиссии. Исполнение по указанной цене не гарантируется."
+      }
+    },
+    "consent": [
+      "Разрешить аналитику для улучшения сравнения?",
+      "Разрешить",
+      "Только необходимые",
+      "Настройки аналитики"
+    ],
+    "privacyBody": "Аналитика Google включается только с вашего согласия. Вы можете изменить выбор в настройках аналитики. Геолокация запрашивается только по вашему действию и используется для расчёта расстояния; координаты не сохраняются в ссылках. Google Maps может обрабатывать данные при открытии карты или отзывов. Мы не собираем платёжные данные или документы для обмена.",
+    "provider": {
+      "title": "Источники и отзывы",
+      "retry": "Загрузить источники",
+      "loading": "Загрузка…",
+      "failed": "Не удалось загрузить. Повторите.",
+      "license": "Проверка лицензии",
+      "fees": "Проверка комиссий",
+      "operations": "Проверка сервиса",
+      "verified": "Проверено",
+      "issue": "Обнаружена проблема",
+      "unknown": "Не проверено",
+      "expired": "Проверка устарела",
+      "not_configured": "Отзывы Google не подключены",
+      "identity_unverified": "Филиал не сопоставлен с Google",
+      "limited": "Лимит запросов отзывов",
+      "unavailable": "Отзывы Google недоступны",
+      "reviewNote": "Google предоставляет до 5 релевантных отзывов, а не все или самые новые.",
+      "original": "Оригинал отзыва",
+      "noRating": "Нет оценки",
+      "all": "Открыть Google Maps",
+      "date": "Дата проверки",
+      "source": "Посмотреть источник",
+      "feeNote": "Непроверенные комиссии — предположения. Отзывы не оценивают сохранность средств."
+    },
+    "status": {
+      "title": "Источники и обновления",
+      "intro": "Источники, время получения и доступность курсов. Старые курсы — только справочные.",
+      "current": "Недавно получено",
+      "reference": "Только справочно",
+      "unavailable": "Нет доступных курсов",
+      "attempt": "Последняя попытка",
+      "success": "Последний успех",
+      "quotes": "Время котировки",
+      "official": "Официальный источник",
+      "unknown": "Нет записи",
+      "note": "Котировки бирж проверяются при сравнении. Комиссии и лицензии проверяются отдельно. Общий рейтинг не используется.",
+      "baseline": "Справочный курс Банка Таиланда, не курс обмена в кассе"
+    },
+    "guide": {
+      "heading": "Обмен валюты на тайские баты",
+      "items": [
+        [
+          "Обмен наличных",
+          "Сравните примерную сумму в THB, часы работы, номиналы банкнот и время котировки. RUB пока не поддерживается — по умолчанию выбран USD. Суммы приблизительные. Подтвердите итоговый курс у поставщика. Курс головного офиса / указанного номинала. Уточните филиал и состояние банкнот."
+        ],
+        [
+          "Криптовалюта",
+          "Сравните приблизительные суммы покупки и продажи и предполагаемые комиссии. Исполнение по указанной цене не гарантируется. Сначала учитываем полное исполнение, затем сумму. Предполагаются стандартные торговые комиссии; при продаже учтён вывод THB, при покупке — вывод актива."
+        ],
+        [
+          "Полные условия",
+          "Мы сравниваем только информацию третьих лиц. Мы не обмениваем, не принимаем и не храним деньги. Сделки заключаются напрямую с поставщиком; оцените валютные, рыночные и контрагентские риски. Реферальные ссылки могут приносить нам комиссию, не влияя на порядок сравнения."
+        ]
+      ]
+    },
+    "legal": {
+      "methodology": {
+        "title": "Методика",
+        "intro": "Выберите валюту и сумму. Сравните обменные пункты Бангкока и тайские криптобиржи.",
+        "sections": [
+          {
+            "heading": "Время котировки",
+            "body": "Источники, время получения и доступность курсов. Старые курсы — только справочные. Эти котировки не позволяют выбрать лучший вариант. Проверьте актуальный курс на официальном сайте. Курс головного офиса / указанного номинала. Уточните филиал и состояние банкнот."
+          },
+          {
+            "heading": "Комиссии и источник",
+            "body": "Предполагаются стандартные торговые комиссии; при продаже учтён вывод THB, при покупке — вывод актива. Непроверенные комиссии — предположения. Отзывы не оценивают сохранность средств. Google предоставляет до 5 релевантных отзывов, а не все или самые новые."
+          },
+          {
+            "heading": "Полные условия",
+            "body": "Мы сравниваем только информацию третьих лиц. Мы не обмениваем, не принимаем и не храним деньги. Сделки заключаются напрямую с поставщиком; оцените валютные, рыночные и контрагентские риски. Реферальные ссылки могут приносить нам комиссию, не влияя на порядок сравнения."
+          }
+        ]
+      },
+      "disclaimer": {
+        "title": "Полные условия",
+        "intro": "Мы сравниваем только информацию третьих лиц. Мы не обмениваем, не принимаем и не храним деньги. Сделки заключаются напрямую с поставщиком; оцените валютные, рыночные и контрагентские риски. Реферальные ссылки могут приносить нам комиссию, не влияя на порядок сравнения.",
+        "sections": [
+          {
+            "heading": "Суммы приблизительные. Подтвердите итоговый курс у поставщика.",
+            "body": "Эти котировки не позволяют выбрать лучший вариант. Проверьте актуальный курс на официальном сайте. Комиссии не проверены. Суммы приблизительные. Комиссия за вывод этого актива не проверена; неизвестные расходы не включены."
+          },
+          {
+            "heading": "Источники и отзывы",
+            "body": "Непроверенные комиссии — предположения. Отзывы не оценивают сохранность средств. Google предоставляет до 5 релевантных отзывов, а не все или самые новые."
+          }
+        ]
+      },
+      "privacy-policy": {
+        "title": "Конфиденциальность",
+        "intro": "Аналитика Google включается только с вашего согласия. Вы можете изменить выбор в настройках аналитики. Геолокация запрашивается только по вашему действию и используется для расчёта расстояния; координаты не сохраняются в ссылках. Google Maps может обрабатывать данные при открытии карты или отзывов. Мы не собираем платёжные данные или документы для обмена.",
+        "sections": [
+          {
+            "heading": "Настройки аналитики",
+            "body": "Аналитика Google включается только с вашего согласия. Вы можете изменить выбор в настройках аналитики. Геолокация запрашивается только по вашему действию и используется для расчёта расстояния; координаты не сохраняются в ссылках. Google Maps может обрабатывать данные при открытии карты или отзывов. Мы не собираем платёжные данные или документы для обмена."
+          }
+        ]
+      }
+    }
+  },
+  "ko": {
+    "words": {
+      "cash": "현금 환전",
+      "crypto": "가상자산",
+      "cashHint": "환전소 찾기",
+      "cryptoHint": "거래소 비교",
+      "currency": "통화",
+      "asset": "자산",
+      "amount": "금액",
+      "assetAmount": "자산 수량",
+      "compare": "비교하기",
+      "loading": "비교 중…",
+      "sell": "팔아서 THB 받기",
+      "buy": "THB로 구매",
+      "advanced": "추가 조건",
+      "distance": "최대 거리",
+      "location": "현재 위치 사용",
+      "locating": "위치 확인 중…",
+      "locationActive": "현재 위치 사용 중",
+      "reference": "방콕 중심부 기준 거리",
+      "locationError": "위치를 확인할 수 없습니다. 기준 거리로 비교할 수 있습니다.",
+      "openOnly": "영업 중인 지점만",
+      "nearest": "가까운 순",
+      "best": "금액순",
+      "results": "비교 결과",
+      "ready": "통화와 금액을 선택하세요.",
+      "changed": "선택을 갱신 중입니다. 올바른 금액을 입력하세요.",
+      "error": "갱신하지 못했습니다. 다시 시도하세요.",
+      "invalid": "0보다 큰 금액을 입력하세요.",
+      "empty": "조건에 맞는 결과가 없습니다. 통화나 필터를 변경하세요.",
+      "receive": "예상 수령액",
+      "payment": "예상 지불액",
+      "fresh": "최근 호가",
+      "cached": "참고 데이터",
+      "referenceResults": "참고용",
+      "stale": "이 호가로 최선의 선택을 판단할 수 없습니다. 공식 사이트에서 확인하세요.",
+      "bestLabel": "최대 수령액",
+      "cheapest": "최소 지불액",
+      "closed": "영업 종료",
+      "open": "영업 중",
+      "map": "지도 보기",
+      "official": "공식 사이트",
+      "details": "수수료와 출처",
+      "rate": "환율",
+      "observed": "호가 시점",
+      "note": "금액은 추정치입니다. 최종 환율은 제공자에게 확인하세요.",
+      "trading": "거래 수수료",
+      "withdraw": "THB 출금 수수료",
+      "network": "자산 출금 수수료",
+      "fill": "체결 가능 비율",
+      "banknote": "지폐 액면가",
+      "hours": "영업시간",
+      "gap": "미체결 수량",
+      "all": "다른 결과 보기",
+      "less": "접기",
+      "rankNote": "전량 체결 가능 여부를 먼저 확인한 뒤 금액을 비교합니다.",
+      "buyNote": "구매할 자산 수량을 입력하세요. 지불액은 THB로 표시됩니다.",
+      "valueRoute": "태국 바트로 환전",
+      "assetReceive": "예상 자산 수령량"
+    },
+    "extra": {
+      "cashBuy": "외화 현금 구매",
+      "cashSell": "외화 현금 판매",
+      "buyNote": "원하는 외화 금액을 입력하세요. 지불액은 THB로 추정합니다.",
+      "feeWarning": "수수료는 미확인입니다. 금액은 추정치입니다.",
+      "unknownWithdrawal": "이 자산의 출금 수수료는 미확인입니다. 알 수 없는 비용은 포함되지 않습니다.",
+      "marketBest": "유리한 호가",
+      "unknownDistance": "거리 미확인",
+      "published": "제공자 발표 시점",
+      "collected": "수집 시점",
+      "auto": "30초마다 시장 갱신",
+      "feeAssumption": "표준 거래 수수료를 가정합니다. 판매에는 THB 출금, 구매에는 자산 출금을 포함합니다.",
+      "cashScope": "본점 및 지정 액면가의 환율입니다. 지점과 지폐 조건을 확인하세요."
+    },
+    "ui": {
+      "language": "언어",
+      "nav": "주 메뉴",
+      "siteInfo": "사이트 정보",
+      "skip": "본문으로 이동",
+      "autoNote": "선택하면 자동으로 비교합니다.",
+      "retry": "다시 시도",
+      "disclaimer": "제3자 정보만 비교합니다. 환전, 거래, 입금 수령 또는 자금 보관 서비스를 제공하지 않습니다. 거래는 이용자와 제3자 사이에 이루어집니다. 환율, 자산 및 거래 상대방 위험을 평가하세요. 소개 링크에서 수수료를 받을 수 있지만 순위에는 영향을 주지 않습니다.",
+      "fullDisclaimer": "전체 면책사항",
+      "footer": "비교용 정보입니다. 최종 환율은 제공자에게 확인하세요.",
+      "method": "비교 방법",
+      "privacy": "개인정보",
+      "dataStatus": "데이터 상태"
+    },
+    "pages": {
+      "home": {
+        "title": "태국 바트 환전 비교",
+        "body": "통화와 금액을 선택하고 방콕 환전소 및 태국 가상자산 거래소를 비교하세요."
+      },
+      "cash": {
+        "title": "한국 원화에서 태국 바트로: 방콕 환율 비교",
+        "body": "KRW, USD, EUR 등 15개 통화의 예상 수령액, 영업시간, 지폐 조건과 호가 시점을 확인하세요."
+      },
+      "crypto": {
+        "title": "USDT·BTC에서 THB로: 태국 거래소 비교",
+        "body": "매수·매도 예상 금액과 수수료 가정을 비교합니다. 표시 가격으로 체결을 보장하지 않습니다."
+      }
+    },
+    "consent": [
+      "비교 개선을 위한 사용 분석을 허용할까요?",
+      "분석 허용",
+      "필수 기능만",
+      "분석 설정"
+    ],
+    "privacyBody": "Google 분석은 동의한 경우에만 활성화되며 분석 설정에서 변경할 수 있습니다. 위치는 사용자가 요청할 때 거리 계산에만 사용하고 링크에 좌표를 저장하지 않습니다. 지도나 리뷰를 열면 Google Maps에서 데이터를 처리할 수 있습니다. 환전용 결제 정보나 신분증을 수집하지 않습니다.",
+    "provider": {
+      "title": "근거와 리뷰",
+      "retry": "근거 불러오기",
+      "loading": "불러오는 중…",
+      "failed": "불러오지 못했습니다. 다시 시도하세요.",
+      "license": "허가 확인",
+      "fees": "수수료 확인",
+      "operations": "서비스 확인",
+      "verified": "확인됨",
+      "issue": "문제 발견",
+      "unknown": "미확인",
+      "expired": "확인 기간 만료",
+      "not_configured": "Google 리뷰 미연결",
+      "identity_unverified": "Google 지점 일치 미확인",
+      "limited": "리뷰 조회 한도 도달",
+      "unavailable": "Google 리뷰 이용 불가",
+      "reviewNote": "Google은 관련 리뷰 최대 5개를 제공하며 전체 또는 최신 리뷰가 아닙니다.",
+      "original": "원본 리뷰",
+      "noRating": "평점 없음",
+      "all": "Google Maps 보기",
+      "date": "확인 날짜",
+      "source": "근거 보기",
+      "feeNote": "미확인 수수료는 추정치입니다. 리뷰는 자금 안전 등급이 아닙니다."
+    },
+    "status": {
+      "title": "출처 및 갱신 상태",
+      "intro": "환율 출처, 수집 시점과 가용 상태입니다. 오래된 환율은 참고용입니다.",
+      "current": "최근 수집",
+      "reference": "참고용",
+      "unavailable": "사용 가능한 환율 없음",
+      "attempt": "최근 시도",
+      "success": "최근 성공",
+      "quotes": "호가 시점",
+      "official": "공식 출처",
+      "unknown": "기록 없음",
+      "note": "거래소 호가는 비교 시 확인합니다. 수수료와 허가는 개별 근거로 검증하며 고정 종합점수를 사용하지 않습니다.",
+      "baseline": "태국 중앙은행 참고 환율이며 창구 거래 환율이 아닙니다"
+    },
+    "guide": {
+      "heading": "태국 바트 환전 비교",
+      "items": [
+        [
+          "현금 환전",
+          "KRW, USD, EUR 등 15개 통화의 예상 수령액, 영업시간, 지폐 조건과 호가 시점을 확인하세요. 금액은 추정치입니다. 최종 환율은 제공자에게 확인하세요. 본점 및 지정 액면가의 환율입니다. 지점과 지폐 조건을 확인하세요."
+        ],
+        [
+          "가상자산",
+          "매수·매도 예상 금액과 수수료 가정을 비교합니다. 표시 가격으로 체결을 보장하지 않습니다. 전량 체결 가능 여부를 먼저 확인한 뒤 금액을 비교합니다. 표준 거래 수수료를 가정합니다. 판매에는 THB 출금, 구매에는 자산 출금을 포함합니다."
+        ],
+        [
+          "전체 면책사항",
+          "제3자 정보만 비교합니다. 환전, 거래, 입금 수령 또는 자금 보관 서비스를 제공하지 않습니다. 거래는 이용자와 제3자 사이에 이루어집니다. 환율, 자산 및 거래 상대방 위험을 평가하세요. 소개 링크에서 수수료를 받을 수 있지만 순위에는 영향을 주지 않습니다."
+        ]
+      ]
+    },
+    "legal": {
+      "methodology": {
+        "title": "비교 방법",
+        "intro": "통화와 금액을 선택하고 방콕 환전소 및 태국 가상자산 거래소를 비교하세요.",
+        "sections": [
+          {
+            "heading": "호가 시점",
+            "body": "환율 출처, 수집 시점과 가용 상태입니다. 오래된 환율은 참고용입니다. 이 호가로 최선의 선택을 판단할 수 없습니다. 공식 사이트에서 확인하세요. 본점 및 지정 액면가의 환율입니다. 지점과 지폐 조건을 확인하세요."
+          },
+          {
+            "heading": "수수료와 출처",
+            "body": "표준 거래 수수료를 가정합니다. 판매에는 THB 출금, 구매에는 자산 출금을 포함합니다. 미확인 수수료는 추정치입니다. 리뷰는 자금 안전 등급이 아닙니다. Google은 관련 리뷰 최대 5개를 제공하며 전체 또는 최신 리뷰가 아닙니다."
+          },
+          {
+            "heading": "전체 면책사항",
+            "body": "제3자 정보만 비교합니다. 환전, 거래, 입금 수령 또는 자금 보관 서비스를 제공하지 않습니다. 거래는 이용자와 제3자 사이에 이루어집니다. 환율, 자산 및 거래 상대방 위험을 평가하세요. 소개 링크에서 수수료를 받을 수 있지만 순위에는 영향을 주지 않습니다."
+          }
+        ]
+      },
+      "disclaimer": {
+        "title": "전체 면책사항",
+        "intro": "제3자 정보만 비교합니다. 환전, 거래, 입금 수령 또는 자금 보관 서비스를 제공하지 않습니다. 거래는 이용자와 제3자 사이에 이루어집니다. 환율, 자산 및 거래 상대방 위험을 평가하세요. 소개 링크에서 수수료를 받을 수 있지만 순위에는 영향을 주지 않습니다.",
+        "sections": [
+          {
+            "heading": "금액은 추정치입니다. 최종 환율은 제공자에게 확인하세요.",
+            "body": "이 호가로 최선의 선택을 판단할 수 없습니다. 공식 사이트에서 확인하세요. 수수료는 미확인입니다. 금액은 추정치입니다. 이 자산의 출금 수수료는 미확인입니다. 알 수 없는 비용은 포함되지 않습니다."
+          },
+          {
+            "heading": "근거와 리뷰",
+            "body": "미확인 수수료는 추정치입니다. 리뷰는 자금 안전 등급이 아닙니다. Google은 관련 리뷰 최대 5개를 제공하며 전체 또는 최신 리뷰가 아닙니다."
+          }
+        ]
+      },
+      "privacy-policy": {
+        "title": "개인정보",
+        "intro": "Google 분석은 동의한 경우에만 활성화되며 분석 설정에서 변경할 수 있습니다. 위치는 사용자가 요청할 때 거리 계산에만 사용하고 링크에 좌표를 저장하지 않습니다. 지도나 리뷰를 열면 Google Maps에서 데이터를 처리할 수 있습니다. 환전용 결제 정보나 신분증을 수집하지 않습니다.",
+        "sections": [
+          {
+            "heading": "분석 설정",
+            "body": "Google 분석은 동의한 경우에만 활성화되며 분석 설정에서 변경할 수 있습니다. 위치는 사용자가 요청할 때 거리 계산에만 사용하고 링크에 좌표를 저장하지 않습니다. 지도나 리뷰를 열면 Google Maps에서 데이터를 처리할 수 있습니다. 환전용 결제 정보나 신분증을 수집하지 않습니다."
+          }
+        ]
+      }
+    }
+  },
+  "fr": {
+    "words": {
+      "cash": "Change en espèces",
+      "crypto": "Crypto",
+      "cashHint": "Trouver un bureau de change",
+      "cryptoHint": "Comparer les plateformes",
+      "currency": "Devise",
+      "asset": "Actif",
+      "amount": "Montant",
+      "assetAmount": "Quantité d’actif",
+      "compare": "Comparer",
+      "loading": "Comparaison…",
+      "sell": "Vendre contre des THB",
+      "buy": "Acheter avec des THB",
+      "advanced": "Plus d’options",
+      "distance": "Distance maximale",
+      "location": "Utiliser ma position",
+      "locating": "Recherche de votre position…",
+      "locationActive": "Votre position est utilisée",
+      "reference": "Distances depuis le centre de Bangkok",
+      "locationError": "Position indisponible. Les distances indicatives restent utilisables.",
+      "openOnly": "Établissements ouverts",
+      "nearest": "Les plus proches",
+      "best": "Par montant",
+      "results": "Vos options",
+      "ready": "Choisissez une devise et un montant.",
+      "changed": "Mise à jour. Saisissez un montant valide.",
+      "error": "Mise à jour impossible. Réessayez.",
+      "invalid": "Saisissez un montant supérieur à 0.",
+      "empty": "Aucun résultat. Changez de devise ou de filtres.",
+      "receive": "Réception estimée",
+      "payment": "Paiement estimé",
+      "fresh": "Cotations récentes",
+      "cached": "Données indicatives",
+      "referenceResults": "À titre indicatif",
+      "stale": "Ces cotations ne permettent pas de choisir la meilleure option. Vérifiez le taux sur le site officiel.",
+      "bestLabel": "Montant le plus élevé",
+      "cheapest": "Paiement le plus faible",
+      "closed": "Fermé",
+      "open": "Ouvert",
+      "map": "Voir la carte",
+      "official": "Site officiel",
+      "details": "Frais et source",
+      "rate": "Taux",
+      "observed": "Heure de cotation",
+      "note": "Estimations uniquement. Confirmez le taux final auprès du prestataire.",
+      "trading": "Frais de transaction",
+      "withdraw": "Frais de retrait en THB",
+      "network": "Frais de retrait de l’actif",
+      "fill": "Part exécutable",
+      "banknote": "Coupure du billet",
+      "hours": "Horaires",
+      "gap": "Quantité non exécutée",
+      "all": "Voir les autres options",
+      "less": "Réduire",
+      "rankNote": "L’exécution complète est prise en compte avant le montant.",
+      "buyNote": "Saisissez la quantité d’actif à acheter. Le paiement est affiché en THB.",
+      "valueRoute": "Changer en bahts thaïlandais",
+      "assetReceive": "Actif reçu estimé"
+    },
+    "extra": {
+      "cashBuy": "Acheter des espèces étrangères",
+      "cashSell": "Vendre des espèces étrangères",
+      "buyNote": "Saisissez le montant étranger souhaité. Le paiement est estimé en THB.",
+      "feeWarning": "Frais non vérifiés. Les montants sont estimés.",
+      "unknownWithdrawal": "Frais de retrait non vérifiés pour cet actif ; les frais inconnus ne sont pas inclus.",
+      "marketBest": "Cotation compétitive",
+      "unknownDistance": "Distance non vérifiée",
+      "published": "Publication du prestataire",
+      "collected": "Collecte",
+      "auto": "Actualiser le marché toutes les 30 secondes",
+      "feeAssumption": "Frais de transaction standards supposés ; ventes avec retrait THB, achats avec retrait de l’actif.",
+      "cashScope": "Taux du siège / de la coupure indiquée. Confirmez la succursale et les conditions des billets."
+    },
+    "ui": {
+      "language": "Langue",
+      "nav": "Menu principal",
+      "siteInfo": "Informations du site",
+      "skip": "Aller au contenu",
+      "autoNote": "Les options s’actualisent automatiquement.",
+      "retry": "Réessayer",
+      "disclaimer": "Nous comparons uniquement des informations de tiers. Nous ne réalisons pas de change ni de transactions et ne recevons ni conservons vos fonds. Vous traitez directement avec le prestataire ; évaluez les risques de devise, d’actif et de contrepartie. Les liens de recommandation peuvent nous rapporter une commission sans influencer le classement.",
+      "fullDisclaimer": "Conditions complètes",
+      "footer": "Pour comparer. Confirmez le taux final auprès du prestataire.",
+      "method": "Méthode",
+      "privacy": "Confidentialité",
+      "dataStatus": "État des données"
+    },
+    "pages": {
+      "home": {
+        "title": "Comparer le change en bahts thaïlandais",
+        "body": "Choisissez une devise et un montant. Comparez les bureaux de change de Bangkok et les plateformes crypto thaïlandaises."
+      },
+      "cash": {
+        "title": "Euros en bahts : comparer les taux de change à Bangkok",
+        "body": "Comparez les montants estimés en THB, les horaires, les coupures et l’heure des cotations pour 15 devises."
+      },
+      "crypto": {
+        "title": "USDT et BTC en THB : comparer les plateformes thaïlandaises",
+        "body": "Comparez les estimations d’achat ou de vente et les hypothèses de frais. Le prix affiché ne garantit pas l’exécution."
+      }
+    },
+    "consent": [
+      "Autoriser les statistiques pour améliorer la comparaison ?",
+      "Autoriser",
+      "Fonctions essentielles",
+      "Paramètres analytiques"
+    ],
+    "privacyBody": "Google Analytics est activé uniquement avec votre consentement, modifiable dans les paramètres. La position est demandée à votre initiative pour calculer les distances ; les coordonnées ne sont pas conservées dans les liens. Google Maps peut traiter des données lors de la consultation de cartes ou avis. Nous ne recueillons ni informations de paiement ni documents pour le change.",
+    "provider": {
+      "title": "Sources et avis",
+      "retry": "Charger les sources",
+      "loading": "Chargement…",
+      "failed": "Échec du chargement. Réessayez.",
+      "license": "Vérification de licence",
+      "fees": "Vérification des frais",
+      "operations": "Vérification du service",
+      "verified": "Vérifié",
+      "issue": "Problème détecté",
+      "unknown": "Non vérifié",
+      "expired": "Vérification expirée",
+      "not_configured": "Avis Google non connectés",
+      "identity_unverified": "Agence non identifiée sur Google",
+      "limited": "Limite de requêtes atteinte",
+      "unavailable": "Avis Google indisponibles",
+      "reviewNote": "Google fournit jusqu’à 5 avis pertinents, pas tous les avis ni les plus récents.",
+      "original": "Avis original",
+      "noRating": "Aucune note",
+      "all": "Voir Google Maps",
+      "date": "Vérifié le",
+      "source": "Voir la source",
+      "feeNote": "Les frais non vérifiés sont estimés. Les avis ne mesurent pas la sécurité des fonds."
+    },
+    "status": {
+      "title": "Sources et mises à jour",
+      "intro": "Sources, heure de collecte et disponibilité des taux. Les anciens taux sont indicatifs.",
+      "current": "Collecte récente",
+      "reference": "À titre indicatif",
+      "unavailable": "Aucun taux disponible",
+      "attempt": "Dernière tentative",
+      "success": "Dernier succès",
+      "quotes": "Heure du taux",
+      "official": "Source officielle",
+      "unknown": "Aucun relevé",
+      "note": "Les cotations sont vérifiées au moment de la comparaison. Les frais et licences sont vérifiés séparément, sans note globale fixe.",
+      "baseline": "Taux indicatif de la Banque de Thaïlande, pas un taux garanti au guichet"
+    },
+    "guide": {
+      "heading": "Comparer le change en bahts thaïlandais",
+      "items": [
+        [
+          "Change en espèces",
+          "Comparez les montants estimés en THB, les horaires, les coupures et l’heure des cotations pour 15 devises. Estimations uniquement. Confirmez le taux final auprès du prestataire. Taux du siège / de la coupure indiquée. Confirmez la succursale et les conditions des billets."
+        ],
+        [
+          "Crypto",
+          "Comparez les estimations d’achat ou de vente et les hypothèses de frais. Le prix affiché ne garantit pas l’exécution. L’exécution complète est prise en compte avant le montant. Frais de transaction standards supposés ; ventes avec retrait THB, achats avec retrait de l’actif."
+        ],
+        [
+          "Conditions complètes",
+          "Nous comparons uniquement des informations de tiers. Nous ne réalisons pas de change ni de transactions et ne recevons ni conservons vos fonds. Vous traitez directement avec le prestataire ; évaluez les risques de devise, d’actif et de contrepartie. Les liens de recommandation peuvent nous rapporter une commission sans influencer le classement."
+        ]
+      ]
+    },
+    "legal": {
+      "methodology": {
+        "title": "Méthode",
+        "intro": "Choisissez une devise et un montant. Comparez les bureaux de change de Bangkok et les plateformes crypto thaïlandaises.",
+        "sections": [
+          {
+            "heading": "Heure de cotation",
+            "body": "Sources, heure de collecte et disponibilité des taux. Les anciens taux sont indicatifs. Ces cotations ne permettent pas de choisir la meilleure option. Vérifiez le taux sur le site officiel. Taux du siège / de la coupure indiquée. Confirmez la succursale et les conditions des billets."
+          },
+          {
+            "heading": "Frais et source",
+            "body": "Frais de transaction standards supposés ; ventes avec retrait THB, achats avec retrait de l’actif. Les frais non vérifiés sont estimés. Les avis ne mesurent pas la sécurité des fonds. Google fournit jusqu’à 5 avis pertinents, pas tous les avis ni les plus récents."
+          },
+          {
+            "heading": "Conditions complètes",
+            "body": "Nous comparons uniquement des informations de tiers. Nous ne réalisons pas de change ni de transactions et ne recevons ni conservons vos fonds. Vous traitez directement avec le prestataire ; évaluez les risques de devise, d’actif et de contrepartie. Les liens de recommandation peuvent nous rapporter une commission sans influencer le classement."
+          }
+        ]
+      },
+      "disclaimer": {
+        "title": "Conditions complètes",
+        "intro": "Nous comparons uniquement des informations de tiers. Nous ne réalisons pas de change ni de transactions et ne recevons ni conservons vos fonds. Vous traitez directement avec le prestataire ; évaluez les risques de devise, d’actif et de contrepartie. Les liens de recommandation peuvent nous rapporter une commission sans influencer le classement.",
+        "sections": [
+          {
+            "heading": "Estimations uniquement. Confirmez le taux final auprès du prestataire.",
+            "body": "Ces cotations ne permettent pas de choisir la meilleure option. Vérifiez le taux sur le site officiel. Frais non vérifiés. Les montants sont estimés. Frais de retrait non vérifiés pour cet actif ; les frais inconnus ne sont pas inclus."
+          },
+          {
+            "heading": "Sources et avis",
+            "body": "Les frais non vérifiés sont estimés. Les avis ne mesurent pas la sécurité des fonds. Google fournit jusqu’à 5 avis pertinents, pas tous les avis ni les plus récents."
+          }
+        ]
+      },
+      "privacy-policy": {
+        "title": "Confidentialité",
+        "intro": "Google Analytics est activé uniquement avec votre consentement, modifiable dans les paramètres. La position est demandée à votre initiative pour calculer les distances ; les coordonnées ne sont pas conservées dans les liens. Google Maps peut traiter des données lors de la consultation de cartes ou avis. Nous ne recueillons ni informations de paiement ni documents pour le change.",
+        "sections": [
+          {
+            "heading": "Paramètres analytiques",
+            "body": "Google Analytics est activé uniquement avec votre consentement, modifiable dans les paramètres. La position est demandée à votre initiative pour calculer les distances ; les coordonnées ne sont pas conservées dans les liens. Google Maps peut traiter des données lors de la consultation de cartes ou avis. Nous ne recueillons ni informations de paiement ni documents pour le change."
+          }
+        ]
+      }
+    }
+  },
+  "de": {
+    "words": {
+      "cash": "Bargeld wechseln",
+      "crypto": "Krypto",
+      "cashHint": "Wechselstube finden",
+      "cryptoHint": "Börsen vergleichen",
+      "currency": "Währung",
+      "asset": "Vermögenswert",
+      "amount": "Betrag",
+      "assetAmount": "Menge",
+      "compare": "Vergleichen",
+      "loading": "Vergleich läuft…",
+      "sell": "Für THB verkaufen",
+      "buy": "Mit THB kaufen",
+      "advanced": "Weitere Optionen",
+      "distance": "Max. Entfernung",
+      "location": "Meinen Standort nutzen",
+      "locating": "Standort wird gesucht…",
+      "locationActive": "Ihr Standort wird verwendet",
+      "reference": "Entfernung vom Zentrum Bangkoks",
+      "locationError": "Standort nicht verfügbar. Referenzentfernungen können weiter verglichen werden.",
+      "openOnly": "Nur geöffnete Filialen",
+      "nearest": "Nächste zuerst",
+      "best": "Nach Betrag",
+      "results": "Ihre Optionen",
+      "ready": "Währung und Betrag auswählen.",
+      "changed": "Auswahl wird aktualisiert. Gültigen Betrag eingeben.",
+      "error": "Aktualisierung nicht möglich. Erneut versuchen.",
+      "invalid": "Betrag größer als 0 eingeben.",
+      "empty": "Keine passenden Ergebnisse. Währung oder Filter ändern.",
+      "receive": "Geschätzter Erhalt",
+      "payment": "Geschätzte Zahlung",
+      "fresh": "Aktuelle Kursangabe",
+      "cached": "Referenzdaten",
+      "referenceResults": "Nur zur Orientierung",
+      "stale": "Diese Kurse bestimmen keine beste Option. Den aktuellen Kurs auf der offiziellen Website prüfen.",
+      "bestLabel": "Höchster Betrag",
+      "cheapest": "Niedrigste Zahlung",
+      "closed": "Geschlossen",
+      "open": "Geöffnet",
+      "map": "Karte öffnen",
+      "official": "Offizielle Website",
+      "details": "Gebühren und Quelle",
+      "rate": "Kurs",
+      "observed": "Kurszeitpunkt",
+      "note": "Nur Schätzungen. Endgültigen Kurs beim Anbieter bestätigen.",
+      "trading": "Handelsgebühr",
+      "withdraw": "THB-Auszahlungsgebühr",
+      "network": "Auszahlungsgebühr des Vermögenswerts",
+      "fill": "Ausführbarer Anteil",
+      "banknote": "Banknotenwert",
+      "hours": "Öffnungszeiten",
+      "gap": "Nicht ausgeführte Menge",
+      "all": "Weitere Optionen",
+      "less": "Weniger anzeigen",
+      "rankNote": "Vollständige Ausführung wird vor dem Betrag berücksichtigt.",
+      "buyNote": "Gewünschte Kaufmenge eingeben. Zahlung wird in THB angezeigt.",
+      "valueRoute": "In thailändische Baht wechseln",
+      "assetReceive": "Geschätzte erhaltene Menge"
+    },
+    "extra": {
+      "cashBuy": "Ausländisches Bargeld kaufen",
+      "cashSell": "Ausländisches Bargeld verkaufen",
+      "buyNote": "Gewünschten Fremdwährungsbetrag eingeben. Die Zahlung wird in THB geschätzt.",
+      "feeWarning": "Gebühren nicht geprüft. Beträge sind Schätzungen.",
+      "unknownWithdrawal": "Auszahlungsgebühr für diesen Vermögenswert nicht geprüft; unbekannte Gebühren sind nicht enthalten.",
+      "marketBest": "Günstige Kursangabe",
+      "unknownDistance": "Entfernung nicht geprüft",
+      "published": "Vom Anbieter veröffentlicht",
+      "collected": "Erfasst",
+      "auto": "Marktdaten alle 30 Sekunden aktualisieren",
+      "feeAssumption": "Standardhandelsgebühren angenommen; Verkauf enthält THB-Auszahlung, Kauf die Auszahlung des Vermögenswerts.",
+      "cashScope": "Kurs der Hauptfiliale / angegebenen Banknote. Filiale und Banknotenbedingungen bestätigen."
+    },
+    "ui": {
+      "language": "Sprache",
+      "nav": "Hauptmenü",
+      "siteInfo": "Website-Informationen",
+      "skip": "Zum Inhalt",
+      "autoNote": "Die Optionen aktualisieren sich automatisch.",
+      "retry": "Erneut versuchen",
+      "disclaimer": "Wir vergleichen nur Informationen Dritter. Wir wechseln oder handeln nicht und nehmen keine Gelder entgegen oder in Verwahrung. Transaktionen erfolgen direkt mit dem Anbieter; prüfen Sie Währungs-, Vermögens- und Gegenparteirisiken. Empfehlungslinks können uns Provisionen einbringen, ohne die Reihenfolge zu beeinflussen.",
+      "fullDisclaimer": "Vollständiger Haftungshinweis",
+      "footer": "Zum Vergleich. Endgültigen Kurs beim Anbieter bestätigen.",
+      "method": "Vergleichsmethode",
+      "privacy": "Datenschutz",
+      "dataStatus": "Datenstatus"
+    },
+    "pages": {
+      "home": {
+        "title": "Geld in thailändische Baht wechseln",
+        "body": "Währung und Betrag auswählen. Wechselstuben in Bangkok und thailändische Kryptobörsen vergleichen."
+      },
+      "cash": {
+        "title": "Euro in Baht: Wechselkurse in Bangkok vergleichen",
+        "body": "Geschätzte THB-Beträge, Öffnungszeiten, Banknotenbedingungen und Kurszeitpunkte für 15 Währungen vergleichen."
+      },
+      "crypto": {
+        "title": "USDT und BTC in THB: thailändische Börsen vergleichen",
+        "body": "Geschätzte Kauf- und Verkaufsbeträge sowie Gebührenannahmen vergleichen. Die Ausführung zum angezeigten Preis ist nicht garantiert."
+      }
+    },
+    "consent": [
+      "Nutzungsanalyse zur Verbesserung der Vergleiche erlauben?",
+      "Analyse erlauben",
+      "Nur notwendige Funktionen",
+      "Analyseeinstellungen"
+    ],
+    "privacyBody": "Google Analytics wird nur mit Ihrer Zustimmung aktiviert. Sie können die Auswahl in den Analyseeinstellungen ändern. Der Standort wird auf Ihren Wunsch zur Entfernungsberechnung verwendet; Koordinaten werden nicht in Links gespeichert. Google Maps kann beim Öffnen von Karten oder Bewertungen Daten verarbeiten. Wir erheben keine Zahlungsdaten oder Ausweisdokumente für den Geldwechsel.",
+    "provider": {
+      "title": "Quellen und Bewertungen",
+      "retry": "Quellen laden",
+      "loading": "Wird geladen…",
+      "failed": "Laden fehlgeschlagen. Erneut versuchen.",
+      "license": "Lizenzprüfung",
+      "fees": "Gebührenprüfung",
+      "operations": "Dienstprüfung",
+      "verified": "Geprüft",
+      "issue": "Problem festgestellt",
+      "unknown": "Ungeprüft",
+      "expired": "Prüfung abgelaufen",
+      "not_configured": "Google-Bewertungen nicht verbunden",
+      "identity_unverified": "Filiale bei Google nicht zugeordnet",
+      "limited": "Abfragelimit erreicht",
+      "unavailable": "Google-Bewertungen nicht verfügbar",
+      "reviewNote": "Google liefert bis zu 5 relevante Bewertungen, nicht alle oder die neuesten.",
+      "original": "Originalbewertung",
+      "noRating": "Keine Bewertung",
+      "all": "Google Maps öffnen",
+      "date": "Prüfdatum",
+      "source": "Quelle ansehen",
+      "feeNote": "Ungeprüfte Gebühren sind Schätzungen. Bewertungen beurteilen nicht die Sicherheit von Geldern."
+    },
+    "status": {
+      "title": "Quellen und Aktualisierung",
+      "intro": "Quellen, Abrufzeit und Verfügbarkeit der Kurse. Alte Kurse dienen nur als Referenz.",
+      "current": "Kürzlich abgerufen",
+      "reference": "Nur Referenz",
+      "unavailable": "Keine Kurse verfügbar",
+      "attempt": "Letzter Versuch",
+      "success": "Letzter Erfolg",
+      "quotes": "Kurszeitpunkt",
+      "official": "Offizielle Quelle",
+      "unknown": "Kein Eintrag",
+      "note": "Börsenkurse werden beim Vergleich geprüft. Gebühren und Lizenzen werden getrennt geprüft, ohne feste Gesamtnote.",
+      "baseline": "Referenzkurs der Bank of Thailand, kein garantierter Schalterkurs"
+    },
+    "guide": {
+      "heading": "Geld in thailändische Baht wechseln",
+      "items": [
+        [
+          "Bargeld wechseln",
+          "Geschätzte THB-Beträge, Öffnungszeiten, Banknotenbedingungen und Kurszeitpunkte für 15 Währungen vergleichen. Nur Schätzungen. Endgültigen Kurs beim Anbieter bestätigen. Kurs der Hauptfiliale / angegebenen Banknote. Filiale und Banknotenbedingungen bestätigen."
+        ],
+        [
+          "Krypto",
+          "Geschätzte Kauf- und Verkaufsbeträge sowie Gebührenannahmen vergleichen. Die Ausführung zum angezeigten Preis ist nicht garantiert. Vollständige Ausführung wird vor dem Betrag berücksichtigt. Standardhandelsgebühren angenommen; Verkauf enthält THB-Auszahlung, Kauf die Auszahlung des Vermögenswerts."
+        ],
+        [
+          "Vollständiger Haftungshinweis",
+          "Wir vergleichen nur Informationen Dritter. Wir wechseln oder handeln nicht und nehmen keine Gelder entgegen oder in Verwahrung. Transaktionen erfolgen direkt mit dem Anbieter; prüfen Sie Währungs-, Vermögens- und Gegenparteirisiken. Empfehlungslinks können uns Provisionen einbringen, ohne die Reihenfolge zu beeinflussen."
+        ]
+      ]
+    },
+    "legal": {
+      "methodology": {
+        "title": "Vergleichsmethode",
+        "intro": "Währung und Betrag auswählen. Wechselstuben in Bangkok und thailändische Kryptobörsen vergleichen.",
+        "sections": [
+          {
+            "heading": "Kurszeitpunkt",
+            "body": "Quellen, Abrufzeit und Verfügbarkeit der Kurse. Alte Kurse dienen nur als Referenz. Diese Kurse bestimmen keine beste Option. Den aktuellen Kurs auf der offiziellen Website prüfen. Kurs der Hauptfiliale / angegebenen Banknote. Filiale und Banknotenbedingungen bestätigen."
+          },
+          {
+            "heading": "Gebühren und Quelle",
+            "body": "Standardhandelsgebühren angenommen; Verkauf enthält THB-Auszahlung, Kauf die Auszahlung des Vermögenswerts. Ungeprüfte Gebühren sind Schätzungen. Bewertungen beurteilen nicht die Sicherheit von Geldern. Google liefert bis zu 5 relevante Bewertungen, nicht alle oder die neuesten."
+          },
+          {
+            "heading": "Vollständiger Haftungshinweis",
+            "body": "Wir vergleichen nur Informationen Dritter. Wir wechseln oder handeln nicht und nehmen keine Gelder entgegen oder in Verwahrung. Transaktionen erfolgen direkt mit dem Anbieter; prüfen Sie Währungs-, Vermögens- und Gegenparteirisiken. Empfehlungslinks können uns Provisionen einbringen, ohne die Reihenfolge zu beeinflussen."
+          }
+        ]
+      },
+      "disclaimer": {
+        "title": "Vollständiger Haftungshinweis",
+        "intro": "Wir vergleichen nur Informationen Dritter. Wir wechseln oder handeln nicht und nehmen keine Gelder entgegen oder in Verwahrung. Transaktionen erfolgen direkt mit dem Anbieter; prüfen Sie Währungs-, Vermögens- und Gegenparteirisiken. Empfehlungslinks können uns Provisionen einbringen, ohne die Reihenfolge zu beeinflussen.",
+        "sections": [
+          {
+            "heading": "Nur Schätzungen. Endgültigen Kurs beim Anbieter bestätigen.",
+            "body": "Diese Kurse bestimmen keine beste Option. Den aktuellen Kurs auf der offiziellen Website prüfen. Gebühren nicht geprüft. Beträge sind Schätzungen. Auszahlungsgebühr für diesen Vermögenswert nicht geprüft; unbekannte Gebühren sind nicht enthalten."
+          },
+          {
+            "heading": "Quellen und Bewertungen",
+            "body": "Ungeprüfte Gebühren sind Schätzungen. Bewertungen beurteilen nicht die Sicherheit von Geldern. Google liefert bis zu 5 relevante Bewertungen, nicht alle oder die neuesten."
+          }
+        ]
+      },
+      "privacy-policy": {
+        "title": "Datenschutz",
+        "intro": "Google Analytics wird nur mit Ihrer Zustimmung aktiviert. Sie können die Auswahl in den Analyseeinstellungen ändern. Der Standort wird auf Ihren Wunsch zur Entfernungsberechnung verwendet; Koordinaten werden nicht in Links gespeichert. Google Maps kann beim Öffnen von Karten oder Bewertungen Daten verarbeiten. Wir erheben keine Zahlungsdaten oder Ausweisdokumente für den Geldwechsel.",
+        "sections": [
+          {
+            "heading": "Analyseeinstellungen",
+            "body": "Google Analytics wird nur mit Ihrer Zustimmung aktiviert. Sie können die Auswahl in den Analyseeinstellungen ändern. Der Standort wird auf Ihren Wunsch zur Entfernungsberechnung verwendet; Koordinaten werden nicht in Links gespeichert. Google Maps kann beim Öffnen von Karten oder Bewertungen Daten verarbeiten. Wir erheben keine Zahlungsdaten oder Ausweisdokumente für den Geldwechsel."
+          }
+        ]
+      }
+    }
+  },
+  "id": {
+    "words": {
+      "cash": "Tukar uang tunai",
+      "crypto": "Kripto",
+      "cashHint": "Cari penukar uang",
+      "cryptoHint": "Bandingkan bursa",
+      "currency": "Mata uang",
+      "asset": "Aset",
+      "amount": "Jumlah uang",
+      "assetAmount": "Jumlah aset",
+      "compare": "Bandingkan",
+      "loading": "Membandingkan…",
+      "sell": "Jual untuk THB",
+      "buy": "Beli dengan THB",
+      "advanced": "Opsi lainnya",
+      "distance": "Jarak maksimum",
+      "location": "Gunakan lokasi saya",
+      "locating": "Mencari lokasi…",
+      "locationActive": "Menggunakan lokasi Anda",
+      "reference": "Jarak dari pusat Bangkok",
+      "locationError": "Lokasi tidak tersedia. Jarak acuan masih dapat dibandingkan.",
+      "openOnly": "Hanya yang buka",
+      "nearest": "Terdekat dahulu",
+      "best": "Menurut jumlah",
+      "results": "Pilihan Anda",
+      "ready": "Pilih mata uang dan jumlah.",
+      "changed": "Memperbarui pilihan. Masukkan jumlah yang valid.",
+      "error": "Tidak dapat memperbarui. Coba lagi.",
+      "invalid": "Masukkan jumlah lebih dari 0.",
+      "empty": "Tidak ada hasil. Ganti mata uang atau filter.",
+      "receive": "Perkiraan diterima",
+      "payment": "Perkiraan dibayar",
+      "fresh": "Kutipan terbaru",
+      "cached": "Data acuan",
+      "referenceResults": "Hanya sebagai acuan",
+      "stale": "Kutipan ini belum menentukan pilihan terbaik. Periksa kurs di situs resmi.",
+      "bestLabel": "Jumlah tertinggi",
+      "cheapest": "Pembayaran terendah",
+      "closed": "Tutup",
+      "open": "Buka",
+      "map": "Buka peta",
+      "official": "Situs resmi",
+      "details": "Biaya dan sumber",
+      "rate": "Kurs",
+      "observed": "Waktu kutipan",
+      "note": "Hanya perkiraan. Konfirmasikan kurs akhir kepada penyedia.",
+      "trading": "Biaya perdagangan",
+      "withdraw": "Biaya penarikan THB",
+      "network": "Biaya penarikan aset",
+      "fill": "Porsi yang dapat dieksekusi",
+      "banknote": "Pecahan uang kertas",
+      "hours": "Jam buka",
+      "gap": "Jumlah belum dieksekusi",
+      "all": "Lihat pilihan lain",
+      "less": "Tampilkan lebih sedikit",
+      "rankNote": "Kemampuan mengeksekusi seluruh jumlah didahulukan, lalu jumlah uang.",
+      "buyNote": "Masukkan jumlah aset yang ingin dibeli. Pembayaran ditampilkan dalam THB.",
+      "valueRoute": "Tukar ke baht Thailand",
+      "assetReceive": "Perkiraan aset diterima"
+    },
+    "extra": {
+      "cashBuy": "Beli uang tunai asing",
+      "cashSell": "Jual uang tunai asing",
+      "buyNote": "Masukkan jumlah mata uang asing yang diinginkan. Pembayaran diperkirakan dalam THB.",
+      "feeWarning": "Biaya belum diverifikasi. Jumlah hanya perkiraan.",
+      "unknownWithdrawal": "Biaya penarikan aset ini belum diverifikasi; biaya yang tidak diketahui belum termasuk.",
+      "marketBest": "Kutipan kompetitif",
+      "unknownDistance": "Jarak belum diverifikasi",
+      "published": "Diterbitkan penyedia",
+      "collected": "Dikumpulkan",
+      "auto": "Perbarui pasar setiap 30 detik",
+      "feeAssumption": "Asumsi biaya perdagangan standar; penjualan termasuk penarikan THB, pembelian termasuk penarikan aset.",
+      "cashScope": "Kurs kantor pusat / pecahan yang tercantum. Konfirmasikan cabang dan kondisi uang kertas."
+    },
+    "ui": {
+      "language": "Bahasa",
+      "nav": "Menu utama",
+      "siteInfo": "Informasi situs",
+      "skip": "Ke konten utama",
+      "autoNote": "Pilihan diperbarui otomatis saat Anda memilih.",
+      "retry": "Coba lagi",
+      "disclaimer": "Kami hanya membandingkan informasi pihak ketiga. Kami tidak menukar, memperdagangkan, menerima atau menyimpan dana. Transaksi dilakukan langsung dengan penyedia; nilai risiko mata uang, aset dan pihak lawan. Tautan rujukan dapat memberi kami komisi tanpa memengaruhi peringkat.",
+      "fullDisclaimer": "Pernyataan lengkap",
+      "footer": "Untuk perbandingan. Konfirmasikan kurs akhir kepada penyedia.",
+      "method": "Metode",
+      "privacy": "Privasi",
+      "dataStatus": "Status data"
+    },
+    "pages": {
+      "home": {
+        "title": "Bandingkan penukaran ke baht Thailand",
+        "body": "Pilih mata uang dan jumlah. Bandingkan penukar uang Bangkok dan bursa kripto Thailand."
+      },
+      "cash": {
+        "title": "Bandingkan kurs uang tunai ke baht di Bangkok",
+        "body": "Bandingkan perkiraan THB, jam buka, pecahan uang dan waktu kutipan. IDR belum didukung — USD dipilih secara default."
+      },
+      "crypto": {
+        "title": "USDT dan BTC ke THB: bandingkan bursa Thailand",
+        "body": "Bandingkan perkiraan pembelian atau penjualan dan asumsi biaya. Harga yang tampil tidak menjamin eksekusi."
+      }
+    },
+    "consent": [
+      "Izinkan analitik untuk meningkatkan perbandingan?",
+      "Izinkan analitik",
+      "Hanya yang diperlukan",
+      "Pengaturan analitik"
+    ],
+    "privacyBody": "Google Analytics diaktifkan hanya dengan persetujuan Anda dan dapat diubah melalui pengaturan analitik. Lokasi diminta atas tindakan Anda untuk menghitung jarak; koordinat tidak disimpan dalam tautan. Google Maps dapat memproses data saat peta atau ulasan dibuka. Kami tidak mengumpulkan data pembayaran atau dokumen untuk penukaran uang.",
+    "provider": {
+      "title": "Sumber dan ulasan",
+      "retry": "Muat sumber",
+      "loading": "Memuat…",
+      "failed": "Gagal memuat. Coba lagi.",
+      "license": "Verifikasi izin",
+      "fees": "Verifikasi biaya",
+      "operations": "Verifikasi layanan",
+      "verified": "Terverifikasi",
+      "issue": "Masalah ditemukan",
+      "unknown": "Belum diverifikasi",
+      "expired": "Verifikasi kedaluwarsa",
+      "not_configured": "Ulasan Google belum terhubung",
+      "identity_unverified": "Cabang belum dicocokkan di Google",
+      "limited": "Batas kueri ulasan tercapai",
+      "unavailable": "Ulasan Google tidak tersedia",
+      "reviewNote": "Google menyediakan hingga 5 ulasan relevan, bukan semua atau yang terbaru.",
+      "original": "Ulasan asli",
+      "noRating": "Belum ada nilai",
+      "all": "Buka Google Maps",
+      "date": "Tanggal verifikasi",
+      "source": "Lihat sumber",
+      "feeNote": "Biaya belum terverifikasi adalah perkiraan. Ulasan bukan penilaian keamanan dana."
+    },
+    "status": {
+      "title": "Sumber dan pembaruan",
+      "intro": "Sumber, waktu pengambilan, dan ketersediaan kurs. Kurs lama hanya referensi.",
+      "current": "Baru diambil",
+      "reference": "Hanya referensi",
+      "unavailable": "Tidak ada kurs tersedia",
+      "attempt": "Percobaan terakhir",
+      "success": "Berhasil terakhir",
+      "quotes": "Waktu kurs",
+      "official": "Sumber resmi",
+      "unknown": "Belum ada catatan",
+      "note": "Kuotasi bursa diperiksa saat perbandingan. Biaya dan izin diverifikasi secara terpisah tanpa skor keseluruhan tetap.",
+      "baseline": "Kurs referensi Bank of Thailand, bukan kurs transaksi di loket"
+    },
+    "guide": {
+      "heading": "Bandingkan penukaran ke baht Thailand",
+      "items": [
+        [
+          "Tukar uang tunai",
+          "Bandingkan perkiraan THB, jam buka, pecahan uang dan waktu kutipan. IDR belum didukung — USD dipilih secara default. Hanya perkiraan. Konfirmasikan kurs akhir kepada penyedia. Kurs kantor pusat / pecahan yang tercantum. Konfirmasikan cabang dan kondisi uang kertas."
+        ],
+        [
+          "Kripto",
+          "Bandingkan perkiraan pembelian atau penjualan dan asumsi biaya. Harga yang tampil tidak menjamin eksekusi. Kemampuan mengeksekusi seluruh jumlah didahulukan, lalu jumlah uang. Asumsi biaya perdagangan standar; penjualan termasuk penarikan THB, pembelian termasuk penarikan aset."
+        ],
+        [
+          "Pernyataan lengkap",
+          "Kami hanya membandingkan informasi pihak ketiga. Kami tidak menukar, memperdagangkan, menerima atau menyimpan dana. Transaksi dilakukan langsung dengan penyedia; nilai risiko mata uang, aset dan pihak lawan. Tautan rujukan dapat memberi kami komisi tanpa memengaruhi peringkat."
+        ]
+      ]
+    },
+    "legal": {
+      "methodology": {
+        "title": "Metode",
+        "intro": "Pilih mata uang dan jumlah. Bandingkan penukar uang Bangkok dan bursa kripto Thailand.",
+        "sections": [
+          {
+            "heading": "Waktu kutipan",
+            "body": "Sumber, waktu pengambilan, dan ketersediaan kurs. Kurs lama hanya referensi. Kutipan ini belum menentukan pilihan terbaik. Periksa kurs di situs resmi. Kurs kantor pusat / pecahan yang tercantum. Konfirmasikan cabang dan kondisi uang kertas."
+          },
+          {
+            "heading": "Biaya dan sumber",
+            "body": "Asumsi biaya perdagangan standar; penjualan termasuk penarikan THB, pembelian termasuk penarikan aset. Biaya belum terverifikasi adalah perkiraan. Ulasan bukan penilaian keamanan dana. Google menyediakan hingga 5 ulasan relevan, bukan semua atau yang terbaru."
+          },
+          {
+            "heading": "Pernyataan lengkap",
+            "body": "Kami hanya membandingkan informasi pihak ketiga. Kami tidak menukar, memperdagangkan, menerima atau menyimpan dana. Transaksi dilakukan langsung dengan penyedia; nilai risiko mata uang, aset dan pihak lawan. Tautan rujukan dapat memberi kami komisi tanpa memengaruhi peringkat."
+          }
+        ]
+      },
+      "disclaimer": {
+        "title": "Pernyataan lengkap",
+        "intro": "Kami hanya membandingkan informasi pihak ketiga. Kami tidak menukar, memperdagangkan, menerima atau menyimpan dana. Transaksi dilakukan langsung dengan penyedia; nilai risiko mata uang, aset dan pihak lawan. Tautan rujukan dapat memberi kami komisi tanpa memengaruhi peringkat.",
+        "sections": [
+          {
+            "heading": "Hanya perkiraan. Konfirmasikan kurs akhir kepada penyedia.",
+            "body": "Kutipan ini belum menentukan pilihan terbaik. Periksa kurs di situs resmi. Biaya belum diverifikasi. Jumlah hanya perkiraan. Biaya penarikan aset ini belum diverifikasi; biaya yang tidak diketahui belum termasuk."
+          },
+          {
+            "heading": "Sumber dan ulasan",
+            "body": "Biaya belum terverifikasi adalah perkiraan. Ulasan bukan penilaian keamanan dana. Google menyediakan hingga 5 ulasan relevan, bukan semua atau yang terbaru."
+          }
+        ]
+      },
+      "privacy-policy": {
+        "title": "Privasi",
+        "intro": "Google Analytics diaktifkan hanya dengan persetujuan Anda dan dapat diubah melalui pengaturan analitik. Lokasi diminta atas tindakan Anda untuk menghitung jarak; koordinat tidak disimpan dalam tautan. Google Maps dapat memproses data saat peta atau ulasan dibuka. Kami tidak mengumpulkan data pembayaran atau dokumen untuk penukaran uang.",
+        "sections": [
+          {
+            "heading": "Pengaturan analitik",
+            "body": "Google Analytics diaktifkan hanya dengan persetujuan Anda dan dapat diubah melalui pengaturan analitik. Lokasi diminta atas tindakan Anda untuk menghitung jarak; koordinat tidak disimpan dalam tautan. Google Maps dapat memproses data saat peta atau ulasan dibuka. Kami tidak mengumpulkan data pembayaran atau dokumen untuk penukaran uang."
+          }
+        ]
+      }
+    }
+  },
+  "vi": {
+    "words": {
+      "cash": "Đổi tiền mặt",
+      "crypto": "Tài sản mã hóa",
+      "cashHint": "Tìm điểm đổi tiền",
+      "cryptoHint": "So sánh sàn",
+      "currency": "Tiền tệ",
+      "asset": "Tài sản",
+      "amount": "Số tiền",
+      "assetAmount": "Số lượng tài sản",
+      "compare": "So sánh",
+      "loading": "Đang so sánh…",
+      "sell": "Bán để nhận THB",
+      "buy": "Mua bằng THB",
+      "advanced": "Tùy chọn khác",
+      "distance": "Khoảng cách tối đa",
+      "location": "Dùng vị trí của tôi",
+      "locating": "Đang tìm vị trí…",
+      "locationActive": "Đang dùng vị trí của bạn",
+      "reference": "Khoảng cách từ trung tâm Bangkok",
+      "locationError": "Không có vị trí. Vẫn có thể so sánh khoảng cách tham khảo.",
+      "openOnly": "Chỉ điểm đang mở",
+      "nearest": "Gần nhất trước",
+      "best": "Theo số tiền",
+      "results": "Các lựa chọn",
+      "ready": "Chọn tiền tệ và số tiền.",
+      "changed": "Đang cập nhật. Nhập số tiền hợp lệ.",
+      "error": "Không thể cập nhật. Hãy thử lại.",
+      "invalid": "Nhập số tiền lớn hơn 0.",
+      "empty": "Không có kết quả. Đổi tiền tệ hoặc bộ lọc.",
+      "receive": "Ước tính nhận",
+      "payment": "Ước tính trả",
+      "fresh": "Báo giá gần đây",
+      "cached": "Dữ liệu tham khảo",
+      "referenceResults": "Chỉ để tham khảo",
+      "stale": "Báo giá này chưa xác định lựa chọn tốt nhất. Kiểm tra tỷ giá trên trang chính thức.",
+      "bestLabel": "Số tiền cao nhất",
+      "cheapest": "Khoản trả thấp nhất",
+      "closed": "Đã đóng",
+      "open": "Đang mở",
+      "map": "Mở bản đồ",
+      "official": "Trang chính thức",
+      "details": "Phí và nguồn",
+      "rate": "Tỷ giá",
+      "observed": "Thời điểm báo giá",
+      "note": "Chỉ là ước tính. Xác nhận tỷ giá cuối cùng với bên cung cấp.",
+      "trading": "Phí giao dịch",
+      "withdraw": "Phí rút THB",
+      "network": "Phí rút tài sản",
+      "fill": "Tỷ lệ có thể khớp",
+      "banknote": "Mệnh giá tiền giấy",
+      "hours": "Giờ mở cửa",
+      "gap": "Số lượng chưa khớp",
+      "all": "Xem lựa chọn khác",
+      "less": "Thu gọn",
+      "rankNote": "Ưu tiên khả năng khớp toàn bộ rồi so sánh số tiền.",
+      "buyNote": "Nhập số lượng tài sản muốn mua. Khoản trả hiển thị bằng THB.",
+      "valueRoute": "Đổi sang baht Thái",
+      "assetReceive": "Ước tính tài sản nhận"
+    },
+    "extra": {
+      "cashBuy": "Mua tiền mặt ngoại tệ",
+      "cashSell": "Bán tiền mặt ngoại tệ",
+      "buyNote": "Nhập số ngoại tệ muốn nhận. Khoản trả được ước tính bằng THB.",
+      "feeWarning": "Phí chưa xác minh. Số tiền chỉ là ước tính.",
+      "unknownWithdrawal": "Phí rút tài sản này chưa xác minh; chưa tính phí không rõ.",
+      "marketBest": "Báo giá cạnh tranh",
+      "unknownDistance": "Khoảng cách chưa xác minh",
+      "published": "Bên cung cấp công bố",
+      "collected": "Đã thu thập",
+      "auto": "Cập nhật thị trường mỗi 30 giây",
+      "feeAssumption": "Giả định phí giao dịch tiêu chuẩn; bán gồm rút THB, mua gồm rút tài sản.",
+      "cashScope": "Tỷ giá trụ sở / mệnh giá được nêu. Xác nhận chi nhánh và điều kiện tiền giấy."
+    },
+    "ui": {
+      "language": "Ngôn ngữ",
+      "nav": "Menu chính",
+      "siteInfo": "Thông tin trang",
+      "skip": "Đến nội dung",
+      "autoNote": "Các lựa chọn tự cập nhật khi bạn chọn.",
+      "retry": "Thử lại",
+      "disclaimer": "Chúng tôi chỉ so sánh thông tin bên thứ ba. Không đổi tiền, giao dịch, nhận hay lưu giữ tiền. Giao dịch diễn ra trực tiếp với bên cung cấp; hãy đánh giá rủi ro tiền tệ, tài sản và đối tác. Liên kết giới thiệu có thể tạo hoa hồng cho chúng tôi nhưng không ảnh hưởng thứ tự.",
+      "fullDisclaimer": "Tuyên bố đầy đủ",
+      "footer": "Thông tin so sánh. Xác nhận tỷ giá cuối cùng với bên cung cấp.",
+      "method": "Phương pháp",
+      "privacy": "Quyền riêng tư",
+      "dataStatus": "Trạng thái dữ liệu"
+    },
+    "pages": {
+      "home": {
+        "title": "So sánh đổi tiền sang baht Thái",
+        "body": "Chọn tiền tệ và số tiền. So sánh điểm đổi tiền Bangkok và sàn tài sản mã hóa Thái Lan."
+      },
+      "cash": {
+        "title": "So sánh tỷ giá tiền mặt sang baht tại Bangkok",
+        "body": "So sánh số THB ước tính, giờ mở cửa, mệnh giá và thời điểm báo giá. VND chưa được hỗ trợ — mặc định chọn USD."
+      },
+      "crypto": {
+        "title": "USDT và BTC sang THB: so sánh sàn Thái Lan",
+        "body": "So sánh khoản mua hoặc bán ước tính và giả định phí. Giá hiển thị không đảm bảo khớp lệnh."
+      }
+    },
+    "consent": [
+      "Cho phép phân tích để cải thiện so sánh?",
+      "Cho phép",
+      "Chỉ tính năng cần thiết",
+      "Cài đặt phân tích"
+    ],
+    "privacyBody": "Google Analytics chỉ được bật khi bạn đồng ý và có thể thay đổi trong cài đặt phân tích. Vị trí chỉ được yêu cầu khi bạn chọn để tính khoảng cách; tọa độ không được lưu trong liên kết. Google Maps có thể xử lý dữ liệu khi mở bản đồ hoặc đánh giá. Chúng tôi không thu thập dữ liệu thanh toán hay giấy tờ để đổi tiền.",
+    "provider": {
+      "title": "Nguồn và đánh giá",
+      "retry": "Tải nguồn",
+      "loading": "Đang tải…",
+      "failed": "Không tải được. Hãy thử lại.",
+      "license": "Kiểm tra giấy phép",
+      "fees": "Kiểm tra phí",
+      "operations": "Kiểm tra dịch vụ",
+      "verified": "Đã kiểm tra",
+      "issue": "Phát hiện vấn đề",
+      "unknown": "Chưa kiểm tra",
+      "expired": "Kiểm tra đã hết hạn",
+      "not_configured": "Chưa kết nối đánh giá Google",
+      "identity_unverified": "Chưa khớp chi nhánh trên Google",
+      "limited": "Đã đạt giới hạn truy vấn",
+      "unavailable": "Đánh giá Google không khả dụng",
+      "reviewNote": "Google cung cấp tối đa 5 đánh giá liên quan, không phải tất cả hoặc mới nhất.",
+      "original": "Đánh giá gốc",
+      "noRating": "Chưa có điểm",
+      "all": "Mở Google Maps",
+      "date": "Ngày kiểm tra",
+      "source": "Xem nguồn",
+      "feeNote": "Phí chưa kiểm tra là ước tính. Đánh giá không phản ánh mức an toàn của tiền."
+    },
+    "status": {
+      "title": "Nguồn và cập nhật",
+      "intro": "Nguồn, thời điểm thu thập và tình trạng tỷ giá. Tỷ giá cũ chỉ để tham khảo.",
+      "current": "Thu thập gần đây",
+      "reference": "Chỉ tham khảo",
+      "unavailable": "Không có tỷ giá khả dụng",
+      "attempt": "Lần thử cuối",
+      "success": "Lần thành công cuối",
+      "quotes": "Thời điểm tỷ giá",
+      "official": "Nguồn chính thức",
+      "unknown": "Chưa có bản ghi",
+      "note": "Báo giá sàn được kiểm tra khi so sánh. Phí và giấy phép được kiểm tra riêng, không dùng điểm tổng hợp cố định.",
+      "baseline": "Tỷ giá tham khảo của Ngân hàng Thái Lan, không phải tỷ giá giao dịch tại quầy"
+    },
+    "guide": {
+      "heading": "So sánh đổi tiền sang baht Thái",
+      "items": [
+        [
+          "Đổi tiền mặt",
+          "So sánh số THB ước tính, giờ mở cửa, mệnh giá và thời điểm báo giá. VND chưa được hỗ trợ — mặc định chọn USD. Chỉ là ước tính. Xác nhận tỷ giá cuối cùng với bên cung cấp. Tỷ giá trụ sở / mệnh giá được nêu. Xác nhận chi nhánh và điều kiện tiền giấy."
+        ],
+        [
+          "Tài sản mã hóa",
+          "So sánh khoản mua hoặc bán ước tính và giả định phí. Giá hiển thị không đảm bảo khớp lệnh. Ưu tiên khả năng khớp toàn bộ rồi so sánh số tiền. Giả định phí giao dịch tiêu chuẩn; bán gồm rút THB, mua gồm rút tài sản."
+        ],
+        [
+          "Tuyên bố đầy đủ",
+          "Chúng tôi chỉ so sánh thông tin bên thứ ba. Không đổi tiền, giao dịch, nhận hay lưu giữ tiền. Giao dịch diễn ra trực tiếp với bên cung cấp; hãy đánh giá rủi ro tiền tệ, tài sản và đối tác. Liên kết giới thiệu có thể tạo hoa hồng cho chúng tôi nhưng không ảnh hưởng thứ tự."
+        ]
+      ]
+    },
+    "legal": {
+      "methodology": {
+        "title": "Phương pháp",
+        "intro": "Chọn tiền tệ và số tiền. So sánh điểm đổi tiền Bangkok và sàn tài sản mã hóa Thái Lan.",
+        "sections": [
+          {
+            "heading": "Thời điểm báo giá",
+            "body": "Nguồn, thời điểm thu thập và tình trạng tỷ giá. Tỷ giá cũ chỉ để tham khảo. Báo giá này chưa xác định lựa chọn tốt nhất. Kiểm tra tỷ giá trên trang chính thức. Tỷ giá trụ sở / mệnh giá được nêu. Xác nhận chi nhánh và điều kiện tiền giấy."
+          },
+          {
+            "heading": "Phí và nguồn",
+            "body": "Giả định phí giao dịch tiêu chuẩn; bán gồm rút THB, mua gồm rút tài sản. Phí chưa kiểm tra là ước tính. Đánh giá không phản ánh mức an toàn của tiền. Google cung cấp tối đa 5 đánh giá liên quan, không phải tất cả hoặc mới nhất."
+          },
+          {
+            "heading": "Tuyên bố đầy đủ",
+            "body": "Chúng tôi chỉ so sánh thông tin bên thứ ba. Không đổi tiền, giao dịch, nhận hay lưu giữ tiền. Giao dịch diễn ra trực tiếp với bên cung cấp; hãy đánh giá rủi ro tiền tệ, tài sản và đối tác. Liên kết giới thiệu có thể tạo hoa hồng cho chúng tôi nhưng không ảnh hưởng thứ tự."
+          }
+        ]
+      },
+      "disclaimer": {
+        "title": "Tuyên bố đầy đủ",
+        "intro": "Chúng tôi chỉ so sánh thông tin bên thứ ba. Không đổi tiền, giao dịch, nhận hay lưu giữ tiền. Giao dịch diễn ra trực tiếp với bên cung cấp; hãy đánh giá rủi ro tiền tệ, tài sản và đối tác. Liên kết giới thiệu có thể tạo hoa hồng cho chúng tôi nhưng không ảnh hưởng thứ tự.",
+        "sections": [
+          {
+            "heading": "Chỉ là ước tính. Xác nhận tỷ giá cuối cùng với bên cung cấp.",
+            "body": "Báo giá này chưa xác định lựa chọn tốt nhất. Kiểm tra tỷ giá trên trang chính thức. Phí chưa xác minh. Số tiền chỉ là ước tính. Phí rút tài sản này chưa xác minh; chưa tính phí không rõ."
+          },
+          {
+            "heading": "Nguồn và đánh giá",
+            "body": "Phí chưa kiểm tra là ước tính. Đánh giá không phản ánh mức an toàn của tiền. Google cung cấp tối đa 5 đánh giá liên quan, không phải tất cả hoặc mới nhất."
+          }
+        ]
+      },
+      "privacy-policy": {
+        "title": "Quyền riêng tư",
+        "intro": "Google Analytics chỉ được bật khi bạn đồng ý và có thể thay đổi trong cài đặt phân tích. Vị trí chỉ được yêu cầu khi bạn chọn để tính khoảng cách; tọa độ không được lưu trong liên kết. Google Maps có thể xử lý dữ liệu khi mở bản đồ hoặc đánh giá. Chúng tôi không thu thập dữ liệu thanh toán hay giấy tờ để đổi tiền.",
+        "sections": [
+          {
+            "heading": "Cài đặt phân tích",
+            "body": "Google Analytics chỉ được bật khi bạn đồng ý và có thể thay đổi trong cài đặt phân tích. Vị trí chỉ được yêu cầu khi bạn chọn để tính khoảng cách; tọa độ không được lưu trong liên kết. Google Maps có thể xử lý dữ liệu khi mở bản đồ hoặc đánh giá. Chúng tôi không thu thập dữ liệu thanh toán hay giấy tờ để đổi tiền."
+          }
+        ]
+      }
+    }
+  }
+}

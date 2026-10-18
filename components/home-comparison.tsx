@@ -148,7 +148,7 @@ function timeLabel(value: string | null) {
 }
 
 function sourceLabel(locale: ContentLocale, sourceType: 'live' | 'hybrid' | 'fallback') {
-  return copy[locale][sourceType];
+  return copy[locale === 'th' || locale === 'zh' ? locale : 'en'][sourceType];
 }
 
 export function HomeComparison({
@@ -160,7 +160,7 @@ export function HomeComparison({
   initialCrypto: CryptoRow[];
   initialCash: CashResult;
 }) {
-  const c = copy[locale];
+  const c = copy[locale === 'th' || locale === 'zh' ? locale : 'en'];
   const [mode, setMode] = useState<'cash' | 'crypto'>('cash');
   const [cryptoSymbol, setCryptoSymbol] = useState<CryptoSymbol>('USDT');
   const [cryptoAmount, setCryptoAmount] = useState('1000');

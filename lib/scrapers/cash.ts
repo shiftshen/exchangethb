@@ -1,5 +1,6 @@
-import { cashBranches, cashRates } from '@/data/site';
-import { CurrencyCode } from '@/lib/types';
+import { cashCurrencies, CurrencyCode } from '@/lib/types';
+import { scrapeAdditionalCash } from '@/lib/scrapers/additional-cash';
+import { sourceText } from '@/lib/source-http';
 
 export interface ScrapedCashRate {
   providerSlug: string;
@@ -10,6 +11,8 @@ export interface ScrapedCashRate {
   observedAt: string;
   sourceUrl: string;
   sourceKind?: 'live' | 'hybrid';
+  fetchedAt?: string;
+  timestampKind?: 'published' | 'collected';
 }
 
 export interface ScrapeResult {
@@ -18,11 +21,16 @@ export interface ScrapeResult {
   observedAt: string;
   notes: string[];
   rates?: ScrapedCashRate[];
+  lastSuccessAt?: string;
 }
 
-function extractRatchadaRates(html: string): ScrapedCashRate[] {
-  const observedAt = new Date().toISOString();
-  const rows = [...html.matchAll(/id="(USD|EUR|GBP|JPY|CNY)"[^>]*>\s*<td[^>]*>([^<]+)<\/td>\s*<td[^>]*>(\d+\.\d{2,4})<\/td>\s*<td[^>]*>(\d+\.\d{2,4})<\/td>/gi)];
+export function extractRatchadaRates(html: string, fetchedAt = new Date().toISOString()): ScrapedCashRate[] {
+  const publication = html.match(/getElementById\(['"]rateTime['"]\)\.innerHTML\s*=\s*['"](\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2})['"]/);
+  if (!publication) return [];
+  const publishedTime = Date.parse(`${publication[1]}T${publication[2]}+07:00`);
+  if (!Number.isFinite(publishedTime)) return [];
+  const observedAt = new Date(publishedTime).toISOString();
+  const rows = [...html.matchAll(/id="(USD|EUR|JPY|CNY|GBP|AUD|CAD|SGD|HKD|CHF|NZD|KRW|TWD|MYR|INR)"[^>]*>\s*<td[^>]*>([^<]+)<\/td>\s*<td[^>]*>(\d+\.\d{2,4})<\/td>\s*<td[^>]*>(\d+\.\d{2,4})<\/td>/gi)];
   return rows.map((match) => ({
     providerSlug: 'ratchada',
     currency: match[1] as CurrencyCode,
@@ -31,18 +39,21 @@ function extractRatchadaRates(html: string): ScrapedCashRate[] {
     sellRate: Number(match[4]),
     observedAt,
     sourceUrl: 'https://www.ratchadaexchange.com/',
-  }));
+    sourceKind: 'live' as const,
+    fetchedAt,
+    timestampKind: 'published' as const,
+  })).filter(row => Number.isFinite(row.buyRate) && row.buyRate > 0 && row.sellRate >= row.buyRate);
 }
 
 function extractSiaRates(html: string): ScrapedCashRate[] {
   const observedAt = new Date().toISOString();
-  const supported = new Set<CurrencyCode>(['USD', 'CNY', 'EUR', 'JPY', 'GBP']);
+  const supported = new Set<CurrencyCode>(cashCurrencies);
   const rows = [...html.matchAll(/<tr class="list-(?:over|none)">[\s\S]*?<td[^>]*align="center">([^<]+)<\/td>[\s\S]*?<td[^>]*align="center">([^<]+)<\/td>[\s\S]*?<td[^>]*class="show-rate"[^>]*>([^<]+)<\/td>[\s\S]*?<td[^>]*class="show-rate"[^>]*>([^<]+)<\/td>[\s\S]*?<\/tr>/gi)];
   const output: ScrapedCashRate[] = [];
 
   for (const match of rows) {
     const currencyLabel = match[2].replace(/\s+/g, ' ').trim();
-    const symbol = (currencyLabel.match(/USD|CNY|EUR|JPY|GBP/) || [])[0] as CurrencyCode | undefined;
+    const symbol = (currencyLabel.match(/USD|EUR|JPY|CNY|GBP|AUD|CAD|SGD|HKD|CHF|NZD|KRW|TWD|MYR|INR/) || [])[0] as CurrencyCode | undefined;
     if (!symbol || !supported.has(symbol)) continue;
     const buyRate = Number(match[3].trim());
     const sellRaw = match[4].trim();
@@ -64,22 +75,22 @@ function extractSiaRates(html: string): ScrapedCashRate[] {
 }
 
 async function fetchHtml(url: string) {
-  const response = await fetchWithTimeout(url, {
+  return sourceText(url, 15000, {
     headers: { 'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0' },
     cache: 'no-store',
   });
-  if (!response.ok) throw new Error(`Failed ${url}: ${response.status}`);
-  return response.text();
 }
 
 async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs = 15000) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    return await fetch(url, {
+    const response = await fetch(url, {
       ...init,
       signal: controller.signal,
     });
+    const payload = response.ok ? await response.json() : null;
+    return { ok: response.ok, status: response.status, json: async () => payload };
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') {
       throw new Error(`Timeout ${url} after ${timeoutMs}ms`);
@@ -92,7 +103,7 @@ async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs = 1500
 
 function extractSuperrichThailandRates(payload: unknown): ScrapedCashRate[] {
   const observedAt = new Date().toISOString();
-  const supported = new Set<CurrencyCode>(['USD', 'CNY', 'EUR', 'JPY', 'GBP']);
+  const supported = new Set<CurrencyCode>(cashCurrencies);
   const rows = (payload as { data?: { exchangeRate?: Array<{ cUnit?: string; rate?: Array<{ cBuying?: number; cSelling?: number; denom?: string; dateTime?: string }> }> } })?.data?.exchangeRate;
   if (!Array.isArray(rows)) return [];
   const output: ScrapedCashRate[] = [];
@@ -109,9 +120,11 @@ function extractSuperrichThailandRates(payload: unknown): ScrapedCashRate[] {
         denomination: String(rate.denom || 'notes').replace(/\s+/g, ' ').trim() || 'notes',
         buyRate,
         sellRate,
-        observedAt: typeof rate.dateTime === 'string' ? new Date(rate.dateTime).toISOString() : observedAt,
+        observedAt: typeof rate.dateTime === 'string' && Number.isFinite(Date.parse(rate.dateTime)) ? new Date(rate.dateTime).toISOString() : observedAt,
         sourceUrl: 'https://www.superrichthailand.com/api/v1/rates',
         sourceKind: 'live',
+        fetchedAt: observedAt,
+        timestampKind: typeof rate.dateTime === 'string' && Number.isFinite(Date.parse(rate.dateTime)) ? 'published' : 'collected',
       });
     }
   }
@@ -133,7 +146,7 @@ export async function scrapeSuperrichThailand(): Promise<ScrapeResult> {
     const response = await fetchWithTimeout('https://www.superrichthailand.com/api/v1/rates', {
       headers: {
         'user-agent': 'Mozilla/5.0 ExchangeTHB/1.0',
-        authorization: 'Basic c3VwZXJyaWNoVGg6aFRoY2lycmVwdXM=',
+        ...(process.env.SUPERRICH_TH_AUTHORIZATION ? { authorization: process.env.SUPERRICH_TH_AUTHORIZATION } : {}),
       },
       cache: 'no-store',
     });
@@ -164,14 +177,7 @@ export async function scrapeSia(): Promise<ScrapeResult> {
 
 export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
   const observedAt = new Date().toISOString();
-  const supported = new Set<CurrencyCode>(['USD', 'CNY', 'EUR', 'JPY', 'GBP']);
-  const spreadTemplate: Record<CurrencyCode, number> = {
-    USD: 0.16,
-    CNY: 0.12,
-    EUR: 0.2,
-    JPY: 0.002,
-    GBP: 0.25,
-  };
+  const supported = new Set<CurrencyCode>(cashCurrencies);
   const normalizeDenomination = (value: string) => value.replace(/\s+/g, '').replace(/–/g, '-').toUpperCase();
   try {
     const guestTokenResponse = await fetchWithTimeout('https://superrichrate2.ztidev.com/superRich/getGuestToken', {
@@ -203,7 +209,7 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
       },
       cache: 'no-store',
     });
-    const bookingPages: Array<{ data?: { content?: Array<{ rateUpdateDate?: number; updateDate?: number; createDate?: number; currencyList?: Array<{ currencyCode?: string; denominationList?: Array<{ denom?: string; sell?: string }> }> }> } }> = [];
+    const bookingPages: Array<{ data?: { content?: Array<{ rateUpdateDate?: number; updateDate?: number; createDate?: number; currencyList?: Array<{ currencyCode?: string; denominationList?: Array<{ denom?: string; sell?: string; buy?: string }> }> }> } }> = [];
     for (let page = 0; page < 6; page += 1) {
       const bookingsResponse = await fetchWithTimeout(`https://superrichrate2.ztidev.com/superRich/getBooking?page=${page}&sizeContents=100`, {
         headers: {
@@ -213,7 +219,7 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
         cache: 'no-store',
       });
       if (!bookingsResponse.ok) break;
-      const payload = await bookingsResponse.json() as { data?: { content?: Array<{ rateUpdateDate?: number; updateDate?: number; createDate?: number; currencyList?: Array<{ currencyCode?: string; denominationList?: Array<{ denom?: string; sell?: string }> }> }> } };
+      const payload = await bookingsResponse.json() as { data?: { content?: Array<{ rateUpdateDate?: number; updateDate?: number; createDate?: number; currencyList?: Array<{ currencyCode?: string; denominationList?: Array<{ denom?: string; sell?: string; buy?: string }> }> }> } };
       const rows = payload.data?.content || [];
       if (!rows.length) break;
       bookingPages.push(payload);
@@ -231,32 +237,11 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
       };
     }
     const locationsPayload = await locationsResponse.json() as { data?: { content?: Array<{ dynLastUpdate?: string }> } };
-    const fallbackRows = cashRates
-      .filter((rate) => {
-        const branch = cashBranches.find((entry) => entry.id === rate.branchId);
-        return branch?.providerSlug === 'superrich-1965' && supported.has(rate.currency);
-      })
-      .map((rate) => {
-        const branch = cashBranches.find((entry) => entry.id === rate.branchId)!;
-        return {
-          currency: rate.currency,
-          denomination: rate.denomination,
-          normalizedDenomination: normalizeDenomination(rate.denomination),
-          buyRate: rate.buyRate,
-          sellRate: rate.sellRate,
-          branchId: branch.id,
-        };
-      });
-    const fallbackMap = new Map(fallbackRows.map((row) => [`${row.currency}:${row.normalizedDenomination}`, row]));
-    const fallbackByCurrency = new Map<CurrencyCode, (typeof fallbackRows)[number]>();
-    for (const row of fallbackRows) {
-      const existing = fallbackByCurrency.get(row.currency);
-      if (!existing || row.buyRate > existing.buyRate) fallbackByCurrency.set(row.currency, row);
-    }
-    const latestSellMap = new Map<string, { sellRate: number; timestamp: number; denomination: string; currency: CurrencyCode }>();
+    const latestSellMap = new Map<string, { sellRate: number; buyRate: number; timestamp: number; denomination: string; currency: CurrencyCode }>();
     for (const pagePayload of bookingPages) {
       for (const booking of pagePayload.data?.content || []) {
-        const timestamp = Number(booking.rateUpdateDate || booking.updateDate || booking.createDate || Date.now());
+        const timestamp = Number(booking.rateUpdateDate || booking.updateDate || booking.createDate);
+        if (!Number.isFinite(timestamp) || timestamp <= 0) continue;
         for (const currencyRow of booking.currencyList || []) {
           const currency = currencyRow.currencyCode as CurrencyCode;
           if (!supported.has(currency)) continue;
@@ -264,11 +249,12 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
             const denomination = String(denomRow.denom || '').trim();
             const normalizedDenomination = normalizeDenomination(denomination);
             const sellRate = Number(denomRow.sell);
-            if (!normalizedDenomination || !Number.isFinite(sellRate) || sellRate <= 0) continue;
+            const buyRate = Number(denomRow.buy);
+            if (!normalizedDenomination || !Number.isFinite(sellRate) || sellRate <= 0 || !Number.isFinite(buyRate) || buyRate <= 0 || buyRate > sellRate) continue;
             const key = `${currency}:${normalizedDenomination}`;
             const previous = latestSellMap.get(key);
             if (!previous || timestamp > previous.timestamp) {
-              latestSellMap.set(key, { sellRate, timestamp, denomination, currency });
+              latestSellMap.set(key, { sellRate, buyRate, timestamp, denomination, currency });
             }
           }
         }
@@ -276,19 +262,16 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
     }
     const mergedRows = new Map<string, ScrapedCashRate & { __ts: number }>();
     for (const [key, sell] of latestSellMap.entries()) {
-      const fallback = fallbackMap.get(key) || fallbackByCurrency.get(sell.currency);
-      const rowKey = `${sell.currency}:${(fallback?.denomination || sell.denomination || 'notes')}`;
-      const spread = Math.max(0.0001, fallback ? fallback.sellRate - fallback.buyRate : spreadTemplate[sell.currency]);
-      const derivedBuy = Number(Math.max(0, sell.sellRate - spread).toFixed(4));
+      const rowKey = key;
       const candidate: ScrapedCashRate & { __ts: number } = {
         providerSlug: 'superrich-1965',
         currency: sell.currency,
-        denomination: fallback?.denomination || sell.denomination || 'notes',
-        buyRate: derivedBuy,
+        denomination: sell.denomination,
+        buyRate: sell.buyRate,
         sellRate: sell.sellRate,
         observedAt: new Date(sell.timestamp).toISOString(),
         sourceUrl: 'https://superrichrate2.ztidev.com/superRich/getBooking (guest feed)',
-        sourceKind: 'hybrid',
+        sourceKind: 'live',
         __ts: sell.timestamp,
       };
       const existing = mergedRows.get(rowKey);
@@ -314,8 +297,8 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
       ok: rates.length > 0,
       observedAt,
       notes: [
-        `Parsed ${rates.length} hybrid rows from official guest booking feed.`,
-        'Buy side is derived from validated fallback spread model; live feed currently exposes sell-side only.',
+        `Parsed ${rates.length} two-sided rows from official guest booking feed.`,
+        'Rows without official buy and sell prices or a published timestamp are excluded; no spread-derived prices.',
         latestDynUpdate ? `Latest branch rate update marker: ${latestDynUpdate}` : 'No branch update marker in guest feed.',
       ],
       rates,
@@ -326,5 +309,5 @@ export async function scrapeSuperrich1965(): Promise<ScrapeResult> {
 }
 
 export async function runCashScrapers(): Promise<ScrapeResult[]> {
-  return Promise.all([scrapeRatchada(), scrapeSuperrichThailand(), scrapeSuperrich1965(), scrapeSia()]);
+  return Promise.all([scrapeRatchada(), scrapeSuperrichThailand(), scrapeSuperrich1965(), scrapeAdditionalCash('twelve-victory')]);
 }

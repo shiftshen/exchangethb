@@ -11,6 +11,8 @@ const cacheStateKey = 'latest';
 export interface CashCachePayload {
   generatedAt: string | null;
   results: ScrapeResult[];
+  lastAttemptAt?: string;
+  lastAttempts?: Array<{ provider: string; ok: boolean; observedAt: string; notes: string[] }>;
 }
 
 function toJsonValue<T>(value: T): InputJsonValue {

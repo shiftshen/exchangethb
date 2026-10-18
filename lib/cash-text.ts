@@ -121,7 +121,7 @@ const textMap: Record<string, { th: string; en: string; zh: string }> = {
 
 export function localizeCashText(value: string, locale: Locale) {
   const contentLocale = resolveContentLocale(locale);
-  return textMap[value]?.[contentLocale] || value;
+  return textMap[value]?.[contentLocale === 'th' || contentLocale === 'zh' ? contentLocale : 'en'] || value;
 }
 
 export function localizeScrapeNote(note: string, locale: Locale) {

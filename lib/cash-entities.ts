@@ -1,5 +1,5 @@
 import { cashBranches, cashProviders } from '@/data/site';
-import { readAdminConfig } from '@/lib/content-store';
+import { readAdminConfig, type BranchOverride } from '@/lib/content-store';
 
 const bangkokReferencePoint = {
   latitude: 13.7563,
@@ -19,15 +19,32 @@ export function haversineDistanceKm(a: { latitude: number; longitude: number }, 
   return Number(distance.toFixed(1));
 }
 
-export function getBangkokReferenceDistanceKm(branch: { latitude: number; longitude: number }) {
-  return haversineDistanceKm(branch, bangkokReferencePoint);
+export function hasCoordinates(branch: { latitude: number | null; longitude: number | null }): branch is { latitude: number; longitude: number } {
+  return branch.latitude !== null && branch.longitude !== null && Number.isFinite(branch.latitude) && Number.isFinite(branch.longitude);
+}
+
+export function getBangkokReferenceDistanceKm(branch: { latitude: number | null; longitude: number | null }) {
+  return hasCoordinates(branch) ? haversineDistanceKm(branch, bangkokReferencePoint) : 0;
 }
 
 export function getUserDistanceKm(
-  branch: { latitude: number; longitude: number },
+  branch: { latitude: number | null; longitude: number | null },
   userLocation: { latitude: number; longitude: number },
 ) {
-  return haversineDistanceKm(branch, userLocation);
+  return hasCoordinates(branch) ? haversineDistanceKm(branch, userLocation) : 0;
+}
+
+export function effectiveBranchLocation(branch: { latitude: number | null; longitude: number | null; locationPrecision?: string }, override: BranchOverride, now = Date.now()) {
+  const location = override.googleLocation;
+  const fetchedAt = location ? Date.parse(location.fetchedAt) : NaN;
+  if (override.googlePlaceVerified && location && fetchedAt <= now && now - fetchedAt < 30 * 86_400_000) {
+    return { latitude: location.latitude, longitude: location.longitude, locationPrecision: 'address' as const };
+  }
+  return { latitude: branch.latitude, longitude: branch.longitude, locationPrecision: branch.locationPrecision };
+}
+
+export function getVerifiedBranchMapsUrl(branch: { name: string; mapsUrl: string }, override: BranchOverride) {
+  return override.googlePlaceVerified && override.googlePlaceId ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(branch.name)}&query_place_id=${encodeURIComponent(override.googlePlaceId)}` : override.mapsUrl || branch.mapsUrl;
 }
 
 export async function getEffectiveCashBranches() {
@@ -35,14 +52,16 @@ export async function getEffectiveCashBranches() {
   return cashBranches
     .map((branch) => {
       const override = config.branchOverrides[branch.id] || {};
+      const location = effectiveBranchLocation(branch, override);
       return {
         ...branch,
+        ...location,
         name: override.name || branch.name,
         address: override.address || branch.address,
         hours: override.hours || branch.hours,
-        mapsUrl: override.mapsUrl || branch.mapsUrl,
+        mapsUrl: getVerifiedBranchMapsUrl(branch, override),
         isVisible: override.isVisible ?? true,
-        distanceKm: getBangkokReferenceDistanceKm(branch),
+        distanceKm: getBangkokReferenceDistanceKm(location),
       };
     })
     .filter((branch) => branch.isVisible);

@@ -163,7 +163,7 @@ export function generateStaticParams() {
 
 export default async function RoutesIndexPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
-  const c = copy[locale];
+  const c = copy[locale === 'th' || locale === 'zh' || locale === 'ja' || locale === 'ko' || locale === 'de' ? locale : 'en'];
   const groups = groupRoutes();
   const allGuides = [...groups.crypto, ...groups.cash, ...groups.country, ...groups.travel];
   const breadcrumbLd = breadcrumbJsonLd([
@@ -233,7 +233,7 @@ export default async function RoutesIndexPage({ params }: { params: Promise<{ lo
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
-  const c = copy[locale];
+  const c = copy[locale === 'th' || locale === 'zh' || locale === 'ja' || locale === 'ko' || locale === 'de' ? locale : 'en'];
   const path = '/routes';
 
   return {

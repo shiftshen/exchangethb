@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { trackEvent } from '@/lib/analytics-client';
+import { exchanges } from '@/data/site';
 
 type AffiliateLink = {
   status: 'reward_available' | 'campaign_only' | 'official_only';
@@ -24,7 +25,13 @@ export function ConfigEditor({ initialConfig, initialCachePreview }: { initialCo
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
 
-  const feeRows = useMemo(() => Object.entries(config.feeOverrides), [config.feeOverrides]);
+  const feeRows = useMemo(() => [...new Map<string,number>([
+    ...exchanges.flatMap(exchange=>[
+      ...exchange.pairs.map(symbol=>[`${exchange.slug}:${symbol}:tradingFeePct`,exchange.fee.tradingFeePct] as [string,number]),
+      ...Object.entries(exchange.fee.networks).map(([symbol,value])=>[`${exchange.slug}:${symbol}:networkFee`,value] as [string,number]),
+      [`${exchange.slug}:THB:withdrawFee`,exchange.fee.thbWithdraw] as [string,number],
+    ]), ...Object.entries(config.feeOverrides),
+  ]).entries()], [config.feeOverrides]);
 
   async function save() {
     setSaving(true);
@@ -49,7 +56,9 @@ export function ConfigEditor({ initialConfig, initialCachePreview }: { initialCo
     if (data?.data) setCachePreview(JSON.stringify(data.data, null, 2));
     setSaving(false);
     trackEvent('admin_cash_refresh_result', { ok: response.ok });
-    setMessage(response.ok ? 'Cash scrape refreshed.' : 'Cash scrape failed.');
+    setMessage(response.ok ? 'Cash scrape refreshed.' : data?.error === 'external_cash_collection'
+      ? 'Cash quotes update automatically about every 10 minutes. Manual scraping is disabled.'
+      : 'Cash scrape failed.');
   }
 
   function updateFeeOverride(key: string, value: string) {

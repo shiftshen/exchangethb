@@ -1,12 +1,13 @@
+import { cryptoSymbols } from '@/lib/types';
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { fail, ok } from '@/lib/api-response';
 import { compareCrypto } from '@/lib/compare';
 
 const schema = z.object({
-  symbol: z.enum(['BTC', 'ETH', 'USDT', 'XRP', 'DOGE', 'SOL']).default('BTC'),
+  symbol: z.enum(cryptoSymbols).default('BTC'),
   side: z.enum(['buy', 'sell']).default('buy'),
-  amount: z.coerce.number().positive().default(1),
+  amount: z.coerce.number().finite().positive().max(1e12).default(1),
 });
 
 export async function GET(request: NextRequest) {

@@ -1,8 +1,8 @@
-import { ContentLocale, Locale, NavItem } from '@/lib/types';
+import { ContentLocale, Locale, NavItem, CopyGroup } from '@/lib/types';
 
-export const locales: ContentLocale[] = ['th', 'en', 'zh'];
-export const indexableLocales: ContentLocale[] = ['th', 'en', 'zh'];
-export const legacyLocales: Array<Exclude<Locale, ContentLocale>> = ['ja', 'ko', 'de'];
+export const locales: ContentLocale[] = ['th', 'en', 'zh', 'ja', 'ru', 'ko', 'fr', 'de', 'id', 'vi'];
+export const indexableLocales: ContentLocale[] = ['th', 'en', 'zh', 'ja', 'ru', 'ko', 'fr', 'de', 'id', 'vi'];
+export const legacyLocales: Array<Exclude<Locale, ContentLocale>> = [];
 
 export const navigation: NavItem[] = [
   { href: '', label: { th: 'หน้าแรก', en: 'Home', zh: '首页', ja: 'ホーム', ko: '홈', de: 'Start' } },
@@ -29,8 +29,10 @@ export function resolveContentLocale(locale: Locale): ContentLocale {
 }
 
 export function t<T extends { th: string; en: string; zh: string; ja?: string; ko?: string; de?: string }>(copy: T, locale: Locale) {
-  const primary = copy[locale];
+  const primary = (copy as CopyGroup)[locale];
   if (primary && primary.trim().length > 0) return primary;
   if (copy.en && copy.en.trim().length > 0) return copy.en;
   return copy.th || copy.zh;
 }
+
+export function baseContentLocale(locale: Locale): 'en' | 'th' | 'zh' { return locale === 'th' || locale === 'zh' ? locale : 'en'; }

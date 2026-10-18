@@ -10,6 +10,7 @@ import { ConfigEditor } from '@/components/admin/config-editor';
 import { AlertScopeFilters, DashboardFilterBootstrap, HealthStatusFilters } from '@/components/admin/dashboard-filters';
 
 const modules = [
+  { title: '平台核验依据', body: '按来源和有效期核验牌照、费用及服务状态，不使用固定综合分。', href: '/admin/evidence' },
   { title: '数据源监控', body: '查看交易所 API、抓取新鲜度、失败情况和告警状态。', href: '/admin/cash-health' },
   { title: '规则与费用', body: '编辑交易手续费、THB 提现费、网络费和披露说明。', href: '/admin/dashboard' },
   { title: '跳转链接', body: '维护官网链接、统计链接、活动时间和前台按钮说明。', href: '/admin/exchange-profiles' },

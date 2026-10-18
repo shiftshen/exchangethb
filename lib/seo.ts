@@ -134,6 +134,18 @@ export function collectionPageJsonLd(locale: Locale, path: string, name: string,
   };
 }
 
+export function faqPageJsonLd(entries: Array<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: entries.map((entry) => ({
+      '@type': 'Question',
+      name: entry.question,
+      acceptedAnswer: { '@type': 'Answer', text: entry.answer },
+    })),
+  };
+}
+
 export function itemListJsonLd(items: Array<{ name: string; url: string }>, name?: string) {
   return {
     '@context': 'https://schema.org',

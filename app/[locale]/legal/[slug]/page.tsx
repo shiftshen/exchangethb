@@ -1,4 +1,8 @@
+import { additionalCopy, isAdditionalLocale } from '@/lib/additional-copy';
+import { coreIndexLocales } from '@/lib/indexing-policy';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { japaneseLegalPages } from '@/lib/japanese-legal';
 import { Metadata } from 'next';
 import { TrackLink } from '@/components/track-link';
 import { Locale } from '@/lib/types';
@@ -6,6 +10,21 @@ import { t } from '@/lib/i18n';
 import { shouldIndexLegalPage } from '@/lib/indexing-policy';
 import { metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { CopyGroup } from '@/lib/types';
+
+const advertisingPrivacy: Record<Locale, string> = {
+  en: 'We use Google AdSense and its consent manager. Google and its partners may process cookies and device identifiers for advertising. Where applicable, you can consent, decline or manage advertising choices in the Google message. Usage analytics has a separate choice in Analytics settings. AdSense approval and advertising revenue are not guaranteed.',
+  zh: '本站接入 Google AdSense 及其同意管理工具。Google 和合作方可能为广告处理 Cookie 与设备标识。在适用地区，你可在 Google 提示中同意、拒绝或管理广告选择；访问统计另由“统计设置”控制。接入不代表审核通过或保证广告收入。',
+  th: 'เว็บไซต์ใช้ Google AdSense และเครื่องมือจัดการความยินยอม Google และพันธมิตรอาจใช้คุกกี้และตัวระบุอุปกรณ์เพื่อโฆษณา ในพื้นที่ที่เกี่ยวข้อง คุณยอมรับ ปฏิเสธ หรือจัดการตัวเลือกโฆษณาได้ สถิติการใช้งานมีการตั้งค่าแยกต่างหาก การอนุมัติและรายได้ไม่รับประกัน',
+  ja: 'Google AdSenseと同意管理ツールを使用します。Googleと提携先は広告のためにCookieや端末識別子を処理する場合があります。対象地域では同意、拒否、広告設定の管理ができます。利用統計は分析設定で別に選択できます。審査承認や広告収入は保証しません。',
+  ko: 'Google AdSense와 동의 관리 도구를 사용합니다. Google과 파트너는 광고를 위해 쿠키와 기기 식별자를 처리할 수 있습니다. 해당 지역에서는 동의, 거부 또는 광고 설정 관리가 가능합니다. 이용 통계는 별도로 선택합니다. 승인과 수익은 보장되지 않습니다.',
+  ru: 'Мы используем Google AdSense и управление согласием. Google и партнёры могут обрабатывать cookies и идентификаторы устройств для рекламы. В применимых регионах можно согласиться, отказаться или управлять выбором. Аналитика настраивается отдельно. Одобрение и доход не гарантированы.',
+  fr: 'Nous utilisons Google AdSense et son gestionnaire de consentement. Google et ses partenaires peuvent traiter des cookies et identifiants pour la publicité. Dans les régions concernées, vous pouvez accepter, refuser ou gérer vos choix. Les statistiques se règlent séparément. Approbation et revenus ne sont pas garantis.',
+  de: 'Wir verwenden Google AdSense und dessen Einwilligungsverwaltung. Google und Partner können Cookies und Gerätekennungen für Werbung verarbeiten. In den betreffenden Regionen können Sie zustimmen, ablehnen oder Einstellungen verwalten. Nutzungsstatistiken werden separat gesteuert. Zulassung und Einnahmen sind nicht garantiert.',
+  id: 'Kami menggunakan Google AdSense dan pengelola persetujuannya. Google dan mitra dapat memproses cookie dan pengenal perangkat untuk iklan. Di wilayah terkait, Anda dapat menyetujui, menolak, atau mengelola pilihan. Statistik penggunaan diatur terpisah. Persetujuan akun dan pendapatan tidak dijamin.',
+  vi: 'Chúng tôi sử dụng Google AdSense và công cụ quản lý đồng ý. Google và đối tác có thể xử lý cookie và mã nhận dạng thiết bị cho quảng cáo. Tại khu vực áp dụng, bạn có thể đồng ý, từ chối hoặc quản lý lựa chọn. Thống kê được chọn riêng. Không đảm bảo phê duyệt hoặc doanh thu.',
+};
+
+const travelpayoutsPrivacy = 'We use Travelpayouts Drive to identify eligible travel links and attribute referrals. Travelpayouts and its partners may process cookies, device and click information; we may earn a commission from qualifying bookings. See https://www.travelpayouts.com/privacy. Browser cookie controls also apply.';
 
 type LocalizedText = CopyGroup;
 
@@ -28,6 +47,14 @@ const legalPages: Record<string, {
       zh: '本页说明 ExchangeTHB 如何生成比较结果、数据来自哪里，以及为什么站内所有数字都属于估算值而非保证成交价格。',
     },
     sections: [
+      {
+        heading: {th:'เวลาและหลักฐาน',en:'Time and evidence',zh:'时间与核验依据'},
+        bullets: [
+          {th:'แยกเวลาเก็บข้อมูลกับเวลาประกาศ เรทเก่าหรือคำนวณผสมไม่ใช่เรทแนะนำล่าสุด',en:'Collection time and provider publication time are distinct. Old and inferred quotes are reference only.',zh:'采集时间与官网发布时间分开。过期或混合推算报价仅供参考，不进入当前推荐。'},
+          {th:'ค่าธรรมเนียมที่ยังไม่ได้ตรวจเป็นสมมติฐาน ไม่มีคะแนนรวมตายตัว ค่าคอมมิชชันไม่เปลี่ยนการจัดอันดับ',en:'Unverified fees are assumptions. There is no fixed total rating. Referral commission does not affect ranking.',zh:'未核验费用是计算假设，不使用固定综合分；推广佣金不影响排序。'},
+          {th:'รีวิวของ Google ผูกกับสาขาที่ตรวจแล้ว สูงสุด5รีวิวที่เกี่ยวข้อง ไม่ใช่รีวิวทั้งหมดหรือคะแนนความปลอดภัย',en:'Google reviews belong to a verified branch and include up to five relevant reviews, not all reviews or a financial safety rating.',zh:'Google 口碑绑定已核验的具体分店，只展示最多5条相关评论，并非全部评论或金融安全评级。'},
+        ],
+      },
       {
         heading: { th: 'เราเป็นเว็บเปรียบเทียบ ไม่ใช่ผู้ให้บริการธุรกรรม', en: 'We are a comparison website, not the transaction provider', zh: '我们是比较网站，不是交易服务方' },
         bullets: [
@@ -81,6 +108,7 @@ const legalPages: Record<string, {
       {
         heading: { th: 'เราไม่เข้าร่วมธุรกรรมของคุณ', en: 'We do not participate in your transaction', zh: '我们不参与实际交易' },
         bullets: [
+          { th: 'ข้อมูลอาจล่าช้าหรือผิดพลาด เราไม่รับประกันราคา ผลตอบแทน หรือความปลอดภัยของผู้ให้บริการ ข้อความนี้ไม่ตัดสิทธิหรือความรับผิดที่กฎหมายไม่อนุญาตให้ยกเว้น', en: 'Data may be delayed or inaccurate. We do not guarantee prices, returns or provider safety. This notice does not exclude rights or liabilities that cannot lawfully be excluded.', zh: '数据可能延迟或有误；本站不保证成交价格、收益或第三方资金安全。本声明不排除法律规定不得免除的责任或用户法定权利。' },
           { th: 'เราไม่เป็นตัวแทน นายหน้า เอเยนต์ หรือคู่สัญญาของธุรกรรมคริปโตหรือเงินสดใดๆ', en: 'We are not the broker, agent, or transaction counterparty for any crypto or cash exchange activity.', zh: '我们不是任何加密交易或现金换汇的经纪方、代理方或实际交易对手。' },
           { th: 'เราไม่รับฝาก ไม่ดูแล และไม่ควบคุมเงินหรือสินทรัพย์ของผู้ใช้', en: 'We do not receive, custody, or control user funds or assets.', zh: '我们不接收、不保管、也不控制用户资金或资产。' },
           { th: 'เมื่อคุณคลิกออกจากเว็บไซต์ การทำธุรกรรมทั้งหมดจะอยู่ภายใต้เงื่อนไขและความรับผิดชอบของผู้ให้บริการปลายทาง', en: 'Once you leave our site, the transaction is governed by the destination provider’s terms and responsibility.', zh: '当你离开本站后，后续交易完全受目标服务方条款和责任约束。' },
@@ -110,6 +138,10 @@ const legalPages: Record<string, {
       zh: '本页说明当你访问或使用 ExchangeTHB 时，我们会收集哪些数据、如何使用以及如何保护这些数据。',
     },
     sections: [
+      {
+        heading:{th:'ข้อมูล Google Maps',en:'Google Maps content',zh:'Google Maps 内容'},
+        body:{th:'เมื่อเปิดรีวิวสาขา เซิร์ฟเวอร์อาจเรียก Google Places รูปผู้เขียนโหลดจาก Google โดยตรง รีวิวไม่ถูกบันทึกถาวร การใช้บริการอยู่ภายใต้ Google Terms of Service และ Google Privacy Policy',en:'Opening branch reviews may request Google Places through our server. Author images load directly from Google. We do not persist review content. Use is subject to Google Terms of Service and Google Privacy Policy.',zh:'展开分店评论时，服务器可能请求 Google Places；作者头像由浏览器直接从 Google 加载。评论内容不作持久保存。相关服务适用 Google 服务条款与隐私政策。'},
+      },
       {
         heading: { th: 'ข้อมูลที่เราเก็บ', en: 'What we collect', zh: '我们收集哪些信息' },
         bullets: [
@@ -146,6 +178,12 @@ const legalPages: Record<string, {
 
 export default async function LegalPage({ params }: { params: Promise<{ locale: Locale; slug: keyof typeof legalPages }> }) {
   const { locale, slug } = await params;
+  if (locale === 'ja' || isAdditionalLocale(locale)) {
+    const pages = locale === 'ja' ? japaneseLegalPages : additionalCopy[locale].legal;
+    const page = pages[slug as keyof typeof pages];
+    if (!page) notFound();
+    return <article className="simple-page"><header className="simple-intro"><h1>{page.title}</h1><p>{page.intro}</p></header>{page.sections.map(section=><section className="quote-card" key={section.heading}><h2>{section.heading}</h2><p>{section.body}</p></section>)}<p><Link href={`/${locale}/cash`}>{isAdditionalLocale(locale) ? additionalCopy[locale].words.cash : '現金両替を比較'}</Link> · <Link href={`/${locale}/crypto`}>{isAdditionalLocale(locale) ? additionalCopy[locale].words.crypto : '暗号資産を比較'}</Link></p>{slug === 'privacy-policy' && <><p>{advertisingPrivacy[locale]} </p><p>{travelpayoutsPrivacy}</p></>}{slug === 'privacy-policy' && <p><a href="https://policies.google.com/privacy">Google プライバシー ポリシー</a> · <a href="https://maps.google.com/help/terms_maps/">Google Maps 利用規約</a></p>}</article>;
+  }
   const page = legalPages[slug];
   if (!page) notFound();
   const continueTitle = locale === 'th'
@@ -182,7 +220,7 @@ export default async function LegalPage({ params }: { params: Promise<{ locale: 
     {
       href: `/${locale}/money-changers`,
       label: locale === 'th' ? 'หน้ารวมร้านแลกเงิน' : locale === 'zh' ? '换汇品牌总览' : 'Money Changer Hub',
-      body: locale === 'th' ? 'ดูหน้ารวมแบรนด์อย่าง SIA และ SuperRich ก่อนเทียบเส้นทางจริง' : locale === 'zh' ? '先查看 SIA、SuperRich 等品牌总览，再进入真实比较。' : 'Start from the money changer hub before comparing specific Bangkok cash routes.',
+      body: locale === 'th' ? 'ดูหน้ารวมแบรนด์อย่าง Ratchada และ SuperRich ก่อนเทียบเส้นทางจริง' : locale === 'zh' ? '先查看 Ratchada、SuperRich 等品牌总览，再进入真实比较。' : 'Start from the money changer hub before comparing specific Bangkok cash routes.',
     },
   ];
 
@@ -229,12 +267,19 @@ export default async function LegalPage({ params }: { params: Promise<{ locale: 
           ))}
         </div>
       </section>
+      {slug==='privacy-policy'&&<><p>{advertisingPrivacy[locale]}</p><p>{travelpayoutsPrivacy}</p></>}{slug==='privacy-policy'&&<p className="text-sm text-stone-300"><a href="https://www.google.com/policies/privacy/" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a> · <a href="https://maps.google.com/help/terms_maps/" target="_blank" rel="noopener noreferrer">Google Maps Terms</a></p>}
     </article>
   );
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale; slug: keyof typeof legalPages }> }): Promise<Metadata> {
   const { locale, slug } = await params;
+  if (locale === 'ja' || isAdditionalLocale(locale)) {
+    const pages = locale === 'ja' ? japaneseLegalPages : additionalCopy[locale].legal;
+    const page = pages[slug as keyof typeof pages];
+    if (!page) return {};
+    return { title: page.title, description: page.intro, alternates: metadataAlternatesForPolicy(locale, `/legal/${slug}`, shouldIndexLegalPage(locale, slug) ? coreIndexLocales : []), robots: robotsForPage(locale, shouldIndexLegalPage(locale, slug)) };
+  }
   const page = legalPages[slug];
   if (!page) return {};
   const title = t(page.title, locale);
@@ -245,7 +290,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     alternates: metadataAlternatesForPolicy(
       locale,
       `/legal/${slug}`,
-      shouldIndexLegalPage(locale, slug) ? ['en', 'th', 'zh'] : [],
+      shouldIndexLegalPage(locale, slug) ? coreIndexLocales : [],
     ),
     robots: robotsForPage(locale, shouldIndexLegalPage(locale, slug)),
     openGraph: {

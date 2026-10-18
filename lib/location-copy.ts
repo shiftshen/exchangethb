@@ -1,0 +1,13 @@
+import type { ContentLocale } from '@/lib/types';
+export const locationCopy: Record<ContentLocale, {reference:string;user:string;precision:string;low:string;straight:string}> = {
+ zh:{reference:'曼谷参考点距离',user:'距你的位置',precision:'定位误差约',low:'位置精度较低，建议在手机开启精确定位后重试。',straight:'距离为直线估算；路线距离和实时定位请在 Google 地图确认。'},
+ en:{reference:'From Bangkok reference point',user:'From your position',precision:'Location accuracy about',low:'Low location accuracy. Try again on your phone with precise location enabled.',straight:'Distances are straight-line estimates. Check routes and your live position in Google Maps.'},
+ th:{reference:'จากจุดอ้างอิงกรุงเทพ',user:'จากตำแหน่งของคุณ',precision:'ความคลาดเคลื่อนประมาณ',low:'ตำแหน่งไม่แม่นยำ ลองใหม่บนมือถือและเปิดตำแหน่งแบบแม่นยำ',straight:'ระยะเป็นเส้นตรงโดยประมาณ ตรวจเส้นทางและตำแหน่งปัจจุบันใน Google Maps'},
+ ja:{reference:'バンコク参照点から',user:'現在地から',precision:'位置の誤差は約',low:'位置の精度が低いため、スマートフォンで正確な位置情報を有効にして再試行してください。',straight:'距離は直線の概算です。経路と現在地はGoogle Mapsで確認してください。'},
+ ru:{reference:'От контрольной точки Бангкока',user:'От вашего положения',precision:'Погрешность позиции около',low:'Низкая точность. Повторите на телефоне с точной геолокацией.',straight:'Расстояния приблизительные, по прямой. Маршрут и текущую позицию проверьте в Google Maps.'},
+ ko:{reference:'방콕 기준점에서',user:'현재 위치에서',precision:'위치 오차 약',low:'위치 정확도가 낮습니다. 휴대폰에서 정확한 위치를 켜고 다시 시도하세요.',straight:'거리는 직선 추정치입니다. 경로와 현재 위치는 Google Maps에서 확인하세요.'},
+ fr:{reference:'Depuis le point de référence de Bangkok',user:'Depuis votre position',precision:'Précision de position environ',low:'Position peu précise. Réessayez sur votre téléphone avec la localisation précise.',straight:'Distances estimées à vol d’oiseau. Vérifiez les itinéraires et votre position dans Google Maps.'},
+ de:{reference:'Vom Referenzpunkt Bangkok',user:'Von Ihrem Standort',precision:'Standortgenauigkeit etwa',low:'Ungenauer Standort. Versuchen Sie es mit präziser Ortung auf Ihrem Smartphone erneut.',straight:'Entfernungen sind Luftlinien-Schätzungen. Prüfen Sie Route und aktuellen Standort in Google Maps.'},
+ id:{reference:'Dari titik acuan Bangkok',user:'Dari lokasi Anda',precision:'Akurasi lokasi sekitar',low:'Lokasi kurang akurat. Coba lagi di ponsel dengan lokasi presisi diaktifkan.',straight:'Jarak adalah perkiraan garis lurus. Periksa rute dan lokasi terkini di Google Maps.'},
+ vi:{reference:'Từ điểm tham chiếu Bangkok',user:'Từ vị trí của bạn',precision:'Sai số vị trí khoảng',low:'Vị trí chưa chính xác. Thử lại trên điện thoại với vị trí chính xác được bật.',straight:'Khoảng cách là ước tính đường thẳng. Kiểm tra tuyến đường và vị trí hiện tại trong Google Maps.'},
+};

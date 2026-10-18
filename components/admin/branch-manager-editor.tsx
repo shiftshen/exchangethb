@@ -8,6 +8,8 @@ type BranchOverride = {
   hours?: string;
   mapsUrl?: string;
   isVisible?: boolean;
+  googlePlaceId?: string;
+  googlePlaceVerified?: boolean;
 };
 
 type AdminConfig = {
@@ -58,6 +60,8 @@ export function BranchManagerEditor({ initialConfig, branches }: { initialConfig
                 前台可见
               </label>
             </div>
+            <label className="mt-3 block text-sm">Google Place ID（核对具体分店后填写）<input className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2" value={override.googlePlaceId || ''} onChange={event=>setConfig({...config,branchOverrides:{...config.branchOverrides,[branch.id]:{...override,googlePlaceId:event.target.value || undefined,googlePlaceVerified:false}}})}/></label>
+            <label className="mt-3 flex items-center gap-2 text-sm"><input type="checkbox" checked={override.googlePlaceVerified || false} disabled={!override.googlePlaceId} onChange={event=>setConfig({...config,branchOverrides:{...config.branchOverrides,[branch.id]:{...override,googlePlaceVerified:event.target.checked}}})}/>已比对官方地址及 Google 分店身份（不能使用品牌总部代替）</label>
             <div className="mt-3 grid gap-3 md:grid-cols-2">
               <div className="space-y-1">
                 <label className="text-sm font-medium text-stone-700">门店名称</label>

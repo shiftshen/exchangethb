@@ -1,3 +1,4 @@
+import { isLocale } from '@/lib/i18n';
 import './globals.css';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
@@ -40,15 +41,40 @@ export const metadata: Metadata = {
   verification: {
     google: googleSiteVerification,
   },
+  other: {
+    'google-adsense-account': 'ca-pub-8386341379958173',
+  },
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const organization = organizationJsonLd();
   const requestHeaders = await headers();
   const locale = requestHeaders.get('x-resolved-locale');
-  const htmlLang = locale === 'th' || locale === 'zh' || locale === 'en' ? locale : 'en';
+  const htmlLang = locale && isLocale(locale) ? locale : 'en';
   return (
     <html lang={htmlLang} suppressHydrationWarning>
+      <head>
+        <script
+          id="travelpayouts-drive"
+          {...{ nowprocket: '', 'seraph-accel-crit': '1' }}
+          data-noptimize="1"
+          data-cfasync="false"
+          data-wpfc-render="false"
+          data-no-defer="1"
+          data-cmp-ab="2"
+          dangerouslySetInnerHTML={{ __html: `(function () {
+            if (document.querySelector('script[src="https://tpembars.com/NTgwMjY5.js?t=580269"]')) return;
+            var script = document.createElement("script");
+            script.async = 1;
+            script.setAttribute("data-cmp-ab", "2");
+            script.src = 'https://tpembars.com/NTgwMjY5.js?t=580269';
+            document.head.appendChild(script);
+          })();` }}
+        />
+        {requestHeaders.get('x-public-adsense') === '1' && <script async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8386341379958173"
+          crossOrigin="anonymous" />}
+      </head>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
         {children}

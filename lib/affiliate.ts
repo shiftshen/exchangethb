@@ -5,7 +5,8 @@ function isActiveWindow(link: AffiliateLink, now: Date) {
   const start = link.startAt ? new Date(link.startAt).getTime() : Number.NEGATIVE_INFINITY;
   const end = link.endAt ? new Date(link.endAt).getTime() : Number.POSITIVE_INFINITY;
   const time = now.getTime();
-  return Number.isFinite(start) && Number.isFinite(end) ? time >= start && time <= end : false;
+  if ((link.startAt && !Number.isFinite(start)) || (link.endAt && !Number.isFinite(end))) return false;
+  return time >= start && time <= end;
 }
 
 export function resolveAffiliateLink(link: AffiliateLink, now = new Date()) {

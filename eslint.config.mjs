@@ -13,6 +13,8 @@ const eslintConfig = [
       'node_modules/**',
       // artifacts/ holds captured third-party bundles and evidence output, not our source.
       'artifacts/**',
+      // evidence/<date>/ holds captured pages and screenshots kept as proof, not our source.
+      'evidence/**',
       'content/admin-config.json',
       'content/cash-scrape-cache.json',
       'next-env.d.ts',

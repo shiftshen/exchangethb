@@ -21,13 +21,21 @@ function timeToMinutes(value: string) {
 export function getBangkokOpenState(hours: string, now = new Date()): boolean | null {
   const normalized = hours.trim();
   const { day, minutes } = bangkokParts(now);
-  const timeMatch = normalized.match(/(\d{2}:\d{2})-(\d{2}:\d{2})/);
-  if (!timeMatch) return null;
-
-  const withinHours = minutes >= timeToMinutes(timeMatch[1]) && minutes < timeToMinutes(timeMatch[2]);
-
-  if (/open daily/i.test(normalized)) return withinHours;
-  if (/mon(?:day)?-sat(?:urday)?/i.test(normalized)) return day !== 'Sun' && withinHours;
-
-  return null;
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  let understood=false;
+  for(const section of normalized.split(/[,;]/)) {
+    const time=section.match(/(\d{2}:\d{2})-(\d{2}:\d{2})/);
+    const range=section.match(/(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\w*\s*-\s*(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\w*/i);
+    const single=section.match(/\b(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\w*/i);
+    const daily=/open daily/i.test(section);
+    if(!time&&!/closed/i.test(section))continue;
+    if(!range&&!single&&!daily)continue;
+    understood=true;
+    const index=(v:string)=>days.findIndex(d=>d.toLowerCase()===v.toLowerCase());
+    const today=days.indexOf(day),start=range?index(range[1]):-1,end=range?index(range[2]):-1;
+    const applies=daily||(range?(start<=end?today>=start&&today<=end:today>=start||today<=end):today===index(single![1]));
+    if(applies&&time)return minutes>=timeToMinutes(time[1])&&minutes<timeToMinutes(time[2]);
+    if(applies&&/closed/i.test(section))return false;
+  }
+  return understood?false:null;
 }

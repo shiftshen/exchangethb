@@ -1,9 +1,12 @@
-import { cashBranches, cashProviders, cashRates, exchanges } from '@/data/site';
+import { exchanges } from '@/data/site';
 import { resolveAffiliateLink } from '@/lib/affiliate';
-import { getBangkokReferenceDistanceKm } from '@/lib/cash-entities';
+import { compareCashLive } from '@/lib/cash-live';
 import { describeMarketSource, getLiveMarketSnapshots } from '@/lib/market-data';
 import { readAdminConfig } from '@/lib/content-store';
 import { CryptoSymbol, CurrencyCode, ExchangeRecord, Locale } from '@/lib/types';
+import { cleanOrderbook, finitePositive } from '@/lib/data-quality';
+import { evidenceState } from '@/lib/provider-evidence';
+import { fiatWithdrawalFee } from '@/lib/fiat-withdrawal-fee';
 
 function estimateFromOrderbook(levels: { price: number; quantity: number }[], amount: number) {
   let remaining = amount;
@@ -31,25 +34,37 @@ export async function compareCrypto(input: {
 }) {
   const [snapshots, adminConfig] = await Promise.all([getLiveMarketSnapshots(input.symbol), readAdminConfig()]);
 
-  return snapshots.map((snapshot) => {
+  return snapshots.filter(snapshot => {
+    try { cleanOrderbook(input.side==='buy'?snapshot.asks:snapshot.bids,input.side==='buy'?'asks':'bids'); return true; } catch { return false; }
+  }).map((snapshot) => {
     const exchange = exchanges.find((item) => item.slug === snapshot.exchange) as ExchangeRecord;
-    const book = input.side === 'buy' ? snapshot.asks : snapshot.bids;
+    const book = cleanOrderbook(input.side === 'buy' ? snapshot.asks : snapshot.bids, input.side === 'buy' ? 'asks' : 'bids');
     const coinAmount = input.quoteMode === 'coin' ? input.amount : input.amount / book[0].price;
     const depth = estimateFromOrderbook(book, coinAmount);
     const fillRatio = coinAmount > 0 ? depth.filled / coinAmount : 0;
     const feeOverrideKey = `${exchange.slug}:${input.symbol}:tradingFeePct`;
     const effectiveTradingFeePct = adminConfig.feeOverrides[feeOverrideKey] ?? exchange.fee.tradingFeePct;
     const tradingFee = depth.gross * (effectiveTradingFeePct / 100);
-    const networkFee = input.includeWithdrawal ? exchange.fee.networks[input.network || input.symbol] || 0 : 0;
-    const thbWithdraw = input.withdrawThb ? exchange.fee.thbWithdraw : 0;
-    const estimatedReceive = input.side === 'buy' ? depth.filled - networkFee : depth.gross - tradingFee - thbWithdraw;
-    const totalCost = input.side === 'buy' ? depth.gross + tradingFee : tradingFee + thbWithdraw;
+    const buyFeeInAsset = input.side === 'buy' && exchange.fee.tradingFeeAsset === 'received';
+    const tradingFeeAsset = buyFeeInAsset ? depth.filled * effectiveTradingFeePct / 100 : 0;
+    const assetWithdrawalFee = adminConfig.feeOverrides[`${exchange.slug}:${input.network || input.symbol}:networkFee`] ?? exchange.fee.networks[input.network || input.symbol];
+    const withdrawalSupported = assetWithdrawalFee !== undefined;
+    const networkFee = input.includeWithdrawal ? assetWithdrawalFee || 0 : 0;
+    const override = adminConfig.feeOverrides[`${exchange.slug}:THB:withdrawFee`];
+    const fiatAmount = Math.max(0, depth.gross - tradingFee);
+    const publishedAmountRange = exchange.slug === 'binance-th' ? fiatAmount >= 100 : exchange.slug === 'bitkub' ? fiatAmount >= 21 && fiatAmount <= 20_000_000 : true;
+    const thbWithdrawKnown = !input.withdrawThb || override !== undefined || (exchange.fee.thbWithdrawKnown !== false && publishedAmountRange);
+    const withdrawalRange = !input.withdrawThb || !thbWithdrawKnown ? { min: 0, max: 0 } : override !== undefined ? { min: override, max: override } : fiatWithdrawalFee(exchange.slug, Math.max(0, depth.gross - tradingFee), exchange.fee.thbWithdraw);
+    const thbWithdraw = withdrawalRange.max;
+    const estimatedReceive = Math.max(0, input.side === 'buy' ? depth.filled - tradingFeeAsset - networkFee : depth.gross - tradingFee - thbWithdraw);
+    const totalCost = input.side === 'buy' ? depth.gross + (buyFeeInAsset ? 0 : tradingFee) : tradingFee + thbWithdraw;
     const source = describeMarketSource(snapshot);
     const effectiveAffiliate = resolveAffiliateLink(adminConfig.affiliateLinks[exchange.slug] || exchange.affiliate);
     return {
       exchange: exchange.name,
       slug: exchange.slug,
       estimatedReceive,
+      estimatedReceiveMax: input.side === 'sell' ? Math.max(0, depth.gross - tradingFee - withdrawalRange.min) : estimatedReceive,
       estimatedTotalCost: totalCost,
       averagePrice: depth.averagePrice,
       requestedAmount: coinAmount,
@@ -57,8 +72,11 @@ export async function compareCrypto(input: {
       fillRatio,
       liquidityGap: depth.liquidityGap,
       tradingFee,
+      tradingFeeAsset,
       networkFee,
       thbWithdraw,
+      thbWithdrawMin: withdrawalRange.min,
+      thbWithdrawKnown,
       license: exchange.license,
       affiliate: effectiveAffiliate,
       affiliateUrl: effectiveAffiliate.outboundUrl,
@@ -69,66 +87,24 @@ export async function compareCrypto(input: {
       live: source.live,
       freshness: source.freshness,
       fallbackReason: source.fallbackReason,
+      timestampKind: snapshot.timestampKind || 'collected',
+      fetchedAt: snapshot.fetchedAt || snapshot.lastUpdated,
+      feeStatus: evidenceState(adminConfig.evidence?.[exchange.slug]?.fees),
+      feeCheckedAt: adminConfig.evidence?.[exchange.slug]?.fees?.checkedAt || null,
+      withdrawalFeeKnown: !input.includeWithdrawal || withdrawalSupported,
     };
-  }).sort((a, b) => {
+  }).filter(row => finitePositive(row.averagePrice) && Number.isFinite(row.estimatedReceive) && Number.isFinite(row.estimatedTotalCost)).sort((a, b) => {
+    if (a.live !== b.live) return Number(b.live) - Number(a.live);
     if (b.fillRatio !== a.fillRatio) return b.fillRatio - a.fillRatio;
-    if (input.side === 'buy') return a.estimatedTotalCost - b.estimatedTotalCost;
+    if (input.side === 'buy') {
+      const aUnitCost = a.estimatedReceive > 0 ? a.estimatedTotalCost / a.estimatedReceive : Infinity;
+      const bUnitCost = b.estimatedReceive > 0 ? b.estimatedTotalCost / b.estimatedReceive : Infinity;
+      return aUnitCost - bUnitCost;
+    }
     return b.estimatedReceive - a.estimatedReceive;
   });
 }
 
 export async function compareCash(input: { currency: CurrencyCode; amount: number; prioritizeNearest?: boolean; maxDistanceKm?: number; locale?: Locale; }) {
-  const adminConfig = await readAdminConfig();
-  const effectiveBranches = cashBranches
-    .map((branch) => {
-      const override = adminConfig.branchOverrides[branch.id] || {};
-      return {
-        ...branch,
-        name: override.name || branch.name,
-        address: override.address || branch.address,
-        hours: override.hours || branch.hours,
-        mapsUrl: override.mapsUrl || branch.mapsUrl,
-        isVisible: override.isVisible ?? true,
-        distanceKm: getBangkokReferenceDistanceKm(branch),
-      };
-    })
-    .filter((branch) => branch.isVisible);
-  const results = cashRates
-    .filter((rate) => rate.currency === input.currency)
-    .map((rate) => {
-      const branch = effectiveBranches.find((entry) => entry.id === rate.branchId);
-      if (!branch) return null;
-      const provider = cashProviders.find((entry) => entry.slug === branch.providerSlug)!;
-      return {
-        provider: provider.name,
-        providerSlug: provider.slug,
-        branchName: branch.name,
-        area: branch.area,
-        distanceKm: branch.distanceKm,
-        isOpen: branch.isOpen,
-        hours: branch.hours,
-        buyRate: rate.buyRate,
-        estimatedThb: rate.buyRate * input.amount,
-        mapsUrl: branch.mapsUrl,
-        officialUrl: provider.officialUrl,
-        disclosure: provider.affiliate.disclosure,
-        observedAt: rate.observedAt,
-      } as const;
-    })
-    .filter((row): row is NonNullable<typeof row> => Boolean(row))
-    .filter((row) => row.distanceKm <= (input.maxDistanceKm || Infinity));
-
-  const bestRate = [...results].sort((a, b) => b.buyRate - a.buyRate);
-  const nearestGood = [...results].sort((a, b) => {
-    const scoreA = a.distanceKm * 0.7 - a.buyRate * 0.3;
-    const scoreB = b.distanceKm * 0.7 - b.buyRate * 0.3;
-    return scoreA - scoreB;
-  });
-
-  return {
-    bestRate: bestRate[0] || null,
-    nearestGood: nearestGood[0] || null,
-    all: input.prioritizeNearest ? nearestGood : bestRate,
-    source: 'Official website scraping + manual review',
-  };
+  return compareCashLive(input);
 }

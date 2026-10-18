@@ -17,6 +17,10 @@ type CryptoRow = {
   fillRatio: number;
   liquidityGap: number;
   tradingFee: number;
+  tradingFeeAsset?: number;
+  thbWithdrawMin?: number;
+  thbWithdrawKnown?: boolean;
+  estimatedReceiveMax?: number;
   networkFee: number;
   thbWithdraw: number;
   affiliateUrl: string;
@@ -26,6 +30,11 @@ type CryptoRow = {
   live: boolean;
   freshness: string;
   fallbackReason?: string;
+  feeStatus?: 'verified' | 'unknown' | 'expired' | 'issue';
+  feeCheckedAt?: string | null;
+  withdrawalFeeKnown?: boolean;
+  fetchedAt?: string;
+  timestampKind?: 'published' | 'collected';
 };
 
 export type CryptoDecisionResult = CryptoRow[];
@@ -145,7 +154,7 @@ export function CryptoDecisionTool({
   initialSide: 'buy' | 'sell';
   initialAmount: number;
 }) {
-  const c = copy[locale];
+  const c = copy[locale === 'th' || locale === 'zh' ? locale : 'en'];
   const [symbol, setSymbol] = useState<CryptoSymbol>(initialSymbol);
   const [side, setSide] = useState<'buy' | 'sell'>(initialSide);
   const [amount, setAmount] = useState(String(initialAmount));

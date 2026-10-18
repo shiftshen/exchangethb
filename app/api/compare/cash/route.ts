@@ -1,15 +1,18 @@
+import { cashCurrencies } from '@/lib/types';
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { fail, ok } from '@/lib/api-response';
 import { compareCashLive } from '@/lib/cash-live';
 
 const schema = z.object({
-  currency: z.enum(['USD', 'CNY', 'EUR', 'JPY', 'GBP']).default('USD'),
-  amount: z.coerce.number().positive().default(1000),
+  currency: z.enum(cashCurrencies).default('USD'),
+  amount: z.coerce.number().finite().positive().max(1e12).default(1000),
+  side: z.enum(['buy', 'sell']).default('sell'),
+  banknote: z.coerce.number().finite().positive().max(1e6).optional(),
   maxDistanceKm: z.coerce.number().positive().default(10),
   userLat: z.coerce.number().min(-90).max(90).optional(),
   userLng: z.coerce.number().min(-180).max(180).optional(),
-  prioritizeNearest: z.coerce.boolean().optional().default(false),
+  prioritizeNearest: z.enum(['true', 'false']).default('false').transform(value => value === 'true'),
 });
 
 export async function GET(request: NextRequest) {
@@ -21,6 +24,8 @@ export async function GET(request: NextRequest) {
     const data = await compareCashLive({
       currency: parsed.data.currency,
       amount: parsed.data.amount,
+      side: parsed.data.side,
+      banknote: parsed.data.banknote,
       maxDistanceKm: parsed.data.maxDistanceKm,
       prioritizeNearest: parsed.data.prioritizeNearest,
       userLatitude: parsed.data.userLat,

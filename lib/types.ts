@@ -1,9 +1,11 @@
-export type Locale = 'th' | 'en' | 'zh' | 'ja' | 'ko' | 'de';
-export type ContentLocale = 'th' | 'en' | 'zh';
+export type Locale = 'th' | 'en' | 'zh' | 'ja' | 'ru' | 'ko' | 'fr' | 'de' | 'id' | 'vi';
+export type ContentLocale = Locale;
 export type AffiliateStatus = 'reward_available' | 'campaign_only' | 'official_only';
 export type ExchangeSlug = 'binance-th' | 'bitkub' | 'upbit-thailand' | 'orbix';
-export type CurrencyCode = 'USD' | 'CNY' | 'EUR' | 'JPY' | 'GBP';
-export type CryptoSymbol = 'BTC' | 'ETH' | 'USDT' | 'XRP' | 'DOGE' | 'SOL';
+export const cashCurrencies = ['USD','EUR','JPY','CNY','GBP','AUD','CAD','SGD','HKD','CHF','NZD','KRW','TWD','MYR','INR'] as const;
+export type CurrencyCode = typeof cashCurrencies[number];
+export const cryptoSymbols = ['USDT','BTC','ETH','SOL','XRP','DOGE','USDC','ADA','BNB','AVAX','DOT','LINK','LTC','TRX','NEAR'] as const;
+export type CryptoSymbol = typeof cryptoSymbols[number];
 
 export interface CopyGroup {
   th: string;
@@ -12,11 +14,14 @@ export interface CopyGroup {
   ja?: string;
   ko?: string;
   de?: string;
+  ru?: string;
+  fr?: string;
+  id?: string;
+  vi?: string;
 }
 export interface NavItem { href: string; label: CopyGroup; }
 export interface AffiliateLink { status: AffiliateStatus; trackingUrl?: string; officialUrl: string; disclosure: CopyGroup; startAt?: string; endAt?: string; }
-export interface ExchangeFee { tradingFeePct: number; thbWithdraw: number; networks: Record<string, number>; }
-export interface ExchangeScore { compliance: number; feeTransparency: number; apiQuality: number; thbFriendliness: number; executionQuality: number; operations: number; }
+export interface ExchangeFee { tradingFeePct: number; tradingFeeAsset?: 'received'; thbWithdraw: number; thbWithdrawKnown?: boolean; networks: Record<string, number>; }
 export interface ExchangeRecord {
   slug: ExchangeSlug;
   name: string;
@@ -26,7 +31,6 @@ export interface ExchangeRecord {
   cautions: CopyGroup[];
   affiliate: AffiliateLink;
   fee: ExchangeFee;
-  score: ExchangeScore;
   pairs: CryptoSymbol[];
   lastUpdated: string;
 }
@@ -39,6 +43,8 @@ export interface MarketSnapshot {
   lastUpdated: string;
   source?: 'live' | 'fallback';
   fallbackReason?: string;
+  fetchedAt?: string;
+  timestampKind?: 'published' | 'collected';
 }
 export interface CashBranch {
   id: string;
@@ -47,8 +53,8 @@ export interface CashBranch {
   area: string;
   address: string;
   mapsUrl: string;
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
   hours: string;
   isOpen: boolean;
   distanceKm: number;

@@ -1,7 +1,10 @@
+import { getLiveMarketSnapshots } from '@/lib/market-data';
+export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import { TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
-import { exchanges, marketSnapshots } from '@/data/site';
+import { exchanges } from '@/data/site';
+import { ExchangeBackground } from '@/components/exchange-background';
 import { indexableLocales, t } from '@/lib/i18n';
 import { shouldIndexHub } from '@/lib/indexing-policy';
 import { breadcrumbJsonLd, collectionPageJsonLd, itemListJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
@@ -103,6 +106,7 @@ function webPageJsonLd(locale: ContentLocale, title: string, description: string
 function formatLocaleDate(locale: ContentLocale, value?: string) {
   if (!value) return '-';
   return new Intl.DateTimeFormat(locale === 'th' ? 'th-TH' : locale === 'zh' ? 'zh-CN' : 'en-US', {
+    timeZone: 'Asia/Bangkok',
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(new Date(value));
@@ -114,12 +118,11 @@ export function generateStaticParams() {
 
 export default async function ExchangesIndexPage({ params }: { params: Promise<{ locale: ContentLocale }> }) {
   const { locale } = await params;
-  const c = copy[locale];
+  const c = copy[locale === 'th' || locale === 'zh' ? locale : 'en'];
   const uniquePairs = [...new Set(exchanges.flatMap((exchange) => exchange.pairs))];
-  const latestExchangeUpdate = [...new Set(marketSnapshots.map((snapshot) => snapshot.lastUpdated))]
-    .sort((left, right) => new Date(right).getTime() - new Date(left).getTime())[0] || exchanges
-      .map((exchange) => exchange.lastUpdated)
-      .sort((left, right) => new Date(right).getTime() - new Date(left).getTime())[0];
+  const marketSnapshots = await getLiveMarketSnapshots('USDT');
+  const latestExchangeUpdate = marketSnapshots.map(snapshot => snapshot.lastUpdated)
+    .sort((left, right) => Date.parse(right) - Date.parse(left))[0];
 
   const faqEntries = locale === 'th'
     ? [
@@ -218,7 +221,7 @@ export default async function ExchangesIndexPage({ params }: { params: Promise<{
                 <div className="space-y-2">
                   <Pill>{exchange.license}</Pill>
                   <h2 className="text-2xl font-semibold text-white">{exchange.name}</h2>
-                  <p className="text-sm text-stone-300">{t(exchange.summary, locale)}</p>
+                  <p className="text-sm text-stone-300">{t(exchange.summary, locale)}</p><ExchangeBackground slug={exchange.slug} locale={locale}/>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div className="rounded-2xl border border-white/8 bg-surface-800/70 p-4">
@@ -231,7 +234,7 @@ export default async function ExchangesIndexPage({ params }: { params: Promise<{
                   </div>
                   <div className="rounded-2xl border border-white/8 bg-surface-800/70 p-4">
                     <p className="text-xs uppercase tracking-[0.22em] text-stone-500">{c.reviewedLabel}</p>
-                    <p className="mt-2 text-sm font-semibold text-white">{formatLocaleDate(locale, latestSnapshot?.lastUpdated || exchange.lastUpdated)}</p>
+                    <p className="mt-2 text-sm font-semibold text-white">{formatLocaleDate(locale, latestSnapshot?.lastUpdated)}</p>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
@@ -260,7 +263,7 @@ export default async function ExchangesIndexPage({ params }: { params: Promise<{
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: ContentLocale }> }): Promise<Metadata> {
   const { locale } = await params;
-  const c = copy[locale];
+  const c = copy[locale === 'th' || locale === 'zh' ? locale : 'en'];
   const path = '/exchanges';
 
   return {

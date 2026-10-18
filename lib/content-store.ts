@@ -22,6 +22,17 @@ export interface BranchOverride {
   hours?: string;
   mapsUrl?: string;
   isVisible?: boolean;
+  googlePlaceId?: string;
+  googlePlaceVerified?: boolean;
+  googleLocation?: { latitude: number; longitude: number; fetchedAt: string };
+}
+
+export interface EvidenceCheck {
+  status: 'verified' | 'issue' | 'unknown';
+  sourceUrl: string;
+  checkedAt: string;
+  expiresAt: string;
+  note: string;
 }
 
 export interface AdminConfigStore {
@@ -29,6 +40,7 @@ export interface AdminConfigStore {
   feeOverrides: Record<string, number>;
   exchangeProfiles: Record<string, ExchangeProfileOverride>;
   branchOverrides: Record<string, BranchOverride>;
+  evidence: Record<string, Record<string, EvidenceCheck>>;
   scrapeReview: {
     hiddenAlerts: string[];
     providerModes: Record<string, ScrapeReviewProviderMode>;
@@ -51,6 +63,7 @@ function defaultConfig(): AdminConfigStore {
     feeOverrides: {},
     exchangeProfiles: defaultExchangeProfiles(),
     branchOverrides: defaultBranchOverrides(),
+    evidence: {},
     scrapeReview: {
       hiddenAlerts: [],
       providerModes: {},
@@ -87,13 +100,21 @@ const branchOverrideSchema = z.object({
   hours: z.string().optional(),
   mapsUrl: z.string().optional(),
   isVisible: z.boolean().optional(),
+  googlePlaceId: z.string().regex(/^[A-Za-z0-9_-]{10,200}$/).optional(),
+  googlePlaceVerified: z.boolean().optional(),
+  googleLocation: z.object({ latitude: z.number().min(-90).max(90), longitude: z.number().min(-180).max(180), fetchedAt: z.string().datetime() }).optional(),
 });
 
 const adminConfigSchema = z.object({
   affiliateLinks: z.record(z.string(), affiliateLinkSchema).default({}),
-  feeOverrides: z.record(z.string(), z.number()).default({}),
+  feeOverrides: z.record(z.string(), z.number().finite().nonnegative()).default({}),
   exchangeProfiles: z.record(z.string(), exchangeProfileSchema).default({}),
   branchOverrides: z.record(z.string(), branchOverrideSchema).default({}),
+  evidence: z.record(z.string(), z.record(z.enum(['license', 'fees', 'operations']), z.object({
+    status: z.enum(['verified', 'issue', 'unknown']),
+    sourceUrl: z.string().url().refine(url => url.startsWith('https://') && !new URL(url).username && !new URL(url).password),
+    checkedAt: z.string().datetime(), expiresAt: z.string().datetime(), note: z.string().max(1000),
+  }).refine(value => Date.parse(value.expiresAt) > Date.parse(value.checkedAt), 'Evidence expiry must follow verification'))).default({}),
   scrapeReview: z.object({
     hiddenAlerts: z.array(z.string()).default([]),
     providerModes: z.record(z.string(), z.enum(['auto', 'force_fallback', 'force_live'])).default({}),
@@ -117,6 +138,7 @@ function normalizeConfig(input: Partial<AdminConfigStore>): AdminConfigStore {
     feeOverrides: { ...base.feeOverrides, ...(input.feeOverrides || {}) },
     exchangeProfiles: { ...base.exchangeProfiles, ...(input.exchangeProfiles || {}) },
     branchOverrides: { ...base.branchOverrides, ...(input.branchOverrides || {}) },
+    evidence: input.evidence || {},
     scrapeReview: {
       hiddenAlerts: input.scrapeReview?.hiddenAlerts || [],
       providerModes: input.scrapeReview?.providerModes || {},

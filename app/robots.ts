@@ -1,8 +1,9 @@
+import { locales } from '@/lib/i18n';
 import type { MetadataRoute } from 'next';
 import { siteUrl } from '@/lib/seo';
 
 export default function robots(): MetadataRoute.Robots {
-  const adminDisallow = ['/admin', '/th/admin', '/en/admin', '/zh/admin'];
+  const adminDisallow = ['/admin', ...locales.map(locale => `/${locale}/admin`)];
   return {
     rules: [
       {

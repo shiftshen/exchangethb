@@ -3,6 +3,7 @@ import { readCashCache } from '@/lib/cash-cache-store';
 import { readAdminConfig } from '@/lib/content-store';
 import { getRuntimeConfigWarnings } from '@/lib/runtime-config';
 import { getStorageStatus } from '@/lib/storage-status';
+import { summarizeCashSources } from '@/lib/data-status';
 
 export async function GET() {
   try {
@@ -15,6 +16,10 @@ export async function GET() {
       status: 'ok',
       app: 'exchangethb',
       timestamp: new Date().toISOString(),
+      dataStatus: cashCacheState.status === 'fulfilled' ? {
+        status: summarizeCashSources(cashCacheState.value).every(s=>s.status==='current') ? 'current' : 'degraded',
+        cashSources: summarizeCashSources(cashCacheState.value),
+      } : { status: 'unavailable', cashSources: [] },
       configWarnings: getRuntimeConfigWarnings(),
       storage: storageStatus.status === 'fulfilled' ? storageStatus.value : {
         mode: 'unknown',

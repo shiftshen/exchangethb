@@ -26,8 +26,7 @@ export const exchanges: ExchangeRecord[] = [
         zh: '该链接可能随平台最新规则调整。',
       },
     },
-    fee: { tradingFeePct: 0.25, thbWithdraw: 20, networks: { BTC: 0.00025, ETH: 0.003, USDT: 1 } },
-    score: { compliance: 24, feeTransparency: 14, apiQuality: 15, thbFriendliness: 14, executionQuality: 19, operations: 9 },
+    fee: { tradingFeePct: 0.25, tradingFeeAsset: 'received', thbWithdraw: 20, networks: {} },
     pairs: ['BTC', 'ETH', 'USDT', 'XRP', 'DOGE', 'SOL'],
     lastUpdated: '2026-03-08T00:00:00+07:00',
   },
@@ -40,8 +39,7 @@ export const exchanges: ExchangeRecord[] = [
     ],
     cautions: [{ th: 'บางคู่ลึกน้อยกว่า', en: 'Some markets can be thinner', zh: '部分交易对深度较薄' }],
     affiliate: { status: 'official_only', officialUrl: 'https://www.bitkub.com', disclosure: { th: 'ลิงก์ทางการหรือโปรโมชันอาจอัปเดตได้', en: 'Official or campaign links may be updated.', zh: '官方或活动链接可能更新。' } },
-    fee: { tradingFeePct: 0.25, thbWithdraw: 20, networks: { BTC: 0.0003, ETH: 0.0035, USDT: 1.2 } },
-    score: { compliance: 25, feeTransparency: 13, apiQuality: 14, thbFriendliness: 15, executionQuality: 17, operations: 8 },
+    fee: { tradingFeePct: 0.25, thbWithdraw: 20, networks: {} },
     pairs: ['BTC', 'ETH', 'USDT', 'XRP', 'DOGE', 'SOL'],
     lastUpdated: '2026-03-08T00:00:00+07:00'
   },
@@ -51,8 +49,7 @@ export const exchanges: ExchangeRecord[] = [
     strengths: [{ th: 'โครงสร้างตลาดและหน้าคู่เทรดอ่านง่าย', en: 'Clear market structure and pair pages', zh: '市场结构和交易对页面清晰' }],
     cautions: [{ th: 'ข้อมูลโปรโมชันหรือ referral สาธารณะมีไม่มาก', en: 'Public promotion or referral information is limited', zh: '公开促销或返佣信息较少' }],
     affiliate: { status: 'official_only', officialUrl: 'https://th.upbit.com', disclosure: { th: 'ใช้ลิงก์ทางการเป็นค่าเริ่มต้น', en: 'Official link used by default.', zh: '默认使用官方链接。' } },
-    fee: { tradingFeePct: 0.25, thbWithdraw: 20, networks: { BTC: 0.00028, ETH: 0.0032, USDT: 1 } },
-    score: { compliance: 24, feeTransparency: 13, apiQuality: 14, thbFriendliness: 13, executionQuality: 18, operations: 8 },
+    fee: { tradingFeePct: 0.15, thbWithdraw: 0, thbWithdrawKnown: false, networks: {} },
     pairs: ['BTC', 'ETH', 'USDT'],
     lastUpdated: '2026-03-08T00:00:00+07:00'
   },
@@ -62,8 +59,7 @@ export const exchanges: ExchangeRecord[] = [
     strengths: [{ th: 'มีช่องทางช่วยเหลือและข้อมูลบริษัทบนเว็บอย่างชัดเจน', en: 'Publishes visible support and company information on the website', zh: '官网可见支持渠道和公司信息' }],
     cautions: [{ th: 'จำนวนคู่เทรดและความลึกบางช่วงอาจจำกัด', en: 'Pair coverage and depth can still vary by period', zh: '交易对覆盖和深度仍可能随时段变化' }],
     affiliate: { status: 'campaign_only', officialUrl: 'https://www.orbixtrade.com', disclosure: { th: 'หากแคมเปญหมดอายุ ระบบจะแสดงลิงก์ทางการแทน', en: 'Expired campaigns fall back to the official link.', zh: '活动过期后将回退到官方链接。' } },
-    fee: { tradingFeePct: 0.2, thbWithdraw: 15, networks: { BTC: 0.00024, ETH: 0.0028, USDT: 0.8 } },
-    score: { compliance: 23, feeTransparency: 12, apiQuality: 12, thbFriendliness: 13, executionQuality: 16, operations: 8 },
+    fee: { tradingFeePct: 0.25, tradingFeeAsset: 'received', thbWithdraw: 0, thbWithdrawKnown: false, networks: {} },
     pairs: ['BTC', 'ETH', 'USDT', 'XRP', 'DOGE', 'SOL'],
     lastUpdated: '2026-03-08T00:00:00+07:00'
   }
@@ -82,12 +78,20 @@ export const marketSnapshots: MarketSnapshot[] = [
 
 export const cashProviders: CashProvider[] = [
   { slug: 'superrich-1965', name: 'SuperRich 1965', summary: { th: 'ผู้ให้บริการแลกเงินรายใหญ่ที่เผยแพร่อัตราสำหรับลูกค้าทั่วไปผ่าน guest feed', en: 'Large money changer whose public guest feed exposes customer-facing rates.', zh: '通过公开 guest feed 提供面向客户汇率的大型换汇品牌。' }, officialUrl: 'https://www.superrich1965.com', affiliate: { status: 'official_only', officialUrl: 'https://www.superrich1965.com', disclosure: { th: 'ข้อมูลอาจต่างกันตามสาขาและเวลาจริง', en: 'Rates can vary by branch and time.', zh: '汇率可能因门店与时间不同而变化。' } } },
-  { slug: 'superrich-thailand', name: 'SuperRich Thailand', summary: { th: 'ผู้ให้บริการแลกเงินที่เปิดเผย API อัตราแลกเปลี่ยนสาธารณะบนเว็บไซต์ทางการ', en: 'Money changer with a public rates API exposed on its official site.', zh: '官网公开提供汇率 API 的换汇品牌。' }, officialUrl: 'https://www.superrichthailand.com', affiliate: { status: 'official_only', officialUrl: 'https://www.superrichthailand.com', disclosure: { th: 'ใช้ลิงก์ทางการเท่านั้น', en: 'Official links only.', zh: '仅使用官方链接。' } } },
-  { slug: 'sia', name: 'SIA Money Exchange', summary: { th: 'ร้านแลกเงินย่านประตูน้ำในกรุงเทพที่เผยแพร่หน้าอัตรา เวลาเปิดทำการ และข้อมูลสำนักงานใหญ่บนเว็บทางการ', en: 'SIA Money Exchange Bangkok is a Pratunam money changer with public rate references, branch details, and official website information for THB cash exchange decisions.', zh: '位于曼谷水门一带，官网公开展示汇率参考、门店信息与总部资料的换汇商。' }, officialUrl: 'http://www.siamoneyexchange.com', affiliate: { status: 'official_only', officialUrl: 'http://www.siamoneyexchange.com', disclosure: { th: 'โปรดตรวจสอบเรทล่าสุดจากผู้ให้บริการ', en: 'Please verify final rates with the provider.', zh: '请以门店最终汇率为准。' } } },
+  { slug: 'superrich-thailand', name: 'SuperRich Thailand', summary: { th: 'ผู้ให้บริการแลกเงินที่เผยแพร่ตารางอัตราแลกเปลี่ยนบนเว็บไซต์ทางการ', en: 'Money changer publishing rate tables on its official website.', zh: '官网公布汇率表的换汇品牌。' }, officialUrl: 'https://www.superrichthailand.com', affiliate: { status: 'official_only', officialUrl: 'https://www.superrichthailand.com', disclosure: { th: 'ใช้ลิงก์ทางการเท่านั้น', en: 'Official links only.', zh: '仅使用官方链接。' } } },
+  { slug: 'sia', name: 'SIA Money Exchange', summary: { th: 'ร้านแลกเงินย่านประตูน้ำในกรุงเทพที่เผยแพร่หน้าอัตรา เวลาเปิดทำการ และข้อมูลสำนักงานใหญ่บนเว็บทางการ', en: 'SIA Money Exchange Bangkok is a Pratunam money changer with public rate references, branch details, and official website information for THB cash exchange decisions.', zh: '位于曼谷水门一带，官网公开展示汇率参考、门店信息与总部资料的换汇商。' }, officialUrl: 'https://www.sia-moneyexchange.com/', affiliate: { status: 'official_only', officialUrl: 'https://www.sia-moneyexchange.com/', disclosure: { th: 'โปรดตรวจสอบเรทล่าสุดจากผู้ให้บริการ', en: 'Please verify final rates with the provider.', zh: '请以门店最终汇率为准。' } } },
   { slug: 'ratchada', name: 'Ratchada Exchange', summary: { th: 'ผู้ให้บริการรายเดี่ยวที่เผยแพร่หน้าเรทและข้อมูลติดต่อเองบนเว็บไซต์ทางการ', en: 'Single-store provider publishing its own rates page and contact details on the official website.', zh: '官网自行公开汇率页和联系方式的单店型换汇商。' }, officialUrl: 'https://www.ratchadaexchange.com', affiliate: { status: 'official_only', officialUrl: 'https://www.ratchadaexchange.com', disclosure: { th: 'ลิงก์นี้พาไปยังเว็บไซต์ทางการ', en: 'This link goes to the official website.', zh: '该链接跳转至官网。' } } }
 ];
 
-export const publicCashProviderSlugs = ['superrich-thailand', 'sia', 'ratchada'] as const;
+// Additional official channels have no fabricated fallback quotes.
+cashProviders.push(...(['vasu', 'twelve-victory'] as const).map(slug => ({
+  slug, name: slug === 'vasu' ? 'Vasu Exchange' : 'Twelve Victory Exchange',
+  summary: { en: 'Official head-office rates. Confirm banknote and branch before visiting.', th: 'เรทจากสำนักงานใหญ่ โปรดยืนยันชนิดธนบัตรและสาขาก่อนเดินทาง', zh: '官方总店报价，请确认纸币面额及具体分店后前往。' },
+  officialUrl: slug === 'vasu' ? 'https://www.vasuexchange.co.th/' : 'https://www.twelvevictory.com/en',
+  affiliate: { status: 'official_only' as const, officialUrl: slug === 'vasu' ? 'https://www.vasuexchange.co.th/' : 'https://www.twelvevictory.com/en', disclosure: { en: 'Official link; no verified referral reward.', th: 'ลิงก์ทางการ ไม่มีรางวัลแนะนำที่ยืนยันแล้ว', zh: '官方入口，未核验到推广奖励。' } },
+})));
+
+export const publicCashProviderSlugs = ['superrich-thailand', 'ratchada', 'twelve-victory'] as const;
 export const publicCashProviders = cashProviders.filter((provider) => publicCashProviderSlugs.includes(provider.slug as typeof publicCashProviderSlugs[number]));
 
 export const cashBranches: CashBranch[] = [
@@ -96,6 +100,11 @@ export const cashBranches: CashBranch[] = [
   { id: 'sia-hq-pratunam', providerSlug: 'sia', name: 'SIA Money Exchange HQ', area: 'Pratunam', address: '1091/156-7 Soi Petchaburi 33, New Petchaburi Rd, Makkasan, Ratchathewi, Bangkok 10400', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=1091%2F156-7%20Soi%20Petchaburi%2033%2C%20New%20Petchaburi%20Rd%2C%20Makkasan%2C%20Ratchathewi%2C%20Bangkok%2010400', latitude: 13.751234, longitude: 100.546349, hours: 'Mon-Sat 09:00-18:00, Sun closed', isOpen: true, distanceKm: 3.4, locationPrecision: 'address' },
   { id: 'ratchada-main', providerSlug: 'ratchada', name: 'Ratchada Exchange', area: 'Huai Khwang', address: '78/13 Prachatbamphen Rd., Huai Khwang, Bangkok 10310', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=78%2F13%20Prachatbamphen%20Rd.%2C%20Huai%20Khwang%2C%20Bangkok%2010310', latitude: 13.77837, longitude: 100.577055, hours: 'Open daily 09:00-20:30', isOpen: true, distanceKm: 5.5, locationPrecision: 'address' }
 ];
+
+cashBranches.push(
+  { id: 'vasu-head-office', providerSlug: 'vasu', name: 'Vasu Exchange Head Office', area: 'Sukhumvit 7/1', address: '133-133/1 Sukhumvit Road Soi 7/1, Bangkok 10110', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Vasu+Exchange+133+Sukhumvit+7%2F1+Bangkok', latitude: null, longitude: null, hours: 'Mon-Fri 09:00-18:00, Sat 09:00-17:00, Sun closed', isOpen: false, distanceKm: 0, locationPrecision: 'reference' },
+  { id: 'twelve-pradipat', providerSlug: 'twelve-victory', name: 'Twelve Victory Pradipat Head Office', area: 'Pradipat', address: '231 Pradipat Road, Pradipat 21, Phaya Thai, Bangkok 10400', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Twelve+Victory+231+Pradipat+Bangkok', latitude: null, longitude: null, hours: 'Mon-Fri 08:30-17:00, Sat-Sun 09:00-16:00', isOpen: false, distanceKm: 0, locationPrecision: 'reference' },
+);
 
 export const cashRates: CashRate[] = [
   { branchId: 'sr1965-asok', currency: 'USD', denomination: '100', buyRate: 31.91, sellRate: 32.07, observedAt: '2026-03-10T18:56:10+07:00' },

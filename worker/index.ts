@@ -1,10 +1,12 @@
-import { exchangeAdapters } from '@/lib/adapters/exchanges';
+import { getAdapterHealth } from '@/lib/market-data';
+import { cycleStatus, summarizeCashSources, workerInterval } from '@/lib/data-status';
 import { refreshCashScrapeCache } from '@/lib/cash-live';
+import { readCashCache } from '@/lib/cash-cache-store';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
 const shouldLoop = process.env.WORKER_LOOP === '1';
-const intervalMinutes = Math.max(1, Number(process.env.CASH_SCRAPE_INTERVAL_MINUTES || '10'));
+const intervalMinutes = workerInterval(process.env.CASH_SCRAPE_INTERVAL_MINUTES);
 const heartbeatPath = process.env.WORKER_HEARTBEAT_PATH || path.join('/tmp', 'exchangethb-worker-heartbeat.json');
 
 function sleep(ms: number) {
@@ -24,10 +26,18 @@ async function main() {
   do {
     const startedAt = new Date().toISOString();
     await writeHeartbeat({ status: 'running', startedAt });
-    const marketHealth = await Promise.all(exchangeAdapters.map((adapter) => adapter.checkHealth()));
-    const cashHealth = await refreshCashScrapeCache();
-    await writeHeartbeat({ status: 'ok', startedAt, marketHealth, cashHealth });
-    console.log(JSON.stringify({ marketHealth, cashHealth, ranAt: startedAt, loop: shouldLoop, intervalMinutes }, null, 2));
+    try {
+      // Check all exchanges once, avoiding four copies of the same health requests.
+      const [marketHealth, cashHealth] = await Promise.all([getAdapterHealth(), process.env.CASH_COLLECTION_MODE === 'external' ? readCashCache() : refreshCashScrapeCache()]);
+      const market = { binance: marketHealth.binance, bitkub: marketHealth.bitkub, upbit: marketHealth.upbitThailand, orbix: marketHealth.orbix };
+      const status = cycleStatus(market, cashHealth);
+      const cashSources = summarizeCashSources(cashHealth);
+      await writeHeartbeat({ status, startedAt, marketHealth, cashSources });
+      console.log(JSON.stringify({ status, marketHealth, cashSources, ranAt: startedAt, loop: shouldLoop, intervalMinutes }));
+    } catch {
+      await writeHeartbeat({ status: 'error', startedAt, message: 'Update cycle failed; retry on next scheduled cycle.' });
+      if (!shouldLoop) process.exitCode = 1;
+    }
     if (!shouldLoop) break;
     await sleep(intervalMinutes * 60 * 1000);
   } while (true);

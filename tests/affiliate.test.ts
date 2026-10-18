@@ -2,6 +2,20 @@ import { describe, expect, it } from 'vitest';
 import { resolveAffiliateLink } from '@/lib/affiliate';
 
 describe('affiliate resolver', () => {
+  it.each([
+    { startAt: '2026-03-01T00:00:00.000Z' },
+    { endAt: '2026-03-30T00:00:00.000Z' },
+  ])('supports an open-ended active campaign window %j', (window) => {
+    const resolved = resolveAffiliateLink({ ...window, status: 'campaign_only', officialUrl: 'https://official.example.com', trackingUrl: 'https://tracking.example.com', disclosure: { th: 'x', en: 'x', zh: 'x' } }, new Date('2026-03-10T00:00:00.000Z'));
+    expect(resolved.effectiveStatus).toBe('campaign_only');
+  });
+
+  it('rejects invalid and expired campaign dates', () => {
+    for (const endAt of ['invalid', '2026-03-01T00:00:00.000Z']) {
+      const resolved = resolveAffiliateLink({ endAt, status: 'campaign_only', officialUrl: 'https://official.example.com', trackingUrl: 'https://tracking.example.com', disclosure: { th: 'x', en: 'x', zh: 'x' } }, new Date('2026-03-10T00:00:00.000Z'));
+      expect(resolved.outboundUrl).toBe('https://official.example.com');
+    }
+  });
   it('downgrades campaign link when tracking url is missing', () => {
     const resolved = resolveAffiliateLink({
       status: 'campaign_only',

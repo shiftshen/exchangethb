@@ -1,10 +1,14 @@
+import { readCashCache } from '@/lib/cash-cache-store';
+import { getLiveMarketSnapshots } from '@/lib/market-data';
+export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { TrackLink } from '@/components/track-link';
-import { cashRates, exchanges, marketSnapshots, publicCashProviders } from '@/data/site';
+import { CarRentalRecommendation } from '@/components/car-rental-recommendation';
+import { exchanges, publicCashProviders } from '@/data/site';
 import { Pill, Section } from '@/components/ui';
 import { indexableLocales, t } from '@/lib/i18n';
-import { routeAlternateLocales, shouldIndexRoute } from '@/lib/indexing-policy';
+import { isIndexedRouteSlug, shouldIndexRoute } from '@/lib/indexing-policy';
 import { breadcrumbJsonLd, itemListJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { getRouteGuide, routeGuides, routeGuideSlugs } from '@/lib/route-guides';
 import { Locale } from '@/lib/types';
@@ -102,21 +106,13 @@ const uiCopy = {
   },
 } as const;
 
-function latestRouteDataTimestamp(guideType: 'crypto' | 'cash') {
-  if (guideType === 'crypto') {
-    const latestMarket = marketSnapshots
-      .map((snapshot) => new Date(snapshot.lastUpdated))
-      .sort((a, b) => b.getTime() - a.getTime())[0];
-    const latestExchange = exchanges
-      .map((exchange) => new Date(exchange.lastUpdated))
-      .sort((a, b) => b.getTime() - a.getTime())[0];
-    return [latestMarket, latestExchange]
-      .filter((value): value is Date => Boolean(value))
-      .sort((a, b) => b.getTime() - a.getTime())[0];
-  }
-
-  return cashRates
-    .map((rate) => new Date(rate.observedAt))
+async function latestRouteDataTimestamp(guideType: 'crypto' | 'cash', compareHref: string) {
+  const query = new URL(compareHref, 'https://www.exchangethb.com').searchParams;
+  const timestamps = guideType === 'crypto'
+    ? (await getLiveMarketSnapshots(query.get('symbol') || 'USDT')).map(row => row.lastUpdated)
+    : (await readCashCache()).results.flatMap(result => result.rates || [])
+      .filter(row => row.currency === (query.get('currency') || 'USD')).map(row => row.observedAt);
+  return timestamps.map(value => new Date(value)).filter(value => Number.isFinite(value.getTime()))
     .sort((a, b) => b.getTime() - a.getTime())[0];
 }
 
@@ -133,7 +129,7 @@ function webPageJsonLd(locale: Locale, slug: string, name: string, description: 
 }
 
 function localizeList<T>(value: { th: T; en: T; zh: T; ja?: T; ko?: T; de?: T }, locale: Locale): T {
-  return value[locale] ?? value.en ?? value.th ?? value.zh;
+  return value[locale === 'th' || locale === 'zh' || locale === 'ja' || locale === 'ko' || locale === 'de' ? locale : 'en'] ?? value.en ?? value.th ?? value.zh;
 }
 
 export function generateStaticParams() {
@@ -145,7 +141,7 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
   const guide = getRouteGuide(slug);
   if (!guide) notFound();
 
-  const c = uiCopy[locale];
+  const c = uiCopy[locale === 'th' || locale === 'zh' || locale === 'ja' || locale === 'ko' || locale === 'de' ? locale : 'en'];
   const guideTitle = t(guide.title, locale);
   const guideSummary = t(guide.summary, locale);
   const guideIntro = t(guide.intro, locale);
@@ -165,9 +161,10 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
       : locale === 'zh'
         ? '查看交易所总览'
         : 'Browse exchange hub';
-  const latestDataTimestamp = latestRouteDataTimestamp(guide.type);
+  const latestDataTimestamp = await latestRouteDataTimestamp(guide.type, guide.compareHref);
   const latestDataIso = latestDataTimestamp?.toISOString();
   const latestDataLabel = latestDataTimestamp ? new Intl.DateTimeFormat(locale === 'th' ? 'th-TH' : locale === 'zh' ? 'zh-CN' : 'en-US', {
+    timeZone: 'Asia/Bangkok',
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(latestDataTimestamp) : null;
@@ -175,7 +172,7 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
     .filter((item) => item.slug !== guide.slug && item.type === guide.type)
     .slice(0, 3);
   const relatedProfiles = guide.type === 'cash'
-    ? ['sia', 'superrich-thailand', 'ratchada']
+    ? ['superrich-thailand', 'ratchada', 'twelve-victory']
         .map((providerSlug) => publicCashProviders.find((provider) => provider.slug === providerSlug))
         .filter((provider): provider is typeof publicCashProviders[number] => Boolean(provider))
         .map((provider) => ({
@@ -284,6 +281,8 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
         </Section>
       ) : null}
 
+      {guide.slug === 'bangkok-airport-money-exchange-guide' ? <CarRentalRecommendation locale={locale} /> : null}
+
       {relatedProfiles.length ? (
         <Section
           title={guide.type === 'cash'
@@ -311,10 +310,10 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
                       : 'Exchange profiles to check next'}
           description={guide.type === 'cash'
             ? locale === 'th'
-              ? 'ส่วนนี้ช่วยเชื่อมจาก route intent ไปยังโปรไฟล์ร้านจริง เช่น SIA Money Exchange และแบรนด์สำคัญอื่นในกรุงเทพ'
+              ? 'ส่วนนี้ช่วยเชื่อมจาก route intent ไปยังโปรไฟล์ร้านจริง เช่น Ratchada Exchange และแบรนด์สำคัญอื่นในกรุงเทพ'
               : locale === 'zh'
                 ? '这一组品牌页把路线意图继续推进到真实的曼谷换汇实体页。'
-                : 'These profile pages help cash-route visitors move into real Bangkok money changer entity pages such as SIA Money Exchange.'
+                : 'These profile pages help cash-route visitors move into real Bangkok money changer entity pages such as Ratchada Exchange.'
             : locale === 'th'
               ? 'ส่วนนี้ช่วยเชื่อมจาก route intent ไปยังหน้าโปรไฟล์แพลตฟอร์มจริง'
               : locale === 'zh'
@@ -383,7 +382,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: metadataAlternatesForPolicy(locale, path, routeAlternateLocales(slug)),
+    alternates: metadataAlternatesForPolicy(locale, path, isIndexedRouteSlug(slug) ? ['en'] : []),
     robots: robotsForPage(locale, shouldIndexRoute(locale, slug)),
     keywords: locale === 'en' ? guide.keywords : undefined,
     openGraph: {

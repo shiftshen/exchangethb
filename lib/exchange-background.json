@@ -1,0 +1,58 @@
+{
+  "binance-th": {
+    "operator": "Gulf Binance Co., Ltd.",
+    "url": "https://www.binance.th/en/aboutus/about-us/22c0541e34e84ce19c94d79713c66f07",
+    "en": "Operated by Gulf Binance, a joint venture between Gulf Edge (Gulf Development group) and Binance (AP) Holdings, a Binance affiliate. Provides THB digital asset trading in Thailand.",
+    "zh": "由 Gulf Binance 运营，是 Gulf Development 集团旗下 Gulf Edge 与 Binance 关联公司 Binance (AP) Holdings 的合资平台，提供泰国本地泰铢数字资产交易。",
+    "th": "ดำเนินการโดย Gulf Binance บริษัทร่วมทุนระหว่าง Gulf Edge ในกลุ่ม Gulf Development และ Binance (AP) Holdings ซึ่งเป็นบริษัทในเครือ Binance ให้บริการซื้อขายสินทรัพย์ดิจิทัลด้วยเงินบาท",
+    "ja": "Gulf DevelopmentグループのGulf EdgeとBinance関連会社による合弁会社Gulf Binanceが運営する、タイのTHB取引プラットフォーム。",
+    "ru": "Тайскую платформу управляет Gulf Binance — совместное предприятие Gulf Edge (группа Gulf Development) и компании Binance (AP) Holdings.",
+    "ko": "Gulf Development 그룹의 Gulf Edge와 Binance 계열사가 합작한 Gulf Binance가 운영하는 태국 THB 거래 플랫폼입니다.",
+    "fr": "Plateforme thaïlandaise exploitée par Gulf Binance, coentreprise de Gulf Edge (groupe Gulf Development) et de Binance (AP) Holdings.",
+    "de": "Thailändische Plattform von Gulf Binance, einem Gemeinschaftsunternehmen von Gulf Edge (Gulf Development) und Binance (AP) Holdings.",
+    "id": "Platform Thailand yang dioperasikan Gulf Binance, usaha patungan Gulf Edge (grup Gulf Development) dan Binance (AP) Holdings.",
+    "vi": "Nền tảng Thái Lan do Gulf Binance vận hành, liên doanh giữa Gulf Edge (tập đoàn Gulf Development) và Binance (AP) Holdings."
+  },
+  "bitkub": {
+    "operator": "Bitkub Online Co., Ltd.",
+    "url": "https://www.bitkub.com/en/about",
+    "en": "A Thailand-based digital asset exchange operated by Bitkub Online. Founded in February 2018, it provides THB trading and local deposit and withdrawal services.",
+    "zh": "由 Bitkub Online 运营的泰国本地数字资产交易所，成立于2018年2月，提供泰铢交易及本地充提服务。",
+    "th": "แพลตฟอร์มสินทรัพย์ดิจิทัลในประเทศไทย ดำเนินการโดย Bitkub Online ก่อตั้งเดือนกุมภาพันธ์ 2018 ให้บริการซื้อขายและฝากถอนเงินบาท",
+    "ja": "Bitkub Onlineが運営するタイの暗号資産取引所。2018年2月設立で、THB取引と現地入出金に対応。",
+    "ru": "Тайская биржа под управлением Bitkub Online, основанная в феврале 2018 года. Поддерживает торговлю и ввод/вывод THB.",
+    "ko": "Bitkub Online이 운영하는 태국 거래소로 2018년 2월 설립됐으며 THB 거래와 현지 입출금을 지원합니다.",
+    "fr": "Bourse thaïlandaise exploitée par Bitkub Online, fondée en février 2018, avec échanges, dépôts et retraits en THB.",
+    "de": "Thailändische Börse von Bitkub Online, gegründet im Februar 2018, mit THB-Handel sowie lokalen Ein- und Auszahlungen.",
+    "id": "Bursa Thailand yang dioperasikan Bitkub Online, didirikan Februari 2018, mendukung perdagangan serta setoran dan penarikan THB.",
+    "vi": "Sàn Thái Lan do Bitkub Online vận hành, thành lập tháng 2/2018, hỗ trợ giao dịch và nạp rút THB."
+  },
+  "upbit-thailand": {
+    "operator": "Upbit Exchange (Thailand) Co., Ltd.",
+    "url": "https://th.upbit.com/",
+    "en": "Operated by Upbit Exchange (Thailand), with technology and operational expertise from the Upbit ecosystem. Its Thai platform supports local bank transfers.",
+    "zh": "由 Upbit Exchange (Thailand) 运营，使用 Upbit 体系的技术与运营经验，泰国平台支持本地银行转账。",
+    "th": "ดำเนินการโดย Upbit Exchange (Thailand) ใช้เทคโนโลยีและความเชี่ยวชาญจากระบบ Upbit แพลตฟอร์มไทยรองรับการโอนผ่านธนาคารในประเทศ",
+    "ja": "タイ法人Upbit Exchange (Thailand)が運営。Upbitの技術・運営ノウハウを用い、現地銀行送金に対応。",
+    "ru": "Оператор — Upbit Exchange (Thailand). Использует технологии и опыт Upbit, поддерживает местные банковские переводы.",
+    "ko": "태국 법인 Upbit Exchange (Thailand)가 운영하며 Upbit의 기술과 운영 경험을 활용하고 현지 은행 이체를 지원합니다.",
+    "fr": "Exploitée par Upbit Exchange (Thailand), avec les technologies et le savoir-faire d’Upbit et des virements bancaires locaux.",
+    "de": "Betreiber ist Upbit Exchange (Thailand). Nutzt Upbits Technologie und Betriebserfahrung und unterstützt lokale Banküberweisungen.",
+    "id": "Dioperasikan Upbit Exchange (Thailand), memakai teknologi dan pengalaman Upbit serta mendukung transfer bank lokal.",
+    "vi": "Do Upbit Exchange (Thailand) vận hành, sử dụng công nghệ và kinh nghiệm Upbit, hỗ trợ chuyển khoản ngân hàng nội địa."
+  },
+  "orbix": {
+    "operator": "Orbix Trade Co., Ltd.",
+    "url": "https://www.kasikornbank.com/en/News/Pages/Money20_20.aspx",
+    "en": "Orbix Trade is the digital asset exchange in KBank Financial Conglomerate’s Orbix Group, formerly Satang. It is distinct from Orbix Invest, the group’s digital asset fund manager.",
+    "zh": "Orbix Trade 是 KBank（开泰银行）金融集团 Orbix Group 的数字资产交易所，前身为 Satang；与同集团的数字资产基金管理业务 Orbix Invest 不同。",
+    "th": "Orbix Trade เป็นศูนย์ซื้อขายสินทรัพย์ดิจิทัลใน Orbix Group ของกลุ่มธุรกิจทางการเงินธนาคารกสิกรไทย เดิมชื่อ Satang แยกจาก Orbix Invest ซึ่งเป็นธุรกิจจัดการกองทุนสินทรัพย์ดิจิทัล",
+    "ja": "KBank金融グループのOrbix Groupに属する暗号資産取引所。旧Satang。ファンド運用事業Orbix Investとは別。",
+    "ru": "Биржа Orbix Group финансовой группы KBank, ранее Satang. Отличается от управляющей цифровыми фондами Orbix Invest.",
+    "ko": "KBank 금융그룹의 Orbix Group에 속한 거래소이며 옛 이름은 Satang입니다. 펀드 운용사 Orbix Invest와 구별됩니다.",
+    "fr": "Bourse du groupe Orbix au sein du groupe financier KBank, anciennement Satang. À distinguer du gestionnaire de fonds Orbix Invest.",
+    "de": "Börse der Orbix Group im KBank-Finanzkonzern, früher Satang. Vom Fondsverwalter Orbix Invest zu unterscheiden.",
+    "id": "Bursa Orbix Group dalam grup keuangan KBank, sebelumnya Satang. Berbeda dari pengelola dana Orbix Invest.",
+    "vi": "Sàn thuộc Orbix Group của tập đoàn tài chính KBank, trước đây là Satang. Khác với đơn vị quản lý quỹ Orbix Invest."
+  }
+}
