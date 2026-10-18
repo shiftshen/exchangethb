@@ -1,0 +1,11 @@
+/en/about [Mozilla] 200
+/en/about [GPTBot] 200
+/en/about [Googlebot] 200
+/th/about [Mozilla] 200
+/th/about [GPTBot] 200
+/th/about [Googlebot] 200
+/zh/about [Mozilla] 200
+/zh/about [GPTBot] 200
+/zh/about [Googlebot] 200
+home GPTBot/1.1 200
+home Googlebot/2.1 200

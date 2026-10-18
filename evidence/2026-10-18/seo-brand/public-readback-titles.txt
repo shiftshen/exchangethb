@@ -1,0 +1,10 @@
+th: <title>ExchangeTHB – เปรียบเทียบแลกเงินเป็นบาท เงินสด-คริปโต</title>
+en: <title>ExchangeTHB – Compare Thai baht exchange: cash &amp; crypto</title>
+zh: <title>ExchangeTHB – 泰铢兑换比较：曼谷换汇店与泰国交易所</title>
+ja: <title>ExchangeTHB – タイバーツ両替レート比較：現金・暗号資産</title>
+ru: <title>ExchangeTHB – сравнение обмена валюты на баты</title>
+ko: <title>ExchangeTHB – 태국 바트 환전 비교</title>
+fr: <title>ExchangeTHB – Comparer le change en bahts thaïlandais</title>
+de: <title>ExchangeTHB – Wechsel in thailändische Baht vergleichen</title>
+id: <title>ExchangeTHB – Bandingkan penukaran ke baht Thailand</title>
+vi: <title>ExchangeTHB – So sánh đổi tiền sang baht Thái</title>

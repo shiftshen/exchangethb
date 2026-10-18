@@ -1,0 +1,115 @@
+{
+ "before_source": "https://www.exchangethb.com (live, v0.1.4-20261018-seo-r2) fetched 2026-10-18 13:5x +07",
+ "locales": {
+  "th": {
+   "before": {
+    "title": "เปรียบเทียบแลกเงินเป็นบาท — เงินสดและคริปโตในไทย | ExchangeTHB",
+    "description": "เลือกสกุลเงิน ใส่จำนวน แล้วเปรียบเทียบตัวเลือก",
+    "jsonld_types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage"
+    ]
+   }
+  },
+  "en": {
+   "before": {
+    "title": "Thai baht exchange comparison: cash &amp; crypto in Thailand | ExchangeTHB",
+    "description": "Choose your currency and amount. Compare your options.",
+    "jsonld_types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage"
+    ]
+   }
+  },
+  "zh": {
+   "before": {
+    "title": "泰铢兑换比较：曼谷换汇店与泰国交易所 | ExchangeTHB",
+    "description": "选币种、填金额，比较哪家更合适。",
+    "jsonld_types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage"
+    ]
+   }
+  },
+  "ja": {
+   "before": {
+    "title": "タイバーツ両替レート比較：日本円・現金・暗号資産 | ExchangeTHB",
+    "description": "日本円・米ドルなどの現金と暗号資産をタイバーツへ。金額を入力し、バンコクの両替店やタイの取引所を比較できます。",
+    "jsonld_types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage"
+    ]
+   }
+  },
+  "ru": {
+   "before": {
+    "title": "Обмен валюты на тайские баты | ExchangeTHB",
+    "description": "Выберите валюту и сумму. Сравните обменные пункты Бангкока и тайские криптобиржи.",
+    "jsonld_types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage"
+    ]
+   }
+  },
+  "ko": {
+   "before": {
+    "title": "태국 바트 환전 비교 | ExchangeTHB",
+    "description": "통화와 금액을 선택하고 방콕 환전소 및 태국 가상자산 거래소를 비교하세요.",
+    "jsonld_types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage"
+    ]
+   }
+  },
+  "fr": {
+   "before": {
+    "title": "Comparer le change en bahts thaïlandais | ExchangeTHB",
+    "description": "Choisissez une devise et un montant. Comparez les bureaux de change de Bangkok et les plateformes crypto thaïlandaises.",
+    "jsonld_types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage"
+    ]
+   }
+  },
+  "de": {
+   "before": {
+    "title": "Geld in thailändische Baht wechseln | ExchangeTHB",
+    "description": "Währung und Betrag auswählen. Wechselstuben in Bangkok und thailändische Kryptobörsen vergleichen.",
+    "jsonld_types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage"
+    ]
+   }
+  },
+  "id": {
+   "before": {
+    "title": "Bandingkan penukaran ke baht Thailand | ExchangeTHB",
+    "description": "Pilih mata uang dan jumlah. Bandingkan penukar uang Bangkok dan bursa kripto Thailand.",
+    "jsonld_types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage"
+    ]
+   }
+  },
+  "vi": {
+   "before": {
+    "title": "So sánh đổi tiền sang baht Thái | ExchangeTHB",
+    "description": "Chọn tiền tệ và số tiền. So sánh điểm đổi tiền Bangkok và sàn tài sản mã hóa Thái Lan.",
+    "jsonld_types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage"
+    ]
+   }
+  }
+ }
+}

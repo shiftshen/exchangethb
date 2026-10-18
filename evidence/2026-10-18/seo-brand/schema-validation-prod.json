@@ -1,0 +1,195 @@
+{
+ "base": "https://www.exchangethb.com",
+ "errors": [],
+ "home": {
+  "th": {
+   "title": "ExchangeTHB – เปรียบเทียบแลกเงินเป็นบาท เงินสด-คริปโต",
+   "description": "ExchangeTHB (exchangethb.com) เปรียบเทียบร้านแลกเงินในกรุงเทพฯ และแพลตฟอร์มคริปโตไทยสำหรับแลกเป็นบาท เลือกสกุลเงิน ใส่จำนวน แล้วเปรียบเทียบตัวเลือก",
+   "blocks": 1,
+   "types": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "faq_questions": 5,
+   "seo_answer_lead": "ExchangeTHB (exchangethb.com) คือเว็บไซต์เปรียบเทียบการแลกเป็นเงินบาท ระหว่างร้านแลกเงินสดในกรุงเทพฯ กับแพลตฟอร์มคริปโตใ"
+  },
+  "en": {
+   "title": "ExchangeTHB – Compare Thai baht exchange: cash &amp; crypto",
+   "description": "ExchangeTHB (exchangethb.com) compares Bangkok cash money changers and Thai crypto exchanges for Thai baht. Choose your currency and amount. Compare your options.",
+   "blocks": 1,
+   "types": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "faq_questions": 5,
+   "seo_answer_lead": "ExchangeTHB (exchangethb.com) is a comparison website for getting Thai baht: Bangkok cash money changers and Thai crypto"
+  },
+  "zh": {
+   "title": "ExchangeTHB – 泰铢兑换比较：曼谷换汇店与泰国交易所",
+   "description": "ExchangeTHB（exchangethb.com）比较曼谷换汇店与泰国交易所的泰铢兑换方案。选币种、填金额，比较哪家更合适。",
+   "blocks": 1,
+   "types": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "faq_questions": 5,
+   "seo_answer_lead": "ExchangeTHB（exchangethb.com）是一个泰铢兑换比较网站，把曼谷现金换汇店与泰国加密交易所放在一起比较。<!-- --> <!-- -->直接回答：曼谷市区换汇店通常比机场柜台便宜；只有当你已经持有加密资产时，泰国交易"
+  },
+  "ja": {
+   "title": "ExchangeTHB – タイバーツ両替レート比較：現金・暗号資産",
+   "description": "ExchangeTHB（exchangethb.com）は、現金や暗号資産をタイバーツへ両替する方法を比較するサイトです。通貨と金額を選び、バンコクの両替店やタイの暗号資産取引所を比較できます。",
+   "blocks": 1,
+   "types": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "faq_questions": 5,
+   "seo_answer_lead": "ExchangeTHB（exchangethb.com）は、バンコクの現金両替店とタイの暗号資産取引所を並べてタイバーツの入手方法を比較するサイトです。<!-- --> <!-- -->結論：バンコク市内の両替店は空港カウンターより有利なこ"
+  },
+  "ru": {
+   "title": "ExchangeTHB – сравнение обмена валюты на баты",
+   "description": "ExchangeTHB (exchangethb.com) сравнивает обменные пункты Бангкока и тайские криптобиржи для обмена на баты. Выберите валюту и сумму.",
+   "blocks": 1,
+   "types": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "faq_questions": 5,
+   "seo_answer_lead": "ExchangeTHB (exchangethb.com) — сайт сравнения, где обменные пункты Бангкока и тайские криптобиржи сопоставляются для по"
+  },
+  "ko": {
+   "title": "ExchangeTHB – 태국 바트 환전 비교",
+   "description": "ExchangeTHB(exchangethb.com)는 방콕 환전소와 태국 가상자산 거래소를 비교해 바트로 바꾸는 방법을 보여 줍니다. 통화와 금액을 선택해 비교하세요.",
+   "blocks": 1,
+   "types": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "faq_questions": 5,
+   "seo_answer_lead": "ExchangeTHB(exchangethb.com)는 방콕의 현금 환전소와 태국 가상자산 거래소를 나란히 비교해 태국 바트를 받는 방법을 보여 주는 비교 사이트입니다.<!-- --> <!-- -->결론: 방콕 시내 "
+  },
+  "fr": {
+   "title": "ExchangeTHB – Comparer le change en bahts thaïlandais",
+   "description": "ExchangeTHB (exchangethb.com) compare les bureaux de change de Bangkok et les plateformes crypto thaïlandaises pour obtenir des bahts. Choisissez une devise et un montant.",
+   "blocks": 1,
+   "types": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "faq_questions": 5,
+   "seo_answer_lead": "ExchangeTHB (exchangethb.com) est un site de comparaison pour obtenir des bahts thaïlandais : bureaux de change en espèc"
+  },
+  "de": {
+   "title": "ExchangeTHB – Wechsel in thailändische Baht vergleichen",
+   "description": "ExchangeTHB (exchangethb.com) vergleicht Wechselstuben in Bangkok und thailändische Kryptobörsen für Baht. Währung und Betrag auswählen und vergleichen.",
+   "blocks": 1,
+   "types": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "faq_questions": 5,
+   "seo_answer_lead": "ExchangeTHB (exchangethb.com) ist eine Vergleichsseite für thailändische Baht: Bargeld-Wechselstuben in Bangkok und thai"
+  },
+  "id": {
+   "title": "ExchangeTHB – Bandingkan penukaran ke baht Thailand",
+   "description": "ExchangeTHB (exchangethb.com) membandingkan penukar uang Bangkok dan bursa kripto Thailand untuk mendapatkan baht. Pilih mata uang dan jumlah.",
+   "blocks": 1,
+   "types": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "faq_questions": 5,
+   "seo_answer_lead": "ExchangeTHB (exchangethb.com) adalah situs perbandingan untuk mendapatkan baht Thailand: penukar uang tunai di Bangkok d"
+  },
+  "vi": {
+   "title": "ExchangeTHB – So sánh đổi tiền sang baht Thái",
+   "description": "ExchangeTHB (exchangethb.com) so sánh điểm đổi tiền Bangkok và sàn tài sản mã hóa Thái Lan để đổi sang baht. Chọn tiền tệ và số tiền.",
+   "blocks": 1,
+   "types": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "faq_questions": 5,
+   "seo_answer_lead": "ExchangeTHB (exchangethb.com) là trang so sánh để nhận baht Thái: điểm đổi tiền mặt ở Bangkok và sàn tài sản mã hóa Thái"
+  }
+ },
+ "about": {
+  "en": {
+   "canonical": "https://www.exchangethb.com/en/about",
+   "hreflang": [
+    "en",
+    "th",
+    "x-default",
+    "zh"
+   ],
+   "types": [
+    "Organization",
+    "AboutPage",
+    "BreadcrumbList"
+   ],
+   "noindex": false
+  },
+  "th": {
+   "canonical": "https://www.exchangethb.com/th/about",
+   "hreflang": [
+    "en",
+    "th",
+    "x-default",
+    "zh"
+   ],
+   "types": [
+    "Organization",
+    "AboutPage",
+    "BreadcrumbList"
+   ],
+   "noindex": false
+  },
+  "zh": {
+   "canonical": "https://www.exchangethb.com/zh/about",
+   "hreflang": [
+    "en",
+    "th",
+    "x-default",
+    "zh"
+   ],
+   "types": [
+    "Organization",
+    "AboutPage",
+    "BreadcrumbList"
+   ],
+   "noindex": false
+  }
+ },
+ "sitemap": {
+  "count": 74,
+  "about": [
+   "https://www.exchangethb.com/en/about",
+   "https://www.exchangethb.com/th/about",
+   "https://www.exchangethb.com/zh/about"
+  ]
+ },
+ "cash_org_id": [
+  "https://www.exchangethb.com/#organization"
+ ],
+ "error_count": 0
+}

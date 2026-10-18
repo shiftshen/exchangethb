@@ -1,0 +1,43 @@
+{
+  "card": "SEO brand-entity (ExchangeTHB recognised as one site entity)",
+  "verdict": "PASS (hard acceptance 1-5 met; GSC request-indexing blocked by daily quota, sitemap resubmitted)",
+  "completed_at": "2026-10-18T14:1x+07",
+  "git": {"branch": "seo/brand-entity-20261018", "base": "seo/ratchada-ctr-20261018@97efc6c", "worktree": "/Volumes/M2USB/_scratch/exchangethb/20261018/r3-wt", "code_commit": "b655b4d", "shared_workspace_untouched": true},
+  "images": {
+    "previous_production": {"tag": "exchangethb:v0.1.4-20261018-seo-r2", "digest": "sha256:ee44f09f29495b701a24eea3e222ed61f49a165949654603d42d77eec185e334"},
+    "pinned_rollback_tag": {"tag": "exchangethb:rollback-before-seo-r3-20261018", "digest": "sha256:ee44f09f29495b701a24eea3e222ed61f49a165949654603d42d77eec185e334"},
+    "new_production": {"tag": "exchangethb:v0.1.5-20261018-seo-brand", "digest": "sha256:aa2c1ba94fc543d61ee7cf983efbc0ad0a62d00fa13d04efa7a0e0e9dea549c9"},
+    "worker": "unchanged v0.1.0-20261007-market-retry",
+    "build": "2panel-happy, FROM v0.1.4 overlay app/lib/components/middleware.ts, --network none, docker save|load to 1.83"
+  },
+  "compose_chain_added": "/opt/exchangethb/compose.seo-r3-20261018.yml (after compose.seo-r2-20261018.yml is superseded: chain is base, release-20261007b, drive-r2-20261016, seo-20261018, seo-r3-20261018)",
+  "deploy_order": "web_canary (healthy, seo:cluster via ssh tunnel passed, schema script 0 errors) then web (healthy)",
+  "rollback": "ssh 1panel-happy 'cd /opt/exchangethb && sed s/v0.1.5-20261018-seo-brand/rollback-before-seo-r3-20261018/ compose.seo-r3-20261018.yml > compose.rollback-seo-r3-20261018.yml && CHAIN=\"-f docker-compose.yml -f compose.release-20261007b.yml -f compose.drive-r2-20261016.yml -f compose.seo-20261018.yml -f compose.rollback-seo-r3-20261018.yml\" && docker compose $CHAIN up -d --no-build --no-deps web_canary && docker compose $CHAIN up -d --no-build --no-deps web'  (prepared, not executed, not needed)",
+  "tests": {"tsc": "clean", "eslint": "0 problems", "vitest": "46 files / 174 tests passed (8 new in tests/brand-entity.test.ts)", "build": "npm run build ok", "seo_cluster_local": "passed", "seo_cluster_canary": "passed", "seo_cluster_prod": "passed (sitemap loc count 74)"},
+  "acceptance": {
+    "1_titles_10_locales": "PASS - public-readback-titles.txt",
+    "2_jsonld": "PASS - schema-validation-prod.json error_count 0 (WebSite+Organization @id linked, one Organization per page)",
+    "3_about": "PASS - /en,/th,/zh about 200 (also GPTBot/Googlebot UA), self canonical, in sitemap, no digits in about copy (unit test)",
+    "4_release_gates": "PASS - cluster canary+prod, rollback tag+digest recorded",
+    "5_screenshots": "PASS - 6 x 390px in screens/ (m390-{en,th,zh}-{home,about}.png), viewed, no layout breakage"
+  },
+  "gsc": {
+    "request_indexing": "NOT accepted - daily quota exhausted (first URL 'something went wrong', the remaining 6 'exceeded daily quota'). Targets tried: /en, /th, /en/about, /th/money-changers/ratchada, /en/money-changers/superrich-thailand, /en/money-changers/twelve-victory, /th/cash. Retry after next reset (midnight Pacific).",
+    "sitemap": "resubmitted successfully; GSC now lists 74 submitted URLs (was 71)",
+    "url_inspection_note": "/en and /th homepages already indexed; /en/about not yet in Google."
+  },
+  "not_done": [
+    "GSC request-indexing for /en/about and the legacy SEO-4 URLs (quota) - repeat after reset",
+    "/zh/about and /zh home were not in the GSC request list (card listed /en,/th,/en/about)",
+    "result metrics (GSC queries containing exchangethb, brand SERP top 10) are for the SEO lead in ~2 weeks",
+    "sameAs left empty by decision D2; no social profiles created"
+  ],
+  "decisions_applied": {"D1": "brand ExchangeTHB, alternateName [Exchange THB, exchangethb.com, ExchangeTHB.com]", "D2": "sameAs []", "D3": "/ -> /en 308 unchanged", "D4": "no invented numbers"},
+  "design_notes": [
+    "Home emits a single @graph (WebSite, Organization, BreadcrumbList, FAQPage); root layout skips its own Organization on the homepage via an x-public-home middleware header so there is exactly one Organization on the home page; every other page keeps the layout Organization, now with the same @id.",
+    "Titles use title.absolute to avoid the root '%s | ExchangeTHB' template; about page metaTitle also absolute.",
+    "Logo is an ImageObject pointing at brand-logo.svg because public/ has no PNG.",
+    "ja/ru/de strings corrected after same-model proofreading subagent (ja description no longer invents currencies; ru/de titles keep the 'compare' meaning).",
+    "PublicMain now treats /about as a simple (light) page; first screenshot showed dark legacy styling."
+  ]
+}

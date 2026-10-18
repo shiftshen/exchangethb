@@ -410,7 +410,7 @@
   "回滚": "改前快照 /opt/exchangethb/runtime/backups/admin-config-state-20261007-1000.json（AdminConfigState value='global'），恢复即回 unknown",
   "状态": "未写入生产，等确认"
  },
- "_更新时间": "2026-10-18T11:55+07:00",
+ "_更新时间": "2026-10-18T14:10+07:00",
  "现金牌照写入_20261007": {
   "批准": "fujane 2026-10-07 11:04「③licence 写入：写（证据条目，有快照即可；写完公网回读截图进 evidence）」",
   "执行时间": "2026-10-07T11:08+07:00",
@@ -495,5 +495,18 @@
   "发布": "exchangethb:v0.1.4-20261018-seo-r2（digest ee44f09f…），compose.seo-r2-20261018.yml；回退镜像已钉住 rollback-before-seo-r2-20261018（60bcfa24…），未执行回滚",
   "待办": "GSC 今日配额已满：/th/money-changers/ratchada、/en/superrich、/en/twelve-victory、/th/cash 未收录，配额恢复后优先补请求；外部 schema 校验器 429 限流，待补跑",
   "证据": "evidence/2026-10-18/seo-r2/SUMMARY.json"
+ },
+ "SEO_20261018_brand": {
+  "时间": "2026-10-18T14:10+07:00",
+  "事项": "SEO 品牌实体卡：让 Google 把 ExchangeTHB 认作一个网站实体",
+  "结论": "已发布 v0.1.5-20261018-seo-brand（canary→web），硬验收 1-5 通过；GSC 请求编入索引被每日配额挡住，站点地图已重交（74）",
+  "分支": "seo/brand-entity-20261018（基于 seo/ratchada-ctr-20261018，未合并 main）",
+  "镜像": {
+   "新": "exchangethb:v0.1.5-20261018-seo-brand sha256:aa2c1ba9…",
+   "回退": "exchangethb:rollback-before-seo-r3-20261018 = v0.1.4 sha256:ee44f09f…"
+  },
+  "改动": "10 语言首页 title/description/seo-answer 品牌开头；首页 @graph(WebSite+Organization+Breadcrumb+FAQ)，Organization 加 @id/alternateName/description/logo ImageObject；新页 /en|th|zh/about(AboutPage)；页脚/llms.txt/sitemap(71→74)/check-seo-cluster 同步",
+  "未做": "GSC 请求编入索引（/en /th /en/about 及 SEO-4 遗留 4 个）次日配额重置后重试；结果指标两周后由 SEO 负责人看；sameAs 按决策保持空",
+  "证据": "evidence/2026-10-18/seo-brand/"
  }
 }
