@@ -107,6 +107,15 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(nextUrl, 308);
   }
 
+  // SEO-30: SIA left the public provider list on 2026-10-02 (DEVELOPMENT_PLAN.md).
+  // Nothing is restored: every localized old profile URL permanently redirects to the
+  // cash comparison in the same language instead of returning 404.
+  if (firstSegment && isLocale(firstSegment) && segments[1] === 'money-changers' && segments[2] === 'sia') {
+    nextUrl.pathname = `/${firstSegment}/cash`;
+    nextUrl.search = '';
+    return NextResponse.redirect(nextUrl, 301);
+  }
+
   if (firstSegment && !['en','th','zh'].includes(firstSegment) && isLocale(firstSegment) && ['exchanges', 'money-changers', 'routes'].includes(segments[1])) {
     segments[0] = 'en';
     nextUrl.pathname = `/${segments.join('/')}`;

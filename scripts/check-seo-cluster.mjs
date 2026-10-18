@@ -29,6 +29,13 @@ const checks = [
   { path: '/ja/cash', canonical: '/ja/cash', mustInclude: ['日本円からタイバーツ', '選択すると自動で比較', '日本語', '/en/money-changers/ratchada', '両替店の店舗ページ'], mustMatch: [/aria-label="通貨"/], mustNotInclude: ['Where to exchange your cash?', '/ja/money-changers/ratchada'] },
   { path: '/ja/exchanges/bitkub', expectedStatus: 307, expectedLocation: '/en/exchanges/bitkub', followRedirect: false },
   { path: '/change-lang/ja', expectedStatus: 308, expectedLocation: '/ja', followRedirect: false },
+  ...['en', 'th', 'zh', 'ja', 'ru', 'ko', 'fr', 'de', 'id', 'vi'].map(locale => ({
+    // SEO-30: SIA was removed from the public list; every locale redirects its old URL to its own cash page.
+    path: `/${locale}/money-changers/sia`,
+    expectedStatus: 301,
+    expectedLocation: `/${locale}/cash`,
+    followRedirect: false,
+  })),
   { path: '/ads.txt', mustInclude: ['google.com, pub-8386341379958173, DIRECT, f08c47fec0942fa0'], mustMatch: [], mustNotInclude: ['<html'] },
   {
     path: '/',
@@ -48,7 +55,7 @@ const checks = [
   },
   {
     path: '/en/crypto',
-    mustInclude: ['Buy or sell. See the final amount.', 'Buy with THB', 'Sell for THB', '/en/exchanges/binance-th', '/en/exchanges/bitkub', '/en/exchanges/upbit-thailand', '/en/exchanges/orbix'],
+    mustInclude: ['Buy or sell. See the final amount.', 'Buy with THB', 'Sell for THB', '/en/exchanges/binance-th', '/en/exchanges/bitkub', '/en/exchanges/upbit-thailand', '/en/exchanges/orbix', 'data-crypto-exchanges-link'],
     mustMatch: [/aria-label="Asset"/, /inputMode="decimal"/, /Options update automatically as you choose/],
     mustNotInclude: ['Related crypto route guides', 'English search questions this page answers'],
     canonical: '/en/crypto',
@@ -88,6 +95,24 @@ const checks = [
     // assertion proves the cash branch rendered rather than depending on local data state.
     mustMatch: [/Latest data reference|Current live cash coverage/, /@type":"WebPage"/],
     canonical: '/en/routes/usd-cash-to-thb',
+  },
+  {
+    // SEO-30: the route page shows a THB estimate from the snapshots it already fetched,
+    // and always links back to the licensed exchange comparison.
+    path: '/en/routes/btc-to-thb',
+    mustInclude: ['data-thb-estimate', 'Estimated THB for 0.01 BTC', '/en/exchanges'],
+    mustMatch: [/data-thb-estimate="(ready|empty)"/],
+    canonical: '/en/routes/btc-to-thb',
+  },
+  {
+    path: '/th/routes/btc-to-thb',
+    mustInclude: ['data-thb-estimate', '/th/exchanges'],
+    mustMatch: [/data-thb-estimate="(ready|empty)"/],
+  },
+  {
+    path: '/zh/routes/btc-to-thb',
+    mustInclude: ['data-thb-estimate', '/zh/exchanges'],
+    mustMatch: [/data-thb-estimate="(ready|empty)"/],
   },
   {
     path: '/en/routes/eth-to-thb',
@@ -170,14 +195,15 @@ const checks = [
   },
   {
     path: '/zh/exchanges',
-    mustInclude: ['/zh/money-changers/ratchada'],
-    mustMatch: [],
+    mustInclude: ['/zh/money-changers/ratchada', 'data-exchange-table="licensed"', 'THB 交易对'],
+    mustMatch: [/data-exchange-row="binance-th"/],
     mustNotInclude: [],
   },
   {
     path: '/en/exchanges',
-    mustInclude: ['/en/money-changers/ratchada'],
-    mustMatch: [],
+    // SEO-30: first screen answers the licensed crypto-to-THB-cash question; rows are one per data/site.ts exchange.
+    mustInclude: ['/en/money-changers/ratchada', 'data-exchange-table="licensed"', 'data-exchange-row="binance-th"', 'Thai SEC digital asset exchange license', 'BTC/THB', 'Official link'],
+    mustMatch: [/data-exchange-table="licensed"/, /data-exchange-row="(binance-th|bitkub|upbit-thailand|orbix)"/],
     mustNotInclude: [],
   },
   {
@@ -189,7 +215,7 @@ const checks = [
     path: '/sitemap.xml',
     mustInclude: ['/en/about', '/th/about', '/zh/about', '/en/exchanges/bitkub', '/zh/exchanges/bitkub', '/th/exchanges/bitkub', '/th/exchanges/orbix', '/en/money-changers/ratchada', '/zh/money-changers/ratchada', '/en/routes/usd-cash-to-thb'],
     mustMatch: [/<priority>1<\/priority>/, /<priority>0\.95<\/priority>/, /<lastmod>/],
-    mustNotInclude: ['/en/exchanges</loc>', '/en/money-changers</loc>', '/en/routes</loc>', '/en/routes/eth-to-thb', '/zh/legal/privacy-policy'],
+    mustNotInclude: ['/en/exchanges</loc>', '/en/money-changers</loc>', '/en/routes</loc>', '/en/routes/eth-to-thb', '/zh/legal/privacy-policy', '/money-changers/sia'],
     mustNotMatch: [/<loc>https?:\/\/[^<]+\/<\/loc>/],
     expectedLocCount: 78,
   },

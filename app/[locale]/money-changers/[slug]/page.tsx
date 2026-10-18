@@ -3,6 +3,7 @@ import { ProviderContext } from '@/components/provider-context';
 import { ProfileRateTable } from '@/components/profile-rate-table';
 import { formatBangkokStamp, ratchadaMeta, rateLocale } from '@/lib/rate-format';
 import { getRateTable } from '@/lib/rate-table';
+import { buildPeerComparisonRows } from '@/lib/profile-compare';
 import type { Metadata } from 'next';
 import { TrackAnchor, TrackLink } from '@/components/track-link';
 import { cashProviders, publicCashProviderSlugs } from '@/data/site';
@@ -128,6 +129,10 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
         }
       : null;
   }).filter((item): item is NonNullable<typeof item> => Boolean(item));
+  // Same USD comparison rows the table below shows, keyed by profile slug. The helper
+  // reads rateTable.comparisons, i.e. the same cash cache /cash renders.
+  const peerComparisonRows = buildPeerComparisonRows(rateTable.comparisons);
+  const peerRate = (peerSlug: string) => peerComparisonRows.find((row) => row.slug === peerSlug) ?? null;
 
   // SEO-19: one direct answer per mapped question (Ratchada rate en/th, SuperRich vs Ratchada en),
   // built from the same USD rows as the table below and appended to the visible FAQ + JSON-LD.
@@ -281,8 +286,10 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
         <h2 className="text-xl font-semibold text-white">{content.compareTableHeading}</h2>
         <p className="mt-2 max-w-3xl text-sm text-stone-400">{content.compareTableBody}</p>
         <div className="mt-5 space-y-3 sm:hidden">
-          {peers.map((peer) => (
-            <div key={`card-${peer.profile.slug}`} className={`rounded-2xl border p-4 ${peer.current ? 'border-emerald-400/30 bg-white/[0.06]' : 'border-white/10 bg-[#111614]'}`}>
+          {peers.map((peer) => {
+            const rate = peerRate(peer.profile.slug);
+            return (
+            <div key={`card-${peer.profile.slug}`} data-peer-row={peer.profile.slug} data-peer-buy={rate?.buyRate ?? ''} data-peer-observed={rate?.observedAt ?? ''} className={`rounded-2xl border p-4 ${peer.current ? 'border-emerald-400/30 bg-white/[0.06]' : 'border-white/10 bg-[#111614]'}`}>
               <p className="text-sm font-semibold text-white">
                 {peer.current ? <span className="mr-2 rounded-full bg-emerald-400/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-200">{content.currentBadge}</span> : null}
                 {peer.current
@@ -293,10 +300,12 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
               <p className="mt-2 text-sm text-stone-300">
                 {sundayLabel(peer.profile.sundayOpen, content)}
                 <span className="mx-2 text-stone-600">|</span>
-                {content.tableRate}: {peer.row ? formatNumber(peer.row.buyRate, 4) : '—'}
+                {content.tableRate}: {rate?.buyRate != null ? formatNumber(rate.buyRate, 4) : '—'}
               </p>
+              <p className="mt-1 text-xs text-stone-500">{content.tableUpdated}: {rate?.observedAt ? formatBangkokStamp(rate.observedAt, rateLocale(locale)) : '—'}</p>
             </div>
-          ))}
+            );
+          })}
         </div>
         <div className="mt-5 hidden overflow-x-auto sm:block">
           <table className="w-full min-w-[640px] border-collapse text-left text-sm">
@@ -306,12 +315,15 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
                 <th className="border-b border-white/10 py-2 pr-3 font-medium">{content.tableArea}</th>
                 <th className="border-b border-white/10 py-2 pr-3 font-medium">{content.tableHours}</th>
                 <th className="border-b border-white/10 py-2 pr-3 font-medium">{content.tableSunday}</th>
-                <th className="border-b border-white/10 py-2 font-medium">{content.tableRate}</th>
+                <th className="border-b border-white/10 py-2 pr-3 font-medium">{content.tableRate}</th>
+                <th className="border-b border-white/10 py-2 font-medium">{content.tableUpdated}</th>
               </tr>
             </thead>
             <tbody>
-              {peers.map((peer) => (
-                <tr key={peer.profile.slug} className={peer.current ? 'bg-white/[0.06] text-white' : 'text-stone-300'}>
+              {peers.map((peer) => {
+                const rate = peerRate(peer.profile.slug);
+                return (
+                <tr key={peer.profile.slug} data-peer-row={peer.profile.slug} data-peer-buy={rate?.buyRate ?? ''} data-peer-observed={rate?.observedAt ?? ''} className={peer.current ? 'bg-white/[0.06] text-white' : 'text-stone-300'}>
                   <td className="border-b border-white/5 py-3 pr-3 font-semibold">
                     {peer.current ? <span className="mr-2 rounded-full bg-emerald-400/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-200">{content.currentBadge}</span> : null}
                     {peer.current
@@ -321,12 +333,19 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
                   <td className="border-b border-white/5 py-3 pr-3">{peer.profile.area}</td>
                   <td className="border-b border-white/5 py-3 pr-3">{peer.hours}</td>
                   <td className="border-b border-white/5 py-3 pr-3">{sundayLabel(peer.profile.sundayOpen, content)}</td>
-                  <td className="border-b border-white/5 py-3">{peer.row ? formatNumber(peer.row.buyRate, 4) : '—'}</td>
+                  <td className="border-b border-white/5 py-3 pr-3">{rate?.buyRate != null ? formatNumber(rate.buyRate, 4) : '—'}</td>
+                  <td className="border-b border-white/5 py-3">{rate?.observedAt ? formatBangkokStamp(rate.observedAt, rateLocale(locale)) : '—'}</td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
+        <nav className="mt-5 flex flex-wrap items-center gap-3 text-sm" data-peer-links>
+          {peers.filter((peer) => !peer.current).map((peer) => (
+            <TrackLink key={`link-${peer.profile.slug}`} href={`/${locale}/money-changers/${peer.profile.slug}`} data-peer-link={peer.profile.slug} eventName="money_changer_profile_peer_nav_click" eventParams={{ provider: provider.slug, target: peer.profile.slug }} className="rounded-full border border-white/15 px-4 py-2 font-semibold text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{peer.profile.name}</TrackLink>
+          ))}
+        </nav>
       </section>
 
       <section className="rounded-[28px] border border-white/10 bg-[#151a18] p-6">

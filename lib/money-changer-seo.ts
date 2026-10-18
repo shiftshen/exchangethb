@@ -174,6 +174,7 @@ export interface ProfileContent {
   tableHours: string;
   tableSunday: string;
   tableRate: string;
+  tableUpdated: string;
   currentBadge: string;
   faqHeading: string;
   verifyNote: string;
@@ -249,12 +250,13 @@ const copy: Record<ProfileLocale, Omit<ProfileCopyBundle, 'metaTitle' | 'metaDes
     officialCta: 'Verify on official site',
     compareCta: 'Compare all Bangkok changers',
     compareTableHeading: 'How the three changers we cover compare',
-    compareTableBody: 'Same-day observed USD buying rate, published hours and address precision for each changer. Rows come from the same collection as the comparison tool.',
+    compareTableBody: 'Same-day observed USD buying rate with the quote time, published hours and address precision for each changer. Rows come from the same cash collection as the comparison tool, so the numbers match /cash at the same moment.',
     tableChanger: 'Changer',
     tableArea: 'Area',
     tableHours: 'Hours',
     tableSunday: 'Sunday',
     tableRate: 'USD buy (observed)',
+    tableUpdated: 'Quote time',
     currentBadge: 'This page',
     faqHeading: 'Questions before you go',
     verifyNote: 'Rates are observations from public sources, not guaranteed counter quotes.',
@@ -276,12 +278,13 @@ const copy: Record<ProfileLocale, Omit<ProfileCopyBundle, 'metaTitle' | 'metaDes
     officialCta: 'ยืนยันกับเว็บทางการ',
     compareCta: 'เทียบร้านแลกเงินในกรุงเทพทั้งหมด',
     compareTableHeading: 'เทียบสามร้านที่เรารวบรวมไว้',
-    compareTableBody: 'เรทรับซื้อ USD ที่สังเกตในวันเดียวกัน เวลาเปิดที่ประกาศ และความละเอียดของที่อยู่ของแต่ละร้าน ข้อมูลชุดเดียวกับเครื่องมือเปรียบเทียบ',
+    compareTableBody: 'เรทรับซื้อ USD ที่สังเกตในวันเดียวกันพร้อมเวลาที่เก็บเรท เวลาเปิดที่ประกาศ และความละเอียดของที่อยู่ของแต่ละร้าน ข้อมูลชุดเดียวกับเครื่องมือเปรียบเทียบ จึงตรงกับหน้า /cash ในช่วงเวลาเดียวกัน',
     tableChanger: 'ร้าน',
     tableArea: 'ย่าน',
     tableHours: 'เวลาเปิด',
     tableSunday: 'วันอาทิตย์',
     tableRate: 'รับซื้อ USD (ที่สังเกต)',
+    tableUpdated: 'เวลาที่เก็บเรท',
     currentBadge: 'หน้านี้',
     faqHeading: 'คำถามก่อนเดินทาง',
     verifyNote: 'เรทเป็นค่าที่สังเกตจากแหล่งสาธารณะ ไม่ใช่เรทหน้าร้านที่รับประกัน',
@@ -303,12 +306,13 @@ const copy: Record<ProfileLocale, Omit<ProfileCopyBundle, 'metaTitle' | 'metaDes
     officialCta: '前往官网确认',
     compareCta: '比较曼谷全部换汇店',
     compareTableHeading: '我们收录的三家换汇店对比',
-    compareTableBody: '同一天观测的美元买入价、公布的营业时间与地址精确度，与会话比较工具使用同一批采集数据。',
+    compareTableBody: '同一天观测的美元买入价与采集时间、公布的营业时间与地址精确度，与现金比较工具使用同一批采集数据，因此同一时刻的数值与 /cash 一致。',
     tableChanger: '换汇店',
     tableArea: '区域',
     tableHours: '营业时间',
     tableSunday: '周日',
     tableRate: '美元买入（观测）',
+    tableUpdated: '报价时间',
     currentBadge: '本页',
     faqHeading: '前往之前的常见问题',
     verifyNote: '汇率来自公开来源观测，不代表保证的柜台成交价。',

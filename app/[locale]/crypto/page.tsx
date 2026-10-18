@@ -3,6 +3,7 @@ import { locales } from '@/lib/i18n';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { CryptoFeaturedExchanges } from '@/components/crypto-featured-exchanges';
+import { CryptoExchangesCrossLink } from '@/components/crypto-exchanges-cross-link';
 import { ExchangeGuide } from '@/components/exchange-guide';
 import { ExchangePicker } from '@/components/exchange-picker';
 import { isLocale } from '@/lib/i18n';
@@ -31,7 +32,7 @@ export default async function CryptoPage({ params }: { params: Promise<{ locale:
   // SEO-19 Q5 (en): direct answer built from the same cash cache; other locales unchanged.
   const cashVsCrypto = locale === 'en' ? buildCashVsCryptoAnswer('en', await loadAnswerQuotes('USD', locale)) : null;
   return <div className="simple-page"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }, { name: copy[locale].title, item: withLocalePath(locale, '/crypto') }])) }} />
-    <header className="simple-intro"><h1>{copy[locale].title}</h1><p>{copy[locale].body}</p></header>{cashVsCrypto ? <section className="cash-hub-answer" aria-labelledby="crypto-ai-answer-heading"><h2 id="crypto-ai-answer-heading">Is it better to exchange cash or use crypto for Thai baht in Thailand?</h2><p className="cash-hub-answer-text" data-ai-answer="cash-vs-crypto">{cashVsCrypto}</p></section> : null}<ExchangePicker key={locale} locale={locale} initialMode="crypto" showModeSwitch={false} /><CryptoFeaturedExchanges locale={locale} /><ExchangeGuide locale={locale} /></div>;
+    <header className="simple-intro"><h1>{copy[locale].title}</h1><p>{copy[locale].body}</p></header><CryptoExchangesCrossLink locale={locale} />{cashVsCrypto ? <section className="cash-hub-answer" aria-labelledby="crypto-ai-answer-heading"><h2 id="crypto-ai-answer-heading">Is it better to exchange cash or use crypto for Thai baht in Thailand?</h2><p className="cash-hub-answer-text" data-ai-answer="cash-vs-crypto">{cashVsCrypto}</p></section> : null}<ExchangePicker key={locale} locale={locale} initialMode="crypto" showModeSwitch={false} /><CryptoFeaturedExchanges locale={locale} /><ExchangeGuide locale={locale} /></div>;
 }
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;

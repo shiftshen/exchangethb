@@ -1,9 +1,10 @@
 import { getLiveMarketSnapshots } from '@/lib/market-data';
 export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
-import { TrackLink } from '@/components/track-link';
+import { TrackAnchor, TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
 import { exchanges } from '@/data/site';
+import { buildExchangeComparisonRows } from '@/lib/exchange-compare';
 import { ExchangeBackground } from '@/components/exchange-background';
 import { indexableLocales, t } from '@/lib/i18n';
 import { shouldIndexHub } from '@/lib/indexing-policy';
@@ -38,6 +39,20 @@ const copy = {
     faqTitle: 'คำถามที่พบบ่อย',
     cashNote: 'ต้องการแลกเงินสด? ดูเรทวันนี้ของ',
     cashLink: 'รัชดาเอกเช้น Ratchada Exchange',
+    compareTitle: 'เปลี่ยน crypto เป็นเงินบาทสด ดูแพลตฟอร์มที่ได้รับใบอนุญาต',
+    compareDescription: 'สี่แพลตฟอร์มที่ได้รับใบอนุญาตจาก ก.ล.ต. ไทยที่เราติดตาม พร้อมคู่เทรด THB ค่าถอนเงินบาทในชุดข้อมูลของเรา และทางออกเงินสดบนเว็บนี้ ข้อมูลแพลตฟอร์มทั้งหมดมาจาก data/site.ts',
+    licenseLabel: 'ใบอนุญาต',
+    thbPairsLabel: 'คู่เทรด THB',
+    withdrawalLabel: 'การถอนเงินบาท',
+    cashLabel: 'ทางออกเงินสด',
+    officialLabel: 'ลิงก์ทางการ',
+    withdrawUnknown: 'ยังไม่ประกาศค่าธรรมเนียม',
+    cashKnown: 'ถอนเงินบาทเข้าบัญชีธนาคารไทยแล้วจึงถอนเป็นเงินสด เปรียบเทียบ',
+    cashUnknown: 'ยังไม่ประกาศค่าธรรมเนียม ตรวจที่เว็บทางการก่อน แล้วจึงถอนเป็นเงินสด เปรียบเทียบ',
+    cashCompareLink: 'เรทเงินสดของร้านแลกเงิน',
+    officialCta: 'เว็บทางการ',
+    scopeNote: 'หน้านี้ใช้เปรียบเทียบแพลตฟอร์มที่ได้รับใบอนุญาต หากต้องการประมาณยอดบาทและค่าธรรมเนียมของธุรกรรมหนึ่ง ๆ ให้ใช้เครื่องคำนวณคริปโต',
+    scopeLink: 'เปิดเครื่องคำนวณคริปโต',
   },
   en: {
     kicker: 'Exchange index',
@@ -66,6 +81,20 @@ const copy = {
     faqTitle: 'Common questions',
     cashNote: 'Swapping cash instead of crypto? See today’s rate at',
     cashLink: 'Ratchada Exchange',
+    compareTitle: 'Converting crypto to THB cash: which licensed venues to check',
+    compareDescription: 'Four Thai SEC-licensed exchanges we track, with the THB pairs they quote, the THB withdrawal fee in our data, and the cash side on this site. Every exchange fact below comes from data/site.ts.',
+    licenseLabel: 'License',
+    thbPairsLabel: 'THB pairs',
+    withdrawalLabel: 'THB withdrawal',
+    cashLabel: 'Cash option',
+    officialLabel: 'Official link',
+    withdrawUnknown: 'Fee not published',
+    cashKnown: 'Withdraw baht to a Thai bank, then cash out. Compare',
+    cashUnknown: 'Fee unpublished; confirm on the official site, then cash out. Compare',
+    cashCompareLink: 'money changer cash rates',
+    officialCta: 'Official site',
+    scopeNote: 'This page compares licensed exchanges. To estimate the THB amount and fees for a specific trade, use the crypto calculator.',
+    scopeLink: 'Open the crypto calculator',
   },
   zh: {
     kicker: '交易所索引',
@@ -94,6 +123,20 @@ const copy = {
     faqTitle: '常见问题',
     cashNote: '想换现金而不是加密货币？查看今日汇率：',
     cashLink: 'Ratchada Exchange 汇权区门店',
+    compareTitle: '在泰国把 crypto 换成 THB 现金：先看哪几家持牌交易所',
+    compareDescription: '我们追踪的四家泰国 SEC 持牌交易所，列出数据里的 THB 交易对、THB 提现费，以及本站的现金出口。表内交易所事实全部来自 data/site.ts。',
+    licenseLabel: '牌照',
+    thbPairsLabel: 'THB 交易对',
+    withdrawalLabel: '提现方式',
+    cashLabel: '现金选项',
+    officialLabel: '官方链接',
+    withdrawUnknown: '未公布',
+    cashKnown: '提现到泰国银行账户后取现。比较',
+    cashUnknown: '提现费未公布，先核对官网，再取现。比较',
+    cashCompareLink: '换汇店现金汇率',
+    officialCta: '官方链接',
+    scopeNote: '本页负责比较持牌交易所；具体一笔交易的泰铢金额与手续费估算，请用加密计算页。',
+    scopeLink: '打开加密计算页',
   },
 } as const;
 
@@ -126,6 +169,7 @@ export default async function ExchangesIndexPage({ params }: { params: Promise<{
   const { locale } = await params;
   const c = copy[locale === 'th' || locale === 'zh' ? locale : 'en'];
   const uniquePairs = [...new Set(exchanges.flatMap((exchange) => exchange.pairs))];
+  const comparisonRows = buildExchangeComparisonRows();
   const marketSnapshots = await getLiveMarketSnapshots('USDT');
   const latestExchangeUpdate = marketSnapshots.map(snapshot => snapshot.lastUpdated)
     .sort((left, right) => Date.parse(right) - Date.parse(left))[0];
@@ -200,6 +244,64 @@ export default async function ExchangesIndexPage({ params }: { params: Promise<{
           </div>
         </div>
       </section>
+
+
+      <Section title={c.compareTitle} description={c.compareDescription}>
+        <div className="space-y-3 sm:hidden">
+          {comparisonRows.map((row) => (
+            <div key={row.slug} data-exchange-card={row.slug} className="rounded-[24px] border border-white/10 bg-[#151a18] p-5">
+              <p className="text-lg font-semibold text-white">{row.name}</p>
+              <p className="mt-1 text-xs leading-5 text-stone-500" data-exchange-license>{row.license}</p>
+              <dl className="mt-3 grid grid-cols-[6.5rem_1fr] gap-y-2 text-sm">
+                <dt className="text-xs uppercase tracking-[0.12em] text-stone-500">{c.thbPairsLabel}</dt>
+                <dd className="text-stone-300">{row.thbPairs.join(', ')}</dd>
+                <dt className="text-xs uppercase tracking-[0.12em] text-stone-500">{c.withdrawalLabel}</dt>
+                <dd className="text-stone-300">{row.thbWithdraw === null ? c.withdrawUnknown : `฿${row.thbWithdraw}`}</dd>
+                <dt className="text-xs uppercase tracking-[0.12em] text-stone-500">{c.cashLabel}</dt>
+                <dd className="text-xs leading-5 text-stone-300">{row.thbWithdraw === null ? c.cashUnknown : c.cashKnown}{' '}<TrackLink href={`/${locale}/cash`} eventName="exchanges_compare_cash_click" eventParams={{ exchange: row.slug, layout: 'mobile' }} className="font-medium text-brand-300 underline underline-offset-4">{c.cashCompareLink}</TrackLink></dd>
+                <dt className="text-xs uppercase tracking-[0.12em] text-stone-500">{c.officialLabel}</dt>
+                <dd><TrackAnchor href={row.officialUrl} target="_blank" rel="noreferrer" eventName="exchanges_compare_official_click" eventParams={{ exchange: row.slug, layout: 'mobile' }} className="font-medium text-brand-300 underline underline-offset-4">{c.officialCta}</TrackAnchor></dd>
+              </dl>
+            </div>
+          ))}
+        </div>
+        <div className="hidden overflow-x-auto rounded-[28px] border border-white/10 bg-[#151a18] sm:block">
+          <table className="w-full min-w-[720px] border-collapse text-left text-sm" data-exchange-table="licensed">
+            <thead>
+              <tr className="text-xs uppercase tracking-[0.08em] text-stone-500">
+                <th scope="col" className="px-4 py-3 font-medium sm:px-6">{c.licenseLabel}</th>
+                <th scope="col" className="px-3 py-3 font-medium">{c.thbPairsLabel}</th>
+                <th scope="col" className="px-3 py-3 font-medium">{c.withdrawalLabel}</th>
+                <th scope="col" className="px-3 py-3 font-medium">{c.cashLabel}</th>
+                <th scope="col" className="px-4 py-3 font-medium sm:px-6">{c.officialLabel}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparisonRows.map((row) => (
+                <tr key={row.slug} data-exchange-row={row.slug} data-thb-withdraw={row.thbWithdraw ?? ''} className="border-t border-white/5 text-stone-300">
+                  <th scope="row" className="px-4 py-4 text-left align-top font-semibold text-white sm:px-6">
+                    {row.name}
+                    <span className="mt-1 block text-xs font-normal leading-5 text-stone-500" data-exchange-license>{row.license}</span>
+                  </th>
+                  <td className="px-3 py-4 align-top text-xs leading-5">{row.thbPairs.join(', ')}</td>
+                  <td className="px-3 py-4 align-top">
+                    {row.thbWithdraw === null ? c.withdrawUnknown : `฿${row.thbWithdraw}`}
+                    <span className="mt-1 block text-xs text-stone-500">{c.withdrawalLabel}</span>
+                  </td>
+                  <td className="px-3 py-4 align-top text-xs leading-5">
+                    {row.thbWithdraw === null ? c.cashUnknown : c.cashKnown}{' '}
+                    <TrackLink href={`/${locale}/cash`} eventName="exchanges_compare_cash_click" eventParams={{ exchange: row.slug }} className="font-medium text-brand-300 underline underline-offset-4">{c.cashCompareLink}</TrackLink>
+                  </td>
+                  <td className="px-4 py-4 align-top sm:px-6">
+                    <TrackAnchor href={row.officialUrl} target="_blank" rel="noreferrer" eventName="exchanges_compare_official_click" eventParams={{ exchange: row.slug }} className="font-medium text-brand-300 underline underline-offset-4">{c.officialCta}</TrackAnchor>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-sm text-stone-400">{c.scopeNote}{' '}<TrackLink href={`/${locale}/crypto`} eventName="exchanges_compare_scope_click" eventParams={{ locale }} className="font-medium text-brand-300 underline underline-offset-4">{c.scopeLink}</TrackLink></p>
+      </Section>
 
       <Section title={c.whyTitle} description={c.whyBody}>
         <div className="grid gap-4 lg:grid-cols-3">

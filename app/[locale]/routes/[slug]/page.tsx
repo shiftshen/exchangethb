@@ -11,6 +11,7 @@ import { indexableLocales, t } from '@/lib/i18n';
 import { isIndexedRouteSlug, shouldIndexRoute } from '@/lib/indexing-policy';
 import { breadcrumbJsonLd, itemListJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { getRouteGuide, routeGuides, routeGuideSlugs } from '@/lib/route-guides';
+import { estimateBuyThb } from '@/lib/route-estimate';
 import { Locale } from '@/lib/types';
 
 const uiCopy = {
@@ -28,6 +29,14 @@ const uiCopy = {
     updatedLabel: 'Latest data reference',
     updatedCrypto: 'Based on the latest tracked exchange market snapshot for this route family.',
     updatedCash: 'Based on the latest tracked cash rate sample for this route family.',
+    estimateTitle: 'Estimated THB for 0.01 BTC (before fees)',
+    estimateBody: 'Cheapest full fill across the order books this page already reads, using the visible ask levels. Trading fees are not included; use the crypto calculator for the fee-inclusive amount. The stamp is the snapshot time, not a promise of execution.',
+    estimateFor: 'Buy 0.01 BTC at',
+    estimateUpdated: 'Snapshot updated',
+    estimateNone: 'No current order book snapshot is available, so no THB estimate is shown.',
+    estimateCta: 'Compare the licensed exchanges',
+    estimateFeeCta: 'Estimate with fees',
+    exchangesFooter: 'Nothing on this page is a quote. Compare licensed Thai exchanges and their THB pairs before you trade.',
   },
   zh: {
     routeGuide: '路线指南',
@@ -43,6 +52,14 @@ const uiCopy = {
     updatedLabel: '最近数据参考时间',
     updatedCrypto: '基于这类路线最近一次被记录的交易所市场快照。',
     updatedCash: '基于这类路线最近一次被记录的现金汇率样本。',
+    estimateTitle: '0.01 BTC 的泰铢估算（未含手续费）',
+    estimateBody: '用本页已经读取的盘口可见卖单，取能完整成交的最低价。此数不含交易手续费，含手续费金额请用加密计算页。时间戳是快照时间，不代表一定成交。',
+    estimateFor: '买入 0.01 BTC ·',
+    estimateUpdated: '快照更新时间',
+    estimateNone: '暂无可用的实时盘口快照，因此不显示泰铢估算。',
+    estimateCta: '比较持牌交易所',
+    estimateFeeCta: '含手续费估算',
+    exchangesFooter: '本页数字都不是报价。交易前请先比较泰国持牌交易所及其 THB 交易对。',
   },
   th: {
     routeGuide: 'คู่มือเส้นทาง',
@@ -58,6 +75,14 @@ const uiCopy = {
     updatedLabel: 'อ้างอิงข้อมูลล่าสุด',
     updatedCrypto: 'อิงจาก market snapshot ล่าสุดที่ระบบติดตามได้ในกลุ่มเส้นทางนี้',
     updatedCash: 'อิงจากตัวอย่างเรตเงินสดล่าสุดที่ระบบติดตามได้ในกลุ่มเส้นทางนี้',
+    estimateTitle: 'ประเมินเงินบาทสำหรับ 0.01 BTC (ก่อนค่าธรรมเนียม)',
+    estimateBody: 'ใช้ระดับคำสั่งขายที่มองเห็นในหน้านี้ เลือกทางที่เติมเต็มจำนวนได้ในราคาต่ำสุด ยังไม่รวมค่าธรรมเนียมเทรด หากต้องการยอดรวมค่าธรรมเนียมให้ใช้เครื่องคำนวณคริปโต เวลาที่แสดงคือเวลาของสแนปช็อต ไม่ใช่การรับประกันการจับคู่',
+    estimateFor: 'ซื้อ 0.01 BTC ที่',
+    estimateUpdated: 'อัปเดตสแนปช็อต',
+    estimateNone: 'ยังไม่มีสแนปช็อตสมุดคำสั่งล่าสุด จึงไม่แสดงยอดประเมิน',
+    estimateCta: 'เปรียบเทียบแพลตฟอร์มที่ได้รับใบอนุญาต',
+    estimateFeeCta: 'ประเมินรวมค่าธรรมเนียม',
+    exchangesFooter: 'ตัวเลขในหน้านี้ไม่ใช่ราคาเสนอซื้อขาย ควรเปรียบเทียบแพลตฟอร์มไทยที่ได้รับใบอนุญาตและคู่เทรด THB ก่อนเทรด',
   },
   ja: {
     routeGuide: 'ルートガイド',
@@ -106,14 +131,15 @@ const uiCopy = {
   },
 } as const;
 
-async function latestRouteDataTimestamp(guideType: 'crypto' | 'cash', compareHref: string) {
-  const query = new URL(compareHref, 'https://www.exchangethb.com').searchParams;
-  const timestamps = guideType === 'crypto'
-    ? (await getLiveMarketSnapshots(query.get('symbol') || 'USDT')).map(row => row.lastUpdated)
-    : (await readCashCache()).results.flatMap(result => result.rates || [])
-      .filter(row => row.currency === (query.get('currency') || 'USD')).map(row => row.observedAt);
-  return timestamps.map(value => new Date(value)).filter(value => Number.isFinite(value.getTime()))
-    .sort((a, b) => b.getTime() - a.getTime())[0];
+async function loadRouteData(guide: { type: 'crypto' | 'cash'; compareHref: string }) {
+  const query = new URL(guide.compareHref, 'https://www.exchangethb.com').searchParams;
+  if (guide.type === 'crypto') {
+    const snapshots = await getLiveMarketSnapshots(query.get('symbol') || 'USDT');
+    return { snapshots, timestamps: snapshots.map((row) => row.lastUpdated) };
+  }
+  const timestamps = (await readCashCache()).results.flatMap(result => result.rates || [])
+    .filter(row => row.currency === (query.get('currency') || 'USD')).map(row => row.observedAt);
+  return { snapshots: [], timestamps };
 }
 
 function webPageJsonLd(locale: Locale, slug: string, name: string, description: string, dateModified?: string) {
@@ -142,6 +168,10 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
   if (!guide) notFound();
 
   const c = uiCopy[locale === 'th' || locale === 'zh' || locale === 'ja' || locale === 'ko' || locale === 'de' ? locale : 'en'];
+  // The THB estimate block ships in en/th/zh only; keep its copy separate so the
+  // other locales' shared object does not need placeholder keys.
+  const estimateCopy = uiCopy[locale === 'th' ? 'th' : locale === 'zh' ? 'zh' : 'en'];
+  const showThbEstimate = guide.slug === 'btc-to-thb' && ['en', 'th', 'zh'].includes(locale);
   const guideTitle = t(guide.title, locale);
   const guideSummary = t(guide.summary, locale);
   const guideIntro = t(guide.intro, locale);
@@ -161,7 +191,16 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
       : locale === 'zh'
         ? '查看交易所总览'
         : 'Browse exchange hub';
-  const latestDataTimestamp = await latestRouteDataTimestamp(guide.type, guide.compareHref);
+  const routeData = await loadRouteData(guide);
+  const latestDataTimestamp = routeData.timestamps.map((value) => new Date(value)).filter((value) => Number.isFinite(value.getTime()))
+    .sort((a, b) => b.getTime() - a.getTime())[0];
+  const thbEstimate = showThbEstimate ? estimateBuyThb(routeData.snapshots, Number(guide.amount)) : null;
+  const estimateExchange = thbEstimate ? exchanges.find((exchange) => exchange.slug === thbEstimate.exchange)?.name ?? thbEstimate.exchange : null;
+  const estimateStamp = thbEstimate ? new Intl.DateTimeFormat(locale === 'th' ? 'th-TH' : locale === 'zh' ? 'zh-CN' : 'en-US', {
+    timeZone: 'Asia/Bangkok',
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(new Date(thbEstimate.updatedAt)) : null;
   const latestDataIso = latestDataTimestamp?.toISOString();
   const latestDataLabel = latestDataTimestamp ? new Intl.DateTimeFormat(locale === 'th' ? 'th-TH' : locale === 'zh' ? 'zh-CN' : 'en-US', {
     timeZone: 'Asia/Bangkok',
@@ -251,6 +290,24 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
           </div>
         </div>
       </section>
+
+      {showThbEstimate ? (
+        <Section title={estimateCopy.estimateTitle} description={estimateCopy.estimateBody}>
+          <div className="card p-6" data-thb-estimate={thbEstimate ? 'ready' : 'empty'}>
+            {thbEstimate ? (
+              <>
+                <p className="text-4xl font-semibold tracking-tight text-white">฿{new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(thbEstimate.thb)}</p>
+                <p className="mt-2 text-sm text-stone-300">{estimateCopy.estimateFor} {estimateExchange} · {new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(thbEstimate.averagePrice)} THB/BTC</p>
+                <p className="mt-1 text-sm text-stone-400">{estimateCopy.estimateUpdated}: <time dateTime={thbEstimate.updatedAt} data-thb-estimate-updated>{estimateStamp}</time></p>
+              </>
+            ) : <p className="text-base text-stone-300">{estimateCopy.estimateNone}</p>}
+            <div className="mt-4 flex flex-wrap gap-3">
+              <TrackLink href={entityHubHref} eventName="route_guide_estimate_exchanges_click" eventParams={{ route: guide.slug }} className="inline-block rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{estimateCopy.estimateCta}</TrackLink>
+              <TrackLink href={`/${locale}/crypto?symbol=BTC&amount=0.01&side=buy`} eventName="route_guide_estimate_fees_click" eventParams={{ route: guide.slug }} className="inline-block rounded-full border border-white/10 bg-surface-800 px-5 py-3 text-sm font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{estimateCopy.estimateFeeCta}</TrackLink>
+            </div>
+          </div>
+        </Section>
+      ) : null}
 
       <Section title={c.whyTitle} description={guideIntro}>
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
@@ -359,6 +416,10 @@ export default async function RouteGuidePage({ params }: { params: Promise<{ loc
             ))}
           </div>
         </Section>
+      ) : null}
+
+      {showThbEstimate ? (
+        <p className="text-sm text-stone-400">{estimateCopy.exchangesFooter}{' '}<TrackLink href={entityHubHref} eventName="route_guide_footer_exchanges_click" eventParams={{ route: guide.slug }} className="font-medium text-brand-300 underline underline-offset-4">{estimateCopy.estimateCta}</TrackLink></p>
       ) : null}
     </div>
   );
