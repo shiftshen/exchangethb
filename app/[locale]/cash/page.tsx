@@ -3,6 +3,8 @@ import { locales } from '@/lib/i18n';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { CashFeaturedChangers } from '@/components/cash-featured-changers';
+import { CashHubAnswer, CashHubCurrencies, CashHubFaq } from '@/components/cash-hub';
+import { buildCashHubContent, cashHubFaqJsonLd, isCashHubLocale } from '@/lib/cash-hub-seo';
 import { ExchangeGuide } from '@/components/exchange-guide';
 import { ExchangePicker } from '@/components/exchange-picker';
 import { isLocale } from '@/lib/i18n';
@@ -27,11 +29,16 @@ const seoTitles = {ru: additionalCopy.ru.pages.cash.title,ko: additionalCopy.ko.
 export default async function CashPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
+  const hub = isCashHubLocale(locale) ? buildCashHubContent(locale) : null;
   return <div className="simple-page"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }, { name: copy[locale].title, item: withLocalePath(locale, '/cash') }])) }} />
-    <header className="simple-intro"><h1>{copy[locale].title}</h1><p>{copy[locale].body}</p></header><ExchangePicker key={locale} locale={locale} initialMode="cash" showModeSwitch={false} /><CashFeaturedChangers locale={locale} /><ExchangeGuide locale={locale} /></div>;
+    {hub ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(cashHubFaqJsonLd(locale, hub.faqs)) }} /> : null}
+    <header className="simple-intro"><h1>{copy[locale].title}</h1><p>{copy[locale].body}</p></header><ExchangePicker key={locale} locale={locale} initialMode="cash" showModeSwitch={false} /><CashHubAnswer locale={locale} /><CashFeaturedChangers locale={locale} /><CashHubCurrencies locale={locale} /><CashHubFaq locale={locale} /><ExchangeGuide locale={locale} /></div>;
 }
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  return { title: seoTitles[locale], description: copy[locale].body, openGraph: { title: seoTitles[locale], description: copy[locale].body, url: withLocalePath(locale, '/cash'), locale: locale === 'ja' ? 'ja_JP' : locale === 'zh' ? 'zh_CN' : locale === 'th' ? 'th_TH' : 'en_GB', type: 'website' }, alternates: localeMetadataAlternates(locale, '/cash'), robots: localeRobots(locale) };
+  const hub = isCashHubLocale(locale) ? buildCashHubContent(locale) : null;
+  const title = hub?.metaTitle ?? seoTitles[locale];
+  const description = hub?.metaDescription ?? copy[locale].body;
+  return { title, description, openGraph: { title, description, url: withLocalePath(locale, '/cash'), locale: locale === 'ja' ? 'ja_JP' : locale === 'zh' ? 'zh_CN' : locale === 'th' ? 'th_TH' : 'en_GB', type: 'website' }, alternates: localeMetadataAlternates(locale, '/cash'), robots: localeRobots(locale) };
 }

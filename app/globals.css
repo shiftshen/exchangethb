@@ -249,3 +249,19 @@ a { @apply transition-colors; }
   .seo-section { margin-top: 26px; }
   .seo-table th, .seo-table td { padding: 10px 12px; }
 }
+.cash-hub-answer, .cash-hub-faq { margin-top: 34px; }
+.cash-hub-currencies { margin-top: 34px; display: grid; gap: 28px; }
+.cash-hub-answer h2, .cash-hub-currency h2, .cash-hub-faq h2 { font-size: clamp(20px, 2.4vw, 25px); font-weight: 700; line-height: 1.35; letter-spacing: -.4px; color: #132b3a; }
+.cash-hub-answer-text, .cash-hub-currency-intro { margin-top: 10px; color: #3c5162; font-size: 15px; line-height: 1.75; }
+.cash-hub-rows { list-style: none; margin-top: 14px; display: grid; gap: 10px; }
+.cash-hub-rows li { display: grid; gap: 4px; padding: 14px 16px; border: 1px solid #dce5eb; border-radius: 12px; background: #fff; }
+.cash-hub-name { font-weight: 650; color: #132b3a; font-size: 15px; }
+.cash-hub-name:hover { color: #087f91; }
+.cash-hub-rate { font-size: 14px; color: #132b3a; }
+.cash-hub-meta { font-size: 13px; color: #526777; line-height: 1.6; }
+.cash-hub-empty, .cash-hub-missing { margin-top: 12px; font-size: 13px; color: #526777; line-height: 1.7; }
+.cash-hub-cta { display: inline-flex; align-items: center; min-height: 44px; margin-top: 14px; padding: 10px 16px; border-radius: 12px; background: #087f91; color: #fff; font-size: 14px; font-weight: 650; }
+.cash-hub-faq-item { padding: 16px 0; border-bottom: 1px solid #dce3e6; }
+.cash-hub-faq-item:first-of-type { border-top: 1px solid #dce3e6; margin-top: 16px; }
+.cash-hub-faq-item h3 { font-size: 16px; font-weight: 650; color: #132b3a; line-height: 1.5; }
+.cash-hub-faq-item p { margin-top: 6px; font-size: 14px; line-height: 1.75; color: #3c5162; }

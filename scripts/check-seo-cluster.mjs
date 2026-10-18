@@ -61,6 +61,19 @@ const checks = [
     mustNotInclude: ['Related cash and country route guides', 'English search questions this page answers'],
     canonical: '/en/cash',
   },
+  // /cash answer-first block, per-currency sections and visible FAQ (en/th/zh). The FAQPage must
+  // reference the site Organization and every other locale must keep the unchanged page.
+  ...Object.entries({
+    en: ['Where can I exchange cash for Thai baht in Bangkok?', 'Where to exchange US dollars (USD) to Thai baht in Bangkok?', 'Where to exchange Chinese yuan (CNY) to Thai baht in Bangkok?', 'Does ExchangeTHB exchange money or take payments?', '/en/cash?currency=EUR'],
+    th: ['แลกเงินสดเป็นบาทที่ไหนในกรุงเทพฯ ดี?', 'แลกเยนญี่ปุ่น (JPY) เป็นบาทที่ไหนในกรุงเทพฯ?', 'เรทที่แสดงในหน้านี้เป็นเรทสุดท้ายหรือไม่?', '/th/cash?currency=USD'],
+    zh: ['曼谷哪里可以把现金换成泰铢？', '日元（JPY）换泰铢，曼谷在哪里换？', '页面上显示的汇率是最终汇率吗？', '/zh/cash?currency=CNY'],
+  }).map(([locale, mustInclude]) => ({
+    path: `/${locale}/cash`,
+    canonical: `/${locale}/cash`,
+    mustInclude,
+    mustMatch: [/"@type":"FAQPage"/, /"publisher":\{"@id":"[^"]+\/#organization"\}/, /<section class="cash-hub-answer"/, /<section class="cash-hub-faq"/, /<h3>[^<]+<\/h3><p>/],
+    mustNotInclude: ['noindex, follow'],
+  })),
   {
     path: '/en/routes',
     mustInclude: ['noindex, follow'],
