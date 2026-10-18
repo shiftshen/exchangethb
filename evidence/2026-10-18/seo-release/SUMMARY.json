@@ -126,16 +126,18 @@
    "ja": "dialog (fading in screenshot)",
    "ko": "dialog (fading)",
    "fr": "dialog (fading)",
-   "th": "dialog (fading, reconfirmed in 2nd pass)"
+   "th": "dialog (fading, reconfirmed in 2nd pass)",
+   "vi": "accepted at 10:5x (script saw visible '已请求编入索引'; screenshot not captured - window minimized; quota then exhausted)"
   },
   "request_indexing_NOT_confirmed": {
-   "ru": "2nd attempt returned '超出了配额 / daily quota exceeded' (GSC daily URL-inspection request quota used up, partly by my re-checks); first attempt had no visible confirmation",
-   "vi": "no confirmation dialog in screenshot",
-   "id": "no confirmation dialog in screenshot; inspection shows /id = 'URL not on Google: discovered - currently not indexed' (referrers: other home pages + sitemap)"
+   "ru": "daily quota exceeded (screenshot of the quota error not saved; observed in page text)",
+   "id": "daily quota exceeded (gsc/id-last-state.png); /id = discovered, currently not indexed"
   },
-  "retry": "re-request ru, vi, id after the GSC quota resets (next day); not a site fault, so no rollback",
+  "retry": "re-request ru and id after the GSC daily quota resets (next day); not a site fault, so no rollback",
   "sitemap": "resubmitted https://www.exchangethb.com/sitemap.xml -> '已成功提交站点地图'; list now shows last read 2026-10-18, status 成功, 71 discovered pages (was 68 on 10-02) (sitemap-submitted.png, sitemaps-before.png)",
-  "screenshots_dir": "evidence/2026-10-18/seo-release/gsc/ (10 per-locale *-request-indexing.png, sitemaps-before.png, sitemap-submitted.png)"
+  "screenshots_dir": "evidence/2026-10-18/seo-release/gsc/ (10 per-locale *-request-indexing.png, sitemaps-before.png, sitemap-submitted.png)",
+  "status_update_1055": "Round 2 retry 10:5x: vi request accepted (confirmation wait passed; screenshot failed because Chrome window was minimized, earlier vi-request-indexing.png shows no dialog); id and ru now return daily quota exceeded",
+  "summary_counts": "8 of 10 homes requested (en zh de ja ko fr th vi); ru and id pending GSC daily quota reset"
  },
  "followups": [
   "Retry GSC request indexing for ru, vi, id once quota resets; watch /id (discovered, not indexed)",
