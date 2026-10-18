@@ -1,9 +1,11 @@
 import { notFound } from 'next/navigation';
 import { ProviderContext } from '@/components/provider-context';
+import { ProfileRateTable } from '@/components/profile-rate-table';
+import { formatBangkokStamp, ratchadaMeta, rateLocale } from '@/lib/rate-format';
+import { getRateTable } from '@/lib/rate-table';
 import type { Metadata } from 'next';
 import { TrackAnchor, TrackLink } from '@/components/track-link';
 import { cashProviders, publicCashProviderSlugs } from '@/data/site';
-import { compareCashLive } from '@/lib/cash-live';
 import { buildRatchadaAnswer, buildVersusAnswer, quotesFromRows, ratchadaFaqQuestion, versusFaqQuestion } from '@/lib/ai-answers';
 import { getEffectiveCashBranches } from '@/lib/cash-entities';
 import { resolveContentLocale } from '@/lib/i18n';
@@ -93,11 +95,14 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
   const c = labels[locale === 'th' || locale === 'zh' ? locale : 'en'];
   const content = seo.content;
 
-  const comparisons = await Promise.all(currencies.map(async (currency) => {
-    const result = await compareCashLive({ currency, amount: 1000, maxDistanceKm: 100, locale: contentLocale }).catch(() => null);
-    const row = result?.all.find((item) => item.providerSlug === slug);
-    return row ? { currency, row, all: result?.all ?? [] } : null;
-  }));
+  // SEO-24: Ratchada gets the full 15-currency table; the other profiles keep their five examples.
+  const isRatchada = slug === 'ratchada';
+  const rateTable = await getRateTable(slug, isRatchada);
+  const comparisons = currencies.map((currency) => {
+    const found = rateTable.comparisons.find((item) => item.currency === currency);
+    const row = found?.all.find((item) => item.providerSlug === slug);
+    return row ? { currency, row, all: found?.all ?? [] } : null;
+  });
   const rateRows = comparisons.filter((item): item is NonNullable<typeof item> => Boolean(item));
   const usdComparison = comparisons.find((item) => item?.currency === 'USD');
   const primary = usdComparison?.row || rateRows[0]?.row;
@@ -157,6 +162,40 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(faqEntries)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(exchangeLd) }} />
 
+      {isRatchada ? (
+        <>
+          <header className="rounded-[32px] bg-[#0f2e22] p-6 text-white sm:p-9">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9fd0b1]">{content.eyebrow}</p>
+            <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">{seo.locale === 'th' && profile.brandThai ? profile.brandThai : provider.name}</h1>
+            {profile.brandThai ? <p className="mt-2 text-lg font-semibold text-[#9fd0b1]">{seo.locale === 'th' ? provider.name : profile.brandThai}</p> : null}
+          </header>
+
+          <ProfileRateTable table={rateTable} locale={rateLocale(locale)} heading={content.rateHeading} />
+
+          <section id="store-status" className="rounded-[28px] bg-[#0f2e22] p-5 text-white sm:p-7" aria-label={branchName}>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className={`rounded-full px-3 py-1 text-xs font-semibold ${openState ? 'bg-emerald-400/15 text-emerald-200' : 'bg-stone-500/20 text-stone-300'}`}>{openState ? c.open : c.closed}</span>
+              <span className="rounded-full border border-white/15 px-3 py-1 text-xs text-stone-200">{hours}</span>
+            </div>
+            <p className="mt-3 text-base font-semibold">{branchName}</p>
+            <p className="mt-1 text-sm leading-6 text-[#d7e4dc]">{address}</p>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-[#d7e4dc]">{content.answer}</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <TrackAnchor href={provider.officialUrl} target="_blank" rel="noreferrer" eventName="money_changer_profile_official_click" eventParams={{ provider: provider.slug, source_type: sourceType, position: 'status' }} className="rounded-full bg-[#dcebdd] px-5 py-3 text-sm font-semibold text-[#18583d]">{content.officialCta}</TrackAnchor>
+              <TrackAnchor href={mapsUrl} target="_blank" rel="noreferrer" eventName="money_changer_profile_map_click" eventParams={{ provider: provider.slug }} className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white">{content.mapCta}</TrackAnchor>
+              <TrackLink href={`/${locale}/cash?currency=USD&amount=1000`} eventName="money_changer_profile_compare_click" eventParams={{ provider: provider.slug }} className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white">{c.rateEntry}</TrackLink>
+            </div>
+          </section>
+
+      {ai?.answer ? (
+        <section className="rounded-[28px] border border-white/10 bg-[#151a18] p-6" aria-labelledby="ai-answer-heading">
+          <h2 id="ai-answer-heading" className="text-xl font-semibold text-white">{ai.question}</h2>
+          <p className="mt-3 max-w-3xl text-base leading-7 text-stone-200" data-ai-answer={ai.id}>{ai.answer}</p>
+        </section>
+      ) : null}
+        </>
+      ) : (
+        <>
       <header className="grid gap-6 rounded-[32px] bg-[#0f2e22] p-6 text-white sm:p-9 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9fd0b1]">{content.eyebrow}</p>
@@ -203,8 +242,10 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
         </div>
         <p className="border-t border-white/10 px-6 py-4 text-xs text-stone-500">{content.verifyNote}</p>
       </section>
+        </>
+      )}
 
-      <section className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
+      <section className={isRatchada ? 'grid gap-4' : 'grid gap-4 lg:grid-cols-[0.8fr_1.2fr]'}>
         <div className="rounded-[28px] border border-black/10 bg-[#ece8dc] p-6 text-[#11271e]">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#657169]">{content.locationHeading}</p>
           <h2 className="mt-3 text-xl font-semibold">{branchName}</h2>
@@ -216,6 +257,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
             <Fact label={c.distance} value={primary && primary.distanceKnown !== false ? `${formatNumber(primary.distanceKm, 1)} km` : '-'} />
           </div>
         </div>
+        {isRatchada ? null : (
         <div className="rounded-[28px] border border-white/10 bg-[#151a18] p-6">
           <h2 className="text-xl font-semibold text-white">{c.rates}</h2>
           <p className="mt-2 text-sm text-stone-400">{content.sourceNote}</p>
@@ -232,6 +274,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
             ))}
           </div>
         </div>
+        )}
       </section>
 
       <section className="rounded-[28px] border border-white/10 bg-[#151a18] p-6">
@@ -328,7 +371,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   if (!publicCashProviderSlugs.includes(slug as typeof publicCashProviderSlugs[number])) return {};
   const seo = buildMoneyChangerSeo(slug, locale);
   if (!seo) return {};
-  const { metaTitle: title, metaDescription: description } = seo.content;
+  let { metaTitle: title, metaDescription: description } = seo.content;
+  if (slug === 'ratchada') {
+    // SEO-24: the title/description carry the same quote stamp the first-screen table shows.
+    const table = await getRateTable(slug, true);
+    const meta = ratchadaMeta(rateLocale(locale), formatBangkokStamp(table.latestObservedAt, rateLocale(locale)), table.available);
+    title = meta.title;
+    description = meta.description;
+  }
   const path = `/money-changers/${slug}`;
   return {
     title,

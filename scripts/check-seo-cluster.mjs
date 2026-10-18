@@ -126,7 +126,7 @@ const checks = [
   {
     path: '/zh/money-changers/ratchada',
     canonical: '/zh/money-changers/ratchada',
-    mustInclude: ['hrefLang="th"', 'hrefLang="en"', 'รัชดาเอ๊กซเชนจ์', '护照', '每天 09:00–20:30'],
+    mustInclude: ['hrefLang="th"', 'hrefLang="en"', 'รัชดาเอ๊กซเชนจ์', '护照', '每天 09:00–20:30', 'data-rate-table="ratchada"', '汇权', '今日汇率'],
     mustMatch: [/"@type":\["LocalBusiness","FinancialService"\]/, /"@type":"FAQPage"/],
     mustNotInclude: ['noindex, follow'],
   },
@@ -135,7 +135,7 @@ const checks = [
     // LocalBusiness/FinancialService + FAQPage + BreadcrumbList markup from verified data.
     path: '/en/money-changers/ratchada',
     canonical: '/en/money-changers/ratchada',
-    mustInclude: ['รัชดาเอ๊กซเชนจ์', 'Huai Khwang', '78/13 Prachatbamphen Rd', 'passport', 'Observed buy rate'],
+    mustInclude: ['รัชดาเอ๊กซเชนจ์', 'Huai Khwang', '78/13 Prachatbamphen Rd', 'passport', 'data-rate-table="ratchada"', 'Rate Today'],
     mustMatch: [/"@type":\["LocalBusiness","FinancialService"\]/, /"@type":"FAQPage"/, /"@type":"BreadcrumbList"/, /"dayOfWeek":\["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"\]/],
     mustNotInclude: ['noindex, follow'],
   },
@@ -157,9 +157,28 @@ const checks = [
   {
     path: '/th/money-changers/ratchada',
     canonical: '/th/money-changers/ratchada',
-    mustInclude: ['hrefLang="zh"', 'รัชดาเอ๊กซเชนจ์', 'ทุกวัน 09:00–20:30', 'หนังสือเดินทาง'],
+    mustInclude: ['hrefLang="zh"', 'รัชดาเอ๊กซเชนจ์', 'รัชดาเอกเช้น', 'ทุกวัน 09:00–20:30', 'หนังสือเดินทาง', 'data-rate-table="ratchada"'],
     mustMatch: [/"@type":\["LocalBusiness","FinancialService"\]/, /"@type":"FAQPage"/],
     mustNotInclude: ['noindex, follow'],
+  },
+  {
+    // SEO-24: the crypto index (a noindex,follow hub) points cash readers at the Ratchada profile in their own language.
+    path: '/th/exchanges',
+    mustInclude: ['/th/money-changers/ratchada'],
+    mustMatch: [],
+    mustNotInclude: [],
+  },
+  {
+    path: '/zh/exchanges',
+    mustInclude: ['/zh/money-changers/ratchada'],
+    mustMatch: [],
+    mustNotInclude: [],
+  },
+  {
+    path: '/en/exchanges',
+    mustInclude: ['/en/money-changers/ratchada'],
+    mustMatch: [],
+    mustNotInclude: [],
   },
   {
     path: '/robots.txt',

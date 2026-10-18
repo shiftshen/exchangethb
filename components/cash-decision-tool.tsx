@@ -347,7 +347,7 @@ export function CashDecisionTool({
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#24352d] text-xs font-bold text-[#9fd0b1]">{index + 1}</span>
-                        <h2 className="text-xl font-semibold text-white">{row.provider}</h2>
+                        <h2 className="text-xl font-semibold text-white"><Link href={`/${locale}/money-changers/${row.providerSlug}`} onClick={() => trackEvent('cash_provider_name_click', { provider: row.providerSlug, rank: index + 1 })} className="underline decoration-white/20 underline-offset-4 hover:decoration-white/60">{row.provider}</Link></h2>
                         <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${row.isOpen ? 'bg-emerald-500/10 text-emerald-300' : 'bg-stone-700 text-stone-300'}`}>
                           {row.isOpen ? c.open : c.closed}
                         </span>

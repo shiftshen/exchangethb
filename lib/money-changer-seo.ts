@@ -1,3 +1,4 @@
+import { ratchadaMeta } from '@/lib/rate-format';
 import { cashBranches, cashProviders, publicCashProviderSlugs } from '@/data/site';
 import type { Locale } from '@/lib/types';
 
@@ -329,20 +330,21 @@ interface ProviderCopy {
 const providers: Record<string, ProviderCopy> = {
   ratchada: {
     brandThai: 'รัชดาเอ๊กซเชนจ์',
+    // Static (no-quote) copy; the live page replaces it via ratchadaMeta() with the quote stamp.
     metaTitle: {
-      en: 'Ratchada Exchange รัชดาเอ๊กซเชนจ์: rate today, 09:00–20:30',
-      th: 'รัชดาเอ๊กซเชนจ์ (Ratchada Exchange) เรทวันนี้ เปิด 09:00–20:30',
-      zh: 'Ratchada Exchange（รัชดาเอ๊กซเชนจ์）今日汇率、营业时间 09:00–20:30',
+      en: ratchadaMeta('en', null, 0).title,
+      th: ratchadaMeta('th', null, 0).title,
+      zh: ratchadaMeta('zh', null, 0).title,
     },
     metaDescription: {
-      en: 'Ratchada Exchange (รัชดาเอ๊กซเชนจ์), Huai Khwang: open daily 09:00–20:30 at 78/13 Prachatbamphen Rd. Today’s observed rate, map and official site.',
-      th: 'รัชดาเอ๊กซเชนจ์ (Ratchada Exchange) ย่านห้วยขวาง เปิดทุกวัน 09:00–20:30 ที่ 78/13 Prachatbamphen Rd. ดูเรทที่สังเกตล่าสุด แผนที่ และเว็บทางการ',
-      zh: 'Ratchada Exchange（รัชดาเอ๊กซเชนจ์）位于曼谷辉煌区，每天 09:00–20:30 营业，地址 78/13 Prachatbamphen Rd.。查看今日观测汇率、地图与官网入口。',
+      en: ratchadaMeta('en', null, 0).description,
+      th: ratchadaMeta('th', null, 0).description,
+      zh: ratchadaMeta('zh', null, 0).description,
     },
     answer: {
       en: 'Ratchada Exchange is in Huai Khwang, Bangkok, at 78/13 Prachatbamphen Rd. It opens every day from 09:00 to 20:30. Today’s observed buying rate and the baht you would receive are below, with the time each quote was collected. Bring your passport: licensed Thai changers record ID.',
-      th: 'รัชดาเอ๊กซเชนจ์ (Ratchada Exchange) อยู่ย่านห้วยขวาง กรุงเทพฯ ที่ 78/13 Prachatbamphen Rd. เปิดทุกวัน 09:00–20:30 เรทรับซื้อที่สังเกตล่าสุดและยอดบาทโดยประมาณอยู่ในส่วนถัดไป ควรพาหนังสือเดินทางไปด้วย เพราะร้านที่ได้ใบอนุญาตต้องบันทึกข้อมูลผู้แลก',
-      zh: 'Ratchada Exchange（รัชดาเอ๊กซเชนจ์）位于曼谷辉煌区 78/13 Prachatbamphen Rd.，每天 09:00–20:30 营业，今日观测买入汇率与预计泰铢见下方。请带护照，持牌换汇店会登记换汇人身份。',
+      th: 'รัชดาเอ๊กซเชนจ์ (Ratchada Exchange หรือที่ค้นหาว่า รัชดาเอกเช้น) อยู่ย่านห้วยขวาง กรุงเทพฯ ที่ 78/13 Prachatbamphen Rd. เปิดทุกวัน 09:00–20:30 เรทรับซื้อที่สังเกตล่าสุดและยอดบาทโดยประมาณอยู่ในส่วนถัดไป ควรพาหนังสือเดินทางไปด้วย เพราะร้านที่ได้ใบอนุญาตต้องบันทึกข้อมูลผู้แลก',
+      zh: 'Ratchada Exchange（รัชดาเอ๊กซเชนจ์）位于曼谷汇权区（ห้วยขวาง）78/13 Prachatbamphen Rd.，每天 09:00–20:30 营业，今日观测买入汇率与预计泰铢见下方。请带护照，持牌换汇店会登记换汇人身份。',
     },
     positioning: {
       en: 'This is a single-store changer that publishes its own rate page, so the quote you compare here can be checked again on its official site before you walk in.',
@@ -464,7 +466,7 @@ function addressKind(profile: MoneyChangerProfile): AddressKind {
 // Locale area names, used inside FAQ prose. Street addresses stay exactly as published in
 // data/site.ts (Latin script) so the page never invents a transliteration.
 const areaNames: Record<string, Record<ProfileLocale, string>> = {
-  ratchada: { en: 'Huai Khwang, Bangkok', th: 'ห้วยขวาง', zh: '辉煌区（Huai Khwang）' },
+  ratchada: { en: 'Huai Khwang, Bangkok', th: 'ห้วยขวาง', zh: '汇权区（Huai Khwang）' },
   'superrich-thailand': { en: 'the Pratunam area of Bangkok', th: 'ประตูน้ำ', zh: '水门（Pratunam）一带' },
   'twelve-victory': { en: 'Phaya Thai, Bangkok', th: 'พญาไท', zh: 'Phaya Thai 区' },
 };

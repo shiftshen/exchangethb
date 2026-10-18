@@ -66,7 +66,10 @@ describe('money changer profile copy', () => {
       const profile = getMoneyChangerProfile(slug)!;
       for (const locale of locales) {
         const seo = buildMoneyChangerSeo(slug, locale)!;
-        const brand = locale === 'th' && profile.brandThai ? profile.brandThai : profile.name;
+        // SEO-24: the Thai Ratchada title leads with the spelling users actually search (GSC).
+        const brand = locale === 'th' && slug === 'ratchada'
+          ? 'รัชดาเอกเช้น'
+          : locale === 'th' && profile.brandThai ? profile.brandThai : profile.name;
         expect(seo.content.metaTitle.startsWith(brand), `${slug}/${locale} title: ${seo.content.metaTitle}`).toBe(true);
         expect(seo.content.metaDescription.startsWith(brand), `${slug}/${locale} description`).toBe(true);
       }
@@ -76,7 +79,6 @@ describe('money changer profile copy', () => {
   it('carries the Thai brand name on all three Ratchada locales', () => {
     for (const locale of locales) {
       const seo = buildMoneyChangerSeo('ratchada', locale)!;
-      expect(seo.content.metaTitle).toContain('รัชดาเอ๊กซเชนจ์');
       expect(seo.content.metaDescription).toContain('รัชดาเอ๊กซเชนจ์');
     }
   });

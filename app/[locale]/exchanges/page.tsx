@@ -36,6 +36,8 @@ const copy = {
     reasonThreeTitle: 'เชื่อมกับ route intent ได้ง่ายกว่า',
     reasonThreeBody: 'หน้ารวมนี้รับลิงก์จากหน้า route และหน้าแรก เพื่อกระจาย internal link ไปยัง exchange profile ที่สำคัญกว่าเดิม',
     faqTitle: 'คำถามที่พบบ่อย',
+    cashNote: 'ต้องการแลกเงินสด? ดูเรทวันนี้ของ',
+    cashLink: 'รัชดาเอกเช้น Ratchada Exchange',
   },
   en: {
     kicker: 'Exchange index',
@@ -62,6 +64,8 @@ const copy = {
     reasonThreeTitle: 'Support route-intent pages better',
     reasonThreeBody: 'Route guides and the homepage can point here first, which helps redistribute internal link equity into the exchange profiles that need trust.',
     faqTitle: 'Common questions',
+    cashNote: 'Swapping cash instead of crypto? See today’s rate at',
+    cashLink: 'Ratchada Exchange',
   },
   zh: {
     kicker: '交易所索引',
@@ -88,6 +92,8 @@ const copy = {
     reasonThreeTitle: '更好承接路线页意图',
     reasonThreeBody: '首页和路线页可以优先链接到这个 hub，再把内部链接权重分发到更重要的交易所实体页。',
     faqTitle: '常见问题',
+    cashNote: '想换现金而不是加密货币？查看今日汇率：',
+    cashLink: 'Ratchada Exchange 汇权区门店',
   },
 } as const;
 
@@ -175,6 +181,7 @@ export default async function ExchangesIndexPage({ params }: { params: Promise<{
               <TrackLink href={`/${locale}/crypto`} eventName="exchanges_index_compare_click" eventParams={{ locale }} className="rounded-full bg-brand-500 px-6 py-3 font-medium text-surface-950 hover:bg-brand-400">{c.compareCta}</TrackLink>
               <TrackLink href={`/${locale}/routes`} eventName="exchanges_index_routes_click" eventParams={{ locale }} className="rounded-full border border-white/10 bg-surface-800 px-6 py-3 font-medium text-stone-100 hover:border-brand-500/40 hover:text-brand-300">{c.routesCta}</TrackLink>
             </div>
+            <p className="text-sm text-stone-400">{c.cashNote}{' '}<TrackLink href={`/${locale}/money-changers/ratchada`} eventName="exchanges_index_cash_click" eventParams={{ locale, provider: 'ratchada' }} className="font-medium text-brand-300 underline underline-offset-4">{c.cashLink}</TrackLink></p>
           </div>
           <div className="card-panel grid gap-3 p-6 sm:grid-cols-3 lg:grid-cols-1">
             <div className="rounded-2xl border border-white/8 bg-surface-900/70 p-4">
