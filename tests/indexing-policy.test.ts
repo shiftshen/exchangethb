@@ -64,6 +64,6 @@ describe('sitemap detail coverage', () => {
   });
 
   it('keeps the sitemap at the expected size after adding zh detail pages', () => {
-    expect(entries.length).toBe(71);
+    expect(entries.length).toBe(74);
   });
 });

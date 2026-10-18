@@ -5,7 +5,8 @@ import { notFound } from 'next/navigation';
 import { ExchangePicker } from '@/components/exchange-picker';
 import { HomeSeoSections, homeFaqEntries, homeQuickAnswer } from '@/components/home-seo-sections';
 import { isLocale } from '@/lib/i18n';
-import { breadcrumbJsonLd, faqPageJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
+import { homeBrandIntro, homeMetadata } from '@/lib/brand-entity';
+import { breadcrumbJsonLd, faqPageJsonLd, graphNode, homeGraphJsonLd, withLocalePath } from '@/lib/seo';
 import type { ContentLocale, Locale } from '@/lib/types';
 
 export const revalidate = 60;
@@ -23,17 +24,17 @@ const copy = {
   en: { title: 'Thai baht. An easier choice.', body: 'Choose your currency and amount. Compare your options.' },
   th: { title: 'แลกเป็นบาท เลือกให้ง่ายขึ้น', body: 'เลือกสกุลเงิน ใส่จำนวน แล้วเปรียบเทียบตัวเลือก' },
 };
-const seoTitles = {ru: additionalCopy.ru.pages.home.title,ko: additionalCopy.ko.pages.home.title,fr: additionalCopy.fr.pages.home.title,de: additionalCopy.de.pages.home.title,id: additionalCopy.id.pages.home.title,vi: additionalCopy.vi.pages.home.title,"en": "Thai baht exchange comparison: cash & crypto in Thailand", "th": "เปรียบเทียบแลกเงินเป็นบาท — เงินสดและคริปโตในไทย", "zh": "泰铢兑换比较：曼谷换汇店与泰国交易所", "ja": "タイバーツ両替レート比較：日本円・現金・暗号資産"};
 export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const c = copy[locale as ContentLocale];
-  const breadcrumb = breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }]);
-  const faq = faqPageJsonLd(homeFaqEntries(locale));
+  const breadcrumb = graphNode(breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }]));
+  const faq = graphNode(faqPageJsonLd(homeFaqEntries(locale)));
+  // One @graph: WebSite + Organization (same @id the rest of the site references) + page nodes.
+  const graph = homeGraphJsonLd(locale, [breadcrumb, faq]);
   return <div className="simple-page">
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }} />
-    <header className="simple-intro"><h1>{c.title}</h1><p className="seo-answer">{homeQuickAnswer(locale)}</p></header>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }} />
+    <header className="simple-intro"><h1>{c.title}</h1><p className="seo-answer">{homeBrandIntro[locale]} {homeQuickAnswer(locale)}</p></header>
     <ExchangePicker key={locale} locale={locale} />
     <HomeSeoSections locale={locale} />
   </div>;
@@ -41,5 +42,5 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  return { title: seoTitles[locale], description: copy[locale].body, alternates: localeMetadataAlternates(locale), robots: localeRobots(locale), openGraph: { title: seoTitles[locale], description: copy[locale].body, url: withLocalePath(locale) } };
+  return homeMetadata(locale);
 }

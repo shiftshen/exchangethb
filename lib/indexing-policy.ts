@@ -38,6 +38,13 @@ export function shouldIndexLegalPage(locale: Locale, slug: string) {
     && indexedLegalSlugs.includes(slug as typeof indexedLegalSlugs[number]);
 }
 
+// About page carries full hand-written copy in en/th/zh only; other locales stay noindex and canonical to en.
+export const indexedAboutLocales: Locale[] = ['en', 'th', 'zh'];
+
+export function shouldIndexAboutPage(locale: Locale) {
+  return indexedAboutLocales.includes(locale);
+}
+
 export function shouldIndexHub() {
   return false;
 }

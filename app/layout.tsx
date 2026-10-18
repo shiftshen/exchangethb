@@ -50,6 +50,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const organization = organizationJsonLd();
   const requestHeaders = await headers();
   const locale = requestHeaders.get('x-resolved-locale');
+  // The homepage emits Organization inside its own @graph; every other page emits it here.
+  const isHome = requestHeaders.get('x-public-home') === '1';
   const htmlLang = locale && isLocale(locale) ? locale : 'en';
   return (
     <html lang={htmlLang} suppressHydrationWarning>
@@ -76,7 +78,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           crossOrigin="anonymous" />}
       </head>
       <body>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
+        {!isHome && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />}
         {children}
       </body>
     </html>

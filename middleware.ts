@@ -139,6 +139,7 @@ export function middleware(request: NextRequest) {
   const locale = resolveLocale(nextUrl.pathname);
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-resolved-locale', locale);
+  requestHeaders.set('x-public-home', segments.length === 1 && firstSegment && isLocale(firstSegment) ? '1' : '0');
   requestHeaders.set('x-public-adsense', !firstSegment || isLocale(firstSegment) ? '1' : '0');
   const response = NextResponse.next({
     request: {

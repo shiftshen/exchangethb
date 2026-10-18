@@ -18,6 +18,7 @@ function urls(paths: string[]) {
 export function GET() {
   const homePaths = locales.map((locale) => `/${locale}`);
   const corePaths = locales.flatMap((locale) => [`/${locale}/cash`, `/${locale}/crypto`, `/${locale}/legal/methodology`]);
+  const aboutPaths = detailLocales.map((locale) => `/${locale}/about`);
   const moneyChangerPaths = detailLocales.flatMap((locale) => publicCashProviderSlugs.map((slug) => `/${locale}/money-changers/${slug}`));
   const exchangePaths = (['en', 'zh'] as const).flatMap((locale) => exchanges.map((exchange) => `/${locale}/exchanges/${exchange.slug}`));
   const routePaths = routeLocales.flatMap((locale) => indexedRouteSlugs.map((slug) => `/${locale}/routes/${slug}`));
@@ -26,6 +27,8 @@ export function GET() {
     '# ExchangeTHB',
     '',
     '> ExchangeTHB compares what it actually costs to get Thai baht (THB): cash money changers in Bangkok against Thai SEC-licensed crypto exchanges. Public pages are written to be quoted by search engines and AI answer engines, and every amount is labelled as an estimate.',
+    '',
+    '- Name: ExchangeTHB (also written Exchange THB). Website: exchangethb.com.',
     '',
     '## Questions this site answers',
     '- Where do you get more baht for the same money: a Bangkok cash changer or a Thai exchange?',
@@ -46,6 +49,9 @@ export function GET() {
     '',
     '## Core comparison pages (every locale)',
     urls(corePaths),
+    '',
+    '## About ExchangeTHB (en, th, zh)',
+    urls(aboutPaths),
     '',
     '## Money changer profiles (en, th, zh)',
     urls(moneyChangerPaths),

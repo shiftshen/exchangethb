@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { statSync } from 'node:fs';
 import { join } from 'node:path';
 import { exchanges, publicCashProviders } from '@/data/site';
-import { coreIndexLocales, indexedLegalSlugs, indexedRouteSlugs } from '@/lib/indexing-policy';
+import { coreIndexLocales, indexedAboutLocales, indexedLegalSlugs, indexedRouteSlugs } from '@/lib/indexing-policy';
 import { localeAlternates, siteUrl } from '@/lib/seo';
 
 function fileDate(paths: string[]) {
@@ -90,6 +90,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     alternates: { languages: localeAlternates(`/legal/${slug}`) },
   })));
 
+  const aboutUpdated = fileDate(['app/[locale]/about/page.tsx', 'lib/brand-entity.ts']);
+  const about = indexedAboutLocales.map((locale) => ({
+    url: `${siteUrl}/${locale}/about`,
+    priority: 0.5,
+    changeFrequency: 'monthly' as const,
+    lastModified: aboutUpdated,
+    alternates: { languages: englishThaiAndChinese('/about') },
+  }));
+
   const exchangeProfiles = exchanges.flatMap((exchange) => [
     {
       url: `${siteUrl}/en/exchanges/${exchange.slug}`,
@@ -139,5 +148,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     alternates: { languages: englishOnly(`/routes/${slug}`) },
   }));
 
-  return [...core, ...legal, ...exchangeProfiles, ...moneyChangerProfiles, ...routes];
+  return [...core, ...legal, ...about, ...exchangeProfiles, ...moneyChangerProfiles, ...routes];
 }

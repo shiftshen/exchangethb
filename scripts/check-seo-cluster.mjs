@@ -10,7 +10,7 @@ const checks = [
     path: `/${locale}${path}`,
     canonical: `/${locale}${path}`,
     mustInclude: [`<html lang="${locale}"`, 'id="main-content" class="simple-main"', `hrefLang="ja"`, 'google-adsense-account', 'ca-pub-8386341379958173'],
-    mustMatch: [/<section class="exchange-guide">/],
+    mustMatch: [/<section class="exchange-guide">/, ...(path === '' ? [new RegExp(`<title>ExchangeTHB – `), /"@graph":\[\{"@type":"WebSite","@id":"[^"]+\/#website"/, /"@type":"Organization","@id":"[^"]+\/#organization"/, /<meta property="og:site_name" content="ExchangeTHB"/] : [])],
     mustNotInclude: ['noindex, follow'],
   }))),
   ...Object.entries({ru:'Обмен',ko:'바트',fr:'baht',de:'Baht',id:'baht',vi:'baht'}).flatMap(([locale, text]) => [
@@ -18,6 +18,13 @@ const checks = [
     {path:`/${locale}/legal/disclaimer`,canonical:`/${locale}/legal/disclaimer`,mustInclude:[`<html lang="${locale}"`,'simple-main'],mustMatch:[],mustNotInclude:['noindex, follow']},
     {path:`/${locale}/exchanges/bitkub`,expectedStatus:307,expectedLocation:'/en/exchanges/bitkub',followRedirect:false},
   ]),
+  ...['en', 'th', 'zh'].map(locale => ({
+    path: `/${locale}/about`,
+    canonical: `/${locale}/about`,
+    mustInclude: ['ExchangeTHB', 'exchangethb.com', 'hrefLang="en"', 'hrefLang="th"', 'hrefLang="zh"'],
+    mustMatch: [/"@type":"AboutPage"/, /"about":\{"@id":"[^"]+\/#organization"\}/, /<title>[^<]*ExchangeTHB/],
+    mustNotInclude: ['noindex, follow'],
+  })),
   { path: '/ja/legal/disclaimer', canonical: '/ja/legal/disclaimer', mustInclude: ['第三者サービス', '両替、暗号資産取引、入金受付', 'hrefLang="en"'], mustMatch: [], mustNotInclude: ['noindex, follow'] },
   { path: '/ja/cash', canonical: '/ja/cash', mustInclude: ['日本円からタイバーツ', '選択すると自動で比較', '日本語', '/en/money-changers/ratchada', '両替店の店舗ページ'], mustMatch: [/aria-label="通貨"/], mustNotInclude: ['Where to exchange your cash?', '/ja/money-changers/ratchada'] },
   { path: '/ja/exchanges/bitkub', expectedStatus: 307, expectedLocation: '/en/exchanges/bitkub', followRedirect: false },
@@ -27,7 +34,7 @@ const checks = [
     path: '/',
     // Answer-first homepage: quick answer, question headings, two data-driven
     // tables, the priority landing-page hub and the FAQPage block.
-    mustInclude: ['/en/crypto', '/en/cash', 'Thai baht. An easier choice.', 'FAQPage', 'seo-answer', 'seo-table', 'Ratchada Exchange'],
+    mustInclude: ['/en/crypto', '/en/cash', '/en/about', 'ExchangeTHB (exchangethb.com) is a comparison website', 'Thai baht. An easier choice.', 'FAQPage', 'seo-answer', 'seo-table', 'Ratchada Exchange'],
     mustMatch: [/aria-label="Currency"/, /inputMode="decimal"/, /Options update automatically as you choose/, /<h2[^>]*>[^<]*\?<\/h2>/],
     // Route *detail* links are allowed on the homepage; the noindex /en/routes hub must not be linked.
     mustNotInclude: ['/en/routes"', 'Featured Thai exchanges', 'Featured Bangkok money changers'],
@@ -35,7 +42,7 @@ const checks = [
   },
   {
     path: '/llms.txt',
-    mustInclude: ['# ExchangeTHB', '/en/cash', '/en/routes/btc-to-thb', 'ai-input', 'Sitemap:'],
+    mustInclude: ['# ExchangeTHB', '/en/about', '/en/cash', '/en/routes/btc-to-thb', 'ai-input', 'Sitemap:'],
     mustMatch: [/ai-train: allowed/],
     mustNotInclude: ['permanently redirect to the primary English', '/en/routes/eth-to-thb', '/routes/us-to-thailand-money-exchange'],
   },
@@ -127,11 +134,11 @@ const checks = [
   },
   {
     path: '/sitemap.xml',
-    mustInclude: ['/en/exchanges/bitkub', '/zh/exchanges/bitkub', '/en/money-changers/ratchada', '/zh/money-changers/ratchada', '/en/routes/usd-cash-to-thb'],
+    mustInclude: ['/en/about', '/th/about', '/zh/about', '/en/exchanges/bitkub', '/zh/exchanges/bitkub', '/en/money-changers/ratchada', '/zh/money-changers/ratchada', '/en/routes/usd-cash-to-thb'],
     mustMatch: [/<priority>1<\/priority>/, /<priority>0\.95<\/priority>/, /<lastmod>/],
     mustNotInclude: ['/en/exchanges</loc>', '/en/money-changers</loc>', '/en/routes</loc>', '/en/routes/eth-to-thb', '/zh/legal/privacy-policy'],
     mustNotMatch: [/<loc>https?:\/\/[^<]+\/<\/loc>/],
-    expectedLocCount: 71,
+    expectedLocCount: 74,
   },
 ];
 

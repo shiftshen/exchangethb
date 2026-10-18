@@ -95,15 +95,74 @@ export function breadcrumbJsonLd(items: Array<{ name: string; item: string }>) {
   };
 }
 
+export const brandAlternateNames = ['Exchange THB', 'exchangethb.com', 'ExchangeTHB.com'];
+export const organizationId = () => `${siteUrl}/#organization`;
+export const websiteId = () => `${siteUrl}/#website`;
+
+// One sentence, taken from the description already published in llms.txt.
+export const brandDescription = 'ExchangeTHB compares what it actually costs to get Thai baht (THB): cash money changers in Bangkok against Thai SEC-licensed crypto exchanges. It is a comparison site, not the transaction provider.';
+
+/** Organization node without @context, so it can sit inside an @graph. */
+/** Drop the top-level @context so a schema.org object can be placed inside an @graph. */
+export function graphNode<T extends { '@context'?: unknown }>(entry: T): Omit<T, '@context'> {
+  const copy = { ...entry };
+  delete copy['@context'];
+  return copy;
+}
+
+export function organizationNode() {
+  return {
+    '@type': 'Organization',
+    '@id': organizationId(),
+    name: 'ExchangeTHB',
+    alternateName: brandAlternateNames,
+    url: `${siteUrl}/`,
+    // public/ has only SVG brand assets (no PNG), so the ImageObject points at the SVG.
+    logo: { '@type': 'ImageObject', url: `${siteUrl}/brand-logo.svg`, width: 1280, height: 360 },
+    image: `${siteUrl}/brand-logo.svg`,
+    description: brandDescription,
+    // No official social profile exists yet; never invent one.
+    sameAs: [] as string[],
+  };
+}
+
 export function organizationJsonLd() {
+  return { '@context': 'https://schema.org', ...organizationNode() };
+}
+
+/** WebSite node without @context. It names the brand and points at the Organization by @id. */
+export function websiteNode(locale: Locale) {
+  return {
+    '@type': 'WebSite',
+    '@id': websiteId(),
+    name: 'ExchangeTHB',
+    alternateName: brandAlternateNames,
+    url: `${siteUrl}/`,
+    inLanguage: locale,
+    publisher: { '@id': organizationId() },
+  };
+}
+
+/** Homepage graph: WebSite + Organization (+ the page-level nodes passed in). */
+export function homeGraphJsonLd(locale: Locale, extra: Array<Record<string, unknown>> = []) {
   return {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'ExchangeTHB',
-    url: siteUrl,
-    logo: `${siteUrl}/brand-logo.svg`,
-    image: `${siteUrl}/brand-logo.svg`,
-    sameAs: [],
+    '@graph': [websiteNode(locale), organizationNode(), ...extra],
+  };
+}
+
+export function aboutPageJsonLd(locale: Locale, name: string, description: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    '@id': `${withLocalePath(locale, '/about')}#aboutpage`,
+    name,
+    description,
+    url: withLocalePath(locale, '/about'),
+    inLanguage: locale,
+    about: { '@id': organizationId() },
+    isPartOf: { '@id': websiteId() },
+    publisher: { '@id': organizationId() },
   };
 }
 
@@ -126,11 +185,7 @@ export function collectionPageJsonLd(locale: Locale, path: string, name: string,
     url: withLocalePath(locale, path),
     inLanguage: locale,
     description,
-    isPartOf: {
-      '@type': 'WebSite',
-      name: 'ExchangeTHB',
-      url: withLocalePath(locale),
-    },
+    isPartOf: { '@id': websiteId() },
   };
 }
 
