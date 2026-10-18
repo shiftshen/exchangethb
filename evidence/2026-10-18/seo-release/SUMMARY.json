@@ -138,7 +138,8 @@
   "screenshots_dir": "evidence/2026-10-18/seo-release/gsc/ (10 per-locale *-request-indexing.png, sitemaps-before.png, sitemap-submitted.png)",
   "status_update_1055": "Round 2 retry 10:5x: vi request accepted (confirmation wait passed; screenshot failed because Chrome window was minimized, earlier vi-request-indexing.png shows no dialog); id and ru now return daily quota exceeded",
   "summary_counts": "8 of 10 homes requested (en zh de ja ko fr th vi); ru and id pending GSC daily quota reset",
-  "round3_retry": "11:0x ru retry returned '糟糕！出了点问题，请稍后重试' (gsc/ru-retry-round2.png); quota still exhausted; ru and id remain pending"
+  "round3_retry": "11:0x ru retry returned '糟糕！出了点问题，请稍后重试' (gsc/ru-retry-round2.png); quota still exhausted; ru and id remain pending",
+  "round3_retry_result": "Third consecutive retry (round 3): ru -> '出了点问题，请稍后重试' (not accepted), id -> daily quota exceeded; screenshots gsc/ru-retry-round3.png, gsc/id-retry-round3.png. Final: 8/10 homes requested; ru and id must be requested after quota reset. Production still healthy (home 200)."
  },
  "followups": [
   "Retry GSC request indexing for ru, vi, id once quota resets; watch /id (discovered, not indexed)",
