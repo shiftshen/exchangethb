@@ -1,0 +1,6 @@
+f6a4b9744ecfbf0e014124f8540a3fd3b60def498038a93f6f5c71cf82ce99b9  build-ctx/candidate/app/globals.css
+7e513af12a07f59f4bcf9de13c95300ed195e1d0fa29ca694f583bbee3dc27dc  build-ctx/candidate/app/llms.txt/route.ts
+3f441283b12f870e46b588815cc504007d8959a78886ba022e7f0916927ca116  build-ctx/candidate/app/[locale]/page.tsx
+4b573f6ed979bc4d15b6f66d1069320fbb1a9ad8d041a5646b65751649f830e1  build-ctx/candidate/lib/home-seo-content.ts
+11f1126c2b05dfb8fd656494d5378a56cd45bd234623a2401bf56d12bc2c1f94  build-ctx/candidate/lib/seo.ts
+696caef439b47adf5fb568db4a3902a037e869dcb76ede6ba2873a01ecbd1072  build-ctx/candidate/components/home-seo-sections.tsx

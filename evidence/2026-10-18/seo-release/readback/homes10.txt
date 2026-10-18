@@ -1,0 +1,10 @@
+th 200 faq=2
+en 200 faq=2
+zh 200 faq=2
+ja 200 faq=2
+ru 200 faq=2
+ko 200 faq=2
+fr 200 faq=2
+de 200 faq=2
+id 200 faq=2
+vi 200 faq=2

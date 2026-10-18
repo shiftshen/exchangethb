@@ -1,0 +1,161 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.seo
+#1 transferring dockerfile:
+#1 transferring dockerfile: 536B done
+#1 DONE 0.2s
+
+#2 [internal] load metadata for docker.io/library/exchangethb:v0.1.2-20261016-car-rental
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context:
+#3 transferring context: 2B done
+#3 DONE 0.2s
+
+#4 [builder 1/6] FROM docker.io/library/exchangethb:v0.1.2-20261016-car-rental
+#4 ...
+
+#5 [internal] load build context
+#5 transferring context: 93.39kB done
+#5 DONE 0.3s
+
+#4 [builder 1/6] FROM docker.io/library/exchangethb:v0.1.2-20261016-car-rental
+#4 DONE 3.7s
+
+#6 [builder 2/6] WORKDIR /app
+#6 DONE 0.3s
+
+#7 [builder 3/6] COPY candidate/app/ ./app/
+#7 DONE 0.2s
+
+#8 [builder 4/6] COPY candidate/lib/ ./lib/
+#8 DONE 0.2s
+
+#9 [builder 5/6] COPY candidate/components/ ./components/
+#9 DONE 0.2s
+
+#10 [builder 6/6] RUN npm run build
+#10 0.489 
+#10 0.489 > exchangethb@0.1.0 build
+#10 0.489 > next build
+#10 0.489 
+#10 0.986    ▲ Next.js 15.5.27
+#10 0.987 
+#10 1.021    Creating an optimized production build ...
+#10 4.478 Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+#10 4.478   npx update-browserslist-db@latest
+#10 4.478   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+#10 5.261  ✓ Compiled successfully in 2.7s
+#10 5.262    Linting and checking validity of types ...
+#10 8.029    Collecting page data ...
+#10 9.085    Generating static pages (0/360) ...
+#10 9.410    Generating static pages (90/360) 
+#10 9.454    Generating static pages (180/360) 
+#10 9.455    Generating static pages (270/360) 
+#10 9.504  ✓ Generating static pages (360/360)
+#10 9.831    Finalizing page optimization ...
+#10 9.831    Collecting build traces ...
+#10 12.18 
+#10 12.18 Route (app)                                 Size  First Load JS
+#10 12.18 ┌ ƒ /                                      190 B         103 kB
+#10 12.18 ├ ƒ /_not-found                            996 B         104 kB
+#10 12.18 ├ ● /[locale]                              180 B         147 kB
+#10 12.18 ├   ├ /th
+#10 12.18 ├   ├ /en
+#10 12.18 ├   ├ /zh
+#10 12.18 ├   └ [+7 more paths]
+#10 12.18 ├ ƒ /[locale]/admin/login                  190 B         103 kB
+#10 12.18 ├ ● /[locale]/cash                         172 B         147 kB
+#10 12.18 ├   ├ /th/cash
+#10 12.18 ├   ├ /en/cash
+#10 12.18 ├   ├ /zh/cash
+#10 12.18 ├   └ [+7 more paths]
+#10 12.18 ├ ● /[locale]/crypto                       172 B         147 kB
+#10 12.18 ├   ├ /th/crypto
+#10 12.18 ├   ├ /en/crypto
+#10 12.18 ├   ├ /zh/crypto
+#10 12.18 ├   └ [+7 more paths]
+#10 12.18 ├ ƒ /[locale]/data-status                  190 B         103 kB
+#10 12.18 ├ ● /[locale]/exchanges                    911 B         107 kB
+#10 12.18 ├   ├ /th/exchanges
+#10 12.18 ├   ├ /en/exchanges
+#10 12.18 ├   ├ /zh/exchanges
+#10 12.18 ├   └ [+7 more paths]
+#10 12.18 ├ ƒ /[locale]/exchanges/[slug]           3.29 kB         126 kB
+#10 12.18 ├ ƒ /[locale]/legal/[slug]                 909 B         107 kB
+#10 12.18 ├ ● /[locale]/money-changers               911 B         107 kB
+#10 12.18 ├   ├ /th/money-changers
+#10 12.18 ├   ├ /en/money-changers
+#10 12.18 ├   ├ /zh/money-changers
+#10 12.18 ├   └ [+7 more paths]
+#10 12.18 ├ ƒ /[locale]/money-changers/[slug]      3.29 kB         126 kB
+#10 12.18 ├ ● /[locale]/routes                       911 B         107 kB
+#10 12.18 ├   ├ /th/routes
+#10 12.18 ├   ├ /en/routes
+#10 12.18 ├   ├ /zh/routes
+#10 12.18 ├   └ [+7 more paths]
+#10 12.18 ├ ● /[locale]/routes/[slug]                903 B         107 kB
+#10 12.18 ├   ├ /th/routes/btc-to-thb
+#10 12.18 ├   ├ /en/routes/btc-to-thb
+#10 12.18 ├   ├ /zh/routes/btc-to-thb
+#10 12.18 ├   └ [+267 more paths]
+#10 12.18 ├ ƒ /admin                                 190 B         103 kB
+#10 12.18 ├ ƒ /admin/audit                           169 B         106 kB
+#10 12.18 ├ ƒ /admin/branch-manager                1.38 kB         107 kB
+#10 12.18 ├ ƒ /admin/cash-health                     169 B         106 kB
+#10 12.18 ├ ƒ /admin/dashboard                     7.34 kB         113 kB
+#10 12.18 ├ ƒ /admin/evidence                      1.44 kB         104 kB
+#10 12.18 ├ ƒ /admin/exchange-profiles             2.49 kB         109 kB
+#10 12.18 ├ ƒ /admin/login                           190 B         103 kB
+#10 12.18 ├ ƒ /admin/scrape-review                 1.43 kB         107 kB
+#10 12.18 ├ ƒ /api/admin/audit-logs                  190 B         103 kB
+#10 12.18 ├ ƒ /api/admin/cash-health/export          190 B         103 kB
+#10 12.18 ├ ƒ /api/admin/config                      190 B         103 kB
+#10 12.18 ├ ƒ /api/admin/health                      190 B         103 kB
+#10 12.18 ├ ƒ /api/admin/login                       190 B         103 kB
+#10 12.18 ├ ƒ /api/admin/logout                      190 B         103 kB
+#10 12.18 ├ ƒ /api/admin/scrape-cash                 190 B         103 kB
+#10 12.18 ├ ƒ /api/admin/scrape-cash/rollback        190 B         103 kB
+#10 12.18 ├ ƒ /api/compare/cash                      190 B         103 kB
+#10 12.18 ├ ƒ /api/compare/crypto                    190 B         103 kB
+#10 12.18 ├ ƒ /api/health                            190 B         103 kB
+#10 12.18 ├ ƒ /api/providers/[kind]/[slug]           190 B         103 kB
+#10 12.18 ├ ƒ /google27d67ef3554303ff.html           190 B         103 kB
+#10 12.18 ├ ○ /icon.svg                                0 B            0 B
+#10 12.18 ├ ○ /llms.txt                              190 B         103 kB
+#10 12.18 ├ ○ /manifest.webmanifest                  190 B         103 kB
+#10 12.18 ├ ○ /robots.txt                            190 B         103 kB
+#10 12.18 └ ○ /sitemap.xml                           190 B         103 kB
+#10 12.18 + First Load JS shared by all             103 kB
+#10 12.18   ├ chunks/1255-5cd2fe06309409a0.js      46.5 kB
+#10 12.18   ├ chunks/4bd1b696-f785427dddbba9fb.js  54.2 kB
+#10 12.18   └ other shared chunks (total)          1.93 kB
+#10 12.18 
+#10 12.18 
+#10 12.18 ƒ Middleware                             34.9 kB
+#10 12.18 
+#10 12.18 ○  (Static)   prerendered as static content
+#10 12.18 ●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+#10 12.18 ƒ  (Dynamic)  server-rendered on demand
+#10 12.18 
+#10 DONE 12.3s
+
+#11 [stage-1 3/6] COPY --from=builder /app/.next ./.next
+#11 DONE 0.2s
+
+#12 [stage-1 4/6] COPY candidate/app/ ./app/
+#12 DONE 0.2s
+
+#13 [stage-1 5/6] COPY candidate/lib/ ./lib/
+#13 DONE 0.3s
+
+#14 [stage-1 6/6] COPY candidate/components/ ./components/
+#14 DONE 0.2s
+
+#15 exporting to image
+#15 exporting layers
+#15 exporting layers 0.8s done
+#15 writing image sha256:60bcfa243f864d5df2638e68454d90f660e4e5cf43e570a5f8b7d479a7da4464 0.0s done
+#15 naming to docker.io/library/exchangethb:v0.1.3-20261018-seo-ai-citation 0.0s done
+#15 DONE 1.0s

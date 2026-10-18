@@ -1,0 +1,148 @@
+{
+ "card": "SEO-1 release (5c6da171) -> production exchangethb.com",
+ "date": "2026-10-18",
+ "timezone": "Asia/Bangkok",
+ "released_at": "2026-10-18T10:27+07:00 (canary 10:25, web 10:27)",
+ "status": "RELEASED and verified on public URLs; GSC indexing requests 7/10 confirmed (3 blocked by Google daily quota/unconfirmed); sitemap resubmitted. No rollback needed.",
+ "authorization": "Boss 10-18 09:2x 'SEO做好就上线'; fujane 10:2x reviewed en/th screenshots; card tag 老板授权投产",
+ "images": {
+  "previous_production": {
+   "tag": "exchangethb:v0.1.2-20261016-car-rental",
+   "digest": "sha256:0f0176da51c8f9b07c9fdfdeec22b9518bf5fe3794f5a3c915941f9789367ba1"
+  },
+  "pinned_rollback_tag": {
+   "tag": "exchangethb:rollback-before-seo-20261018",
+   "digest": "sha256:0f0176da51c8f9b07c9fdfdeec22b9518bf5fe3794f5a3c915941f9789367ba1",
+   "created_on": "1panel-happy (192.168.1.83)"
+  },
+  "new_production": {
+   "tag": "exchangethb:v0.1.3-20261018-seo-ai-citation",
+   "digest": "sha256:60bcfa243f864d5df2638e68454d90f660e4e5cf43e570a5f8b7d479a7da4464"
+  },
+  "worker": "unchanged exchangethb:v0.1.0-20261007-market-retry (healthy); postgres unchanged; no DB/DNS/proxy/Cloudflare change in this release",
+  "build": "docker overlay of the running production image (same method as 2026-10-16 car-rental release) on build host 2panel-happy (5090), --network none, heap 2048MB, exit 0; only 6 SEO-1 files copied over the image source; image moved 1.83 -> 1.200 -> 1.83 via docker save/load. Dockerfile.seo, overlay-sha256.txt, build.log in this folder.",
+  "compose_chain": [
+   "/opt/exchangethb/docker-compose.yml",
+   "/opt/exchangethb/compose.release-20261007b.yml",
+   "/opt/exchangethb/compose.drive-r2-20261016.yml",
+   "/opt/exchangethb/compose.seo-20261018.yml"
+  ],
+  "deploy_order": "web_canary first (healthy, probes + seo:cluster via ssh tunnel passed), then web; both healthy"
+ },
+ "git": {
+  "branch": "seo/ai-citation-20261018",
+  "commit": "22848ab",
+  "base": "013f78b",
+  "pushed": false,
+  "worktree": "/Volumes/M2USB/_scratch/exchangethb/20261018/release-wt (isolated; shared workspace on codex/mobile-simplification untouched, its 146 dirty entries unchanged)",
+  "gates_on_release_tree": "tsc 0; eslint 0 warnings; vitest 44 files/152 tests pass; seo:cluster passed against canary and against production",
+  "files_committed": "commit-22848ab-files.txt (119 files)"
+ },
+ "source_classification": {
+  "method": "Extracted /app from the running prod image (exchangethb-web-1) to _scratch/.../prod-src and compared byte-by-byte with the dirty workspace and HEAD (classification-vs-prod-image.txt). Finding: HEAD was NOT what production runs; 72 dirty workspace source files are byte-identical to production (i.e. production was built from the dirty workspace), 11 differ.",
+  "category_1_already_in_production": "72 workspace files identical to the image (incl. Localrent car-rental module, provider evidence, additional locales, analytics, etc.) plus production versions of files where HEAD was stale (cash/crypto/legal pages, lib/cash-live.ts, routes page, middleware, ...). Committed.",
+  "category_2_SEO1": [
+   "app/[locale]/page.tsx (prod page + SEO-1 hunks only)",
+   "components/home-seo-sections.tsx",
+   "lib/home-seo-content.ts",
+   "lib/seo.ts",
+   "app/globals.css (.seo-* block, rest = prod)",
+   "app/llms.txt/route.ts (adjusted: route guides listed en only)",
+   "scripts/check-seo-cluster.mjs (adjusted: sitemap stays 71)",
+   "eslint.config.mjs"
+  ],
+  "category_3_other_not_live_NOT_RELEASED": [
+   {
+    "item": "home meta-description copy (3 body lines in page.tsx) + cash/crypto page copy",
+    "why": "other session, 10-12; entangled in the same file as SEO-1, separable by hunk -> SEO-1 hunks shipped, copy lines held back (prod keeps the short descriptions)",
+    "tests_held": [
+     "home-cash-seo-meta"
+    ]
+   },
+   {
+    "item": "money-changers meta (lib/money-changer-seo.ts + page hook)",
+    "tests_held": [
+     "ratchada-seo-metadata"
+    ]
+   },
+   {
+    "item": "legal page wording",
+    "tests_held": [
+     "legal-disclosure"
+    ]
+   },
+   {
+    "item": "lib/cash-live.ts branch-matching change",
+    "tests_held": [
+     "cash-branch-integrity"
+    ]
+   },
+   {
+    "item": "routes/[slug] title suffix and th/zh alternates + th/zh route-index expansion c50f995 (lib/indexing-policy.ts, app/sitemap.ts, tests/indexing-policy.test.ts restored to production state in the commit)",
+    "why": "changes indexing policy and sitemap 71->79; never independently reviewed after the drift finding; SEO-1 llms.txt and cluster script were adapted to stay consistent with production (en-only routes, 71 sitemap URLs). Re-applying later = git revert of the restore part / cherry-pick c50f995 code files.",
+    "tests_held": [
+     "crypto-route-seo-meta"
+    ]
+   },
+   {
+    "item": "Dockerfile / docker-compose.yml / .dockerignore / .gitignore / .env.example edits, daily-ops scripts + plist + test, DEVELOPMENT_PLAN.md, lark-status.json, package-lock.json, docs/PLAN-20261008.md",
+    "why": "not part of the image, relation to production unverifiable, not SEO-1",
+    "tests_held": [
+     "deployment-safety",
+     "test_daily_ops.py"
+    ]
+   }
+  ],
+  "held_back_list": "held-back-files.txt",
+  "entangled_not_separable": "none left entangled: the only mixed file (page.tsx) was split by hunk; globals.css and llms/seo files were SEO-1 only. SEO-1 SUMMARY's measured homepage meta description (new copy) therefore differs from what is live (old short description)."
+ },
+ "rollback": {
+  "trigger": "any failure -> immediate rollback (not triggered)",
+  "command_canary_then_web": "ssh 1panel-happy 'cd /opt/exchangethb && RB=\"docker compose -f docker-compose.yml -f compose.release-20261007b.yml -f compose.drive-r2-20261016.yml -f compose.rollback-seo-20261018.yml\" && $RB up -d --no-build --no-deps web_canary && (wait healthy, curl http://172.30.0.13:3000/api/health -H \"Host: www.exchangethb.com\") && $RB up -d --no-build --no-deps web'",
+  "rollback_overlay": "/opt/exchangethb/compose.rollback-seo-20261018.yml (image exchangethb:rollback-before-seo-20261018)",
+  "dry_run": "`docker compose ... -f compose.rollback-seo-20261018.yml config` resolves web/web_canary to the pinned tag; `up -d --no-build --no-deps --dry-run web_canary` printed Recreate/Started with no error. Real rollback NOT executed (not needed). No recovery time claimed.",
+  "warning_stale_old_rollback": "/opt/exchangethb/compose.rollback-rental-20261016.yml points to exchangethb:rollback-before-rental-20261016 which NO LONGER EXISTS on the host (image pruned; registry production_release.rollback_image 66f39dc5... also gone). Do not use it. The new pinned tag shares digest 0f0176da with v0.1.2-20261016-car-rental; avoid `docker image prune` removing either tag."
+ },
+ "public_readback": {
+  "checked_at": "2026-10-18T10:28-10:45+07",
+  "host": "canonical https://www.exchangethb.com (apex 301 -> www)",
+  "homes_en_th_zh": "200 / 200 / 200 (final URL www); FAQPage JSON-LD present (1 block each; 6 JSON-LD blocks incl. Organization + BreadcrumbList); canonical self-referencing https://www.exchangethb.com/{en,th,zh}; hreflang th,en,zh,ja,ru,ko,fr,de,id,vi + x-default=/en (11 each)",
+  "all_10_homes": "th en zh ja ru ko fr de id vi all 200 with FAQPage (homes10.txt)",
+  "llms_txt": "200 text/plain, 5501 bytes; route guides en only (4 URLs), AI usage policy matches robots (llms.txt in readback/)",
+  "sitemap": "200, 71 <loc> (unchanged)",
+  "bots": "GPTBot, ClaudeBot, PerplexityBot, Googlebot UAs -> /en 200 and /llms.txt 200 each (bots.txt)",
+  "seo_cluster_prod": "node scripts/check-seo-cluster.mjs https://www.exchangethb.com -> 'SEO cluster check passed.' exit 0, 0 FAIL (readback/seo-cluster-prod.log)",
+  "cash_compare": "API /api/compare/cash USD 1000 sell 200 ok (SuperRich 33,330 THB, collected 10:38); UI /en/cash: sell result 33,330 THB, clicked 'Buy foreign cash' -> 33,250 THB payment, no error (cash-compare-click.png)",
+  "crypto_compare": "API /api/compare/crypto BTC buy 0.01 200 ok (Upbit Thailand 27,422 THB); UI /en/crypto: clicked 'Sell for THB' -> 1000 USDT quotes rendered (Orbix 33,326.48 THB @33.41; Binance TH...), 'Comparing...' for ~4-10s on first load (crypto-compare-click.png). Fee-unverified notes are existing behaviour",
+  "unchanged": "rates, fees, affiliate logic and values untouched (only SEO-1 files differ from the prod image)"
+ },
+ "gsc": {
+  "account": "Ego Profile 16 / fujane110@gmail.com, one TaskSpace 'exchangethb-seo-release-20261018' (finished keep=[]; the first space id 168 vanished mid-run and was recreated under the same name as space 6)",
+  "property": "sc-domain:exchangethb.com",
+  "request_indexing_confirmed": {
+   "en": "已请求编入索引 dialog (full)",
+   "zh": "dialog (full)",
+   "de": "dialog (full)",
+   "ja": "dialog (fading in screenshot)",
+   "ko": "dialog (fading)",
+   "fr": "dialog (fading)",
+   "th": "dialog (fading, reconfirmed in 2nd pass)"
+  },
+  "request_indexing_NOT_confirmed": {
+   "ru": "2nd attempt returned '超出了配额 / daily quota exceeded' (GSC daily URL-inspection request quota used up, partly by my re-checks); first attempt had no visible confirmation",
+   "vi": "no confirmation dialog in screenshot",
+   "id": "no confirmation dialog in screenshot; inspection shows /id = 'URL not on Google: discovered - currently not indexed' (referrers: other home pages + sitemap)"
+  },
+  "retry": "re-request ru, vi, id after the GSC quota resets (next day); not a site fault, so no rollback",
+  "sitemap": "resubmitted https://www.exchangethb.com/sitemap.xml -> '已成功提交站点地图'; list now shows last read 2026-10-18, status 成功, 71 discovered pages (was 68 on 10-02) (sitemap-submitted.png, sitemaps-before.png)",
+  "screenshots_dir": "evidence/2026-10-18/seo-release/gsc/ (10 per-locale *-request-indexing.png, sitemaps-before.png, sitemap-submitted.png)"
+ },
+ "followups": [
+  "Retry GSC request indexing for ru, vi, id once quota resets; watch /id (discovered, not indexed)",
+  "Decide separately on: held-back meta-description copy, th/zh route-index expansion (79 sitemap), money-changer meta, legal wording, cash-live fix. Each needs its own review; the committed branch is the clean base",
+  "Registry production_release still lists the pruned rollback_image; this release adds the pinned tag instead",
+  "Cloudflare AI-crawler training policy set to allow by SEO-1 (before this release) is now consistent with robots + llms.txt; bots return 200 from origin/edge",
+  "Native-language spot check of the 8 non-en/zh/th locales still pending (from SEO-1 followups)"
+ ],
+ "constraints_respected": "no change to rates/affiliate logic, DNS, Cloudflare settings, paid services; no git push; no DB change"
+}

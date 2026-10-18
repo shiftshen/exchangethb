@@ -1,0 +1,15 @@
+FROM exchangethb:v0.1.2-20261016-car-rental AS builder
+WORKDIR /app
+ENV NEXT_PUBLIC_GA4_MEASUREMENT_ID=G-HHPM4E9QGY
+ENV NODE_OPTIONS=--max-old-space-size=2048
+ENV NEXT_TELEMETRY_DISABLED=1
+COPY candidate/app/ ./app/
+COPY candidate/lib/ ./lib/
+COPY candidate/components/ ./components/
+RUN npm run build
+FROM exchangethb:v0.1.2-20261016-car-rental
+WORKDIR /app
+COPY --from=builder /app/.next ./.next
+COPY candidate/app/ ./app/
+COPY candidate/lib/ ./lib/
+COPY candidate/components/ ./components/
