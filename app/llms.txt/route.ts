@@ -20,7 +20,7 @@ export function GET() {
   const corePaths = locales.flatMap((locale) => [`/${locale}/cash`, `/${locale}/crypto`, `/${locale}/legal/methodology`]);
   const aboutPaths = detailLocales.map((locale) => `/${locale}/about`);
   const moneyChangerPaths = detailLocales.flatMap((locale) => publicCashProviderSlugs.map((slug) => `/${locale}/money-changers/${slug}`));
-  const exchangePaths = (['en', 'zh'] as const).flatMap((locale) => exchanges.map((exchange) => `/${locale}/exchanges/${exchange.slug}`));
+  const exchangePaths = detailLocales.flatMap((locale) => exchanges.map((exchange) => `/${locale}/exchanges/${exchange.slug}`));
   const routePaths = routeLocales.flatMap((locale) => indexedRouteSlugs.map((slug) => `/${locale}/routes/${slug}`));
 
   const body = [

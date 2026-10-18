@@ -2,6 +2,7 @@ import { additionalCopy } from '@/lib/additional-copy';
 import { locales } from '@/lib/i18n';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { CryptoFeaturedExchanges } from '@/components/crypto-featured-exchanges';
 import { ExchangeGuide } from '@/components/exchange-guide';
 import { ExchangePicker } from '@/components/exchange-picker';
 import { isLocale } from '@/lib/i18n';
@@ -27,7 +28,7 @@ export default async function CryptoPage({ params }: { params: Promise<{ locale:
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   return <div className="simple-page"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }, { name: copy[locale].title, item: withLocalePath(locale, '/crypto') }])) }} />
-    <header className="simple-intro"><h1>{copy[locale].title}</h1><p>{copy[locale].body}</p></header><ExchangePicker key={locale} locale={locale} initialMode="crypto" showModeSwitch={false} /><ExchangeGuide locale={locale} /></div>;
+    <header className="simple-intro"><h1>{copy[locale].title}</h1><p>{copy[locale].body}</p></header><ExchangePicker key={locale} locale={locale} initialMode="crypto" showModeSwitch={false} /><CryptoFeaturedExchanges locale={locale} /><ExchangeGuide locale={locale} /></div>;
 }
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;

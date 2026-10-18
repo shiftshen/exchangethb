@@ -25,14 +25,6 @@ function englishOnly(path: string) {
   };
 }
 
-function englishAndChinese(path: string) {
-  return {
-    en: `${siteUrl}/en${path}`,
-    zh: `${siteUrl}/zh${path}`,
-    'x-default': `${siteUrl}/en${path}`,
-  };
-}
-
 function englishThaiAndChinese(path: string) {
   return {
     en: `${siteUrl}/en${path}`,
@@ -54,7 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'components/exchange-guide.tsx',
   ]);
   const legalUpdated = fileDate(['app/[locale]/legal/[slug]/page.tsx', 'lib/japanese-legal.ts', 'lib/additional-languages.json', 'lib/locale-preferences.ts']);
-  const exchangeUpdated = fileDate(['app/[locale]/exchanges/[slug]/page.tsx', 'data/site.ts']);
+  const exchangeUpdated = fileDate(['app/[locale]/exchanges/[slug]/page.tsx', 'lib/exchange-seo.ts', 'data/site.ts']);
   const moneyChangerUpdated = fileDate(['app/[locale]/money-changers/[slug]/page.tsx', 'data/site.ts']);
   const routeUpdated = fileDate(['app/[locale]/routes/[slug]/page.tsx', 'lib/route-guides.ts']);
 
@@ -105,14 +97,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.72,
       changeFrequency: 'weekly' as const,
       lastModified: exchangeUpdated,
-      alternates: { languages: englishAndChinese(`/exchanges/${exchange.slug}`) },
+      alternates: { languages: englishThaiAndChinese(`/exchanges/${exchange.slug}`) },
+    },
+    {
+      url: `${siteUrl}/th/exchanges/${exchange.slug}`,
+      priority: 0.7,
+      changeFrequency: 'weekly' as const,
+      lastModified: exchangeUpdated,
+      alternates: { languages: englishThaiAndChinese(`/exchanges/${exchange.slug}`) },
     },
     {
       url: `${siteUrl}/zh/exchanges/${exchange.slug}`,
       priority: 0.7,
       changeFrequency: 'weekly' as const,
       lastModified: exchangeUpdated,
-      alternates: { languages: englishAndChinese(`/exchanges/${exchange.slug}`) },
+      alternates: { languages: englishThaiAndChinese(`/exchanges/${exchange.slug}`) },
     },
   ]);
 

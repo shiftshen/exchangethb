@@ -9,10 +9,9 @@ import {
 
 describe('detail page indexing policy', () => {
   it('indexes exchange profiles only where a full translation exists', () => {
-    expect(indexedExchangeLocales).toEqual(['en', 'zh']);
-    expect(shouldIndexExchangeProfile('en')).toBe(true);
-    expect(shouldIndexExchangeProfile('zh')).toBe(true);
-    for (const locale of ['th', 'ja', 'ru', 'ko', 'fr', 'de', 'id', 'vi'] as const) {
+    expect(indexedExchangeLocales).toEqual(['en', 'th', 'zh']);
+    for (const locale of ['en', 'th', 'zh'] as const) expect(shouldIndexExchangeProfile(locale), locale).toBe(true);
+    for (const locale of ['ja', 'ru', 'ko', 'fr', 'de', 'id', 'vi'] as const) {
       expect(shouldIndexExchangeProfile(locale), locale).toBe(false);
     }
   });
@@ -54,16 +53,19 @@ describe('sitemap detail coverage', () => {
     expect(languages['x-default']).toMatch(/\/en\/money-changers\/ratchada$/);
   });
 
-  it('emits English and Chinese alternates for the exchange profile', () => {
-    const entry = entries.find((item) => item.url.endsWith('/zh/exchanges/bitkub'));
-    expect(entry).toBeDefined();
-    const languages = entry?.alternates?.languages as Record<string, string>;
-    expect(languages.en).toMatch(/\/en\/exchanges\/bitkub$/);
-    expect(languages.zh).toMatch(/\/zh\/exchanges\/bitkub$/);
-    expect(languages.th).toBeUndefined();
+  it('emits reciprocal English, Thai and Chinese alternates for the exchange profile', () => {
+    for (const locale of ['en', 'th', 'zh']) {
+      const entry = entries.find((item) => item.url.endsWith(`/${locale}/exchanges/bitkub`));
+      expect(entry).toBeDefined();
+      const languages = entry?.alternates?.languages as Record<string, string>;
+      expect(languages.en).toMatch(/\/en\/exchanges\/bitkub$/);
+      expect(languages.th).toMatch(/\/th\/exchanges\/bitkub$/);
+      expect(languages.zh).toMatch(/\/zh\/exchanges\/bitkub$/);
+      expect(languages['x-default']).toMatch(/\/en\/exchanges\/bitkub$/);
+    }
   });
 
-  it('keeps the sitemap at the expected size after adding zh detail pages', () => {
-    expect(entries.length).toBe(74);
+  it('keeps the sitemap at the expected size after adding the Thai exchange pages', () => {
+    expect(entries.length).toBe(78);
   });
 });

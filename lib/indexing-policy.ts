@@ -18,8 +18,8 @@ export function isIndexedRouteSlug(slug: string) {
 }
 
 // Detail-page locales that carry fully localized copy (verified against the rendered pages):
-// exchange profiles have complete Chinese copy; money changer profiles complete Thai and Chinese copy.
-export const indexedExchangeLocales: Locale[] = ['en', 'zh'];
+// exchange and money changer profiles both carry hand-written English, Thai and Chinese copy.
+export const indexedExchangeLocales: Locale[] = ['en', 'th', 'zh'];
 export const indexedMoneyChangerLocales: Locale[] = ['en', 'th', 'zh'];
 export const indexedMoneyChangerSlugs = ['ratchada', 'superrich-thailand', 'twelve-victory'] as const;
 

@@ -48,7 +48,7 @@ const checks = [
   },
   {
     path: '/en/crypto',
-    mustInclude: ['Buy or sell. See the final amount.', 'Buy with THB', 'Sell for THB'],
+    mustInclude: ['Buy or sell. See the final amount.', 'Buy with THB', 'Sell for THB', '/en/exchanges/binance-th', '/en/exchanges/bitkub', '/en/exchanges/upbit-thailand', '/en/exchanges/orbix'],
     mustMatch: [/aria-label="Asset"/, /inputMode="decimal"/, /Options update automatically as you choose/],
     mustNotInclude: ['Related crypto route guides', 'English search questions this page answers'],
     canonical: '/en/crypto',
@@ -85,8 +85,29 @@ const checks = [
   {
     path: '/zh/exchanges/bitkub',
     canonical: '/zh/exchanges/bitkub',
-    mustInclude: ['/en/exchanges/bitkub'],
-    mustMatch: [/<link rel="alternate" hrefLang="en"/, /<link rel="alternate" hrefLang="zh"/],
+    mustInclude: ['/en/exchanges/bitkub', 'Bitkub 手续费：交易费 0.25% 与泰铢提现', 'hrefLang="th"', '怎么往 Bitkub 充值泰铢？'],
+    mustMatch: [/<link rel="alternate" hrefLang="en"/, /<link rel="alternate" hrefLang="zh"/, /"@type":"FinancialService"/, /"@type":"FAQPage"/],
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
+    path: '/en/exchanges/bitkub',
+    canonical: '/en/exchanges/bitkub',
+    mustInclude: ['<title>Bitkub Fees: 0.25% Trading Fee &amp; THB Withdrawal</title>', 'How do I deposit THB on Bitkub?', 'hrefLang="th"', 'hrefLang="x-default"'],
+    mustMatch: [/"@type":"FinancialService"/, /"@type":"FAQPage"/, /"@type":"BreadcrumbList"/, /"publisher":\{"@id":"[^"]+\/#organization"\}/],
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
+    path: '/th/exchanges/bitkub',
+    canonical: '/th/exchanges/bitkub',
+    mustInclude: ['Bitkub ค่าธรรมเนียมเทรด 0.25% และการถอนเงินบาท', 'ฝากเงินบาทเข้า Bitkub ทำอย่างไร', 'hrefLang="zh"', 'hrefLang="x-default"'],
+    mustMatch: [/"@type":"FinancialService"/, /"@type":"FAQPage"/],
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
+    path: '/th/exchanges/upbit-thailand',
+    canonical: '/th/exchanges/upbit-thailand',
+    mustInclude: ['Upbit Thailand ค่าธรรมเนียมเทรด 0.15% และการถอนเงินบาท', 'ยังไม่มีข้อมูลเผยแพร่'],
+    mustMatch: [/"@type":"FAQPage"/],
     mustNotInclude: ['noindex, follow'],
   },
   {
@@ -134,11 +155,11 @@ const checks = [
   },
   {
     path: '/sitemap.xml',
-    mustInclude: ['/en/about', '/th/about', '/zh/about', '/en/exchanges/bitkub', '/zh/exchanges/bitkub', '/en/money-changers/ratchada', '/zh/money-changers/ratchada', '/en/routes/usd-cash-to-thb'],
+    mustInclude: ['/en/about', '/th/about', '/zh/about', '/en/exchanges/bitkub', '/zh/exchanges/bitkub', '/th/exchanges/bitkub', '/th/exchanges/orbix', '/en/money-changers/ratchada', '/zh/money-changers/ratchada', '/en/routes/usd-cash-to-thb'],
     mustMatch: [/<priority>1<\/priority>/, /<priority>0\.95<\/priority>/, /<lastmod>/],
     mustNotInclude: ['/en/exchanges</loc>', '/en/money-changers</loc>', '/en/routes</loc>', '/en/routes/eth-to-thb', '/zh/legal/privacy-policy'],
     mustNotMatch: [/<loc>https?:\/\/[^<]+\/<\/loc>/],
-    expectedLocCount: 74,
+    expectedLocCount: 78,
   },
 ];
 
