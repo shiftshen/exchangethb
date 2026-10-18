@@ -47,10 +47,28 @@ describe('SEO-19 direct answers', () => {
     }
   });
 
+  it('stays within 40-70 units when the quotes are NOT from one cycle (each carries its own time), as seen on production', () => {
+    const apart = quotes([0, 2, 0]).map((q, i) => (i === 1 ? { ...q, observedAt: new Date(Date.parse(t0) - 31 * 3600000).toISOString() } : q));
+    for (const locale of cashHubLocales) {
+      const spec = currencyFaqQuestion[locale];
+      for (const text of [buildBestPlaceAnswer(locale, apart)!, buildCurrencyAnswer(locale, spec.code, apart)!]) {
+        const n = units(text, locale);
+        expect(n, `${locale} ${n}: ${text}`).toBeGreaterThanOrEqual(40);
+        expect(n, `${locale} ${n}: ${text}`).toBeLessThanOrEqual(70);
+        expect(text).toMatch(/GMT\+7/);
+        expect(text).toMatch(/2026/);
+      }
+    }
+    const crypto = buildCashVsCryptoAnswer('en', apart)!;
+    expect(units(crypto, 'en')).toBeLessThanOrEqual(70);
+    expect(units(buildRatchadaAnswer('th', apart)!, 'th')).toBeLessThanOrEqual(70);
+    expect(units(buildVersusAnswer('en', apart)!, 'en')).toBeLessThanOrEqual(70);
+  });
+
   it('when quotes are not from one cycle, each carries its own time (no shared stamp)', () => {
     const text = buildBestPlaceAnswer('en', quotes([0, 2, 60]))!;
     expect(text).not.toContain('Data updated');
-    expect(text.match(/\(observed /g)?.length).toBe(3);
+    expect(text).toContain('Times are GMT+7');
   });
 
   it('says nothing when every quote is older than 48 hours, but still answers on recent-but-not-current quotes', () => {

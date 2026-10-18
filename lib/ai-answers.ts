@@ -42,9 +42,10 @@ export async function loadAnswerQuotes(currency: CurrencyCode, locale: Locale | 
 
 const dateLocale: Record<CashHubLocale, string> = { en: 'en-GB', th: 'th-TH-u-ca-gregory', zh: 'zh-CN' };
 
-export function formatAnswerTime(value: string, locale: CashHubLocale) {
-  const text = new Intl.DateTimeFormat(dateLocale[locale], { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Bangkok' }).format(new Date(Date.parse(value)));
-  return `${text} (GMT+7)`;
+export function formatAnswerTime(value: string, locale: CashHubLocale, withZone = true) {
+  // zh uses the ISO-like numeric form (2026-10-19 00:52) so the date reads as one short unit.
+  const text = new Intl.DateTimeFormat(locale === 'zh' ? 'sv-SE' : dateLocale[locale], { dateStyle: locale === 'zh' ? 'short' : 'medium', timeStyle: 'short', timeZone: 'Asia/Bangkok' }).format(new Date(Date.parse(value)));
+  return withZone ? `${text} (GMT+7)` : text;
 }
 
 function formatRate(value: number) {
@@ -77,21 +78,24 @@ const L = {
   en: {
     join: (items: string[]) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`),
     sep: ', ',
-    observed: (t: string) => `(observed ${t})`,
+    observed: (t: string) => `(${t})`,
+    zone: 'Times are GMT+7.',
     updated: (t: string) => `Data updated ${t}.`,
     word: { USD: 'US dollar', CNY: 'Chinese yuan' } as Record<string, string>,
   },
   th: {
     join: (items: string[]) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} และ ${items[items.length - 1]}`),
     sep: ', ',
-    observed: (t: string) => `(สังเกตเมื่อ ${t})`,
+    observed: (t: string) => `(${t})`,
+    zone: 'เวลา GMT+7',
     updated: (t: string) => `ข้อมูลอัปเดตเมื่อ ${t}`,
     word: { USD: 'ดอลลาร์สหรัฐ', CNY: 'หยวนจีน' } as Record<string, string>,
   },
   zh: {
     join: (items: string[]) => items.join('、'),
     sep: '；',
-    observed: (t: string) => `（观测于 ${t}）`,
+    observed: (t: string) => `（${t}）`,
+    zone: '时间均为 GMT+7。',
     updated: (t: string) => `数据更新于 ${t}。`,
     word: { USD: '美元', CNY: '人民币' } as Record<string, string>,
   },
@@ -100,8 +104,8 @@ const L = {
 function quoteLine(locale: CashHubLocale, quotes: AnswerQuote[]) {
   const l = L[locale];
   const same = sameCycle(quotes);
-  const list = quotes.map((q) => `${q.name} ${formatRate(q.buyRate)}${same ? '' : ` ${l.observed(formatAnswerTime(q.observedAt, locale))}`}`).join(l.sep);
-  const time = same ? l.updated(formatAnswerTime(latest(quotes), locale)) : '';
+  const list = quotes.map((q) => `${q.name} ${formatRate(q.buyRate)}${same ? '' : ` ${l.observed(formatAnswerTime(q.observedAt, locale, false))}`}`).join(l.sep);
+  const time = same ? l.updated(formatAnswerTime(latest(quotes), locale)) : l.zone;
   return { list, time, names: l.join(quotes.map((q) => q.name)) };
 }
 
@@ -110,8 +114,8 @@ export function buildBestPlaceAnswer(locale: CashHubLocale, quotes: AnswerQuote[
   const live = usable(quotes);
   if (!live.length) return null;
   const { list, time } = quoteLine(locale, live);
-  if (locale === 'en') return `ExchangeTHB's own collection of the changers' published rates shows these latest observed US dollar cash buying rates, in baht per dollar: ${list}. ${time} ExchangeTHB does not rank money changers; the rate depends on the banknote group, so confirm it with the changer before you go.`.replace(/\s+/g, ' ');
-  if (locale === 'th') return `จากเรทที่ร้านประกาศไว้และ ExchangeTHB เก็บเอง เรทรับซื้อเงินสดดอลลาร์สหรัฐล่าสุดที่สังเกตได้ (บาทต่อดอลลาร์) คือ ${list} ${time} ExchangeTHB ไม่จัดอันดับร้านแลกเงิน เพราะเรทขึ้นอยู่กับกลุ่มธนบัตร โปรดยืนยันเรทกับร้านก่อนไปแลก`.replace(/\s+/g, ' ');
+  if (locale === 'en') return `From ExchangeTHB's own collection of the changers' published rates, the latest observed US dollar cash buying rates in baht per dollar: ${list}. ${time} ExchangeTHB does not rank changers; rates depend on the banknote group, so confirm with the changer.`.replace(/\s+/g, ' ');
+  if (locale === 'th') return `ExchangeTHB เก็บเรทที่ร้านประกาศ เรทรับซื้อเงินสดดอลลาร์สหรัฐล่าสุดที่สังเกตได้ (บาทต่อดอลลาร์) คือ ${list} ${time} ExchangeTHB ไม่จัดอันดับร้าน เรทขึ้นกับกลุ่มธนบัตร โปรดยืนยันกับร้านก่อนไปแลก`.replace(/\s+/g, ' ');
   return `根据 ExchangeTHB 自行采集的各店公布牌价，美元现钞最新观测收购价（泰铢/美元）为：${list}。${time}本站不给换汇店排名，汇率随纸币组别而异，出发前请向店家确认。`.replace(/\s+/g, ' ');
 }
 
@@ -121,8 +125,8 @@ export function buildCurrencyAnswer(locale: CashHubLocale, code: 'USD' | 'CNY', 
   if (!live.length) return null;
   const { list, time } = quoteLine(locale, live);
   const word = L[locale].word[code];
-  if (locale === 'en') return `ExchangeTHB names no single winner: the rate depends on the banknote group and the time it was observed. The latest observed ${word} cash buying rates, collected from the changers, in baht per ${word}, are ${list}. ${time} Confirm the rate with the changer before you go.`.replace(/\s+/g, ' ');
-  if (locale === 'th') return `ExchangeTHB ไม่ชี้ว่าร้านใดเหนือกว่า เพราะเรทขึ้นอยู่กับกลุ่มธนบัตรและเวลาที่สังเกต เรทรับซื้อเงินสด${word}ล่าสุดที่ ExchangeTHB เก็บจากแต่ละร้าน (บาทต่อ${word}) คือ ${list} ${time} โปรดยืนยันเรทกับร้านก่อนไปแลก`.replace(/\s+/g, ' ');
+  if (locale === 'en') return `ExchangeTHB names no single winner: rates depend on the banknote group and observation time. Latest observed ${word} cash buying rates collected from the changers, in baht per ${word}: ${list}. ${time} Confirm with the changer before you go.`.replace(/\s+/g, ' ');
+  if (locale === 'th') return `ExchangeTHB ไม่ชี้ว่าร้านใดเหนือกว่า เพราะเรทขึ้นกับกลุ่มธนบัตรและเวลาที่สังเกต เรทรับซื้อเงินสด${word}ล่าสุดที่เก็บจากแต่ละร้าน (บาทต่อหน่วย) คือ ${list} ${time} โปรดยืนยันเรทกับร้านก่อนไปแลก`.replace(/\s+/g, ' ');
   return `本站不指定唯一结论：汇率随纸币组别和观测时间而异。ExchangeTHB 采集的各店${word}现钞最新收购价（泰铢/${word}）为：${list}。${time}出发前请向店家确认汇率。`.replace(/\s+/g, ' ');
 }
 
@@ -188,7 +192,7 @@ export function buildCashVsCryptoAnswer(locale: CashHubLocale, usd: AnswerQuote[
   const live = usable(usd);
   if (locale !== 'en' || !live.length) return null;
   const { list, time } = quoteLine('en', live);
-  return `Cash and crypto are two routes to baht; ExchangeTHB recommends neither. Cash: latest observed US dollar buying rates at Bangkok changers, in baht per dollar: ${list}. ${time} Crypto: this page compares ${exchanges.length} Thai SEC-licensed exchanges by trading fee, THB withdrawal fee and quote status. No figure is guaranteed.`.replace(/\s+/g, ' ');
+  return `Cash and crypto are two routes to baht; ExchangeTHB recommends neither. Cash: latest observed US dollar buying rates, in baht per dollar: ${list}. ${time} Crypto: this page compares ${exchanges.length} Thai SEC-licensed exchanges by fees and quote status. No figure is guaranteed.`.replace(/\s+/g, ' ');
 }
 
 export function isAnswerLocale(locale: string): locale is CashHubLocale {
