@@ -1,0 +1,33 @@
+{
+  "card": "SEO-39",
+  "title": "Crypto 内容补强：并列对比表 + FAQPage + SEC 来源 + 编辑段 + btc-to-thb FAQ",
+  "branch": "seo/crypto-enrich-20261019",
+  "base": "03e3afc",
+  "worktree": "/Volumes/M2USB/_scratch/exchangethb/20261018/r9-wt",
+  "result": "passed",
+  "mode": "local-dev-only",
+  "published": false,
+  "changed": {
+    "new": [
+      "lib/exchange-comparison.ts",
+      "components/exchange-comparison-table.tsx",
+      "components/crypto-how-to-compare.tsx",
+      "tests/crypto-enrich.test.ts"
+    ],
+    "modified": [
+      "app/[locale]/exchanges/page.tsx",
+      "app/[locale]/crypto/page.tsx",
+      "lib/route-guides.ts"
+    ]
+  },
+  "checks": {
+    "tsc": "pass",
+    "eslint": "pass",
+    "vitest": "pass (55 files / 237 tests)",
+    "build": "pass",
+    "seo_cluster": "pass",
+    "screenshots": ["en/exchanges", "en/crypto", "en/routes/btc-to-thb"]
+  },
+  "data_source": "data/site.ts exchanges (license/pairs/fee/strengths); SEC source https://market.sec.or.th/LicenseCheck/views/DABusiness",
+  "evidence": "evidence/2026-10-19/seo-crypto-enrich/"
+}

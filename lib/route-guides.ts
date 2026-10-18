@@ -51,6 +51,38 @@ export const routeGuides: RouteGuide[] = [
       zh: ['优先看总支付，而不是只看单价。', '结果接近时优先看实时数据。', '注册或交易前先查看平台详情页。'],
       th: ['ดูยอดจ่ายรวม ไม่ใช่ดูแค่ราคาหน้าแรก', 'ถ้าผลใกล้กัน ให้เลือกข้อมูลสดก่อน', 'ก่อนสมัครหรือเทรดให้เปิดหน้าโปรไฟล์แพลตฟอร์มก่อน'],
     },
+    faqs: {
+      en: [
+        {
+          question: 'How is the BTC to THB estimate on this page calculated?',
+          answer: 'This page reads the visible ask levels from the Thai exchanges it tracks and picks the cheapest order book that can fill the whole amount. The figure is BTC amount × ask price, before trading fees, so it is a reference estimate and not a guaranteed fill.',
+        },
+        {
+          question: 'Why does this page sometimes show no THB estimate?',
+          answer: 'When no current order book snapshot is available the page shows no number instead of inventing one. Open the live comparison for fresh figures and check the official exchange before you trade.',
+        },
+      ],
+      zh: [
+        {
+          question: '本页的 BTC 换 THB 估算是怎么算出来的？',
+          answer: '本页读取所追踪泰国平台的可见卖盘，选取能完整成交所需数量的最低价盘口。数字是 BTC 数量 × 卖价，尚未计入交易手续费，属于参考估算，不保证成交。',
+        },
+        {
+          question: '为什么本页有时不显示 THB 估算？',
+          answer: '当没有可用的实时盘口快照时，本页不显示数字，而不是编造一个数字。打开实时比较页可看最新数据，交易前请到交易所官网确认。',
+        },
+      ],
+      th: [
+        {
+          question: 'ยอดประเมิน BTC เป็น THB บนหน้านี้คำนวณอย่างไร',
+          answer: 'หน้านี้อ่านระดับคำสั่งขายที่มองเห็นจากแพลตฟอร์มไทยที่ติดตาม แล้วเลือกสมุดคำสั่งที่เติมเต็มจำนวนทั้งหมดได้ในราคาต่ำสุด ตัวเลขคือ จำนวน BTC × ราคาเสนอขาย ยังไม่รวมค่าธรรมเนียมเทรด จึงเป็นค่าประมาณอ้างอิง ไม่รับประกันการจับคู่',
+        },
+        {
+          question: 'ทำไมบางครั้งหน้านี้ไม่แสดงยอดประเมิน THB',
+          answer: 'เมื่อไม่มีสแนปช็อตสมุดคำสั่งล่าสุด หน้านี้จะไม่แสดงตัวเลข แทนที่จะสมมติตัวเลขขึ้นมา เปิดหน้าเปรียบเทียบสดเพื่อดูตัวเลขล่าสุด และตรวจสอบกับเว็บเทรดทางการก่อนเทรด',
+        },
+      ],
+    },
     keywords: ['btc to thb', 'bitcoin to thb', 'buy btc thailand', 'thai bitcoin exchange', 'btc thb comparison'],
   },
   {
