@@ -1,0 +1,511 @@
+{
+ "base": "http://127.0.0.1:41718",
+ "generated_at": "2026-10-18T11:17:42+0700",
+ "pages": {
+  "en:ratchada": {
+   "path": "/en/money-changers/ratchada",
+   "checks": {
+    "business_block": true,
+    "faq_page": true,
+    "breadcrumb": true,
+    "address_matches_data_precision": true,
+    "opening_hours_match_data": true,
+    "opening_hours_wellformed": true,
+    "geo_matches_data": true,
+    "no_price_range": true,
+    "address_wellformed": true,
+    "faq_min_six": true,
+    "faq_wellformed": true,
+    "faq_visible_on_page": true,
+    "no_duplicate_questions": true,
+    "breadcrumb_wellformed": true,
+    "canonical_self": true,
+    "hreflang_en_th_zh": true,
+    "indexable": true
+   },
+   "detail": {
+    "name": "Ratchada Exchange",
+    "has_map": true,
+    "same_as": true,
+    "area_served": "Bangkok",
+    "currencies": "THB, USD, EUR, JPY, CNY, GBP",
+    "address_present": true,
+    "opening_hours": [
+     [
+      "09:00",
+      "20:30",
+      7
+     ]
+    ],
+    "geo": [
+     13.77837,
+     100.577055
+    ],
+    "faq_count": 7,
+    "faq_not_visible": [],
+    "breadcrumb_items": [
+     "ExchangeTHB",
+     "Cash to THB",
+     "Ratchada Exchange"
+    ],
+    "canonical": "https://www.exchangethb.com/en/money-changers/ratchada",
+    "types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage",
+     "LocalBusiness",
+     "FinancialService"
+    ]
+   }
+  },
+  "th:ratchada": {
+   "path": "/th/money-changers/ratchada",
+   "checks": {
+    "business_block": true,
+    "faq_page": true,
+    "breadcrumb": true,
+    "address_matches_data_precision": true,
+    "opening_hours_match_data": true,
+    "opening_hours_wellformed": true,
+    "geo_matches_data": true,
+    "no_price_range": true,
+    "address_wellformed": true,
+    "faq_min_six": true,
+    "faq_wellformed": true,
+    "faq_visible_on_page": true,
+    "no_duplicate_questions": true,
+    "breadcrumb_wellformed": true,
+    "canonical_self": true,
+    "hreflang_en_th_zh": true,
+    "indexable": true
+   },
+   "detail": {
+    "name": "Ratchada Exchange",
+    "has_map": true,
+    "same_as": true,
+    "area_served": "Bangkok",
+    "currencies": "THB, USD, EUR, JPY, CNY, GBP",
+    "address_present": true,
+    "opening_hours": [
+     [
+      "09:00",
+      "20:30",
+      7
+     ]
+    ],
+    "geo": [
+     13.77837,
+     100.577055
+    ],
+    "faq_count": 7,
+    "faq_not_visible": [],
+    "breadcrumb_items": [
+     "ExchangeTHB",
+     "เงินสดเป็น THB",
+     "Ratchada Exchange"
+    ],
+    "canonical": "https://www.exchangethb.com/th/money-changers/ratchada",
+    "types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage",
+     "LocalBusiness",
+     "FinancialService"
+    ]
+   }
+  },
+  "zh:ratchada": {
+   "path": "/zh/money-changers/ratchada",
+   "checks": {
+    "business_block": true,
+    "faq_page": true,
+    "breadcrumb": true,
+    "address_matches_data_precision": true,
+    "opening_hours_match_data": true,
+    "opening_hours_wellformed": true,
+    "geo_matches_data": true,
+    "no_price_range": true,
+    "address_wellformed": true,
+    "faq_min_six": true,
+    "faq_wellformed": true,
+    "faq_visible_on_page": true,
+    "no_duplicate_questions": true,
+    "breadcrumb_wellformed": true,
+    "canonical_self": true,
+    "hreflang_en_th_zh": true,
+    "indexable": true
+   },
+   "detail": {
+    "name": "Ratchada Exchange",
+    "has_map": true,
+    "same_as": true,
+    "area_served": "Bangkok",
+    "currencies": "THB, USD, EUR, JPY, CNY, GBP",
+    "address_present": true,
+    "opening_hours": [
+     [
+      "09:00",
+      "20:30",
+      7
+     ]
+    ],
+    "geo": [
+     13.77837,
+     100.577055
+    ],
+    "faq_count": 7,
+    "faq_not_visible": [],
+    "breadcrumb_items": [
+     "ExchangeTHB",
+     "现金换 THB",
+     "Ratchada Exchange"
+    ],
+    "canonical": "https://www.exchangethb.com/zh/money-changers/ratchada",
+    "types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage",
+     "LocalBusiness",
+     "FinancialService"
+    ]
+   }
+  },
+  "en:superrich-thailand": {
+   "path": "/en/money-changers/superrich-thailand",
+   "checks": {
+    "business_block": true,
+    "faq_page": true,
+    "breadcrumb": true,
+    "address_matches_data_precision": true,
+    "opening_hours_match_data": true,
+    "opening_hours_wellformed": true,
+    "geo_matches_data": true,
+    "no_price_range": true,
+    "faq_min_six": true,
+    "faq_wellformed": true,
+    "faq_visible_on_page": true,
+    "no_duplicate_questions": true,
+    "breadcrumb_wellformed": true,
+    "canonical_self": true,
+    "hreflang_en_th_zh": true,
+    "indexable": true
+   },
+   "detail": {
+    "name": "SuperRich Thailand",
+    "has_map": true,
+    "same_as": true,
+    "area_served": "Bangkok",
+    "currencies": "THB, USD, EUR, JPY, CNY, GBP",
+    "address_present": false,
+    "opening_hours": [
+     [
+      "09:00",
+      "16:30",
+      6
+     ]
+    ],
+    "geo": [
+     13.7504,
+     100.5401
+    ],
+    "faq_count": 7,
+    "faq_not_visible": [],
+    "breadcrumb_items": [
+     "ExchangeTHB",
+     "Cash to THB",
+     "SuperRich Thailand"
+    ],
+    "canonical": "https://www.exchangethb.com/en/money-changers/superrich-thailand",
+    "types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage",
+     "LocalBusiness",
+     "FinancialService"
+    ]
+   }
+  },
+  "th:superrich-thailand": {
+   "path": "/th/money-changers/superrich-thailand",
+   "checks": {
+    "business_block": true,
+    "faq_page": true,
+    "breadcrumb": true,
+    "address_matches_data_precision": true,
+    "opening_hours_match_data": true,
+    "opening_hours_wellformed": true,
+    "geo_matches_data": true,
+    "no_price_range": true,
+    "faq_min_six": true,
+    "faq_wellformed": true,
+    "faq_visible_on_page": true,
+    "no_duplicate_questions": true,
+    "breadcrumb_wellformed": true,
+    "canonical_self": true,
+    "hreflang_en_th_zh": true,
+    "indexable": true
+   },
+   "detail": {
+    "name": "SuperRich Thailand",
+    "has_map": true,
+    "same_as": true,
+    "area_served": "Bangkok",
+    "currencies": "THB, USD, EUR, JPY, CNY, GBP",
+    "address_present": false,
+    "opening_hours": [
+     [
+      "09:00",
+      "16:30",
+      6
+     ]
+    ],
+    "geo": [
+     13.7504,
+     100.5401
+    ],
+    "faq_count": 7,
+    "faq_not_visible": [],
+    "breadcrumb_items": [
+     "ExchangeTHB",
+     "เงินสดเป็น THB",
+     "SuperRich Thailand"
+    ],
+    "canonical": "https://www.exchangethb.com/th/money-changers/superrich-thailand",
+    "types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage",
+     "LocalBusiness",
+     "FinancialService"
+    ]
+   }
+  },
+  "zh:superrich-thailand": {
+   "path": "/zh/money-changers/superrich-thailand",
+   "checks": {
+    "business_block": true,
+    "faq_page": true,
+    "breadcrumb": true,
+    "address_matches_data_precision": true,
+    "opening_hours_match_data": true,
+    "opening_hours_wellformed": true,
+    "geo_matches_data": true,
+    "no_price_range": true,
+    "faq_min_six": true,
+    "faq_wellformed": true,
+    "faq_visible_on_page": true,
+    "no_duplicate_questions": true,
+    "breadcrumb_wellformed": true,
+    "canonical_self": true,
+    "hreflang_en_th_zh": true,
+    "indexable": true
+   },
+   "detail": {
+    "name": "SuperRich Thailand",
+    "has_map": true,
+    "same_as": true,
+    "area_served": "Bangkok",
+    "currencies": "THB, USD, EUR, JPY, CNY, GBP",
+    "address_present": false,
+    "opening_hours": [
+     [
+      "09:00",
+      "16:30",
+      6
+     ]
+    ],
+    "geo": [
+     13.7504,
+     100.5401
+    ],
+    "faq_count": 7,
+    "faq_not_visible": [],
+    "breadcrumb_items": [
+     "ExchangeTHB",
+     "现金换 THB",
+     "SuperRich Thailand"
+    ],
+    "canonical": "https://www.exchangethb.com/zh/money-changers/superrich-thailand",
+    "types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage",
+     "LocalBusiness",
+     "FinancialService"
+    ]
+   }
+  },
+  "en:twelve-victory": {
+   "path": "/en/money-changers/twelve-victory",
+   "checks": {
+    "business_block": true,
+    "faq_page": true,
+    "breadcrumb": true,
+    "address_matches_data_precision": true,
+    "opening_hours_match_data": true,
+    "opening_hours_wellformed": true,
+    "geo_matches_data": true,
+    "no_price_range": true,
+    "faq_min_six": true,
+    "faq_wellformed": true,
+    "faq_visible_on_page": true,
+    "no_duplicate_questions": true,
+    "breadcrumb_wellformed": true,
+    "canonical_self": true,
+    "hreflang_en_th_zh": true,
+    "indexable": true
+   },
+   "detail": {
+    "name": "Twelve Victory Exchange",
+    "has_map": true,
+    "same_as": true,
+    "area_served": "Bangkok",
+    "currencies": "THB, USD, EUR, JPY, CNY, GBP",
+    "address_present": false,
+    "opening_hours": [
+     [
+      "08:30",
+      "17:00",
+      5
+     ],
+     [
+      "09:00",
+      "16:00",
+      2
+     ]
+    ],
+    "geo": null,
+    "faq_count": 7,
+    "faq_not_visible": [],
+    "breadcrumb_items": [
+     "ExchangeTHB",
+     "Cash to THB",
+     "Twelve Victory Exchange"
+    ],
+    "canonical": "https://www.exchangethb.com/en/money-changers/twelve-victory",
+    "types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage",
+     "LocalBusiness",
+     "FinancialService"
+    ]
+   }
+  },
+  "th:twelve-victory": {
+   "path": "/th/money-changers/twelve-victory",
+   "checks": {
+    "business_block": true,
+    "faq_page": true,
+    "breadcrumb": true,
+    "address_matches_data_precision": true,
+    "opening_hours_match_data": true,
+    "opening_hours_wellformed": true,
+    "geo_matches_data": true,
+    "no_price_range": true,
+    "faq_min_six": true,
+    "faq_wellformed": true,
+    "faq_visible_on_page": true,
+    "no_duplicate_questions": true,
+    "breadcrumb_wellformed": true,
+    "canonical_self": true,
+    "hreflang_en_th_zh": true,
+    "indexable": true
+   },
+   "detail": {
+    "name": "Twelve Victory Exchange",
+    "has_map": true,
+    "same_as": true,
+    "area_served": "Bangkok",
+    "currencies": "THB, USD, EUR, JPY, CNY, GBP",
+    "address_present": false,
+    "opening_hours": [
+     [
+      "08:30",
+      "17:00",
+      5
+     ],
+     [
+      "09:00",
+      "16:00",
+      2
+     ]
+    ],
+    "geo": null,
+    "faq_count": 7,
+    "faq_not_visible": [],
+    "breadcrumb_items": [
+     "ExchangeTHB",
+     "เงินสดเป็น THB",
+     "Twelve Victory Exchange"
+    ],
+    "canonical": "https://www.exchangethb.com/th/money-changers/twelve-victory",
+    "types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage",
+     "LocalBusiness",
+     "FinancialService"
+    ]
+   }
+  },
+  "zh:twelve-victory": {
+   "path": "/zh/money-changers/twelve-victory",
+   "checks": {
+    "business_block": true,
+    "faq_page": true,
+    "breadcrumb": true,
+    "address_matches_data_precision": true,
+    "opening_hours_match_data": true,
+    "opening_hours_wellformed": true,
+    "geo_matches_data": true,
+    "no_price_range": true,
+    "faq_min_six": true,
+    "faq_wellformed": true,
+    "faq_visible_on_page": true,
+    "no_duplicate_questions": true,
+    "breadcrumb_wellformed": true,
+    "canonical_self": true,
+    "hreflang_en_th_zh": true,
+    "indexable": true
+   },
+   "detail": {
+    "name": "Twelve Victory Exchange",
+    "has_map": true,
+    "same_as": true,
+    "area_served": "Bangkok",
+    "currencies": "THB, USD, EUR, JPY, CNY, GBP",
+    "address_present": false,
+    "opening_hours": [
+     [
+      "08:30",
+      "17:00",
+      5
+     ],
+     [
+      "09:00",
+      "16:00",
+      2
+     ]
+    ],
+    "geo": null,
+    "faq_count": 7,
+    "faq_not_visible": [],
+    "breadcrumb_items": [
+     "ExchangeTHB",
+     "现金换 THB",
+     "Twelve Victory Exchange"
+    ],
+    "canonical": "https://www.exchangethb.com/zh/money-changers/twelve-victory",
+    "types": [
+     "Organization",
+     "BreadcrumbList",
+     "FAQPage",
+     "LocalBusiness",
+     "FinancialService"
+    ]
+   }
+  }
+ },
+ "errors": []
+}

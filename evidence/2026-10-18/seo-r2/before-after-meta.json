@@ -1,0 +1,158 @@
+{
+ "note": "Before values are the metadata the released v0.1.3 build rendered (title template from the pre-card page code; en/th/zh Ratchada captured live at 11:0x before deploy). After values are read back from https://www.exchangethb.com at 11:23-11:35.",
+ "rows": [
+  {
+   "page": "en:ratchada",
+   "before": {
+    "title": "Ratchada Exchange Rate, Hours & Map | Huai Khwang",
+    "description": "Check Ratchada Exchange observed rates, estimated THB, opening status, Bangkok location, map, and official verification link.",
+    "title_length": 49,
+    "description_length": 125
+   },
+   "after": {
+    "title": "Ratchada Exchange รัชดาเอ๊กซเชนจ์: rate today, 09:00–20:30",
+    "description": "Ratchada Exchange (รัชดาเอ๊กซเชนจ์), Huai Khwang: open daily 09:00–20:30 at 78/13 Prachatbamphen Rd. Today’s observed rate, map and official site.",
+    "title_length": 58,
+    "description_length": 146
+   },
+   "title_chars_delta": 9,
+   "description_chars_delta": 21
+  },
+  {
+   "page": "th:ratchada",
+   "before": {
+    "title": "Ratchada Exchange เรท เวลาเปิด และแผนที่",
+    "description": "ผู้ให้บริการรายเดี่ยวที่เผยแพร่หน้าเรทและข้อมูลติดต่อเองบนเว็บไซต์ทางการ",
+    "title_length": 40,
+    "description_length": 72
+   },
+   "after": {
+    "title": "รัชดาเอ๊กซเชนจ์ (Ratchada Exchange) เรทวันนี้ เปิด 09:00–20:30",
+    "description": "รัชดาเอ๊กซเชนจ์ (Ratchada Exchange) ย่านห้วยขวาง เปิดทุกวัน 09:00–20:30 ที่ 78/13 Prachatbamphen Rd. ดูเรทที่สังเกตล่าสุด แผนที่ และเว็บทางการ",
+    "title_length": 62,
+    "description_length": 142
+   },
+   "title_chars_delta": 22,
+   "description_chars_delta": 70
+  },
+  {
+   "page": "zh:ratchada",
+   "before": {
+    "title": "Ratchada Exchange 曼谷｜汇率、营业时间与地图",
+    "description": "官网自行公开汇率页和联系方式的单店型换汇商。",
+    "title_length": 31,
+    "description_length": 22
+   },
+   "after": {
+    "title": "Ratchada Exchange（รัชดาเอ๊กซเชนจ์）今日汇率、营业时间 09:00–20:30",
+    "description": "Ratchada Exchange（รัชดาเอ๊กซเชนจ์）位于曼谷辉煌区，每天 09:00–20:30 营业，地址 78/13 Prachatbamphen Rd.。查看今日观测汇率、地图与官网入口。",
+    "title_length": 55,
+    "description_length": 105
+   },
+   "title_chars_delta": 24,
+   "description_chars_delta": 83
+  },
+  {
+   "page": "en:superrich-thailand",
+   "before": {
+    "title": "SuperRich Thailand Bangkok | Rates, Hours & Map",
+    "description": "Check SuperRich Thailand observed rates, estimated THB, opening status, Bangkok location, map, and official verification link.",
+    "title_length": 47,
+    "description_length": 126
+   },
+   "after": {
+    "title": "SuperRich Thailand: Pratunam rates, Mon–Sat 09:00–16:30",
+    "description": "SuperRich Thailand in Pratunam, Bangkok: branches open Monday to Saturday 09:00–16:30, closed Sunday. Today’s observed rate, map and official branch list.",
+    "title_length": 55,
+    "description_length": 154
+   },
+   "title_chars_delta": 8,
+   "description_chars_delta": 28
+  },
+  {
+   "page": "th:superrich-thailand",
+   "before": {
+    "title": "SuperRich Thailand เรท เวลาเปิด และแผนที่",
+    "description": "ผู้ให้บริการแลกเงินที่เผยแพร่ตารางอัตราแลกเปลี่ยนบนเว็บไซต์ทางการ",
+    "title_length": 41,
+    "description_length": 65
+   },
+   "after": {
+    "title": "SuperRich Thailand เรทวันนี้ จันทร์–เสาร์ 09:00–16:30",
+    "description": "SuperRich Thailand ย่านประตูน้ำ กรุงเทพฯ เปิดจันทร์–เสาร์ 09:00–16:30 ปิดวันอาทิตย์ ดูเรทที่สังเกตล่าสุด แผนที่ และรายชื่อสาขาทางการ",
+    "title_length": 53,
+    "description_length": 132
+   },
+   "title_chars_delta": 12,
+   "description_chars_delta": 67
+  },
+  {
+   "page": "zh:superrich-thailand",
+   "before": {
+    "title": "SuperRich Thailand 曼谷｜汇率、营业时间与地图",
+    "description": "官网公布汇率表的换汇品牌。",
+    "title_length": 32,
+    "description_length": 13
+   },
+   "after": {
+    "title": "SuperRich Thailand 今日汇率、营业时间 周一至周六 09:00–16:30",
+    "description": "SuperRich Thailand 位于曼谷水门（Pratunam）一带，周一至周六 09:00–16:30 营业，周日休息。查看今日观测汇率、地图与官网分行列表。",
+    "title_length": 46,
+    "description_length": 83
+   },
+   "title_chars_delta": 14,
+   "description_chars_delta": 70
+  },
+  {
+   "page": "en:twelve-victory",
+   "before": {
+    "title": "Twelve Victory Exchange Bangkok | Rates, Hours & Map",
+    "description": "Check Twelve Victory Exchange observed rates, estimated THB, opening status, Bangkok location, map, and official verification link.",
+    "title_length": 52,
+    "description_length": 131
+   },
+   "after": {
+    "title": "Twelve Victory Exchange: Pradipat rates, open 7 days",
+    "description": "Twelve Victory Exchange head office, 231 Pradipat Rd, Bangkok: weekdays 08:30–17:00, weekends 09:00–16:00. Today’s observed rate, map and official site.",
+    "title_length": 52,
+    "description_length": 152
+   },
+   "title_chars_delta": 0,
+   "description_chars_delta": 21
+  },
+  {
+   "page": "th:twelve-victory",
+   "before": {
+    "title": "Twelve Victory Exchange เรท เวลาเปิด และแผนที่",
+    "description": "เรทจากสำนักงานใหญ่ โปรดยืนยันชนิดธนบัตรและสาขาก่อนเดินทาง",
+    "title_length": 46,
+    "description_length": 57
+   },
+   "after": {
+    "title": "Twelve Victory Exchange เรทวันนี้ เปิดครบเจ็ดวัน",
+    "description": "Twelve Victory Exchange สำนักงานใหญ่ 231 Pradipat Rd. กรุงเทพฯ จันทร์–ศุกร์ 08:30–17:00 เสาร์–อาทิตย์ 09:00–16:00 ดูเรทที่สังเกตล่าสุดและแผนที่",
+    "title_length": 48,
+    "description_length": 143
+   },
+   "title_chars_delta": 2,
+   "description_chars_delta": 86
+  },
+  {
+   "page": "zh:twelve-victory",
+   "before": {
+    "title": "Twelve Victory Exchange 曼谷｜汇率、营业时间与地图",
+    "description": "官方总店报价，请确认纸币面额及具体分店后前往。",
+    "title_length": 37,
+    "description_length": 23
+   },
+   "after": {
+    "title": "Twelve Victory Exchange 今日汇率、营业时间 全周营业",
+    "description": "Twelve Victory Exchange 总部位于曼谷 231 Pradipat Rd.，周一至周五 08:30–17:00、周末 09:00–16:00。查看今日观测汇率与地图。",
+    "title_length": 38,
+    "description_length": 93
+   },
+   "title_chars_delta": 1,
+   "description_chars_delta": 70
+  }
+ ]
+}

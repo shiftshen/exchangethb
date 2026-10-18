@@ -1,0 +1,153 @@
+# public readback 2026-10-18 (after release)
+=== /en/money-changers/ratchada ===
+<title>Ratchada Exchange รัชดาเอ๊กซเชนจ์: rate today, 09:00–20:30</title>
+DESC: Ratchada Exchange (รัชดาเอ๊กซเชนจ์), Huai Khwang: open daily 09:00–20:30 at 78/13 Prachatbamphen Rd. Today’s observed rate, map and official site.
+JSONLD: 8
+CANONICAL: https://www.exchangethb.com/en/money-changers/ratchada
+HREFLANG: en,th,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/en/money-changers/ratchada
+=== /th/money-changers/ratchada ===
+<title>รัชดาเอ๊กซเชนจ์ (Ratchada Exchange) เรทวันนี้ เปิด 09:00–20:30</title>
+DESC: รัชดาเอ๊กซเชนจ์ (Ratchada Exchange) ย่านห้วยขวาง เปิดทุกวัน 09:00–20:30 ที่ 78/13 Prachatbamphen Rd. ดูเรทที่สังเกตล่าสุด แผนที่ และเว็บทางการ
+JSONLD: 8
+CANONICAL: https://www.exchangethb.com/th/money-changers/ratchada
+HREFLANG: en,th,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/th/money-changers/ratchada
+=== /zh/money-changers/ratchada ===
+<title>Ratchada Exchange（รัชดาเอ๊กซเชนจ์）今日汇率、营业时间 09:00–20:30</title>
+DESC: Ratchada Exchange（รัชดาเอ๊กซเชนจ์）位于曼谷辉煌区，每天 09:00–20:30 营业，地址 78/13 Prachatbamphen Rd.。查看今日观测汇率、地图与官网入口。
+JSONLD: 8
+CANONICAL: https://www.exchangethb.com/zh/money-changers/ratchada
+HREFLANG: en,th,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/zh/money-changers/ratchada
+=== /en/money-changers/superrich-thailand ===
+<title>SuperRich Thailand: Pratunam rates, Mon–Sat 09:00–16:30</title>
+DESC: SuperRich Thailand in Pratunam, Bangkok: branches open Monday to Saturday 09:00–16:30, closed Sunday. Today’s observed rate, map and official branch list.
+JSONLD: 8
+CANONICAL: https://www.exchangethb.com/en/money-changers/superrich-thailand
+HREFLANG: en,th,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/en/money-changers/superrich-thailand
+=== /th/money-changers/superrich-thailand ===
+<title>SuperRich Thailand เรทวันนี้ จันทร์–เสาร์ 09:00–16:30</title>
+DESC: SuperRich Thailand ย่านประตูน้ำ กรุงเทพฯ เปิดจันทร์–เสาร์ 09:00–16:30 ปิดวันอาทิตย์ ดูเรทที่สังเกตล่าสุด แผนที่ และรายชื่อสาขาทางการ
+JSONLD: 8
+CANONICAL: https://www.exchangethb.com/th/money-changers/superrich-thailand
+HREFLANG: en,th,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/th/money-changers/superrich-thailand
+=== /zh/money-changers/superrich-thailand ===
+<title>SuperRich Thailand 今日汇率、营业时间 周一至周六 09:00–16:30</title>
+DESC: SuperRich Thailand 位于曼谷水门（Pratunam）一带，周一至周六 09:00–16:30 营业，周日休息。查看今日观测汇率、地图与官网分行列表。
+JSONLD: 8
+CANONICAL: https://www.exchangethb.com/zh/money-changers/superrich-thailand
+HREFLANG: en,th,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/zh/money-changers/superrich-thailand
+=== /en/money-changers/twelve-victory ===
+<title>Twelve Victory Exchange: Pradipat rates, open 7 days</title>
+DESC: Twelve Victory Exchange head office, 231 Pradipat Rd, Bangkok: weekdays 08:30–17:00, weekends 09:00–16:00. Today’s observed rate, map and official site.
+JSONLD: 8
+CANONICAL: https://www.exchangethb.com/en/money-changers/twelve-victory
+HREFLANG: en,th,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/en/money-changers/twelve-victory
+=== /th/money-changers/twelve-victory ===
+<title>Twelve Victory Exchange เรทวันนี้ เปิดครบเจ็ดวัน</title>
+DESC: Twelve Victory Exchange สำนักงานใหญ่ 231 Pradipat Rd. กรุงเทพฯ จันทร์–ศุกร์ 08:30–17:00 เสาร์–อาทิตย์ 09:00–16:00 ดูเรทที่สังเกตล่าสุดและแผนที่
+JSONLD: 8
+CANONICAL: https://www.exchangethb.com/th/money-changers/twelve-victory
+HREFLANG: en,th,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/th/money-changers/twelve-victory
+=== /zh/money-changers/twelve-victory ===
+<title>Twelve Victory Exchange 今日汇率、营业时间 全周营业</title>
+DESC: Twelve Victory Exchange 总部位于曼谷 231 Pradipat Rd.，周一至周五 08:30–17:00、周末 09:00–16:00。查看今日观测汇率与地图。
+JSONLD: 8
+CANONICAL: https://www.exchangethb.com/zh/money-changers/twelve-victory
+HREFLANG: en,th,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/zh/money-changers/twelve-victory
+=== /en/cash ===
+<title>USD, JPY &amp; EUR to Thai baht: Bangkok money changer comparison</title>
+DESC: Compare estimated baht before choosing a money changer.
+JSONLD: 4
+CANONICAL: https://www.exchangethb.com/en/cash
+HREFLANG: de,en,fr,id,ja,ko,ru,th,vi,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/en/cash
+=== /th/cash ===
+<title>เปรียบเทียบเรทแลกเงิน USD JPY EUR เป็นบาท — ร้านแลกเงินกรุงเทพ</title>
+DESC: เทียบยอดรับโดยประมาณ ก่อนเลือกร้านแลกเงิน
+JSONLD: 4
+CANONICAL: https://www.exchangethb.com/th/cash
+HREFLANG: de,en,fr,id,ja,ko,ru,th,vi,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/th/cash
+=== /zh/cash ===
+<title>美元、日元、欧元换泰铢：曼谷换汇店比较</title>
+DESC: 比较预计到手，再决定去哪家换汇店。
+JSONLD: 4
+CANONICAL: https://www.exchangethb.com/zh/cash
+HREFLANG: de,en,fr,id,ja,ko,ru,th,vi,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/zh/cash
+=== /ja/cash ===
+<title>日本円からタイバーツへ：バンコクの両替レート比較</title>
+DESC: JPY・USD・EURなど15通貨に対応。バンコクの両替店の概算受取額、営業時間、紙幣条件を確認して選びましょう。
+JSONLD: 4
+CANONICAL: https://www.exchangethb.com/ja/cash
+HREFLANG: de,en,fr,id,ja,ko,ru,th,vi,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/ja/cash
+=== /ko/cash ===
+<title>한국 원화에서 태국 바트로: 방콕 환율 비교</title>
+DESC: KRW, USD, EUR 등 15개 통화의 예상 수령액, 영업시간, 지폐 조건과 호가 시점을 확인하세요.
+JSONLD: 4
+CANONICAL: https://www.exchangethb.com/ko/cash
+HREFLANG: de,en,fr,id,ja,ko,ru,th,vi,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/ko/cash
+=== /ru/cash ===
+<title>Курсы обмена наличных на тайские баты в Бангкоке</title>
+DESC: Сравните примерную сумму в THB, часы работы, номиналы банкнот и время котировки. RUB пока не поддерживается — по умолчанию выбран USD.
+JSONLD: 4
+CANONICAL: https://www.exchangethb.com/ru/cash
+HREFLANG: de,en,fr,id,ja,ko,ru,th,vi,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/ru/cash
+=== /fr/cash ===
+<title>Euros en bahts : comparer les taux de change à Bangkok</title>
+DESC: Comparez les montants estimés en THB, les horaires, les coupures et l’heure des cotations pour 15 devises.
+JSONLD: 4
+CANONICAL: https://www.exchangethb.com/fr/cash
+HREFLANG: de,en,fr,id,ja,ko,ru,th,vi,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/fr/cash
+=== /de/cash ===
+<title>Euro in Baht: Wechselkurse in Bangkok vergleichen</title>
+DESC: Geschätzte THB-Beträge, Öffnungszeiten, Banknotenbedingungen und Kurszeitpunkte für 15 Währungen vergleichen.
+JSONLD: 4
+CANONICAL: https://www.exchangethb.com/de/cash
+HREFLANG: de,en,fr,id,ja,ko,ru,th,vi,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/de/cash
+=== /id/cash ===
+<title>Bandingkan kurs uang tunai ke baht di Bangkok</title>
+DESC: Bandingkan perkiraan THB, jam buka, pecahan uang dan waktu kutipan. IDR belum didukung — USD dipilih secara default.
+JSONLD: 4
+CANONICAL: https://www.exchangethb.com/id/cash
+HREFLANG: de,en,fr,id,ja,ko,ru,th,vi,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/id/cash
+=== /vi/cash ===
+<title>So sánh tỷ giá tiền mặt sang baht tại Bangkok</title>
+DESC: So sánh số THB ước tính, giờ mở cửa, mệnh giá và thời điểm báo giá. VND chưa được hỗ trợ — mặc định chọn USD.
+JSONLD: 4
+CANONICAL: https://www.exchangethb.com/vi/cash
+HREFLANG: de,en,fr,id,ja,ko,ru,th,vi,x-default,zh
+
+STATUS:200 FINAL:https://www.exchangethb.com/vi/cash

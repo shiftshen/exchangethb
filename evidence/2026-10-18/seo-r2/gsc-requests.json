@@ -1,0 +1,89 @@
+{
+ "property": "sc-domain:exchangethb.com",
+ "account": "Ego Profile 16 / fujane110@gmail.com",
+ "checked_at": "2026-10-18T11:40-11:52+07",
+ "method": "Search Console UI > URL Inspection (read-only status pass), after one attempt pass that clicked 请求编入索引 on all 8 URLs",
+ "quota": {
+  "state": "exhausted",
+  "message": "超出了配额 — 抱歉！我们无法处理这项请求，因为您今天已经超出了每日配额。请明天再尝试提交此网址。",
+  "note": "The first pass returned either this quota dialog or Google's generic '糟糕！出了点问题 — 提交您的索引编制请求时出现了问题' for every URL; no request was accepted, so nothing is claimed as requested.",
+  "reset": "Google resets the daily URL-inspection submission quota at midnight Pacific; retry after the next reset"
+ },
+ "urls": [
+  {
+   "name": "en-ratchada",
+   "url": "https://www.exchangethb.com/en/money-changers/ratchada",
+   "index_status": "已收录",
+   "request_indexing": "not accepted (quota / GSC error)",
+   "screenshot": "gsc/en-ratchada.png",
+   "priority": 1,
+   "note": "This is the page with 1613 impressions and 0.12% CTR; the snippet, not the index status, is the fix."
+  },
+  {
+   "name": "th-ratchada",
+   "url": "https://www.exchangethb.com/th/money-changers/ratchada",
+   "index_status": "网址尚未收录到 Google",
+   "request_indexing": "not accepted (quota)",
+   "screenshot": "gsc/th-ratchada.png",
+   "priority": 1,
+   "note": "Inspection panel also showed 上次抓取时间 2026-08-26, 抓取成功, 允许编入索引 = 是, and 未检测到引荐来源网页 — i.e. it was discovered only via the sitemap. The new /cash strip now links to it from an indexed page."
+  },
+  {
+   "name": "zh-ratchada",
+   "url": "https://www.exchangethb.com/zh/money-changers/ratchada",
+   "index_status": "已收录",
+   "request_indexing": "not accepted (quota / GSC error)",
+   "screenshot": "gsc/zh-ratchada.png",
+   "priority": 2
+  },
+  {
+   "name": "en-superrich",
+   "url": "https://www.exchangethb.com/en/money-changers/superrich-thailand",
+   "index_status": "未收录",
+   "request_indexing": "not accepted (quota)",
+   "screenshot": "gsc/en-superrich.png",
+   "priority": 1
+  },
+  {
+   "name": "en-twelve-victory",
+   "url": "https://www.exchangethb.com/en/money-changers/twelve-victory",
+   "index_status": "未收录",
+   "request_indexing": "not accepted (quota)",
+   "screenshot": "gsc/en-twelve-victory.png",
+   "priority": 1
+  },
+  {
+   "name": "en-cash",
+   "url": "https://www.exchangethb.com/en/cash",
+   "index_status": "已收录",
+   "request_indexing": "not accepted (GSC error)",
+   "screenshot": "gsc/en-cash.png",
+   "priority": 3,
+   "note": "Only its internal links and the profile strip changed; no request is required."
+  },
+  {
+   "name": "th-cash",
+   "url": "https://www.exchangethb.com/th/cash",
+   "index_status": "未收录",
+   "request_indexing": "not accepted (quota)",
+   "screenshot": "gsc/th-cash.png",
+   "priority": 2
+  },
+  {
+   "name": "zh-cash",
+   "url": "https://www.exchangethb.com/zh/cash",
+   "index_status": "已收录",
+   "request_indexing": "not accepted (quota)",
+   "screenshot": "gsc/zh-cash.png",
+   "priority": 3
+  }
+ ],
+ "summary_counts": {
+  "attempted": 8,
+  "accepted": 0,
+  "already_indexed": 4,
+  "not_indexed_and_still_waiting": 4
+ },
+ "retry_plan": "After the quota reset, request the 4 not-indexed URLs first (th-ratchada, en-superrich, en-twelve-victory, th-cash); en/zh ratchada and en/zh cash are already indexed and only need a recrawl, which the sitemap lastmod 2026-10-18 already signals.",
+ "supporting_fact": "Sitemap lastmod for /en/money-changers/ratchada is 2026-10-18T04:18:16Z (image build), so Google has a fresh modification signal even without a manual request."
+}

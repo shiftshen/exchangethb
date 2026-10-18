@@ -212,3 +212,31 @@ Final11:35TH: DNS retry release236ba9… all three containers healthy;92tests/32
 **候选源差异**：`git show HEAD:app/[locale]/routes/[slug]/page.tsx` 仍将静态 `cashRates` 用于「Latest data reference」，相关现金商用 `['sia','superrich-thailand','ratchada']`，英文/泰文说明仍写 `SIA Money Exchange`；`HEAD:data/site.ts` 仍有 SIA。当前工作树里的同页改为 `readCashCache/getLiveMarketSnapshots` 和三家现行公开现金商，但属于**早前未提交的工作树内容**，与路线索引两行提交不是同一批。直接从干净 HEAD/c50f995 打包可能重现已下线 SIA 文案/旧数据；从整个脏工作树打包则会夹带大量未审改动。两者均不能作为可复现安全发布制品。
 
 **本轮门禁与处置**：工作树 `npm run typecheck`、`eslint . --max-warnings=0`、`npm run test`（146/42）、`npm run build` 均 exit 0；仅证明这份工作树可编译，不证明旧 HEAD 或现网同源。已通过 fujane 收件箱发送授权与更正：先对照现网运行镜像对应源码，审定保留现网修复且只增加路线索引的精确候选，再通过 Fable 审核和 deploy-executor 部署单执行。避开 03:00 已批准 DNS overlay 窗口；本开发会话不 SSH、不发布、不推 GitHub。
+
+## 2026-10-18 11:22 SEO-4：Ratchada 门店页提点击率 + 第二轮专业 SEO（已发布）
+
+**依据（GSC 28 天，2026-09-18..10-15）**：全站 7 点击 / 1848 展现 / CTR 0.38% / 均位 9.1；其中 `/en/money-changers/ratchada` **1613 展现（87%）、2 点击、CTR 0.12%、均位 7.2**；`/zh/.../ratchada` 45/1/2.22%/6.58；`/th/.../ratchada` 无记录。查询词：`ratchada exchange` 1293/0.15%/7.23、`รัชดาเอกเช้น` 97/0/9.03、`รัชดา exchange` 33/0/6.76。按 seo-audit 判读：**前 10 名而 CTR 0.12% 是摘要问题，不是排名问题**。
+
+**改了什么**（分支 `seo/ratchada-ctr-20261018`，commit `cd31073`，隔离 worktree `_scratch/exchangethb/20261018/r2-wt`，共享脏工作区未动）：
+- `lib/money-changer-seo.ts`（新）：门店事实全部由 `data/site.ts` 派生（营业时间解析器、地址精度、经纬度），en/th/zh 三语文案与 FAQ，`LocalBusiness + FinancialService` JSON-LD 构造器，10 语言营业时间格式化。
+- `app/[locale]/money-changers/[slug]/page.tsx` 重写：品牌开头标题/描述、40–60 词答案段（在哪/几点/汇率怎么看/带什么）、今日观测汇率块（含观测时间）、门店位置卡、5 币种行、三店对比（桌面表格 / 手机卡片）、每店差异点、7 条 FAQ；JSON-LD = Organization + BreadcrumbList + FAQPage + LocalBusiness/FinancialService。
+- `components/cash-featured-changers.tsx` + `lib/cash-featured-changers.ts`（新）：`/cash` 10 语言加三家门店入口（此前门店页只能从 noindex 总览、4 条路线页和 sitemap 到达）。
+- `scripts/check-seo-cluster.mjs` 增加 6 条断言（三店 en/th/zh、`/cash` 链接、`/ja/cash` 不得残留英文营业时间），现共 68 项；新增 `tests/money-changer-seo.test.ts` 14 条。
+
+**只写站内真实数据**：Ratchada 用 `locationPrecision='address'` 的街道地址 + 经纬度 13.77837/100.577055 + 每天 09:00-20:30；SuperRich Thailand 只有区域级记录 → **不输出 PostalAddress**，时间 Mo–Sa 09:00–16:30；Twelve Victory 坐标为空 → **不输出 geo**，时间 Mo–Fr 08:30–17:00 + Sa–Su 09:00–16:00。汇率/费率/联盟逻辑与数值一律未改。
+
+**其他兑换店模板（programmatic-seo）**：三页不是换变量模板——每页有手写导语与 2–3 条独有差异点（Ratchada 七天同时间 + 自有汇率页 + 门牌级地址；SuperRich 只到水门区域 + 周日休 + 分行由官网选；Twelve Victory 总部 + 周末时间不同 + 无坐标），对比表来自同一次采集的同日美元买入价；测试强制三页 answer/positioning 互不相同。
+
+**301 路线页决策（3 条仍在拿展现）**：`/en/routes/sukhumvit-money-exchange-guide` 33 展现/1 点击/位 8.27、`/th/routes/asok-money-exchange-guide` 20/0/10.7、`/en/routes/europe-to-thailand-money-exchange` 11/0/11.82 → **继续 301，不恢复成真页面**。理由：三条均已永久 301 到最相关目标（/th/cash、/en/cash?currency=EUR），信号未丢；恢复等于把 2026-10-07 已收敛的 23 条别名再拆出 3 条模板薄页（71 条 URL 的站点上薄页风险大于 64 次展现的收益），且要同时改 middleware、indexing-policy、sitemap 条数与 cluster 断言，还需首次允许泰语路线页进索引。复评阈值：单条路线 URL 28 天展现 >100、均位 ≤10 且查询集与 /cash 明显不同时再恢复，并按区域内容（分行/时间/地址）重写而非套模板。
+
+**多语言自检（DeepSeek 逐条）**：131 条待审字符串落 `evidence/2026-10-18/seo-r2/copy-under-review.json`。泰语 66 条 → 8 处修正（泰文散文里漏的拉丁区名换 ห้วยขวาง/ประตูน้ำ/พญาไท；泰语 FAQ 里直接拼英文 `Monday-Saturday 09:00-16:30` 改为 `จ.–ส. 09:00–16:30`；Twelve「三家之一」改为「两家之一」；周末问句语法）；7 语言 `/cash` 条 35 条 → 1 处（俄语 «замеченный курс» → «зафиксированный курс»）；复检 8 条泰语 → 再 2 处（泰语 FAQ 品牌名改 `รัชดาเอ๊กซเชนจ์ (Ratchada Exchange)`；周末问句补 `วัน` 与比较对象）；10 语言营业时间标签 21 条 → 全通过。全部修正在发布前进入 commit。
+
+**验证（实测）**：`tsc --noEmit` 0；`eslint app components lib tests scripts --max-warnings=0` 0；`vitest run` **45 文件 / 166 测试全过**（含新 14 条）；`npm run build` exit 0；本地 `next start:41718` + `seo:cluster` 通过；`schema-validation.json` **9 页（en/th/zh × 3 店）结构校验 0 错误**（营业时间与 `data/site.ts` 严格一致、FAQ ≥6 且问题文字在页面上可见、canonical 自指、en/th/zh/x-default、无 noindex）；外部 `validator.schema.org` 连续 4 次 **HTTP 429 限流**，如实记为未取得（未声称通过）。`validator.schema.org` 也确认 `schema.org/CurrencyExchangeService` **不存在（404）**，故用合法的 `LocalBusiness + FinancialService`。截图 43 张（10 语言 × 3 页 + en 第四页 + en/th/zh 手机 390×844 各 2 页）。
+
+**发布**：基线镜像 `v0.1.3-20261018-seo-ai-citation`（digest 60bcfa24…）→ 新镜像 **`exchangethb:v0.1.4-20261018-seo-r2`（digest ee44f09f…）**，在 2panel-happy 以 v0.1.3 为基座 `--network none` 覆盖 app/lib/components 重建并 `docker save/load` 回 1.83；新增 `/opt/exchangethb/compose.seo-r2-20261018.yml` 接在既有链后（web + web_canary，worker 不变 v0.1.0）。先 canary（11:21:38 healthy，经 ssh 隧道跑 `seo:cluster` 通过）再 web（11:22:37 healthy）。**回退镜像已钉住**：`exchangethb:rollback-before-seo-r2-20261018` = 60bcfa24…，回退命令写进 SUMMARY（未执行回滚，不声称恢复时长）。
+
+**公网回读（11:23–11:35）**：三店 × en/th/zh 九页 200，标题与描述已是品牌开头（含 `รัชดาเอ๊กซเชนจ์`），4 个 JSON-LD 块，canonical 自指，hreflang en/th/zh/x-default；`/en/money-changers/ratchada` 实际输出 PostalAddress + GeoCoordinates + Mo-Su 09:00-20:30，SuperRich 无 address、Twelve 无 geo（与数据一致）；10 个语言 `/cash` 200 且门店条用本地化星期（ja 月〜土、ru Пн–Сб、fr lun.–sam.、de Mo–Sa、id Sen–Sab、vi T2–T7、th จ.–ส.、zh 周一至周六），`/ja/cash` 已无英文营业时间残留；`/sitemap.xml` 仍 **71** 条、`/llms.txt` 200（5501 字节）；生产 `seo:cluster` **68 项全过**。
+
+**GSC（实测口径，勿升级）**：对 3 店 × en/th/zh + `/en|th|zh/cash` 共 8 个 URL 点「请求编入索引」，**全部未被接受**——GSC 先返回「糟糕！出了点问题 — 提交您的索引编制请求时出现了问题」，随后明确返回配额弹窗「超出了配额 … 今天已经超出了每日配额。请明天再尝试提交此网址」（与 SEO-1 卡 10:5x 同一类限制，非站点故障）。复查收录状态：**/en、/zh 的 Ratchada 页与 /en、/zh cash 已收录；/th Ratchada、/en SuperRich、/en Twelve Victory、/th/cash 未收录**。未收录的泰语页检查面板还显示「上次抓取 2026-08-26 / 抓取成功 / 允许编入索引=是 / **未检测到引荐来源网页**」——它此前只靠 sitemap 被发现，本轮新增的 `/th/cash` 门店入口第一次给了它来自已收录页的内链。sitemap 里门店页 `lastmod` 已变为 2026-10-18T04:18:16Z，Google 有新的修改信号；配额恢复后优先补这 4 条未收录 URL。截图 8 张存 `evidence/2026-10-18/seo-r2/gsc/`，状态明细见 `gsc-requests.json`。
+
+**状态**：已发布并公网回读通过；registry `production_release` 已 patch（before 57f4ee54… → after 2aeb443a…）。复盘时间点 2026-11-01：对比 `/en/.../ratchada` CTR（基线 0.12%）、`/th/.../ratchada` 首次展现（基线 0）、泰语品牌词点击（基线 0）。

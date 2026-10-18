@@ -1,0 +1,62 @@
+{
+ "owner": "exchangethb/seo-r2-20261018",
+ "file": "registry.json",
+ "expected_sha256": "57f4ee541512126f48d9dbfb4c58962c61f1284cf32550bcdadc8f2322c8f0fa",
+ "changes": [
+  {
+   "path": [
+    "site_operations",
+    "websites",
+    "exchangethb.com",
+    "website_operations",
+    "production_release"
+   ],
+   "value": {
+    "date": "2026-10-18",
+    "image": "sha256:ee44f09f29495b701a24eea3e222ed61f49a165949654603d42d77eec185e334",
+    "compose": "/opt/exchangethb/compose.seo-r2-20261018.yml",
+    "web_instances": "web and web_canary healthy on the new image (canary 11:21:38 +07, web 11:22:37 +07), exact image verified",
+    "worker_changed": false,
+    "database_changed": false,
+    "validation": "2026-10-18 11:23-11:35 public readback: en/th/zh x 3 money changer profiles 200 with brand-first meta, 4 JSON-LD blocks (Organization/BreadcrumbList/FAQPage/LocalBusiness+FinancialService), self canonical, en/th/zh/x-default hreflang; 10 cash pages 200 with localized profile strip; sitemap 71; llms.txt 200; seo:cluster 68 checks passed on canary and prod; schema structural 0 errors on 9 pages (external validator 429 rate-limited)",
+    "cmp_runtime": "__tcfapi undefined after20s; official test parameters used; no popup verified; Google publication propagation up to1hour",
+    "ga_runtime": "GA4 not loaded under existing declined choice",
+    "checked_at": "2026-10-18T11:35:00+07:00",
+    "evidence_ref": "/Volumes/M2USB/dev/exchangethb/evidence/2026-10-18/seo-r2/SUMMARY.json",
+    "rollback_compose": "/opt/exchangethb/compose.rollback-seo-20261018.yml",
+    "removed_public_sources": [
+     "sia",
+     "vasu"
+    ],
+    "active_public_sources": [
+     "superrich-thailand",
+     "ratchada",
+     "twelve-victory"
+    ],
+    "worker_image": "sha256:45ea920c4f3f89fa9bfbcf8d402dc102b957ed3d05684a600df31c927f97b1f6",
+    "worker_rollback_compose": "/opt/exchangethb/compose.company-background-20261003.yml",
+    "worker_status": "existing exited/unhealthy; unchanged",
+    "fee_correction_evidence_ref": "/Volumes/M2USB/dev/exchangethb/artifacts/btc-fee-override-buy-production-20261002.json",
+    "canary_candidate": {
+     "image": "sha256:ee44f09f29495b701a24eea3e222ed61f49a165949654603d42d77eec185e334",
+     "status": "validated and promoted",
+     "checked_at": "2026-10-18T11:21:00+07:00"
+    },
+    "image_tag": "exchangethb:v0.1.4-20261018-seo-r2",
+    "compose_chain": [
+     "/opt/exchangethb/docker-compose.yml",
+     "/opt/exchangethb/compose.release-20261007b.yml",
+     "/opt/exchangethb/compose.drive-r2-20261016.yml",
+     "/opt/exchangethb/compose.seo-20261018.yml",
+     "/opt/exchangethb/compose.seo-r2-20261018.yml"
+    ],
+    "rollback_image": "sha256:60bcfa243f864d5df2638e68454d90f660e4e5cf43e570a5f8b7d479a7da4464",
+    "rollback_tag": "exchangethb:rollback-before-seo-r2-20261018",
+    "git_branch": "seo/ratchada-ctr-20261018",
+    "git_commit": "cd31073",
+    "stale_note": "compose.rollback-rental-20261016.yml references pruned image rollback-before-rental-20261016; do not use",
+    "changes_summary": "SEO-4: money changer profile pages (Ratchada / SuperRich Thailand / Twelve Victory) rebuilt answer-first with brand-first titles in en/th/zh, localized hours, 7-entry FAQ, LocalBusiness+FinancialService JSON-LD; /cash links to the three profiles in 10 locales; route 301 policy unchanged; no rates/affiliate/Cloudflare/DNS change"
+   }
+  }
+ ]
+}

@@ -1,0 +1,408 @@
+{
+ "card": "SEO-4 — exchangethb.com Ratchada page CTR + professional SEO round 2",
+ "date": "2026-10-18",
+ "timezone": "Asia/Bangkok",
+ "executor": "dsh session (deepseek-flash), Ego Profile 16",
+ "prerequisite": "SEO-1 release card 3816d481 (done, verified by fujane 10:5x); this card did not touch the shared dirty workspace",
+ "baseline_source": {
+  "gsc_export": "evidence/2026-10-18/seo/GSC.csv + gsc-raw/ (28 days, 2026-09-18..2026-10-15, downloaded 2026-10-18 09:17)",
+  "property": "sc-domain:exchangethb.com",
+  "note": "Reused the SEO-1 export; no new GSC export was pulled, so the before/after split is 09-18..10-15 (before) vs anything after the 11:22 release (after).",
+  "site_totals": {
+   "clicks": 7,
+   "impressions": 1848,
+   "ctr_percent": 0.38,
+   "avg_position": 9.1
+  },
+  "page_baseline": [
+   {
+    "page": "/en/money-changers/ratchada",
+    "clicks": 2,
+    "impressions": 1613,
+    "ctr_percent": 0.12,
+    "position": 7.2
+   },
+   {
+    "page": "/zh/money-changers/ratchada",
+    "clicks": 1,
+    "impressions": 45,
+    "ctr_percent": 2.22,
+    "position": 6.58
+   },
+   {
+    "page": "/th/money-changers/ratchada",
+    "clicks": 0,
+    "impressions": 0,
+    "note": "not present in the 28-day table"
+   }
+  ],
+  "query_baseline": [
+   {
+    "query": "ratchada exchange",
+    "impressions": 1293,
+    "ctr_percent": 0.15,
+    "position": 7.23
+   },
+   {
+    "query": "รัชดาเอกเช้น",
+    "impressions": 97,
+    "ctr_percent": 0.0,
+    "position": 9.03
+   },
+   {
+    "query": "รัชดา exchange",
+    "impressions": 33,
+    "ctr_percent": 0.0,
+    "position": 6.76
+   },
+   {
+    "query": "rachada exchange",
+    "impressions": 15,
+    "ctr_percent": 0.0,
+    "position": 5.53
+   },
+   {
+    "query": "exchange ratchada",
+    "impressions": 12,
+    "ctr_percent": 0.0,
+    "position": 7.33
+   },
+   {
+    "query": "ratchada exchange rate",
+    "impressions": 9,
+    "ctr_percent": 0.0,
+    "position": 5.22
+   },
+   {
+    "query": "ratchada exchange huai khwang bangkok",
+    "impressions": 3,
+    "ctr_percent": 0.0,
+    "position": 6.0
+   }
+  ]
+ },
+ "diagnosis": {
+  "primary": "Top-10 ranking with a 0.12% CTR is a snippet problem, not a ranking problem (seo-audit: position 1-5 with weak CTR => title/description only).",
+  "secondary": [
+   "The Thai page answered Thai queries with an English-Latin title and a one-line provider blurb as its description, so the Thai brand query รัชดาเอกเช้น got zero clicks at position 9.",
+   "The page led with a template headline and had no answer-first opening, no original per-provider content, 2 FAQ entries and no LocalBusiness/FinancialService markup.",
+   "The three money changer profiles were reachable only from the noindex hub, the four route guides and the sitemap; /cash (the site's second-largest indexed page) had no link to them."
+  ]
+ },
+ "changes": {
+  "files": [
+   {
+    "path": "lib/money-changer-seo.ts",
+    "change": "new: provider facts derived from data/site.ts (hours parser, address precision, geo), 3-locale meta/answer/FAQ copy, LocalBusiness+FinancialService JSON-LD builder, 10-locale hours formatter"
+   },
+   {
+    "path": "app/[locale]/money-changers/[slug]/page.tsx",
+    "change": "rewritten: answer-first lead, today's observed rate block, localized hours/area, three-changer comparison (table >=sm, cards on mobile), 7-entry FAQ, FAQPage + BreadcrumbList + exchange JSON-LD, brand-first metadata"
+   },
+   {
+    "path": "components/cash-featured-changers.tsx",
+    "change": "new: link strip on /cash to the three profiles (10 locales, localised hours/status, direct /en link for locales that would otherwise 307)"
+   },
+   {
+    "path": "lib/cash-featured-changers.ts",
+    "change": "new: 10-locale labels for the /cash strip"
+   },
+   {
+    "path": "app/[locale]/cash/page.tsx",
+    "change": "renders the strip between the picker and the guide"
+   },
+   {
+    "path": "app/globals.css",
+    "change": ".seo-changers* styles matching the existing light .seo-* block"
+   },
+   {
+    "path": "scripts/check-seo-cluster.mjs",
+    "change": "assertions for the 3 profiles in en/th/zh, the /cash strip, and the localized (not raw English) hours line on /ja/cash; 68 checks"
+   },
+   {
+    "path": "tests/money-changer-seo.test.ts",
+    "change": "new: 14 tests (hours parser vs data/site, brand-first meta, 40-60 word lead, unique per-provider copy, FAQ parity, JSON-LD address/geo/hours rules)"
+   }
+  ],
+  "not_touched": [
+   "rates / fees / affiliate logic and values",
+   "Cloudflare (no setting changed)",
+   "DNS",
+   "GA4/AdSense/GSC property configuration",
+   "database",
+   "paid services",
+   "middleware redirect policy",
+   "sitemap count (71)"
+  ],
+  "before_after_meta": {
+   "en:ratchada": {
+    "before_title": "Ratchada Exchange Rate, Hours & Map | Huai Khwang",
+    "before_description": "Check Ratchada Exchange observed rates, estimated THB, opening status, Bangkok location, map, and official verification link.",
+    "after_title": "Ratchada Exchange รัชดาเอ๊กซเชนจ์: rate today, 09:00–20:30",
+    "after_description": "Ratchada Exchange (รัชดาเอ๊กซเชนจ์), Huai Khwang: open daily 09:00–20:30 at 78/13 Prachatbamphen Rd. Today’s observed rate, map and official site."
+   },
+   "th:ratchada": {
+    "before_title": "Ratchada Exchange เรท เวลาเปิด และแผนที่",
+    "before_description": "ผู้ให้บริการรายเดี่ยวที่เผยแพร่หน้าเรทและข้อมูลติดต่อเองบนเว็บไซต์ทางการ",
+    "after_title": "รัชดาเอ๊กซเชนจ์ (Ratchada Exchange) เรทวันนี้ เปิด 09:00–20:30",
+    "after_description": "รัชดาเอ๊กซเชนจ์ (Ratchada Exchange) ย่านห้วยขวาง เปิดทุกวัน 09:00–20:30 ที่ 78/13 Prachatbamphen Rd. ดูเรทที่สังเกตล่าสุด แผนที่ และเว็บทางการ"
+   },
+   "zh:ratchada": {
+    "before_title": "Ratchada Exchange 曼谷｜汇率、营业时间与地图",
+    "before_description": "官网自行公开汇率页和联系方式的单店型换汇商。",
+    "after_title": "Ratchada Exchange（รัชดาเอ๊กซเชนจ์）今日汇率、营业时间 09:00–20:30",
+    "after_description": "Ratchada Exchange（รัชดาเอ๊กซเชนจ์）位于曼谷辉煌区，每天 09:00–20:30 营业，地址 78/13 Prachatbamphen Rd.。查看今日观测汇率、地图与官网入口。"
+   },
+   "en:superrich-thailand": {
+    "before_title": "SuperRich Thailand Bangkok | Rates, Hours & Map",
+    "before_description": "Check SuperRich Thailand observed rates, estimated THB, opening status, Bangkok location, map, and official verification link.",
+    "after_title": "SuperRich Thailand: Pratunam rates, Mon–Sat 09:00–16:30",
+    "after_description": "SuperRich Thailand in Pratunam, Bangkok: branches open Monday to Saturday 09:00–16:30, closed Sunday. Today’s observed rate, map and official branch list."
+   },
+   "th:superrich-thailand": {
+    "before_title": "SuperRich Thailand เรท เวลาเปิด และแผนที่",
+    "before_description": "ผู้ให้บริการแลกเงินที่เผยแพร่ตารางอัตราแลกเปลี่ยนบนเว็บไซต์ทางการ",
+    "after_title": "SuperRich Thailand เรทวันนี้ จันทร์–เสาร์ 09:00–16:30",
+    "after_description": "SuperRich Thailand ย่านประตูน้ำ กรุงเทพฯ เปิดจันทร์–เสาร์ 09:00–16:30 ปิดวันอาทิตย์ ดูเรทที่สังเกตล่าสุด แผนที่ และรายชื่อสาขาทางการ"
+   },
+   "zh:superrich-thailand": {
+    "before_title": "SuperRich Thailand 曼谷｜汇率、营业时间与地图",
+    "before_description": "官网公布汇率表的换汇品牌。",
+    "after_title": "SuperRich Thailand 今日汇率、营业时间 周一至周六 09:00–16:30",
+    "after_description": "SuperRich Thailand 位于曼谷水门（Pratunam）一带，周一至周六 09:00–16:30 营业，周日休息。查看今日观测汇率、地图与官网分行列表。"
+   },
+   "en:twelve-victory": {
+    "before_title": "Twelve Victory Exchange Bangkok | Rates, Hours & Map",
+    "before_description": "Check Twelve Victory Exchange observed rates, estimated THB, opening status, Bangkok location, map, and official verification link.",
+    "after_title": "Twelve Victory Exchange: Pradipat rates, open 7 days",
+    "after_description": "Twelve Victory Exchange head office, 231 Pradipat Rd, Bangkok: weekdays 08:30–17:00, weekends 09:00–16:00. Today’s observed rate, map and official site."
+   },
+   "th:twelve-victory": {
+    "before_title": "Twelve Victory Exchange เรท เวลาเปิด และแผนที่",
+    "before_description": "เรทจากสำนักงานใหญ่ โปรดยืนยันชนิดธนบัตรและสาขาก่อนเดินทาง",
+    "after_title": "Twelve Victory Exchange เรทวันนี้ เปิดครบเจ็ดวัน",
+    "after_description": "Twelve Victory Exchange สำนักงานใหญ่ 231 Pradipat Rd. กรุงเทพฯ จันทร์–ศุกร์ 08:30–17:00 เสาร์–อาทิตย์ 09:00–16:00 ดูเรทที่สังเกตล่าสุดและแผนที่"
+   },
+   "zh:twelve-victory": {
+    "before_title": "Twelve Victory Exchange 曼谷｜汇率、营业时间与地图",
+    "before_description": "官方总店报价，请确认纸币面额及具体分店后前往。",
+    "after_title": "Twelve Victory Exchange 今日汇率、营业时间 全周营业",
+    "after_description": "Twelve Victory Exchange 总部位于曼谷 231 Pradipat Rd.，周一至周五 08:30–17:00、周末 09:00–16:00。查看今日观测汇率与地图。"
+   }
+  },
+  "before_after_structure": {
+   "before": "eyebrow + H1 + one-sentence summary + open status + map/official/compare buttons + a rate card + location card + 2 FAQ entries + BreadcrumbList + FAQPage + FinancialService (no address/geo/hours spec)",
+   "after": "eyebrow + H1 (+Thai brand line) + 40-60 word answer + status pills + CTAs + today's observed rate with observation time + location card (area/address/hours/Sunday) + 5 currency rows + three-changer comparison + per-provider differentiators + 7 visible FAQ entries + BreadcrumbList + FAQPage + LocalBusiness+FinancialService with PostalAddress/GeoCoordinates/openingHoursSpecification"
+  }
+ },
+ "programmatic_template": {
+  "playbook": "programmatic-seo — Profiles playbook, 3 pages, facts generated from data/site.ts, copy hand-written per provider",
+  "anti_thin_rules_applied": [
+   "every page has a hand-written lead paragraph and 2-3 provider-specific differentiators, so the three pages are not swapped variables",
+   "the comparison table carries same-collection observed rates, so each page shows a different highlighted row",
+   "unique facts per page: Ratchada = 7 days + verified street address + own rate page; SuperRich Thailand = Pratunam area only + closed Sunday + branch chosen on official site; Twelve Victory = head office + different weekday/weekend hours + no coordinates in our records",
+   "JSON-LD only emits what data/site.ts holds: no postal address for SuperRich Thailand (area-level note) and no geo for Twelve Victory (null coordinates)",
+   "tests enforce unique answers/positioning and fact parity (tests/money-changer-seo.test.ts)"
+  ]
+ },
+ "route_301_decision": {
+  "urls_in_question": [
+   {
+    "url": "/en/routes/sukhumvit-money-exchange-guide",
+    "impressions": 33,
+    "clicks": 1,
+    "ctr_percent": 3.03,
+    "position": 8.27,
+    "current_target": "/en/cash"
+   },
+   {
+    "url": "/th/routes/asok-money-exchange-guide",
+    "impressions": 20,
+    "clicks": 0,
+    "ctr_percent": 0.0,
+    "position": 10.7,
+    "current_target": "/th/cash"
+   },
+   {
+    "url": "/en/routes/europe-to-thailand-money-exchange",
+    "impressions": 11,
+    "clicks": 0,
+    "ctr_percent": 0.0,
+    "position": 11.82,
+    "current_target": "/en/cash?currency=EUR"
+   }
+  ],
+  "decision": "keep the 301 redirects; do not re-enable the pages",
+  "reasoning": [
+   "seo-audit says pick one owning page per query cluster and check cannibalization first. /cash is already the owner of the cash-comparison cluster and receives these three URLs' signals; restoring 3 of the 23 retired aliases re-splits the cluster that the 2026-10-07 consolidation deliberately joined.",
+   "The restored pages would be template route guides (title/intro/audience/checks from lib/route-guides.ts) — the same thin shape that made the other 20 aliases redirect. seo-audit warns that thin locale/template pages drag site-wide quality; on a 71-URL site that is a real risk for a 64-impression gain.",
+   "Re-enabling needs four coordinated policy changes (middleware, lib/indexing-policy.ts, app/sitemap.ts 71 -> 74+, scripts/check-seo-cluster.mjs) and would also require Thai route indexing, which the policy has never allowed. That is a bigger change than this card's evidence supports.",
+   "/th/routes/asok... earns 20 impressions with 0 clicks at position 10.7; the Thai traffic this card can win is the brand query รัชดาเอกเช้น (97 impressions), which the new Thai title/description now targets directly.",
+   "The redirects are 301 (permanent) and their targets are already the most relevant pages (/th/cash for Thai, /en/cash?currency=EUR for the Europe intent), so no signal is being lost."
+  ],
+  "revisit_rule": "Reconsider only if a single route URL exceeds ~100 impressions / 28 days at position <=10 with a query set distinct from /cash, and then restore it as a real guide with area-specific content (branches, hours, addresses) rather than template prose."
+ },
+ "copy_review": {
+  "method": "DeepSeek subagents (fresh context, same model family as this session) reviewed the strings line by line; every new non-English string was covered",
+  "file": "evidence/2026-10-18/seo-r2/copy-under-review.json",
+  "rounds": [
+   {
+    "scope": "th profile copy (66 keys: meta, answer, positioning, practical, FAQ)",
+    "result": "8 fixes",
+    "fixes": [
+     "Latin district names inside Thai prose -> ห้วยขวาง / ประตูน้ำ / พญาไท",
+     "raw English schedule spliced into Thai FAQ -> จ.–ส. 09:00–16:30 etc.",
+     "Twelve Victory 'one of three' -> 'one of two' (Ratchada is open the same hours every day)",
+     "Thai question grammar in the weekend FAQ"
+    ]
+   },
+   {
+    "scope": "7-locale /cash strip (35 keys: ja ko ru fr de id vi)",
+    "result": "1 fix",
+    "fixes": [
+     "ru «замеченный курс» -> «зафиксированный курс» (observed-rate calque)"
+    ]
+   },
+   {
+    "scope": "re-check of the 8 rewritten Thai strings",
+    "result": "2 more fixes",
+    "fixes": [
+     "Thai FAQ now names the shop รัชดาเอ๊กซเชนจ์ (Ratchada Exchange)",
+     "Thai weekend question needs วัน + an explicit comparison target"
+    ]
+   },
+   {
+    "scope": "10-locale opening-hours labels (21 keys for ja ko ru fr de id vi)",
+    "result": "0 fixes (21/21 ok)"
+   }
+  ],
+  "applied_in_commit": "cd31073 (all fixes applied before the release build)"
+ },
+ "validation": {
+  "typecheck": "npx tsc --noEmit -> exit 0",
+  "lint": "npx eslint app components lib tests scripts --max-warnings=0 -> exit 0",
+  "tests_new_file": "tests/money-changer-seo.test.ts — 14/14 pass",
+  "tests_full": "npx vitest run — 45 files / 166 tests pass (single serial run)",
+  "build_local": "npm run build -> compiled successfully, money changer detail route renders on demand, 360 static pages",
+  "seo_cluster": {
+   "command": "BASE_URL=<target> NEXT_PUBLIC_SITE_URL=https://www.exchangethb.com npm run seo:cluster",
+   "local": "passed",
+   "canary": "passed (log: seo-cluster-canary.log)",
+   "production": "68 checks OK, 'SEO cluster check passed.' (log: seo-cluster-prod.log)"
+  },
+  "schema_structural": {
+   "file": "evidence/2026-10-18/seo-r2/schema-validation.json",
+   "result": "9 pages (en/th/zh x 3 providers): 0 errors — business block present with verified facts, address only where data says 'address' precision, geo only where coordinates exist, opening hours equal to data/site, FAQ >= 6 with every question visible on the page, breadcrumb 3 items, self canonical, en/th/zh/x-default hreflang, no noindex"
+  },
+  "schema_external": {
+   "endpoint": "https://validator.schema.org/validate",
+   "result": "NOT OBTAINED — HTTP 429 (rate limited) on 4 attempts from this host at 11:1x; recorded as unavailable rather than claiming a pass",
+   "mitigation": "structural checks above + schema.org type check (schema.org/CurrencyExchangeService returns 404, so the valid pair LocalBusiness + FinancialService is used instead of inventing a type)"
+  },
+  "screenshots": {
+   "dir": "evidence/2026-10-18/seo-r2/screens",
+   "count": 43,
+   "pattern": "en/th/zh x (cash, ratchada, superrich) + en twelve-victory + ja/ko/ru/fr/de/id/vi x (cash, home, crypto) at 1280x900 full page, plus 6 mobile 390x844 captures of the Ratchada/cash pages in en/th/zh"
+  }
+ },
+ "release": {
+  "authorization": "card tag 老板授权投产 (boss 2026-10-18 'SEO做好就上线'); SEO-1 release card 3816d481 confirmed done before starting",
+  "git": {
+   "branch": "seo/ratchada-ctr-20261018",
+   "worktree": "/Volumes/M2USB/_scratch/exchangethb/20261018/r2-wt (isolated; the shared codex/mobile-simplification workspace was not touched)",
+   "commit": "cd31073",
+   "base": "0ce0ef1 (SEO-1 branch head)",
+   "pushed": false
+  },
+  "images": {
+   "previous_production": {
+    "tag": "exchangethb:v0.1.3-20261018-seo-ai-citation",
+    "digest": "sha256:60bcfa243f864d5df2638e68454d90f660e4e5cf43e570a5f8b7d479a7da4464"
+   },
+   "new_production": {
+    "tag": "exchangethb:v0.1.4-20261018-seo-r2",
+    "digest": "sha256:ee44f09f29495b701a24eea3e222ed61f49a165949654603d42d77eec185e334"
+   },
+   "pinned_rollback_tag": {
+    "tag": "exchangethb:rollback-before-seo-r2-20261018",
+    "digest": "sha256:60bcfa243f864d5df2638e68454d90f660e4e5cf43e570a5f8b7d479a7da4464"
+   },
+   "worker": "unchanged exchangethb:v0.1.0-20261007-market-retry (healthy)",
+   "build": "docker build on 2panel-happy (S5090) from base v0.1.3 with candidate app/lib/components, --network none, exit 0; image moved 2panel-happy -> 1.83 via docker save/load"
+  },
+  "compose_chain": [
+   "/opt/exchangethb/docker-compose.yml",
+   "/opt/exchangethb/compose.release-20261007b.yml",
+   "/opt/exchangethb/compose.drive-r2-20261016.yml",
+   "/opt/exchangethb/compose.seo-20261018.yml",
+   "/opt/exchangethb/compose.seo-r2-20261018.yml (new)"
+  ],
+  "deploy_order": "web_canary first (healthy 11:21:38 +07, seo:cluster through an ssh tunnel passed), then web (healthy 11:22:37 +07)",
+  "public_readback": {
+   "file": "evidence/2026-10-18/seo-r2/public-readback.txt",
+   "checked_at": "2026-10-18T11:23-11:35+07",
+   "host": "https://www.exchangethb.com (apex 301 -> www)",
+   "profile_pages": "en/th/zh x ratchada/superrich-thailand/twelve-victory all 200 with the new brand-first title/description, 4 JSON-LD blocks (Organization + BreadcrumbList + FAQPage + LocalBusiness/FinancialService), self canonical, hreflang en/th/zh/x-default, no noindex",
+   "jsonld_fact_check": "Ratchada: PostalAddress 78/13 Prachatbamphen Rd. + GeoCoordinates 13.77837/100.577055 + Mo-Su 09:00-20:30. SuperRich Thailand: no address (area record), Mo-Sa 09:00-16:30. Twelve Victory: no geo (null in data), Mo-Fr 08:30-17:00 + Sa-Su 09:00-16:00.",
+   "cash_pages": "10 locales 200; the strip renders localized hours (ja 月〜土, ru Пн–Сб, fr lun.–sam., de Mo–Sa, id Sen–Sab, vi T2–T7, th จ.–ส., zh 周一至周六) and no raw English hours remain on /ja/cash",
+   "unchanged": "sitemap 71 URLs, llms.txt 200 (5501 bytes), rates/affiliate untouched, no DNS/Cloudflare change"
+  },
+  "rollback": {
+   "trigger": "any regression in the profile pages, the /cash strip, or the cluster gate -> roll back immediately",
+   "prepared": "/opt/exchangethb/compose.seo-r2-20261018.yml pins web + web_canary to v0.1.4; rollback = add a compose overlay pinning exchangethb:rollback-before-seo-r2-20261018 and run `docker compose ... up -d --no-build --no-deps web_canary` then `web` (same canary-first order)",
+   "exact_command": "ssh 1panel-happy 'cd /opt/exchangethb && sed \"s/v0.1.4-20261018-seo-r2/rollback-before-seo-r2-20261018/\" compose.seo-r2-20261018.yml > compose.rollback-seo-r2-20261018.yml && CHAIN=\"-f docker-compose.yml -f compose.release-20261007b.yml -f compose.drive-r2-20261016.yml -f compose.seo-20261018.yml -f compose.rollback-seo-r2-20261018.yml\" && docker compose $CHAIN up -d --no-build --no-deps web_canary && docker compose $CHAIN up -d --no-build --no-deps web'",
+   "verified_pinned": "docker images shows rollback-before-seo-r2-20261018 = 60bcfa243f86 (the exact image production ran before 11:22)",
+   "not_executed": "rollback was prepared but not needed; no recovery time is claimed"
+  }
+ },
+ "gsc": {
+  "property": "sc-domain:exchangethb.com",
+  "account": "Ego Profile 16 / fujane110@gmail.com",
+  "file": "evidence/2026-10-18/seo-r2/gsc-requests.json",
+  "attempted": 8,
+  "accepted": 0,
+  "index_status_checked": {
+   "already_indexed": [
+    "/en/money-changers/ratchada",
+    "/zh/money-changers/ratchada",
+    "/en/cash",
+    "/zh/cash"
+   ],
+   "not_indexed": [
+    "/th/money-changers/ratchada",
+    "/en/money-changers/superrich-thailand",
+    "/en/money-changers/twelve-victory",
+    "/th/cash"
+   ]
+  },
+  "blocker": "Google returned the URL-inspection daily quota dialog (超出了配额 … 请明天再尝试) and, on earlier attempts, its generic 糟糕！出了点问题 error. Nothing was accepted; no request is claimed.",
+  "useful_side_finding": "The not-indexed Thai page inspection showed 上次抓取 2026-08-26, 抓取成功, 允许编入索引=是 and 未检测到引荐来源网页 — it was only known from the sitemap. The new /cash strip now gives it an internal link from an indexed page.",
+  "recrawl_signal": "sitemap lastmod for the money changer URLs moved to 2026-10-18T04:18:16Z, so Google has a fresh modification signal without a manual request",
+  "retry": "after the daily quota reset, request the 4 not-indexed URLs first; the 4 indexed ones only need recrawl",
+  "screenshots": "evidence/2026-10-18/seo-r2/gsc/ (8 files)"
+ },
+ "delivery": {
+  "evidence_dir": "evidence/2026-10-18/seo-r2",
+  "files": [
+   "SUMMARY.json",
+   "before-after-meta.json",
+   "copy-under-review.json",
+   "schema-validation.json",
+   "seo-cluster-canary.log",
+   "seo-cluster-prod.log",
+   "public-readback.txt",
+   "gsc-requests.json",
+   "screens/ (43)",
+   "gsc/ (8+ screenshots)"
+  ],
+  "measurement_plan": "Judge the change at 2026-11-01 (>= 3-4 weeks, per seo-audit) against this baseline: /en/money-changers/ratchada CTR vs 0.12%, /th/money-changers/ratchada first impressions vs 0, and the Thai brand queries รัชดาเอกเช้น / รัชดา exchange vs 0 clicks. One change was made at a time (snippet + content on the same pages), so a CTR move is attributable to this card."
+ },
+ "followups": [
+  "GSC daily submission quota is exhausted: after the reset, request the 4 not-indexed URLs first (/th/money-changers/ratchada, /en/money-changers/superrich-thailand, /en/money-changers/twelve-victory, /th/cash). /en and /zh Ratchada plus /en and /zh cash are already indexed and only need the recrawl signalled by sitemap lastmod 2026-10-18.",
+  "Watch whether the new /th/cash -> /th/money-changers/ratchada internal link gets the Thai page crawled and indexed (its inspection showed no referring pages before this release).",
+  "Run the external schema.org validator when its 429 rate limit clears (structural checks are already 0-error on 9 pages).",
+  "Ask a native Thai speaker to read the two new Thai FAQ templates after 2 weeks of Thai impressions — the review here was a same-model-family proofread, not a native speaker.",
+  "If Thai brand clicks stay at 0 after 4 weeks, test a Thai title variant that leads with the GSC query spelling รัชดาเอกเช้น instead of the brand spelling รัชดาเอ๊กซเชนจ์.",
+  "SEO-1 followups still open: ru/id home indexing requests, native spot check of the 8 non-core locales."
+ ]
+}
