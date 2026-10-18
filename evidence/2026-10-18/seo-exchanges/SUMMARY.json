@@ -1,0 +1,45 @@
+{
+  "card": "SEO-7 exchange profile pages (Binance TH / Bitkub / Upbit Thailand / Orbix) answer fee / THB withdrawal / deposit queries; add th",
+  "verdict": "PASS (hard acceptance 1-4 met; GSC request-indexing blocked by quota, sitemap resubmitted)",
+  "completed_at": "2026-10-18T21:2x+07",
+  "git": {"branch": "seo/exchange-profiles-20261018", "base": "seo/brand-entity-20261018@933e852", "worktree": "/Volumes/M2USB/_scratch/exchangethb/20261018/r4-wt", "code_commit": "631d16a", "shared_workspace_untouched_for_code": true, "pushed": "see steps.md / git log"},
+  "images": {
+    "previous_production": {"tag": "exchangethb:v0.1.5-20261018-seo-brand", "digest": "sha256:aa2c1ba94fc543d61ee7cf983efbc0ad0a62d00fa13d04efa7a0e0e9dea549c9"},
+    "pinned_rollback_tag": {"tag": "exchangethb:rollback-before-seo-r4-20261018", "digest": "sha256:aa2c1ba94fc543d61ee7cf983efbc0ad0a62d00fa13d04efa7a0e0e9dea549c9"},
+    "new_production": {"tag": "exchangethb:v0.1.6-20261018-seo-exchanges", "digest": "sha256:f79ec3b8625f3d44dd35cc1cbe8b1e1cee78810d399b5ef6462ff877339ed14d"},
+    "worker": "unchanged v0.1.0-20261007-market-retry",
+    "build": "2panel-happy: base v0.1.5 loaded from 1.83, overlay app/lib/components/middleware.ts (r3-ctx overlay verified identical to r3-wt first), --network none, docker save|load to 1.83"
+  },
+  "compose_chain": "base, release-20261007b, drive-r2-20261016, seo-20261018, seo-r4-20261018 (new, replaces seo-r3 in the chain; pins web + web_canary)",
+  "deploy_order": "web_canary healthy 21:11 (seo:cluster + 12-page schema check via ssh tunnel: 0 errors) then web healthy 21:12",
+  "rollback": "ssh 1panel-happy 'cd /opt/exchangethb && sed s/v0.1.6-20261018-seo-exchanges/rollback-before-seo-r4-20261018/ compose.seo-r4-20261018.yml > compose.rollback-seo-r4-20261018.yml && CHAIN=\"-f docker-compose.yml -f compose.release-20261007b.yml -f compose.drive-r2-20261016.yml -f compose.seo-20261018.yml -f compose.rollback-seo-r4-20261018.yml\" && docker compose $CHAIN up -d --no-build --no-deps web_canary && docker compose $CHAIN up -d --no-build --no-deps web' (prepared, not executed, not needed)",
+  "tests": {"tsc": "clean", "eslint": "0 problems", "vitest": "47 files / 185 tests passed (11 new in tests/exchange-seo.test.ts, indexing-policy updated)", "build": "npm run build ok", "seo_cluster_local": "passed", "seo_cluster_canary": "passed", "seo_cluster_prod": "passed (sitemap loc count 78)"},
+  "acceptance": {
+    "1_public_12_pages": "PASS - public-readback-titles.txt: 12 x 200, new title, self canonical, hreflang en/th/zh/x-default, no noindex; GPTBot and Googlebot UA 200 on all 12 (public-readback-bots.txt)",
+    "2_structure": "PASS - schema-validation-prod.json error_count 0 (Organization + BreadcrumbList + FinancialService + FAQPage per page, 7 FAQ each, every FAQ question AND answer found in visible page text); unit test proves every number comes from data/site.ts",
+    "3_gates": "PASS - tests/build/seo:cluster local+canary+prod; rollback tag and digests above",
+    "4_screenshots": "PASS - 3 x 390px bitkub (screens/m390-{en,th,zh}-bitkub.png), viewed, no layout breakage"
+  },
+  "gsc": {
+    "sitemap": "resubmitted, 'successfully submitted'; Google still lists 74 discovered (reads the old file, refreshes later)",
+    "request_indexing": "NOT accepted - first request (/th/money-changers/ratchada) returned 'something went wrong, retry later' (the quota-exhausted signature seen on SEO-4/6); the remaining 11 URLs were not attempted to avoid hammering. Retry after the next daily reset. Order: th ratchada, en superrich, en twelve-victory, th cash, ru, id, en about, th about, 4 th exchange pages."
+  },
+  "not_done": [
+    "GSC request-indexing for all 12 priority URLs (quota)",
+    "Result metrics (exchange page impressions, crypto-query average position) are for the 11-01 review",
+    "Only en/th/zh get the /crypto exchange link strip; the other 7 locales have no profile pages (middleware 307 -> /en), so no strip there",
+    "Deposit steps / deposit fees / limits are NOT written: data/site.ts has none (decision D1); FAQ points to the official site",
+    "Ratchada page untouched (D4)"
+  ],
+  "decisions_applied": {
+    "D1": "facts only from data/site.ts (fee %, fee asset, THB withdrawal or 'not published', pairs, licence, reviewed date 2026-03-08); Upbit/Orbix thbWithdrawKnown=false -> never written as a number or 'free'; the page tile now shows 'Not published' instead of the placeholder 0",
+    "D2": "th added: indexedExchangeLocales en/th/zh, sitemap 74 -> 78, check-seo-cluster expectedLocCount 78 + new exchange/crypto assertions, llms.txt lists th exchange pages",
+    "D3": "titles start with the exchange name + fees keyword (en 'Fees', th 'ค่าธรรมเนียมเทรด', zh '手续费'), all <= 60 chars, title.absolute (no root suffix)",
+    "D4": "Ratchada untouched"
+  },
+  "design_notes": [
+    "FinancialService carries only name/url/description/sameAs(official site)/areaServed; it has no provider because ExchangeTHB does not provide the service. The site Organization is referenced as publisher on the FAQPage and is declared once per page by the layout.",
+    "Old 'strengths / cautions' cards on the page were removed: the new 'what makes X different' section says the same things from the same data without duplicating them.",
+    "Proofreading subagent (same model) reviewed all 12 copies; Thai got ~12 must-fix edits (licence wording, ก.ล.ต., 'ปัจจุบัน' -> 'ล่าสุด', 'งานบริการฝั่งไทย', overclaims like 'whole flow in baht'), en/zh minor; all applied before build."
+  ]
+}

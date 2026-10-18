@@ -1,0 +1,212 @@
+{
+ "base": "http://127.0.0.1:41741",
+ "ua": "Mozilla/5.0 ExchangeTHB-exchange-check",
+ "pages": {
+  "/en/exchanges/binance-th": {
+   "status": 200,
+   "title": "Binance TH Fees: 0.25% Trading Fee & THB Withdrawal",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/binance-th",
+    "th": "https://www.exchangethb.com/th/exchanges/binance-th",
+    "zh": "https://www.exchangethb.com/zh/exchanges/binance-th",
+    "x-default": "https://www.exchangethb.com/en/exchanges/binance-th"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  },
+  "/th/exchanges/binance-th": {
+   "status": 200,
+   "title": "Binance TH ค่าธรรมเนียมเทรด 0.25% และการถอนเงินบาท",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/binance-th",
+    "th": "https://www.exchangethb.com/th/exchanges/binance-th",
+    "zh": "https://www.exchangethb.com/zh/exchanges/binance-th",
+    "x-default": "https://www.exchangethb.com/en/exchanges/binance-th"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  },
+  "/zh/exchanges/binance-th": {
+   "status": 200,
+   "title": "Binance TH 手续费：交易费 0.25% 与泰铢提现",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/binance-th",
+    "th": "https://www.exchangethb.com/th/exchanges/binance-th",
+    "zh": "https://www.exchangethb.com/zh/exchanges/binance-th",
+    "x-default": "https://www.exchangethb.com/en/exchanges/binance-th"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  },
+  "/en/exchanges/bitkub": {
+   "status": 200,
+   "title": "Bitkub Fees: 0.25% Trading Fee & THB Withdrawal",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/bitkub",
+    "th": "https://www.exchangethb.com/th/exchanges/bitkub",
+    "zh": "https://www.exchangethb.com/zh/exchanges/bitkub",
+    "x-default": "https://www.exchangethb.com/en/exchanges/bitkub"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  },
+  "/th/exchanges/bitkub": {
+   "status": 200,
+   "title": "Bitkub ค่าธรรมเนียมเทรด 0.25% และการถอนเงินบาท",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/bitkub",
+    "th": "https://www.exchangethb.com/th/exchanges/bitkub",
+    "zh": "https://www.exchangethb.com/zh/exchanges/bitkub",
+    "x-default": "https://www.exchangethb.com/en/exchanges/bitkub"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  },
+  "/zh/exchanges/bitkub": {
+   "status": 200,
+   "title": "Bitkub 手续费：交易费 0.25% 与泰铢提现",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/bitkub",
+    "th": "https://www.exchangethb.com/th/exchanges/bitkub",
+    "zh": "https://www.exchangethb.com/zh/exchanges/bitkub",
+    "x-default": "https://www.exchangethb.com/en/exchanges/bitkub"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  },
+  "/en/exchanges/upbit-thailand": {
+   "status": 200,
+   "title": "Upbit Thailand Fees: 0.15% Trading Fee & THB Withdrawal",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/upbit-thailand",
+    "th": "https://www.exchangethb.com/th/exchanges/upbit-thailand",
+    "zh": "https://www.exchangethb.com/zh/exchanges/upbit-thailand",
+    "x-default": "https://www.exchangethb.com/en/exchanges/upbit-thailand"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  },
+  "/th/exchanges/upbit-thailand": {
+   "status": 200,
+   "title": "Upbit Thailand ค่าธรรมเนียมเทรด 0.15% และการถอนเงินบาท",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/upbit-thailand",
+    "th": "https://www.exchangethb.com/th/exchanges/upbit-thailand",
+    "zh": "https://www.exchangethb.com/zh/exchanges/upbit-thailand",
+    "x-default": "https://www.exchangethb.com/en/exchanges/upbit-thailand"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  },
+  "/zh/exchanges/upbit-thailand": {
+   "status": 200,
+   "title": "Upbit Thailand 手续费：交易费 0.15% 与泰铢提现",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/upbit-thailand",
+    "th": "https://www.exchangethb.com/th/exchanges/upbit-thailand",
+    "zh": "https://www.exchangethb.com/zh/exchanges/upbit-thailand",
+    "x-default": "https://www.exchangethb.com/en/exchanges/upbit-thailand"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  },
+  "/en/exchanges/orbix": {
+   "status": 200,
+   "title": "Orbix Fees: 0.25% Trading Fee & THB Withdrawal",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/orbix",
+    "th": "https://www.exchangethb.com/th/exchanges/orbix",
+    "zh": "https://www.exchangethb.com/zh/exchanges/orbix",
+    "x-default": "https://www.exchangethb.com/en/exchanges/orbix"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  },
+  "/th/exchanges/orbix": {
+   "status": 200,
+   "title": "Orbix ค่าธรรมเนียมเทรด 0.25% และการถอนเงินบาท",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/orbix",
+    "th": "https://www.exchangethb.com/th/exchanges/orbix",
+    "zh": "https://www.exchangethb.com/zh/exchanges/orbix",
+    "x-default": "https://www.exchangethb.com/en/exchanges/orbix"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  },
+  "/zh/exchanges/orbix": {
+   "status": 200,
+   "title": "Orbix 手续费：交易费 0.25% 与泰铢提现",
+   "hreflang": {
+    "en": "https://www.exchangethb.com/en/exchanges/orbix",
+    "th": "https://www.exchangethb.com/th/exchanges/orbix",
+    "zh": "https://www.exchangethb.com/zh/exchanges/orbix",
+    "x-default": "https://www.exchangethb.com/en/exchanges/orbix"
+   },
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FinancialService",
+    "FAQPage"
+   ],
+   "faq_count": 7
+  }
+ },
+ "errors": [],
+ "error_count": 0
+}

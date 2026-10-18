@@ -1,0 +1,2 @@
+200 200 200 200 200 200 200 200 200 200 200 200  <- GPTBot/1.2
+200 200 200 200 200 200 200 200 200 200 200 200  <- Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
