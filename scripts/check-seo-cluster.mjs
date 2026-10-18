@@ -42,7 +42,7 @@ const checks = [
   },
   {
     path: '/llms.txt',
-    mustInclude: ['# ExchangeTHB', '/en/about', '/en/cash', '/en/routes/btc-to-thb', 'ai-input', 'Sitemap:'],
+    mustInclude: ['# ExchangeTHB', '/en/about', '/en/cash', '/en/routes/btc-to-thb', 'ai-input', 'Sitemap:', '## Question to page', '| Best place to exchange money in Bangkok | ', '/en/money-changers/superrich-thailand |', '/th/money-changers/ratchada |', '| 泰国换钱 人民币 汇率 曼谷 | '],
     mustMatch: [/ai-train: allowed/],
     mustNotInclude: ['permanently redirect to the primary English', '/en/routes/eth-to-thb', '/routes/us-to-thailand-money-exchange'],
   },

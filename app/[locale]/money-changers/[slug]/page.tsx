@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { TrackAnchor, TrackLink } from '@/components/track-link';
 import { cashProviders, publicCashProviderSlugs } from '@/data/site';
 import { compareCashLive } from '@/lib/cash-live';
+import { buildRatchadaAnswer, buildVersusAnswer, quotesFromRows, ratchadaFaqQuestion, versusFaqQuestion } from '@/lib/ai-answers';
 import { getEffectiveCashBranches } from '@/lib/cash-entities';
 import { resolveContentLocale } from '@/lib/i18n';
 import { shouldIndexMoneyChangerProfile } from '@/lib/indexing-policy';
@@ -123,6 +124,16 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
       : null;
   }).filter((item): item is NonNullable<typeof item> => Boolean(item));
 
+  // SEO-19: one direct answer per mapped question (Ratchada rate en/th, SuperRich vs Ratchada en),
+  // built from the same USD rows as the table below and appended to the visible FAQ + JSON-LD.
+  const usdQuotes = quotesFromRows((usdComparison?.all ?? []) as Parameters<typeof quotesFromRows>[0], locale);
+  const ai = slug === 'ratchada' && (locale === 'en' || locale === 'th')
+    ? { id: 'ratchada-rate', question: ratchadaFaqQuestion[locale] ?? '', answer: buildRatchadaAnswer(locale, usdQuotes) }
+    : slug === 'superrich-thailand' && locale === 'en'
+      ? { id: 'superrich-vs-ratchada', question: versusFaqQuestion, answer: buildVersusAnswer('en', usdQuotes) }
+      : null;
+  const faqEntries = ai?.answer ? [...content.faqs, { question: ai.question, answer: ai.answer }] : content.faqs;
+
   const breadcrumbLd = breadcrumbJsonLd([
     { name: 'ExchangeTHB', item: withLocalePath(locale) },
     { name: locale === 'th' ? 'เงินสดเป็น THB' : locale === 'zh' ? '现金换 THB' : 'Cash to THB', item: withLocalePath(locale, '/cash') },
@@ -143,7 +154,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
     <div className="space-y-6">
       <ProviderContext mode="cash" slug={slug} branchId={staticBranch?.id} locale={contentLocale}/>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(content.faqs)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(faqEntries)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(exchangeLd) }} />
 
       <header className="grid gap-6 rounded-[32px] bg-[#0f2e22] p-6 text-white sm:p-9 lg:grid-cols-[1fr_auto] lg:items-end">
@@ -164,6 +175,13 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
           <TrackLink href={`/${locale}/cash?currency=USD&amount=1000`} eventName="money_changer_profile_compare_click" eventParams={{ provider: provider.slug }} className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white">{c.rateEntry}</TrackLink>
         </div>
       </header>
+
+      {ai?.answer ? (
+        <section className="rounded-[28px] border border-white/10 bg-[#151a18] p-6" aria-labelledby="ai-answer-heading">
+          <h2 id="ai-answer-heading" className="text-xl font-semibold text-white">{ai.question}</h2>
+          <p className="mt-3 max-w-3xl text-base leading-7 text-stone-200" data-ai-answer={ai.id}>{ai.answer}</p>
+        </section>
+      ) : null}
 
       <section id="rate" className="overflow-hidden rounded-[28px] border border-white/10 bg-[#151a18]">
         <div className="grid gap-5 p-6 lg:grid-cols-[1fr_auto]">
@@ -285,7 +303,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
       <section className="rounded-[28px] border border-white/10 bg-[#151a18] p-6">
         <h2 className="text-xl font-semibold text-white">{content.faqHeading}</h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          {content.faqs.map((item) => (
+          {faqEntries.map((item) => (
             <div key={item.question} className="border-l border-[#76aa8b]/40 pl-4">
               <h3 className="font-semibold text-white">{item.question}</h3>
               <p className="mt-2 text-sm leading-6 text-stone-400">{item.answer}</p>

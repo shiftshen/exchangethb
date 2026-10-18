@@ -8,6 +8,7 @@ import {
   type CashHubCurrency,
   type CashHubLocale,
 } from '@/lib/cash-hub-seo';
+import type { CashPageLive } from '@/lib/ai-answers';
 import type { Locale } from '@/lib/types';
 
 // Answer-first block, per-currency sections and visible FAQ for /cash (en/th/zh). Other
@@ -38,13 +39,13 @@ function isBanknoteSpec(value: string) {
   return /^[\d\s,\-–]+$/.test(value);
 }
 
-export function CashHubAnswer({ locale }: { locale: Locale }) {
+export function CashHubAnswer({ locale, live }: { locale: Locale; live?: CashPageLive | null }) {
   if (!isCashHubLocale(locale)) return null;
   const content = buildCashHubContent(locale);
   return (
     <section className="cash-hub-answer" aria-labelledby="cash-hub-answer-heading">
       <h2 id="cash-hub-answer-heading">{content.answerHeading}</h2>
-      <p className="cash-hub-answer-text">{content.answer}</p>
+      <p className="cash-hub-answer-text" data-ai-answer={live?.best ? 'best-place' : undefined}>{live?.best ?? content.answer}</p>
     </section>
   );
 }
@@ -54,7 +55,7 @@ async function loadRows(currency: CashHubCurrency, locale: CashHubLocale) {
   return result?.all ?? [];
 }
 
-export async function CashHubCurrencies({ locale }: { locale: Locale }) {
+export async function CashHubCurrencies({ locale, live }: { locale: Locale; live?: CashPageLive | null }) {
   if (!isCashHubLocale(locale)) return null;
   const content = buildCashHubContent(locale);
   const changers = getCashHubChangers(locale);
@@ -76,6 +77,7 @@ export async function CashHubCurrencies({ locale }: { locale: Locale }) {
         return (
           <section key={currency} className="cash-hub-currency" aria-labelledby={headingId}>
             <h2 id={headingId}>{copy.heading}</h2>
+            {live?.direct?.code === currency ? <p className="cash-hub-currency-answer" data-ai-answer={`currency-${currency}`}>{live.direct.text}</p> : null}
             <p className="cash-hub-currency-intro">{copy.intro}</p>
             {rows.length ? (
               <ul className="cash-hub-rows">
@@ -118,13 +120,13 @@ export async function CashHubCurrencies({ locale }: { locale: Locale }) {
   );
 }
 
-export function CashHubFaq({ locale }: { locale: Locale }) {
+export function CashHubFaq({ locale, live }: { locale: Locale; live?: CashPageLive | null }) {
   if (!isCashHubLocale(locale)) return null;
   const content = buildCashHubContent(locale);
   return (
     <section className="cash-hub-faq" aria-labelledby="cash-hub-faq-heading">
       <h2 id="cash-hub-faq-heading">{content.faqHeading}</h2>
-      {content.faqs.map((item) => (
+      {(live?.faq ? [...content.faqs, live.faq] : content.faqs).map((item) => (
         <div key={item.question} className="cash-hub-faq-item">
           <h3>{item.question}</h3>
           <p>{item.answer}</p>

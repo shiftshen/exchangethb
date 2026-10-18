@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { publicCashProviderSlugs, exchanges } from '@/data/site';
 import { indexedRouteSlugs } from '@/lib/indexing-policy';
 import { locales } from '@/lib/i18n';
+import { questionPages } from '@/lib/question-pages';
 import { siteUrl } from '@/lib/seo';
 
 export const dynamic = 'force-static';
@@ -36,6 +37,11 @@ export function GET() {
     '- What does an exchange cost: trading fee, THB withdrawal fee, rate spread, and quote-source status?',
     '- How current is a quote: live, hybrid or fallback?',
     '- Do you need a passport, and which banknote conditions apply?',
+    '',
+    '## Question to page',
+    '| Question | Page |',
+    '| --- | --- |',
+    ...questionPages.map((item) => `| ${item.question} | ${siteUrl}${item.path} |`),
     '',
     '## Scope and caveats',
     '- Rates are observations from public sources, not guaranteed counter quotes. Every amount shown is an estimate; the final rate is set by the provider at the counter.',
