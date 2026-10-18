@@ -301,8 +301,10 @@
   },
   "screenshots": {
    "dir": "evidence/2026-10-18/seo-r2/screens",
-   "count": 43,
-   "pattern": "en/th/zh x (cash, ratchada, superrich) + en twelve-victory + ja/ko/ru/fr/de/id/vi x (cash, home, crypto) at 1280x900 full page, plus 6 mobile 390x844 captures of the Ratchada/cash pages in en/th/zh"
+   "count": 37,
+   "desktop": "31 at 1280x900 full page — en/th/zh x (cash, ratchada, superrich-thailand) = 9, en twelve-victory = 1, ja/ko/ru/fr/de/id/vi x (cash, home, crypto) = 21",
+   "mobile": "6 at 390x844 — en/th/zh x (money-changers/ratchada, cash)",
+   "coverage_check": "every one of the 10 locales has 3 pages captured (the money changer pages render in en/th/zh only; the other 7 locales are covered on cash/home/crypto plus the /en profile they link to)"
   }
  },
  "release": {
@@ -379,7 +381,7 @@
   "useful_side_finding": "The not-indexed Thai page inspection showed 上次抓取 2026-08-26, 抓取成功, 允许编入索引=是 and 未检测到引荐来源网页 — it was only known from the sitemap. The new /cash strip now gives it an internal link from an indexed page.",
   "recrawl_signal": "sitemap lastmod for the money changer URLs moved to 2026-10-18T04:18:16Z, so Google has a fresh modification signal without a manual request",
   "retry": "after the daily quota reset, request the 4 not-indexed URLs first; the 4 indexed ones only need recrawl",
-  "screenshots": "evidence/2026-10-18/seo-r2/gsc/ (8 files)"
+  "screenshots": "evidence/2026-10-18/seo-r2/gsc/ (9 files: one per attempted URL plus one retry capture)"
  },
  "delivery": {
   "evidence_dir": "evidence/2026-10-18/seo-r2",
