@@ -1,0 +1,100 @@
+{
+ "/en/cash": {
+  "status": 200,
+  "canonical": "https://www.exchangethb.com/en/cash",
+  "hreflang": [
+   "de=https://www.exchangethb.com/de/cash",
+   "en=https://www.exchangethb.com/en/cash",
+   "fr=https://www.exchangethb.com/fr/cash",
+   "id=https://www.exchangethb.com/id/cash",
+   "ja=https://www.exchangethb.com/ja/cash",
+   "ko=https://www.exchangethb.com/ko/cash",
+   "ru=https://www.exchangethb.com/ru/cash",
+   "th=https://www.exchangethb.com/th/cash",
+   "vi=https://www.exchangethb.com/vi/cash",
+   "x-default=https://www.exchangethb.com/en/cash",
+   "zh=https://www.exchangethb.com/zh/cash"
+  ]
+ },
+ "/en/money-changers/ratchada": {
+  "status": 200,
+  "canonical": "https://www.exchangethb.com/en/money-changers/ratchada",
+  "hreflang": [
+   "en=https://www.exchangethb.com/en/money-changers/ratchada",
+   "th=https://www.exchangethb.com/th/money-changers/ratchada",
+   "x-default=https://www.exchangethb.com/en/money-changers/ratchada",
+   "zh=https://www.exchangethb.com/zh/money-changers/ratchada"
+  ]
+ },
+ "/en/money-changers/superrich-thailand": {
+  "status": 200,
+  "canonical": "https://www.exchangethb.com/en/money-changers/superrich-thailand",
+  "hreflang": [
+   "en=https://www.exchangethb.com/en/money-changers/superrich-thailand",
+   "th=https://www.exchangethb.com/th/money-changers/superrich-thailand",
+   "x-default=https://www.exchangethb.com/en/money-changers/superrich-thailand",
+   "zh=https://www.exchangethb.com/zh/money-changers/superrich-thailand"
+  ]
+ },
+ "/en/crypto": {
+  "status": 200,
+  "canonical": "https://www.exchangethb.com/en/crypto",
+  "hreflang": [
+   "de=https://www.exchangethb.com/de/crypto",
+   "en=https://www.exchangethb.com/en/crypto",
+   "fr=https://www.exchangethb.com/fr/crypto",
+   "id=https://www.exchangethb.com/id/crypto",
+   "ja=https://www.exchangethb.com/ja/crypto",
+   "ko=https://www.exchangethb.com/ko/crypto",
+   "ru=https://www.exchangethb.com/ru/crypto",
+   "th=https://www.exchangethb.com/th/crypto",
+   "vi=https://www.exchangethb.com/vi/crypto",
+   "x-default=https://www.exchangethb.com/en/crypto",
+   "zh=https://www.exchangethb.com/zh/crypto"
+  ]
+ },
+ "/th/cash": {
+  "status": 200,
+  "canonical": "https://www.exchangethb.com/th/cash",
+  "hreflang": [
+   "de=https://www.exchangethb.com/de/cash",
+   "en=https://www.exchangethb.com/en/cash",
+   "fr=https://www.exchangethb.com/fr/cash",
+   "id=https://www.exchangethb.com/id/cash",
+   "ja=https://www.exchangethb.com/ja/cash",
+   "ko=https://www.exchangethb.com/ko/cash",
+   "ru=https://www.exchangethb.com/ru/cash",
+   "th=https://www.exchangethb.com/th/cash",
+   "vi=https://www.exchangethb.com/vi/cash",
+   "x-default=https://www.exchangethb.com/en/cash",
+   "zh=https://www.exchangethb.com/zh/cash"
+  ]
+ },
+ "/th/money-changers/ratchada": {
+  "status": 200,
+  "canonical": "https://www.exchangethb.com/th/money-changers/ratchada",
+  "hreflang": [
+   "en=https://www.exchangethb.com/en/money-changers/ratchada",
+   "th=https://www.exchangethb.com/th/money-changers/ratchada",
+   "x-default=https://www.exchangethb.com/en/money-changers/ratchada",
+   "zh=https://www.exchangethb.com/zh/money-changers/ratchada"
+  ]
+ },
+ "/zh/cash": {
+  "status": 200,
+  "canonical": "https://www.exchangethb.com/zh/cash",
+  "hreflang": [
+   "de=https://www.exchangethb.com/de/cash",
+   "en=https://www.exchangethb.com/en/cash",
+   "fr=https://www.exchangethb.com/fr/cash",
+   "id=https://www.exchangethb.com/id/cash",
+   "ja=https://www.exchangethb.com/ja/cash",
+   "ko=https://www.exchangethb.com/ko/cash",
+   "ru=https://www.exchangethb.com/ru/cash",
+   "th=https://www.exchangethb.com/th/cash",
+   "vi=https://www.exchangethb.com/vi/cash",
+   "x-default=https://www.exchangethb.com/en/cash",
+   "zh=https://www.exchangethb.com/zh/cash"
+  ]
+ }
+}

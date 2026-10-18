@@ -1,0 +1,270 @@
+{
+ "base": "https://www.exchangethb.com",
+ "label": "prod",
+ "pages": {
+  "/en/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/en/cash",
+   "hreflang": [
+    "de=https://www.exchangethb.com/de/cash",
+    "en=https://www.exchangethb.com/en/cash",
+    "fr=https://www.exchangethb.com/fr/cash",
+    "id=https://www.exchangethb.com/id/cash",
+    "ja=https://www.exchangethb.com/ja/cash",
+    "ko=https://www.exchangethb.com/ko/cash",
+    "ru=https://www.exchangethb.com/ru/cash",
+    "th=https://www.exchangethb.com/th/cash",
+    "vi=https://www.exchangethb.com/vi/cash",
+    "x-default=https://www.exchangethb.com/en/cash",
+    "zh=https://www.exchangethb.com/zh/cash"
+   ]
+  },
+  "/en/money-changers/ratchada": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/en/money-changers/ratchada",
+   "hreflang": [
+    "en=https://www.exchangethb.com/en/money-changers/ratchada",
+    "th=https://www.exchangethb.com/th/money-changers/ratchada",
+    "x-default=https://www.exchangethb.com/en/money-changers/ratchada",
+    "zh=https://www.exchangethb.com/zh/money-changers/ratchada"
+   ]
+  },
+  "/en/money-changers/superrich-thailand": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/en/money-changers/superrich-thailand",
+   "hreflang": [
+    "en=https://www.exchangethb.com/en/money-changers/superrich-thailand",
+    "th=https://www.exchangethb.com/th/money-changers/superrich-thailand",
+    "x-default=https://www.exchangethb.com/en/money-changers/superrich-thailand",
+    "zh=https://www.exchangethb.com/zh/money-changers/superrich-thailand"
+   ]
+  },
+  "/en/crypto": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/en/crypto",
+   "hreflang": [
+    "de=https://www.exchangethb.com/de/crypto",
+    "en=https://www.exchangethb.com/en/crypto",
+    "fr=https://www.exchangethb.com/fr/crypto",
+    "id=https://www.exchangethb.com/id/crypto",
+    "ja=https://www.exchangethb.com/ja/crypto",
+    "ko=https://www.exchangethb.com/ko/crypto",
+    "ru=https://www.exchangethb.com/ru/crypto",
+    "th=https://www.exchangethb.com/th/crypto",
+    "vi=https://www.exchangethb.com/vi/crypto",
+    "x-default=https://www.exchangethb.com/en/crypto",
+    "zh=https://www.exchangethb.com/zh/crypto"
+   ]
+  },
+  "/th/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/th/cash",
+   "hreflang": [
+    "de=https://www.exchangethb.com/de/cash",
+    "en=https://www.exchangethb.com/en/cash",
+    "fr=https://www.exchangethb.com/fr/cash",
+    "id=https://www.exchangethb.com/id/cash",
+    "ja=https://www.exchangethb.com/ja/cash",
+    "ko=https://www.exchangethb.com/ko/cash",
+    "ru=https://www.exchangethb.com/ru/cash",
+    "th=https://www.exchangethb.com/th/cash",
+    "vi=https://www.exchangethb.com/vi/cash",
+    "x-default=https://www.exchangethb.com/en/cash",
+    "zh=https://www.exchangethb.com/zh/cash"
+   ]
+  },
+  "/th/money-changers/ratchada": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/th/money-changers/ratchada",
+   "hreflang": [
+    "en=https://www.exchangethb.com/en/money-changers/ratchada",
+    "th=https://www.exchangethb.com/th/money-changers/ratchada",
+    "x-default=https://www.exchangethb.com/en/money-changers/ratchada",
+    "zh=https://www.exchangethb.com/zh/money-changers/ratchada"
+   ]
+  },
+  "/zh/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/zh/cash",
+   "hreflang": [
+    "de=https://www.exchangethb.com/de/cash",
+    "en=https://www.exchangethb.com/en/cash",
+    "fr=https://www.exchangethb.com/fr/cash",
+    "id=https://www.exchangethb.com/id/cash",
+    "ja=https://www.exchangethb.com/ja/cash",
+    "ko=https://www.exchangethb.com/ko/cash",
+    "ru=https://www.exchangethb.com/ru/cash",
+    "th=https://www.exchangethb.com/th/cash",
+    "vi=https://www.exchangethb.com/vi/cash",
+    "x-default=https://www.exchangethb.com/en/cash",
+    "zh=https://www.exchangethb.com/zh/cash"
+   ]
+  }
+ },
+ "questions": {
+  "Q01": {
+   "page": "/en/cash",
+   "marker": "best-place",
+   "faqQuestion": "Where can I exchange cash for Thai baht in Bangkok?",
+   "answer": "From ExchangeTHB's own collection of the changers' published rates, the latest observed US dollar cash buying rates in baht per dollar: SuperRich Thailand 33.33 (19 Oct 2026, 00:57), Ratchada Exchange 33.27 (17 Oct 2026, 17:00), Twelve Victory Exchange 33.26 (19 Oct 2026, 00:57). Times are GMT+7. ExchangeTHB does not rank changers; rates depend on the banknote group, so confirm with the changer.",
+   "units": 66,
+   "faqCount": 9,
+   "faqValid": true
+  },
+  "Q02": {
+   "page": "/en/money-changers/ratchada",
+   "marker": "ratchada-rate",
+   "faqQuestion": "What is the Ratchada Exchange rate today?",
+   "answer": "Ratchada Exchange's latest observed US dollar cash buying rate is 33.27 baht per dollar (banknote 100), from ExchangeTHB's own collection of its published rates. Data updated 17 Oct 2026, 17:00 (GMT+7). This is an observation, not a counter quote: confirm the rate and banknote condition with the changer before you go.",
+   "units": 53,
+   "faqCount": 8,
+   "faqValid": true
+  },
+  "Q03": {
+   "page": "/en/money-changers/superrich-thailand",
+   "marker": "superrich-vs-ratchada",
+   "faqQuestion": "How do SuperRich Thailand and Ratchada Exchange compare today?",
+   "answer": "ExchangeTHB makes no direct comparison because the two quotes were not observed at the same time: SuperRich Thailand 33.33 baht (banknote 100) (observed 19 Oct 2026, 00:57 (GMT+7)); Ratchada Exchange 33.27 baht (banknote 100) (observed 17 Oct 2026, 17:00 (GMT+7)). Rates depend on the banknote group, so confirm with each changer.",
+   "units": 55,
+   "faqCount": 8,
+   "faqValid": true
+  },
+  "Q04": {
+   "page": "/en/cash",
+   "marker": "currency-USD",
+   "faqQuestion": "What is the best THB exchange rate in Bangkok today?",
+   "answer": "ExchangeTHB names no single winner: rates depend on the banknote group and observation time. Latest observed US dollar cash buying rates collected from the changers, in baht per US dollar: SuperRich Thailand 33.33 (19 Oct 2026, 00:57), Ratchada Exchange 33.27 (17 Oct 2026, 17:00), Twelve Victory Exchange 33.26 (19 Oct 2026, 00:57). Times are GMT+7. Confirm with the changer before you go.",
+   "units": 66,
+   "faqCount": 9,
+   "faqValid": true
+  },
+  "Q05": {
+   "page": "/en/crypto",
+   "marker": "cash-vs-crypto",
+   "faqQuestion": null,
+   "answer": "Cash and crypto are two routes to baht; ExchangeTHB recommends neither. Cash: latest observed US dollar buying rates, in baht per dollar: SuperRich Thailand 33.33 (19 Oct 2026, 00:57), Ratchada Exchange 33.27 (17 Oct 2026, 17:00), Twelve Victory Exchange 33.26 (19 Oct 2026, 00:57). Times are GMT+7. Crypto: this page compares 4 Thai SEC-licensed exchanges by fees and quote status. No figure is guaranteed.",
+   "units": 69
+  },
+  "Q06": {
+   "page": "/th/cash",
+   "marker": "best-place",
+   "faqQuestion": "แลกเงินสดเป็นบาทที่ไหนในกรุงเทพฯ?",
+   "answer": "ExchangeTHB เก็บเรทที่ร้านประกาศ เรทรับซื้อเงินสดดอลลาร์สหรัฐล่าสุดที่สังเกตได้ (บาทต่อดอลลาร์) คือ SuperRich Thailand 33.33 (19 ต.ค. 2026 00:57), Ratchada Exchange 33.27 (17 ต.ค. 2026 17:00), Twelve Victory Exchange 33.26 (19 ต.ค. 2026 00:57) เวลา GMT+7 ExchangeTHB ไม่จัดอันดับร้าน เรทขึ้นกับกลุ่มธนบัตร โปรดยืนยันกับร้านก่อนไปแลก",
+   "units": 65,
+   "faqCount": 9,
+   "faqValid": true
+  },
+  "Q07": {
+   "page": "/th/cash",
+   "marker": "currency-USD",
+   "faqQuestion": "ราคาแลกเงินยูเอสดี วันนี้ กรุงเทพ เท่าไร?",
+   "answer": "ExchangeTHB ไม่ชี้ว่าร้านใดเหนือกว่า เพราะเรทขึ้นกับกลุ่มธนบัตรและเวลาที่สังเกต เรทรับซื้อเงินสดดอลลาร์สหรัฐล่าสุดที่เก็บจากแต่ละร้าน (บาทต่อหน่วย) คือ SuperRich Thailand 33.33 (19 ต.ค. 2026 00:57), Ratchada Exchange 33.27 (17 ต.ค. 2026 17:00), Twelve Victory Exchange 33.26 (19 ต.ค. 2026 00:57) เวลา GMT+7 โปรดยืนยันเรทกับร้านก่อนไปแลก",
+   "units": 70,
+   "faqCount": 9,
+   "faqValid": true
+  },
+  "Q08": {
+   "page": "/th/money-changers/ratchada",
+   "marker": "ratchada-rate",
+   "faqQuestion": "ร้านแลกเงินแถวรัชดา ที่ไหนเรทดี?",
+   "answer": "ร้านแลกเงินแถวรัชดาที่ ExchangeTHB รวบรวมไว้คือ Ratchada Exchange (Huai Khwang, เวลาเปิด ทุกวัน 09:00–20:30) เรทรับซื้อเงินสดดอลลาร์สหรัฐล่าสุดที่สังเกตได้คือ 33.27 บาทต่อดอลลาร์ (ธนบัตร 100) ข้อมูลอัปเดตเมื่อ 17 ต.ค. 2026 17:00 (GMT+7) เป็นเรทที่สังเกตได้ ไม่ใช่ราคาหน้าร้าน โปรดยืนยันกับร้านก่อนไป",
+   "units": 65,
+   "faqCount": 8,
+   "faqValid": true
+  },
+  "Q09": {
+   "page": "/zh/cash",
+   "marker": "best-place",
+   "faqQuestion": "曼谷哪里可以把现金换成泰铢？",
+   "answer": "根据 ExchangeTHB 自行采集的各店公布牌价，美元现钞最新观测收购价（泰铢/美元）为：SuperRich Thailand 33.33 （2026-10-19 00:57）；Ratchada Exchange 33.27 （2026-10-17 17:00）；Twelve Victory Exchange 33.26 （2026-10-19 00:57）。时间均为 GMT+7。本站不给换汇店排名，汇率随纸币组别而异，出发前请向店家确认。",
+   "units": 68,
+   "faqCount": 9,
+   "faqValid": true
+  },
+  "Q10": {
+   "page": "/zh/cash",
+   "marker": "currency-CNY",
+   "faqQuestion": "泰国换钱：人民币兑泰铢汇率今天是多少（曼谷）？",
+   "answer": "本站不指定唯一结论：汇率随纸币组别和观测时间而异。ExchangeTHB 采集的各店人民币现钞最新收购价（泰铢/人民币）为：SuperRich Thailand 5.00 （2026-10-19 00:57）；Ratchada Exchange 4.99 （2026-10-17 17:00）。时间均为 GMT+7。出发前请向店家确认汇率。",
+   "units": 58,
+   "faqCount": 9,
+   "faqValid": true
+  }
+ },
+ "bots": {
+  "Googlebot": [
+   [
+    "/en/cash",
+    200
+   ],
+   [
+    "/en/money-changers/ratchada",
+    200
+   ],
+   [
+    "/en/money-changers/superrich-thailand",
+    200
+   ],
+   [
+    "/en/crypto",
+    200
+   ],
+   [
+    "/th/cash",
+    200
+   ],
+   [
+    "/th/money-changers/ratchada",
+    200
+   ],
+   [
+    "/zh/cash",
+    200
+   ],
+   [
+    "/llms.txt",
+    200
+   ]
+  ],
+  "Mozilla": [
+   [
+    "/en/cash",
+    200
+   ],
+   [
+    "/en/money-changers/ratchada",
+    200
+   ],
+   [
+    "/en/money-changers/superrich-thailand",
+    200
+   ],
+   [
+    "/en/crypto",
+    200
+   ],
+   [
+    "/th/cash",
+    200
+   ],
+   [
+    "/th/money-changers/ratchada",
+    200
+   ],
+   [
+    "/zh/cash",
+    200
+   ],
+   [
+    "/llms.txt",
+    200
+   ]
+  ]
+ },
+ "errors": [],
+ "llms": {
+  "status": 200,
+  "rows": 10
+ },
+ "errorCount": 0
+}

@@ -1,0 +1,108 @@
+
+> exchangethb@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.27
+
+   Creating an optimized production build ...
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled successfully in 1646ms
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/370) ...
+   Generating static pages (92/370) 
+   Generating static pages (184/370) 
+   Generating static pages (277/370) 
+ ✓ Generating static pages (370/370)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ƒ /                                      190 B         102 kB
+├ ƒ /_not-found                            998 B         103 kB
+├ ● /[locale]                              180 B         147 kB
+├   ├ /th
+├   ├ /en
+├   ├ /zh
+├   └ [+7 more paths]
+├ ● /[locale]/about                        172 B         106 kB
+├   ├ /th/about
+├   ├ /en/about
+├   ├ /zh/about
+├   └ [+7 more paths]
+├ ƒ /[locale]/admin/login                  190 B         102 kB
+├ ● /[locale]/cash                         358 B         147 kB
+├   ├ /th/cash
+├   ├ /en/cash
+├   ├ /zh/cash
+├   └ [+7 more paths]
+├ ● /[locale]/crypto                       358 B         147 kB
+├   ├ /th/crypto
+├   ├ /en/crypto
+├   ├ /zh/crypto
+├   └ [+7 more paths]
+├ ƒ /[locale]/data-status                  190 B         102 kB
+├ ● /[locale]/exchanges                    912 B         106 kB
+├   ├ /th/exchanges
+├   ├ /en/exchanges
+├   ├ /zh/exchanges
+├   └ [+7 more paths]
+├ ƒ /[locale]/exchanges/[slug]            3.3 kB         125 kB
+├ ƒ /[locale]/legal/[slug]                 912 B         106 kB
+├ ● /[locale]/money-changers               912 B         106 kB
+├   ├ /th/money-changers
+├   ├ /en/money-changers
+├   ├ /zh/money-changers
+├   └ [+7 more paths]
+├ ƒ /[locale]/money-changers/[slug]       3.3 kB         125 kB
+├ ● /[locale]/routes                       912 B         106 kB
+├   ├ /th/routes
+├   ├ /en/routes
+├   ├ /zh/routes
+├   └ [+7 more paths]
+├ ● /[locale]/routes/[slug]                904 B         106 kB
+├   ├ /th/routes/btc-to-thb
+├   ├ /en/routes/btc-to-thb
+├   ├ /zh/routes/btc-to-thb
+├   └ [+267 more paths]
+├ ƒ /admin                                 190 B         102 kB
+├ ƒ /admin/audit                           172 B         106 kB
+├ ƒ /admin/branch-manager                1.38 kB         107 kB
+├ ƒ /admin/cash-health                     172 B         106 kB
+├ ƒ /admin/dashboard                     7.34 kB         113 kB
+├ ƒ /admin/evidence                      1.44 kB         103 kB
+├ ƒ /admin/exchange-profiles             2.48 kB         108 kB
+├ ƒ /admin/login                           190 B         102 kB
+├ ƒ /admin/scrape-review                 1.42 kB         107 kB
+├ ƒ /api/admin/audit-logs                  190 B         102 kB
+├ ƒ /api/admin/cash-health/export          190 B         102 kB
+├ ƒ /api/admin/config                      190 B         102 kB
+├ ƒ /api/admin/health                      190 B         102 kB
+├ ƒ /api/admin/login                       190 B         102 kB
+├ ƒ /api/admin/logout                      190 B         102 kB
+├ ƒ /api/admin/scrape-cash                 190 B         102 kB
+├ ƒ /api/admin/scrape-cash/rollback        190 B         102 kB
+├ ƒ /api/compare/cash                      190 B         102 kB
+├ ƒ /api/compare/crypto                    190 B         102 kB
+├ ƒ /api/health                            190 B         102 kB
+├ ƒ /api/providers/[kind]/[slug]           190 B         102 kB
+├ ƒ /google27d67ef3554303ff.html           190 B         102 kB
+├ ○ /icon.svg                                0 B            0 B
+├ ○ /llms.txt                              190 B         102 kB
+├ ○ /manifest.webmanifest                  190 B         102 kB
+├ ○ /robots.txt                            190 B         102 kB
+└ ○ /sitemap.xml                           190 B         102 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/7482-08537b11be7f7077.js      45.8 kB
+  ├ chunks/c794df7f-66b868e9051a2c6f.js  54.2 kB
+  └ other shared chunks (total)          1.93 kB
+
+
+ƒ Middleware                             35.3 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

@@ -1,0 +1,35 @@
+{
+ "card": "SEO-19",
+ "result": "pass",
+ "finished": "2026-10-19T01:05+07:00",
+ "image": "exchangethb:v0.1.9-20261019-seo-ai-answers",
+ "image_id": "sha256:52dbb41f831b0b9b27d2efdf3a2a5479f0a17e052784118f1fd8ca23ad416b1b",
+ "rollback_tag": "exchangethb:rollback-before-seo-r6-20261019",
+ "rollback_digest": "sha256:5eb4928a2bcb534ecb836ea71f6bf14fc06e295273f662b8ade1e5cf44fcab28",
+ "branch": "seo/ai-answers-20261018",
+ "commit": "c2005ad",
+ "units": {
+  "Q01": 66,
+  "Q02": 53,
+  "Q03": 55,
+  "Q04": 66,
+  "Q05": 69,
+  "Q06": 65,
+  "Q07": 70,
+  "Q08": 65,
+  "Q09": 68,
+  "Q10": 58
+ },
+ "prod_errors": 0,
+ "canary_first_try": "6 questions >70 units on real mixed-time data; fixed and re-released as v0.1.9",
+ "gsc": {
+  "sitemap": "resubmitted, success, 78 discovered",
+  "request_indexing": "quota exceeded on first URL (/en/cash); remaining skipped"
+ },
+ "screens": [
+  "m390-en-cash-top.png",
+  "m390-th-money-changers-ratchada-top.png",
+  "m390-zh-cash-top.png",
+  "m390-en-crypto-top.png"
+ ]
+}
