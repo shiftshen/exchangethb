@@ -1,0 +1,148 @@
+{
+ "base": "http://127.0.0.1:41761",
+ "ua": "Mozilla/5.0 ExchangeTHB-cash-check",
+ "pages": {
+  "/en/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/en/cash",
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "title": "USD, EUR, JPY & CNY to Thai baht: Bangkok money changers",
+   "faq_count": 8,
+   "h2": [
+    "Your options",
+    "Where can I exchange cash for Thai baht in Bangkok?",
+    "Money changer profiles: rates, hours and maps",
+    "Where to exchange US dollars (USD) to Thai baht in Bangkok?",
+    "Where to exchange euros (EUR) to Thai baht in Bangkok?",
+    "Where to exchange Japanese yen (JPY) to Thai baht in Bangkok?",
+    "Where to exchange Chinese yuan (CNY) to Thai baht in Bangkok?",
+    "Questions about exchanging cash for baht in Bangkok",
+    "Exchanging money in Thailand"
+   ],
+   "currency_links": [
+    "/en/cash?currency=CNY",
+    "/en/cash?currency=EUR",
+    "/en/cash?currency=JPY",
+    "/en/cash?currency=USD"
+   ]
+  },
+  "/th/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/th/cash",
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "title": "เรทแลกเงิน USD EUR JPY CNY เป็นบาท — ร้านแลกเงินกรุงเทพ",
+   "faq_count": 8,
+   "h2": [
+    "ตัวเลือกของคุณ",
+    "แลกเงินสดเป็นบาทที่ไหนในกรุงเทพฯ ดี?",
+    "หน้าร้านแลกเงิน: เรท เวลาเปิด และแผนที่",
+    "แลกดอลลาร์สหรัฐ (USD) เป็นบาทที่ไหนในกรุงเทพฯ?",
+    "แลกยูโร (EUR) เป็นบาทที่ไหนในกรุงเทพฯ?",
+    "แลกเยนญี่ปุ่น (JPY) เป็นบาทที่ไหนในกรุงเทพฯ?",
+    "แลกหยวนจีน (CNY) เป็นบาทที่ไหนในกรุงเทพฯ?",
+    "คำถามเกี่ยวกับการแลกเงินสดเป็นบาทในกรุงเทพฯ",
+    "เลือกวิธีแลกเป็นเงินบาท"
+   ],
+   "currency_links": [
+    "/th/cash?currency=CNY",
+    "/th/cash?currency=EUR",
+    "/th/cash?currency=JPY",
+    "/th/cash?currency=USD"
+   ]
+  },
+  "/zh/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/zh/cash",
+   "types": [
+    "Organization",
+    "BreadcrumbList",
+    "FAQPage"
+   ],
+   "title": "美元、欧元、日元、人民币换泰铢：曼谷换汇店比较",
+   "faq_count": 8,
+   "h2": [
+    "比较结果",
+    "曼谷哪里可以把现金换成泰铢？",
+    "换汇店实体页：汇率、营业时间与地图",
+    "美元（USD）换泰铢，曼谷在哪里换？",
+    "欧元（EUR）换泰铢，曼谷在哪里换？",
+    "日元（JPY）换泰铢，曼谷在哪里换？",
+    "人民币（CNY）换泰铢，曼谷在哪里换？",
+    "曼谷现金换泰铢的常见问题",
+    "换泰铢前需要确认什么？"
+   ],
+   "currency_links": [
+    "/zh/cash?currency=CNY",
+    "/zh/cash?currency=EUR",
+    "/zh/cash?currency=JPY",
+    "/zh/cash?currency=USD"
+   ]
+  },
+  "/ja/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/ja/cash",
+   "types": [
+    "Organization",
+    "BreadcrumbList"
+   ]
+  },
+  "/ru/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/ru/cash",
+   "types": [
+    "Organization",
+    "BreadcrumbList"
+   ]
+  },
+  "/ko/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/ko/cash",
+   "types": [
+    "Organization",
+    "BreadcrumbList"
+   ]
+  },
+  "/fr/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/fr/cash",
+   "types": [
+    "Organization",
+    "BreadcrumbList"
+   ]
+  },
+  "/de/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/de/cash",
+   "types": [
+    "Organization",
+    "BreadcrumbList"
+   ]
+  },
+  "/id/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/id/cash",
+   "types": [
+    "Organization",
+    "BreadcrumbList"
+   ]
+  },
+  "/vi/cash": {
+   "status": 200,
+   "canonical": "https://www.exchangethb.com/vi/cash",
+   "types": [
+    "Organization",
+    "BreadcrumbList"
+   ]
+  }
+ },
+ "errors": [],
+ "error_count": 0
+}

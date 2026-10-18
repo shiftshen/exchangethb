@@ -1,0 +1,55 @@
+{
+ "card": "SEO-12 /cash 承接页：answer-first + USD/EUR/JPY/CNY 四段 + FAQ（en/th/zh）",
+ "verdict": "PASS (hard acceptance 1-4 met; GSC request-indexing blocked by quota)",
+ "completed_at": "2026-10-18T22:5x+07",
+ "git": {
+  "branch": "seo/cash-hub-20261018",
+  "base": "seo/exchange-profiles-20261018@fa10fcf",
+  "worktree": "/Volumes/M2USB/_scratch/exchangethb/20261018/r5-wt",
+  "code_commit": "5db2a2f",
+  "shared_workspace_untouched": true
+ },
+ "images": {
+  "previous_production": {
+   "tag": "exchangethb:v0.1.6-20261018-seo-exchanges",
+   "digest": "sha256:f79ec3b8625f3d44dd35cc1cbe8b1e1cee78810d399b5ef6462ff877339ed14d"
+  },
+  "pinned_rollback_tag": {
+   "tag": "exchangethb:rollback-before-seo-r5-20261018",
+   "digest": "sha256:f79ec3b8625f3d44dd35cc1cbe8b1e1cee78810d399b5ef6462ff877339ed14d"
+  },
+  "new_production": {
+   "tag": "exchangethb:v0.1.7-20261018-seo-cash",
+   "digest": "sha256:5eb4928a2bcb534ecb836ea71f6bf14fc06e295273f662b8ade1e5cf44fcab28"
+  },
+  "worker": "unchanged v0.1.0-20261007-market-retry (healthy)"
+ },
+ "compose_chain": "base, release-20261007b, drive-r2-20261016, seo-20261018, seo-r5-20261018 (new, replaces seo-r4; pins web + web_canary)",
+ "deploy_order": "web_canary healthy 22:52 (cluster + validate via ssh tunnel 0 errors) then web healthy 22:54 +07",
+ "rollback": "ssh 1panel-happy 'cd /opt/exchangethb && CHAIN=\"-f docker-compose.yml -f compose.release-20261007b.yml -f compose.drive-r2-20261016.yml -f compose.seo-20261018.yml -f compose.rollback-seo-r5-20261018.yml\" && docker compose $CHAIN up -d --no-build --no-deps web_canary && docker compose $CHAIN up -d --no-build --no-deps web' (compose.rollback-seo-r5-20261018.yml prepared on host, not executed, not needed)",
+ "tests": {
+  "tsc": "clean",
+  "eslint": "0 problems",
+  "vitest": "48 files / 193 tests passed (8 new in tests/cash-hub-seo.test.ts)",
+  "build": "npm run build ok",
+  "seo_cluster": "local, canary, prod all passed",
+  "validate_cash_pages": "local/canary/prod error_count 0"
+ },
+ "acceptance": {
+  "1_public": "PASS - schema-validation-prod.json error_count 0: /en|th|zh/cash have answer-first H2, 4 currency H2 (questions), 8 visible FAQ + FAQPage (publisher #organization, question and answer text found in visible page), 4 currency links; canonical self and unchanged; hreflang en/th/zh/x-default; 10 locales 200; Googlebot/GPTBot UA 10x200 (public-readback-bots.txt)",
+  "2_gates": "PASS - tests/build/seo:cluster local+canary+prod; rollback tag and digests above",
+  "3_hidden_providers": "PASS - hidden-providers.md: sia (owner-decided offline 2026-10-02, 403), vasu (58/58 collection failures, no licence check), superrich-1965 (not in collector, 0 records in 2310 cycles, brand scope undecided); none made public",
+  "4_screenshots": "PASS - screens/m390-{en,th,zh}-cash.png viewed, no layout breakage"
+ },
+ "gsc": {
+  "request_indexing": "NOT accepted - first request (/th/cash) returned 'something went wrong, retry later' (quota-exhausted signature); en/zh not attempted. Retry after the next daily reset: th, en, zh /cash.",
+  "sitemap": "not touched (no URL change)"
+ },
+ "changes_to_published_text": "en/th/zh /cash title now includes CNY; meta description rewritten from data; other 7 locales unchanged",
+ "not_done": [
+  "GSC request-indexing for /th /en /zh cash (quota)",
+  "Result metrics (/cash impressions & avg position per locale) are for the 11-01 review",
+  "lark-status.json not updated in this card"
+ ],
+ "note": "A `docker compose config` dump printed to the session transcript (not to any file) once contained the worker's ADMIN_SESSION_SECRET and password hash; no file/evidence contains it. Consider rotating ADMIN_SESSION_SECRET."
+}

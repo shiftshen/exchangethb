@@ -1,0 +1,26 @@
+{"name":"th-cash","url":"https://www.exchangethb.com/th/cash","result":"gsc-error","detail":".com/th/cash Google 选择的规范网址  所检查的网址 了解详情 打开报告 增强功能和体验 仅已编入索引的网址有增强选项  网址检查 了解 Google 索引如何查看您的网页。当您的网页在 Google 搜索结果中不显示或显示不正常时，您可以使用此视图排查问题。 了解详情 知道了 error_outline 糟糕！出了点问题 提交您的索引编制请求时出现了问题。请稍后重试。 关闭","indexedBefore":false}
+{
+ "sitemap": "",
+ "requests": [
+  {
+   "name": "th-cash",
+   "url": "https://www.exchangethb.com/th/cash",
+   "result": "gsc-error",
+   "detail": ".com/th/cash Google 选择的规范网址  所检查的网址 了解详情 打开报告 增强功能和体验 仅已编入索引的网址有增强选项  网址检查 了解 Google 索引如何查看您的网页。当您的网页在 Google 搜索结果中不显示或显示不正常时，您可以使用此视图排查问题。 了解详情 知道了 error_outline 糟糕！出了点问题 提交您的索引编制请求时出现了问题。请稍后重试。 关闭",
+   "indexedBefore": false
+  },
+  {
+   "name": "en-cash",
+   "url": "https://www.exchangethb.com/en/cash",
+   "result": "skipped-quota",
+   "detail": ""
+  },
+  {
+   "name": "zh-cash",
+   "url": "https://www.exchangethb.com/zh/cash",
+   "result": "skipped-quota",
+   "detail": ""
+  }
+ ]
+}
+
