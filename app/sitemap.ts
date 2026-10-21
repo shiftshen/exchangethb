@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { exchanges, publicCashProviders } from '@/data/site';
 import { coreIndexLocales, hubAlternateLocales, indexedAboutLocales, indexedLegalSlugs, indexedRouteLocales, indexedRouteSlugs } from '@/lib/indexing-policy';
 import { cashCurrencyCodes, cashCurrencyPath, indexedCashCurrencyLocales } from '@/lib/cash-currency-pages';
+import { ratesMatrixLocales } from '@/lib/cash-rates-matrix';
 import { localeAlternates, siteUrl } from '@/lib/seo';
 
 function fileDate(paths: string[]) {
@@ -159,5 +160,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     alternates: { languages: englishThaiAndChinese(cashCurrencyPath(code)) },
   })));
 
-  return [...core, ...legal, ...about, ...hubs, ...cashCurrencies, ...exchangeProfiles, ...moneyChangerProfiles, ...routes];
+  const ratesPages = ratesMatrixLocales.map((locale) => ({
+    url: `${siteUrl}/${locale}/rates`,
+    priority: 0.85,
+    changeFrequency: 'hourly' as const,
+    lastModified: cashCurrencyUpdated,
+    alternates: { languages: englishThaiAndChinese('/rates') },
+  }));
+
+  return [...core, ...legal, ...about, ...hubs, ...ratesPages, ...cashCurrencies, ...exchangeProfiles, ...moneyChangerProfiles, ...routes];
 }

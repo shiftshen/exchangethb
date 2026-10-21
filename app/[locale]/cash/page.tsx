@@ -41,7 +41,9 @@ export default async function CashPage({ params }: { params: Promise<{ locale: L
       { code: 'GBP', label: { en: 'British pound', th: 'ปอนด์อังกฤษ', zh: '英镑' } },
       { code: 'JPY', label: { en: 'Japanese yen', th: 'เยนญี่ปุ่น', zh: '日元' } },
       { code: 'CNY', label: { en: 'Chinese yuan', th: 'หยวนจีน', zh: '人民币' } },
-    ].map((item) => <a key={item.code} className="rounded-full border border-white/10 px-4 py-2 text-stone-200 hover:border-brand-500/40 hover:text-brand-300" href={`/${locale}/cash/${item.code.toLowerCase()}`}>{item.label[locale as 'en' | 'th' | 'zh']} ({item.code})</a>)}</nav> : null}
+    ].map((item) => <a key={item.code} className="rounded-full border border-white/10 px-4 py-2 text-stone-200 hover:border-brand-500/40 hover:text-brand-300" href={`/${locale}/cash/${item.code.toLowerCase()}`}>{item.label[locale as 'en' | 'th' | 'zh']} ({item.code})</a>)}
+      <a className="rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-2 font-medium text-brand-300 hover:text-brand-200" href={`/${locale}/rates`}>{locale === 'th' ? 'ตารางเรททุกสกุล' : locale === 'zh' ? '全部币种总表' : 'All currencies'}</a>
+    </nav> : null}
     <CashHubAnswer locale={locale} live={live} /><ExchangePicker key={locale} locale={locale} initialMode="cash" showModeSwitch={false} /><CashFeaturedChangers locale={locale} /><CashHubCurrencies locale={locale} live={live} /><CashHubFaq locale={locale} live={live} /><ExchangeGuide locale={locale} /></div>;
 }
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {

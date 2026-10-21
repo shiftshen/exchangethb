@@ -116,7 +116,11 @@ describe('sitemap detail coverage', () => {
     expect(languages['x-default']).toMatch(/\/en\/cash\/usd$/);
   });
 
-  it('keeps the sitemap at the expected size after adding the localised route guides, hubs and currency pages', () => {
-    expect(entries.length).toBe(107);
+  it('lists the all-currency rates table in en/th/zh', () => {
+    for (const locale of ['en', 'th', 'zh']) expect(urls.some((url) => url.endsWith(`/${locale}/rates`)), locale).toBe(true);
+  });
+
+  it('keeps the sitemap at the expected size after adding the localised route guides, hubs, currency pages and rates table', () => {
+    expect(entries.length).toBe(110);
   });
 });

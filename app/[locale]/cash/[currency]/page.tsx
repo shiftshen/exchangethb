@@ -153,6 +153,9 @@ export default async function CashCurrencyPage({ params }: { params: Promise<{ l
 
       <Section title={copy.relatedLabel}>
         <div className="flex flex-wrap gap-3 text-sm">
+          <a className="rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-2 font-medium text-brand-300 hover:text-brand-200" href={withLocalePath(locale, '/rates')}>
+            {locale === 'th' ? 'ดูตารางเรททุกสกุล' : locale === 'zh' ? '查看全部币种总表' : 'All currencies in one table'}
+          </a>
           {others.map((item) => (
             <a key={item} className="rounded-full border border-white/10 px-4 py-2 text-stone-200 hover:border-brand-500/40 hover:text-brand-300" href={withLocalePath(locale, cashCurrencyPath(item))}>
               {currencyName(locale, item)} ({item})
