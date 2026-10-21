@@ -1,5 +1,6 @@
 import { additionalCopy } from '@/lib/additional-copy';
 import { SiteAnalytics } from '@/components/site-analytics';
+import { AdNetworkScripts } from '@/components/ad-network-scripts';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { ReactNode } from 'react';
@@ -68,6 +69,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
       <PublicMain>{children}</PublicMain>
       <SiteFooter locale={locale} />
       <SiteAnalytics locale={locale} />
+      <AdNetworkScripts />
     </div>
   );
 }
