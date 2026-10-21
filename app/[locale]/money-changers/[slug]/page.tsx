@@ -175,7 +175,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
             {profile.brandThai ? <p className="mt-2 text-lg font-semibold text-[#9fd0b1]">{seo.locale === 'th' ? provider.name : profile.brandThai}</p> : null}
           </header>
 
-          <ProfileRateTable table={rateTable} locale={rateLocale(locale)} heading={content.rateHeading} />
+          <ProfileRateTable table={rateTable} locale={rateLocale(locale)} heading={content.rateHeading} slug={slug} />
 
           <section id="store-status" className="rounded-[28px] bg-[#0f2e22] p-5 text-white sm:p-7" aria-label={branchName}>
             <div className="flex flex-wrap items-center gap-2">
@@ -247,6 +247,7 @@ export default async function MoneyChangerDetailPage({ params }: { params: Promi
         </div>
         <p className="border-t border-white/10 px-6 py-4 text-xs text-stone-500">{content.verifyNote}</p>
       </section>
+      <ProfileRateTable table={rateTable} locale={rateLocale(locale)} heading={content.rateHeading} slug={slug} />
         </>
       )}
 

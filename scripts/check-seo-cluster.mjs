@@ -67,6 +67,18 @@ const checks = [
     mustNotInclude: ['noindex, follow'],
   },
   {
+    path: '/en/money-changers/superrich-thailand',
+    mustInclude: ['data-rate-table="superrich-thailand"', 'Rate'],
+    mustMatch: [],
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
+    path: '/en/money-changers/twelve-victory',
+    mustInclude: ['data-rate-table="twelve-victory"'],
+    mustMatch: [],
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
     path: '/th/money-changers/superrich-thailand',
     mustInclude: ['เรทรับซื้อ USD'],
     mustMatch: [],

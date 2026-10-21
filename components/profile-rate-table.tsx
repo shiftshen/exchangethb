@@ -53,7 +53,7 @@ function num(value: number | null) {
   return value === null ? null : new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(value);
 }
 
-export function ProfileRateTable({ table, locale, heading }: { table: RateTable; locale: RateLocale; heading: string }) {
+export function ProfileRateTable({ table, locale, heading, slug }: { table: RateTable; locale: RateLocale; heading: string; slug?: string }) {
   const c = copy[locale];
   const latest = table.latestObservedAt;
   const latestStamp = formatBangkokStamp(latest, locale);
@@ -76,7 +76,7 @@ export function ProfileRateTable({ table, locale, heading }: { table: RateTable;
         {stale ? <p className="mt-2 text-sm text-amber-300">{c.stale}</p> : null}
       </div>
       <div className="overflow-x-auto border-t border-white/10">
-        <table className="w-full border-collapse text-left text-sm" data-rate-table="ratchada">
+        <table className="w-full border-collapse text-left text-sm" data-rate-table={slug ?? 'ratchada'}>
           <thead>
             <tr className="text-xs uppercase tracking-[0.08em] text-stone-500">
               <th scope="col" className="px-4 py-2 font-medium sm:px-6">{c.currency}</th>
