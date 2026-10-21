@@ -84,7 +84,23 @@ describe('sitemap detail coverage', () => {
     expect(languages['x-default']).toMatch(/\/en\/routes\/usd-cash-to-thb$/);
   });
 
-  it('keeps the sitemap at the expected size after adding the localised route guides', () => {
-    expect(entries.length).toBe(86);
+  it('lists the exchanges and money-changers hubs in en/th/zh', () => {
+    for (const locale of ['en', 'th', 'zh']) {
+      for (const path of ['/exchanges', '/money-changers']) {
+        expect(urls.some((url) => url.endsWith(`/${locale}${path}`)), `${locale}${path}`).toBe(true);
+      }
+    }
+    expect(urls.some((url) => url.endsWith('/en/routes'))).toBe(false);
+  });
+
+  it('emits reciprocal alternates for the exchanges hub', () => {
+    const entry = entries.find((item) => item.url.endsWith('/th/exchanges'));
+    const languages = entry?.alternates?.languages as Record<string, string>;
+    expect(languages.en).toMatch(/\/en\/exchanges$/);
+    expect(languages.zh).toMatch(/\/zh\/exchanges$/);
+  });
+
+  it('keeps the sitemap at the expected size after adding the localised route guides and hubs', () => {
+    expect(entries.length).toBe(92);
   });
 });

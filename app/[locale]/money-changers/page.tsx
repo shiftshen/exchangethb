@@ -5,7 +5,7 @@ import { TrackLink } from '@/components/track-link';
 import { Pill, Section } from '@/components/ui';
 import { cashBranches, publicCashProviders } from '@/data/site';
 import { indexableLocales, t } from '@/lib/i18n';
-import { shouldIndexHub } from '@/lib/indexing-policy';
+import { hubAlternateLocales, shouldIndexMoneyChangersHub } from '@/lib/indexing-policy';
 import { breadcrumbJsonLd, collectionPageJsonLd, itemListJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { ContentLocale } from '@/lib/types';
 
@@ -275,8 +275,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: C
   return {
     title: c.title,
     description: c.description,
-    alternates: metadataAlternatesForPolicy(locale, path, []),
-    robots: robotsForPage(locale, shouldIndexHub()),
+    alternates: metadataAlternatesForPolicy(locale, path, shouldIndexMoneyChangersHub(locale) ? hubAlternateLocales() : []),
+    robots: robotsForPage(locale, shouldIndexMoneyChangersHub(locale)),
     keywords: locale === 'en'
       ? ['Bangkok money changer', 'money exchange Bangkok', 'Ratchada Exchange Bangkok', 'SuperRich Thailand', 'cash exchange Thailand', 'Bangkok exchange rates']
       : undefined,

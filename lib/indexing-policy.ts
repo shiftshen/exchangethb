@@ -59,6 +59,23 @@ export function shouldIndexAboutPage(locale: Locale) {
   return indexedAboutLocales.includes(locale);
 }
 
+// Hub pages become indexable only where they carry unique comparison content:
+// /exchanges (licensed venue table + FAQ in en/th/zh) and /money-changers (three live
+// provider cards). /routes stays a pure link hub and remains noindex.
+export const indexedHubLocales: Locale[] = ['en', 'th', 'zh'];
+
+export function hubAlternateLocales(): Locale[] {
+  return indexedHubLocales;
+}
+
+export function shouldIndexExchangesHub(locale: Locale) {
+  return indexedHubLocales.includes(locale);
+}
+
+export function shouldIndexMoneyChangersHub(locale: Locale) {
+  return indexedHubLocales.includes(locale);
+}
+
 export function shouldIndexHub() {
   return false;
 }

@@ -9,7 +9,7 @@ import { ExchangeComparisonTable } from '@/components/exchange-comparison-table'
 import { exchangeIndexFaqs } from '@/lib/exchange-comparison';
 import { ExchangeBackground } from '@/components/exchange-background';
 import { indexableLocales, t } from '@/lib/i18n';
-import { shouldIndexHub } from '@/lib/indexing-policy';
+import { hubAlternateLocales, shouldIndexExchangesHub } from '@/lib/indexing-policy';
 import { breadcrumbJsonLd, collectionPageJsonLd, faqPageJsonLd, itemListJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { ContentLocale } from '@/lib/types';
 
@@ -368,8 +368,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: C
   return {
     title: c.title,
     description: c.description,
-    alternates: metadataAlternatesForPolicy(locale, path, []),
-    robots: robotsForPage(locale, shouldIndexHub()),
+    alternates: metadataAlternatesForPolicy(locale, path, shouldIndexExchangesHub(locale) ? hubAlternateLocales() : []),
+    robots: robotsForPage(locale, shouldIndexExchangesHub(locale)),
     keywords: locale === 'en'
       ? ['Thailand crypto exchange', 'exchange thailand', 'Thai exchange', 'Binance TH', 'Bitkub', 'Upbit Thailand', 'crypto to THB']
       : undefined,
