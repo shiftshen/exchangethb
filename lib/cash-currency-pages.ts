@@ -165,6 +165,20 @@ export function currencyCopy(locale: Locale, code: CashCurrencyCode): CurrencyCo
   };
 }
 
+/** Title/description carrying the observed number — the query is usually "usd to thb". */
+export function currencyQuoteCopy(locale: Locale, code: CashCurrencyCode, best: { name: string; buyRate: number; observedAt: string } | null) {
+  if (!best) return null;
+  const rate = best.buyRate.toFixed(2);
+  const stamp = formatObserved(best.observedAt, locale);
+  if (locale === 'th') {
+    return { title: `${code} เป็นบาท: รับซื้อ ${rate} บาท (${best.name}) · ${stamp}`, description: `เรทรับซื้อเงินสด ${code} ล่าสุด ${rate} บาท ที่ ${best.name} อัปเดต ${stamp} เทียบกับอีกร้านก่อนไปแลก` };
+  }
+  if (locale === 'zh') {
+    return { title: `${code} 换泰铢：${rate} 泰铢最高买入价（${best.name}）· ${stamp}`, description: `${code} 现金买入价 ${rate}（${best.name}，${stamp}）。比价后再去换，附另两家换汇店报价。` };
+  }
+  return { title: `${code} to THB: ${rate} best cash rate in Bangkok (${best.name}) · ${stamp}`, description: `${code} cash buying rate ${rate} THB at ${best.name}, observed ${stamp}. Compare the other Bangkok changers before you go.` };
+}
+
 export function formatRate(value: number) {
   return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 }).format(value);
 }

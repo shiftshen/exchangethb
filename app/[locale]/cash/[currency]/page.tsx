@@ -4,6 +4,7 @@ import { Section } from '@/components/ui';
 import { AdSlot } from '@/components/ad-slot';
 import {
   cashCurrencyCodes,
+  currencyQuoteCopy,
   cashCurrencyPath,
   currencyCopy,
   currencyName,
@@ -34,9 +35,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const code = currencyFromParam(currency);
   if (!code || !indexedCashCurrencyLocales.includes(locale)) return {};
   const copy = currencyCopy(locale, code);
+  const rates = await loadCurrencyRates(code);
+  const best = rates.rows[0] ?? null;
+  const quote = best ? currencyQuoteCopy(locale, code, { name: best.name, buyRate: best.buyRate, observedAt: best.observedAt }) : null;
   return {
-    title: copy.title,
-    description: copy.description,
+    title: quote?.title ?? copy.title,
+    description: quote?.description ?? copy.description,
     alternates: metadataAlternatesForPolicy(locale, cashCurrencyPath(code), indexedCashCurrencyLocales),
     robots: robotsForPage(locale, indexedCashCurrencyLocales.includes(locale)),
     openGraph: { title: copy.title, description: copy.description, url: withLocalePath(locale, cashCurrencyPath(code)) },

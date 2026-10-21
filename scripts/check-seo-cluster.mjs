@@ -120,7 +120,7 @@ const checks = [
   {
     path: '/en/cash/usd',
     mustInclude: ['data-currency-rates="USD"', 'data-rate-provider=', 'USD to THB', 'FAQPage'],
-    mustMatch: [/rel="canonical" href="[^"]+\/en\/cash\/usd"/],
+    mustMatch: [/rel="canonical" href="[^"]+\/en\/cash\/usd"/, /<title>[^<]*USD to THB: \d+\.\d{2} best cash rate/],
     mustNotInclude: ['noindex, follow'],
   },
   {
