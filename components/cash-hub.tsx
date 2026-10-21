@@ -79,6 +79,9 @@ export async function CashHubCurrencies({ locale, live }: { locale: Locale; live
             <h2 id={headingId}>{copy.heading}</h2>
             {live?.direct?.code === currency ? <p className="cash-hub-currency-answer" data-ai-answer={`currency-${currency}`}>{live.direct.text}</p> : null}
             <p className="cash-hub-currency-intro">{copy.intro}</p>
+            <p className="cash-hub-currency-link">
+              <a href={`/${locale}/cash/${currency.toLowerCase()}`}>{locale === 'th' ? `ดูหน้าเรท ${currency} แบบเต็ม` : locale === 'zh' ? `查看 ${currency} 专属汇率页` : `Open the ${currency} rate page`}</a>
+            </p>
             {rows.length ? (
               <ul className="cash-hub-rows">
                 {rows.map(({ changer, row }) => {

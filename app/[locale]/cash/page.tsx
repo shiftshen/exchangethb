@@ -34,7 +34,15 @@ export default async function CashPage({ params }: { params: Promise<{ locale: L
   const live = await buildCashPageLive(locale);
   return <div className="simple-page"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: 'ExchangeTHB', item: withLocalePath(locale) }, { name: copy[locale].title, item: withLocalePath(locale, '/cash') }])) }} />
     {hub ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(cashHubFaqJsonLd(locale, live?.faq ? [...hub.faqs, live.faq] : hub.faqs)) }} /> : null}
-    <header className="simple-intro"><h1>{copy[locale].title}</h1><p>{copy[locale].body}</p></header><CashHubAnswer locale={locale} live={live} /><ExchangePicker key={locale} locale={locale} initialMode="cash" showModeSwitch={false} /><CashFeaturedChangers locale={locale} /><CashHubCurrencies locale={locale} live={live} /><CashHubFaq locale={locale} live={live} /><ExchangeGuide locale={locale} /></div>;
+    <header className="simple-intro"><h1>{copy[locale].title}</h1><p>{copy[locale].body}</p></header>
+    {['en', 'th', 'zh'].includes(locale) ? <nav className="mb-6 flex flex-wrap gap-3 text-sm" data-currency-nav>{[
+      { code: 'USD', label: { en: 'US dollar', th: 'ดอลลาร์สหรัฐ', zh: '美元' } },
+      { code: 'EUR', label: { en: 'euro', th: 'ยูโร', zh: '欧元' } },
+      { code: 'GBP', label: { en: 'British pound', th: 'ปอนด์อังกฤษ', zh: '英镑' } },
+      { code: 'JPY', label: { en: 'Japanese yen', th: 'เยนญี่ปุ่น', zh: '日元' } },
+      { code: 'CNY', label: { en: 'Chinese yuan', th: 'หยวนจีน', zh: '人民币' } },
+    ].map((item) => <a key={item.code} className="rounded-full border border-white/10 px-4 py-2 text-stone-200 hover:border-brand-500/40 hover:text-brand-300" href={`/${locale}/cash/${item.code.toLowerCase()}`}>{item.label[locale as 'en' | 'th' | 'zh']} ({item.code})</a>)}</nav> : null}
+    <CashHubAnswer locale={locale} live={live} /><ExchangePicker key={locale} locale={locale} initialMode="cash" showModeSwitch={false} /><CashFeaturedChangers locale={locale} /><CashHubCurrencies locale={locale} live={live} /><CashHubFaq locale={locale} live={live} /><ExchangeGuide locale={locale} /></div>;
 }
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;

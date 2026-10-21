@@ -82,6 +82,12 @@ const checks = [
     mustNotInclude: ['noindex, follow'],
   })),
   {
+    path: '/en/cash',
+    mustInclude: ['data-currency-nav', '/en/cash/usd', '/en/cash/cny'],
+    mustMatch: [],
+    mustNotInclude: [],
+  },
+  {
     path: '/en/cash/usd',
     mustInclude: ['data-currency-rates="USD"', 'data-rate-provider=', 'USD to THB', 'FAQPage'],
     mustMatch: [/rel="canonical" href="[^"]+\/en\/cash\/usd"/],
