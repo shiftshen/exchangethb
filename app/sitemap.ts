@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { statSync } from 'node:fs';
 import { join } from 'node:path';
 import { exchanges, publicCashProviders } from '@/data/site';
-import { coreIndexLocales, indexedAboutLocales, indexedLegalSlugs, indexedRouteSlugs } from '@/lib/indexing-policy';
+import { coreIndexLocales, indexedAboutLocales, indexedLegalSlugs, indexedRouteLocales, indexedRouteSlugs } from '@/lib/indexing-policy';
 import { localeAlternates, siteUrl } from '@/lib/seo';
 
 function fileDate(paths: string[]) {
@@ -16,13 +16,6 @@ function fileDate(paths: string[]) {
     })
     .filter((value): value is Date => Boolean(value))
     .sort((left, right) => right.getTime() - left.getTime())[0];
-}
-
-function englishOnly(path: string) {
-  return {
-    en: `${siteUrl}/en${path}`,
-    'x-default': `${siteUrl}/en${path}`,
-  };
 }
 
 function englishThaiAndChinese(path: string) {
@@ -139,13 +132,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]);
 
-  const routes = indexedRouteSlugs.map((slug) => ({
-    url: `${siteUrl}/en/routes/${slug}`,
+  const routes = indexedRouteSlugs.flatMap((slug) => indexedRouteLocales.map((locale) => ({
+    url: `${siteUrl}/${locale}/routes/${slug}`,
     priority: 0.58,
     changeFrequency: 'weekly' as const,
     lastModified: routeUpdated,
-    alternates: { languages: englishOnly(`/routes/${slug}`) },
-  }));
+    alternates: { languages: englishThaiAndChinese(`/routes/${slug}`) },
+  })));
 
   return [...core, ...legal, ...about, ...exchangeProfiles, ...moneyChangerProfiles, ...routes];
 }

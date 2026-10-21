@@ -9,8 +9,22 @@ export const indexedRouteSlugs = [
 
 export const indexedLegalSlugs = ['methodology', 'disclaimer'] as const;
 
+// Locales that carry a complete route guide for the slugs above. Route title, summary,
+// intro, audience and checks are required in th/en/zh by CopyGroup, and middleware already
+// serves detail pages only in en/th/zh (other locales 307 to en). Verified against production
+// on 2026-10-22: /th/routes/* and /zh/routes/* return 200 with native copy but were marked
+// noindex with the canonical pointing at the English URL.
+// The other 23 routeGuides slugs are 301 aliases in middleware.routeRedirects and never
+// render a page, so they stay out of the index set by design.
+export const indexedRouteLocales: Locale[] = ['en', 'th', 'zh'];
+
 export function shouldIndexRoute(locale: Locale, slug: string) {
-  return locale === 'en' && isIndexedRouteSlug(slug);
+  return isIndexedRouteSlug(slug) && indexedRouteLocales.includes(locale);
+}
+
+/** Locales a route page should advertise as alternates, or none when the slug is not a live page. */
+export function routeAlternateLocales(slug: string): Locale[] {
+  return isIndexedRouteSlug(slug) ? indexedRouteLocales : [];
 }
 
 export function isIndexedRouteSlug(slug: string) {

@@ -65,7 +65,26 @@ describe('sitemap detail coverage', () => {
     }
   });
 
-  it('keeps the sitemap at the expected size after adding the Thai exchange pages', () => {
-    expect(entries.length).toBe(78);
+  it('lists the Thai and Chinese route guides that carry native copy', () => {
+    for (const locale of ['en', 'th', 'zh']) {
+      for (const slug of ['btc-to-thb', 'usdt-to-thb', 'usd-cash-to-thb', 'bangkok-airport-money-exchange-guide']) {
+        expect(urls.some((url) => url.endsWith(`/${locale}/routes/${slug}`)), `${locale}/${slug}`).toBe(true);
+      }
+    }
+    expect(urls.some((url) => url.endsWith('/en/routes/eth-to-thb'))).toBe(false);
+  });
+
+  it('emits reciprocal alternates for the Thai route guide', () => {
+    const entry = entries.find((item) => item.url.endsWith('/th/routes/usd-cash-to-thb'));
+    expect(entry).toBeDefined();
+    const languages = entry?.alternates?.languages as Record<string, string>;
+    expect(languages.en).toMatch(/\/en\/routes\/usd-cash-to-thb$/);
+    expect(languages.th).toMatch(/\/th\/routes\/usd-cash-to-thb$/);
+    expect(languages.zh).toMatch(/\/zh\/routes\/usd-cash-to-thb$/);
+    expect(languages['x-default']).toMatch(/\/en\/routes\/usd-cash-to-thb$/);
+  });
+
+  it('keeps the sitemap at the expected size after adding the localised route guides', () => {
+    expect(entries.length).toBe(86);
   });
 });

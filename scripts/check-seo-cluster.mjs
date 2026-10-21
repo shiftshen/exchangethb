@@ -213,11 +213,11 @@ const checks = [
   },
   {
     path: '/sitemap.xml',
-    mustInclude: ['/en/about', '/th/about', '/zh/about', '/en/exchanges/bitkub', '/zh/exchanges/bitkub', '/th/exchanges/bitkub', '/th/exchanges/orbix', '/en/money-changers/ratchada', '/zh/money-changers/ratchada', '/en/routes/usd-cash-to-thb'],
+    mustInclude: ['/en/about', '/th/about', '/zh/about', '/en/exchanges/bitkub', '/zh/exchanges/bitkub', '/th/exchanges/bitkub', '/th/exchanges/orbix', '/en/money-changers/ratchada', '/zh/money-changers/ratchada', '/en/routes/usd-cash-to-thb', '/th/routes/usd-cash-to-thb', '/zh/routes/btc-to-thb'],
     mustMatch: [/<priority>1<\/priority>/, /<priority>0\.95<\/priority>/, /<lastmod>/],
     mustNotInclude: ['/en/exchanges</loc>', '/en/money-changers</loc>', '/en/routes</loc>', '/en/routes/eth-to-thb', '/zh/legal/privacy-policy', '/money-changers/sia'],
     mustNotMatch: [/<loc>https?:\/\/[^<]+\/<\/loc>/],
-    expectedLocCount: 78,
+    expectedLocCount: 86,
   },
 ];
 

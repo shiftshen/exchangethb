@@ -8,7 +8,7 @@ import { CarRentalRecommendation } from '@/components/car-rental-recommendation'
 import { exchanges, publicCashProviders } from '@/data/site';
 import { Pill, Section } from '@/components/ui';
 import { indexableLocales, t } from '@/lib/i18n';
-import { isIndexedRouteSlug, shouldIndexRoute } from '@/lib/indexing-policy';
+import { routeAlternateLocales, shouldIndexRoute } from '@/lib/indexing-policy';
 import { breadcrumbJsonLd, itemListJsonLd, metadataAlternatesForPolicy, robotsForPage, withLocalePath } from '@/lib/seo';
 import { getRouteGuide, routeGuides, routeGuideSlugs } from '@/lib/route-guides';
 import { estimateBuyThb } from '@/lib/route-estimate';
@@ -443,7 +443,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   return {
     title,
     description,
-    alternates: metadataAlternatesForPolicy(locale, path, isIndexedRouteSlug(slug) ? ['en'] : []),
+    alternates: metadataAlternatesForPolicy(locale, path, routeAlternateLocales(slug)),
     robots: robotsForPage(locale, shouldIndexRoute(locale, slug)),
     keywords: locale === 'en' ? guide.keywords : undefined,
     openGraph: {
