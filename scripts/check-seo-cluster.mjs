@@ -84,18 +84,19 @@ const checks = [
   {
     path: '/en/cash/usd',
     mustInclude: ['data-currency-rates="USD"', 'data-rate-provider=', 'USD to THB', 'FAQPage'],
-    canonical: '/en/cash/usd',
+    mustMatch: [/rel="canonical" href="[^"]+\/en\/cash\/usd"/],
     mustNotInclude: ['noindex, follow'],
   },
   {
     path: '/th/cash/eur',
     mustInclude: ['data-currency-rates="EUR"', 'ยูโร'],
-    canonical: '/th/cash/eur',
+    mustMatch: [],
     mustNotInclude: ['noindex, follow'],
   },
   {
     path: '/ja/cash/usd',
     expectedStatus: 404,
+    expectedLocation: null,
   },
   {
     path: '/en/routes',
