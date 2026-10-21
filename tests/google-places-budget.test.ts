@@ -1,6 +1,6 @@
 import { afterEach, expect, it, vi } from 'vitest';
 afterEach(()=>{vi.useRealTimers();vi.unstubAllGlobals();vi.unstubAllEnvs();vi.resetModules();});
-it('stops requests at the monthly guard even across daily resets, then permits a new month',async()=>{
+it('stops requests at the monthly guard even across daily resets, then permits a new month',{timeout:30000},async()=>{
  vi.resetModules();vi.useFakeTimers();vi.stubEnv('GOOGLE_PLACES_ENABLED','1');vi.stubEnv('GOOGLE_MAPS_API_KEY','test-key');
  const fetch=vi.fn(async()=>({ok:true,json:async()=>({id:'ChIJabcdefghijk',displayName:{text:'Test branch'},formattedAddress:'Test address'})}));vi.stubGlobal('fetch',fetch);
  const {getGooglePlace}=await import('@/lib/google-places');

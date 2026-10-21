@@ -8,6 +8,9 @@ import { buildCashPageLive } from '@/lib/ai-answers';
 import { buildCashHubContent, cashHubFaqJsonLd, isCashHubLocale } from '@/lib/cash-hub-seo';
 import { ExchangeGuide } from '@/components/exchange-guide';
 import { AdSlot } from '@/components/ad-slot';
+import { Section } from '@/components/ui';
+import { indexedRouteSlugs } from '@/lib/indexing-policy';
+import { getRouteGuide } from '@/lib/route-guides';
 import { ExchangePicker } from '@/components/exchange-picker';
 import { isLocale } from '@/lib/i18n';
 import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
@@ -45,7 +48,20 @@ export default async function CashPage({ params }: { params: Promise<{ locale: L
     ].map((item) => <a key={item.code} className="rounded-full border border-white/10 px-4 py-2 text-stone-200 hover:border-brand-500/40 hover:text-brand-300" href={`/${locale}/cash/${item.code.toLowerCase()}`}>{item.label[locale as 'en' | 'th' | 'zh']} ({item.code})</a>)}
       <a className="rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-2 font-medium text-brand-300 hover:text-brand-200" href={`/${locale}/rates`}>{locale === 'th' ? 'ตารางเรททุกสกุล' : locale === 'zh' ? '全部币种总表' : 'All currencies'}</a>
     </nav> : null}
-    <CashHubAnswer locale={locale} live={live} /><ExchangePicker key={locale} locale={locale} initialMode="cash" showModeSwitch={false} /><CashFeaturedChangers locale={locale} /><CashHubCurrencies locale={locale} live={live} /><CashHubFaq locale={locale} live={live} /><ExchangeGuide locale={locale} /><AdSlot network="coinzilla" slot="cash" /></div>;
+    <CashHubAnswer locale={locale} live={live} /><ExchangePicker key={locale} locale={locale} initialMode="cash" showModeSwitch={false} /><CashFeaturedChangers locale={locale} /><CashHubCurrencies locale={locale} live={live} /><CashHubFaq locale={locale} live={live} /><ExchangeGuide locale={locale} />
+    {['en', 'th', 'zh'].includes(locale) ? (
+      <Section title={locale === 'th' ? 'คู่มือเส้นทางที่เกี่ยวข้อง' : locale === 'zh' ? '相关换汇指南' : 'Related money-exchange guides'}>
+        <div className="flex flex-wrap gap-3 text-sm" data-guide-links>
+          {indexedRouteSlugs.map((slug) => {
+            const guide = getRouteGuide(slug);
+            if (!guide) return null;
+            const label = (guide.title as unknown as Record<string, string>)[locale] ?? (guide.title as unknown as Record<string, string>).en;
+            return <a key={slug} className="rounded-full border border-white/10 px-4 py-2 text-stone-200 hover:border-brand-500/40 hover:text-brand-300" href={withLocalePath(locale, `/routes/${slug}`)}>{label}</a>;
+          })}
+        </div>
+      </Section>
+    ) : null}
+    <AdSlot network="coinzilla" slot="cash" /></div>;
 }
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
