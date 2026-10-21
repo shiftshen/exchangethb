@@ -82,6 +82,22 @@ const checks = [
     mustNotInclude: ['noindex, follow'],
   })),
   {
+    path: '/en/cash/usd',
+    mustInclude: ['data-currency-rates="USD"', 'data-rate-provider=', 'USD to THB', 'FAQPage'],
+    canonical: '/en/cash/usd',
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
+    path: '/th/cash/eur',
+    mustInclude: ['data-currency-rates="EUR"', 'ยูโร'],
+    canonical: '/th/cash/eur',
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
+    path: '/ja/cash/usd',
+    expectedStatus: 404,
+  },
+  {
     path: '/en/routes',
     mustInclude: ['noindex, follow'],
     mustMatch: [/<link rel="canonical" href="[^"]+\/en\/routes"/],
@@ -213,11 +229,11 @@ const checks = [
   },
   {
     path: '/sitemap.xml',
-    mustInclude: ['/en/about', '/th/about', '/zh/about', '/en/exchanges</loc>', '/th/money-changers</loc>', '/en/exchanges/bitkub', '/zh/exchanges/bitkub', '/th/exchanges/bitkub', '/th/exchanges/orbix', '/en/money-changers/ratchada', '/zh/money-changers/ratchada', '/en/routes/usd-cash-to-thb', '/th/routes/usd-cash-to-thb', '/zh/routes/btc-to-thb'],
+    mustInclude: ['/en/about', '/th/about', '/zh/about', '/en/cash/usd</loc>', '/th/cash/eur</loc>', '/en/exchanges</loc>', '/th/money-changers</loc>', '/en/exchanges/bitkub', '/zh/exchanges/bitkub', '/th/exchanges/bitkub', '/th/exchanges/orbix', '/en/money-changers/ratchada', '/zh/money-changers/ratchada', '/en/routes/usd-cash-to-thb', '/th/routes/usd-cash-to-thb', '/zh/routes/btc-to-thb'],
     mustMatch: [/<priority>1<\/priority>/, /<priority>0\.95<\/priority>/, /<lastmod>/],
     mustNotInclude: ['/en/routes</loc>', '/en/routes/eth-to-thb', '/zh/legal/privacy-policy', '/money-changers/sia'],
     mustNotMatch: [/<loc>https?:\/\/[^<]+\/<\/loc>/],
-    expectedLocCount: 92,
+    expectedLocCount: 107,
   },
 ];
 

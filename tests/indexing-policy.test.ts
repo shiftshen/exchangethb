@@ -100,7 +100,23 @@ describe('sitemap detail coverage', () => {
     expect(languages.zh).toMatch(/\/zh\/exchanges$/);
   });
 
-  it('keeps the sitemap at the expected size after adding the localised route guides and hubs', () => {
-    expect(entries.length).toBe(92);
+  it('lists the five cash-currency pages in en/th/zh', () => {
+    for (const locale of ['en', 'th', 'zh']) {
+      for (const code of ['usd', 'eur', 'gbp', 'jpy', 'cny']) {
+        expect(urls.some((url) => url.endsWith(`/${locale}/cash/${code}`)), `${locale}/${code}`).toBe(true);
+      }
+    }
+  });
+
+  it('emits reciprocal alternates for the USD cash page', () => {
+    const entry = entries.find((item) => item.url.endsWith('/th/cash/usd'));
+    const languages = entry?.alternates?.languages as Record<string, string>;
+    expect(languages.en).toMatch(/\/en\/cash\/usd$/);
+    expect(languages.zh).toMatch(/\/zh\/cash\/usd$/);
+    expect(languages['x-default']).toMatch(/\/en\/cash\/usd$/);
+  });
+
+  it('keeps the sitemap at the expected size after adding the localised route guides, hubs and currency pages', () => {
+    expect(entries.length).toBe(107);
   });
 });
