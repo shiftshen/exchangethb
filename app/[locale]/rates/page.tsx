@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Section } from '@/components/ui';
+import { AdSlot } from '@/components/ad-slot';
 import { formatObserved, formatRate } from '@/lib/cash-currency-pages';
 import { loadRatesMatrix, ratesCopy, ratesMatrixLocales } from '@/lib/cash-rates-matrix';
 import { breadcrumbJsonLd, metadataAlternatesForPolicy, robotsForPage, siteUrl, withLocalePath } from '@/lib/seo';
@@ -103,6 +104,8 @@ export default async function RatesPage({ params }: { params: Promise<{ locale: 
           {copy.notes.map((note) => <li key={note}>· {note}</li>)}
         </ul>
       </Section>
+
+      <AdSlot network="coinzilla" slot="rates" />
 
       <Section title="FAQ">
         <div className="space-y-4">

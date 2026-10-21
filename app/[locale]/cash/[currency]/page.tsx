@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Section } from '@/components/ui';
+import { AdSlot } from '@/components/ad-slot';
 import {
   cashCurrencyCodes,
   cashCurrencyPath,
@@ -150,6 +151,8 @@ export default async function CashCurrencyPage({ params }: { params: Promise<{ l
           ))}
         </div>
       </Section>
+
+      <AdSlot network="coinzilla" slot="currency" />
 
       <Section title={copy.relatedLabel}>
         <div className="flex flex-wrap gap-3 text-sm">

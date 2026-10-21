@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { ExchangePicker } from '@/components/exchange-picker';
 import { HomeSeoSections, homeFaqEntries, homeQuickAnswer } from '@/components/home-seo-sections';
 import { HomeRatesStrip } from '@/components/home-rates-strip';
+import { AdSlot } from '@/components/ad-slot';
 import { isLocale } from '@/lib/i18n';
 import { homeBrandIntro, homeMetadata } from '@/lib/brand-entity';
 import { breadcrumbJsonLd, faqPageJsonLd, graphNode, homeGraphJsonLd, withLocalePath } from '@/lib/seo';
@@ -37,6 +38,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }} />
     <header className="simple-intro"><h1>{c.title}</h1><p className="seo-answer">{homeBrandIntro[locale]} {homeQuickAnswer(locale)}</p></header>
     <ExchangePicker key={locale} locale={locale} /><HomeRatesStrip locale={locale} />
+      <AdSlot network="coinzilla" slot="home" />
     <HomeSeoSections locale={locale} />
   </div>;
 }

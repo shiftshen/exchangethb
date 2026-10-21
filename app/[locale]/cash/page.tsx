@@ -7,6 +7,7 @@ import { CashHubAnswer, CashHubCurrencies, CashHubFaq } from '@/components/cash-
 import { buildCashPageLive } from '@/lib/ai-answers';
 import { buildCashHubContent, cashHubFaqJsonLd, isCashHubLocale } from '@/lib/cash-hub-seo';
 import { ExchangeGuide } from '@/components/exchange-guide';
+import { AdSlot } from '@/components/ad-slot';
 import { ExchangePicker } from '@/components/exchange-picker';
 import { isLocale } from '@/lib/i18n';
 import { breadcrumbJsonLd, localeMetadataAlternates, localeRobots, withLocalePath } from '@/lib/seo';
@@ -44,7 +45,7 @@ export default async function CashPage({ params }: { params: Promise<{ locale: L
     ].map((item) => <a key={item.code} className="rounded-full border border-white/10 px-4 py-2 text-stone-200 hover:border-brand-500/40 hover:text-brand-300" href={`/${locale}/cash/${item.code.toLowerCase()}`}>{item.label[locale as 'en' | 'th' | 'zh']} ({item.code})</a>)}
       <a className="rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-2 font-medium text-brand-300 hover:text-brand-200" href={`/${locale}/rates`}>{locale === 'th' ? 'ตารางเรททุกสกุล' : locale === 'zh' ? '全部币种总表' : 'All currencies'}</a>
     </nav> : null}
-    <CashHubAnswer locale={locale} live={live} /><ExchangePicker key={locale} locale={locale} initialMode="cash" showModeSwitch={false} /><CashFeaturedChangers locale={locale} /><CashHubCurrencies locale={locale} live={live} /><CashHubFaq locale={locale} live={live} /><ExchangeGuide locale={locale} /></div>;
+    <CashHubAnswer locale={locale} live={live} /><ExchangePicker key={locale} locale={locale} initialMode="cash" showModeSwitch={false} /><CashFeaturedChangers locale={locale} /><CashHubCurrencies locale={locale} live={live} /><CashHubFaq locale={locale} live={live} /><ExchangeGuide locale={locale} /><AdSlot network="coinzilla" slot="cash" /></div>;
 }
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
