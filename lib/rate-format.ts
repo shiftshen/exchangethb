@@ -45,21 +45,22 @@ export interface RatchadaMeta { title: string; description: string }
  * Title/description for the Ratchada profile. The "updated" stamp is the latest quote time the
  * page itself shows; without any quote the stamp (and the currency count) is simply omitted.
  */
-export function ratchadaMeta(locale: RateLocale, stamp: string | null, count: number): RatchadaMeta {
+export function ratchadaMeta(locale: RateLocale, stamp: string | null, count: number, usdRate: number | null = null): RatchadaMeta {
+  const usd = usdRate && usdRate > 0 ? usdRate.toFixed(2) : null;
   if (locale === 'th') {
     return {
-      title: stamp ? `รัชดาเอกเช้น Ratchada Exchange เรทวันนี้ อัปเดต ${stamp}` : 'รัชดาเอกเช้น Ratchada Exchange เรทวันนี้ ห้วยขวาง เปิด 09:00–20:30',
-      description: `รัชดาเอกเช้น (รัชดาเอ๊กซเชนจ์ / Ratchada Exchange) ย่านห้วยขวาง เรทวันนี้${count ? ` ${count} สกุลเงิน` : ''}${stamp ? ` อัปเดต ${stamp} น.` : ''} เปิดทุกวัน 09:00–20:30 พร้อมแผนที่และเว็บทางการ`,
+      title: usd ? `รัชดาเอกเช้น รับซื้อ USD ${usd} บาท${stamp ? ` · อัปเดต ${stamp}` : ''}` : (stamp ? `รัชดาเอกเช้น Ratchada Exchange เรทวันนี้ อัปเดต ${stamp}` : 'รัชดาเอกเช้น Ratchada Exchange เรทวันนี้ ห้วยขวาง เปิด 09:00–20:30'),
+      description: `${usd ? `รับซื้อเงินสด USD ${usd} บาท/ดอลลาร์ ` : ''}รัชดาเอกเช้น (รัชดาเอ๊กซเชนจ์ / Ratchada Exchange) ย่านห้วยขวาง เรทวันนี้${count ? ` ${count} สกุลเงิน` : ''}${stamp ? ` อัปเดต ${stamp} น.` : ''} เปิดทุกวัน 09:00–20:30 พร้อมแผนที่และเว็บทางการ`,
     };
   }
   if (locale === 'zh') {
     return {
-      title: stamp ? `Ratchada Exchange 汇权区（ห้วยขวาง）今日汇率 · 更新 ${stamp}` : 'Ratchada Exchange 汇权区（ห้วยขวาง）今日汇率 · 09:00–20:30',
-      description: `Ratchada Exchange（รัชดาเอ๊กซเชนจ์）位于曼谷汇权区（ห้วยขวาง），今日汇率${count ? ` ${count} 个币种` : ''}${stamp ? `，更新于 ${stamp}（曼谷时间）` : ''}，每天 09:00–20:30 营业，附地图与官网入口。`,
+      title: usd ? `Ratchada Exchange 美元买入 ${usd} 泰铢${stamp ? ` · 更新 ${stamp}` : ''}` : (stamp ? `Ratchada Exchange 汇权区（ห้วยขวาง）今日汇率 · 更新 ${stamp}` : 'Ratchada Exchange 汇权区（ห้วยขวาง）今日汇率 · 09:00–20:30'),
+      description: `${usd ? `美元现金买入价 ${usd} 泰铢。` : ''}Ratchada Exchange（รัชดาเอ๊กซเชนจ์）位于曼谷汇权区（ห้วยขวาง），今日汇率${count ? ` ${count} 个币种` : ''}${stamp ? `，更新于 ${stamp}（曼谷时间）` : ''}，每天 09:00–20:30 营业，附地图与官网入口。`,
     };
   }
   return {
-    title: stamp ? `Ratchada Exchange Rate Today · Updated ${stamp}` : 'Ratchada Exchange Rate Today · Huai Khwang, 09:00–20:30',
-    description: `Ratchada Exchange (รัชดาเอ๊กซเชนจ์) rate today${count ? `: ${count} currencies` : ''}${stamp ? `, updated ${stamp} ICT` : ''}. Huai Khwang, Bangkok, open daily 09:00–20:30 at 78/13 Prachatbamphen Rd. Map and official site.`,
+    title: usd ? `Ratchada Exchange: ${usd} THB per USD${stamp ? ` · updated ${stamp}` : ''}` : (stamp ? `Ratchada Exchange Rate Today · Updated ${stamp}` : 'Ratchada Exchange Rate Today · Huai Khwang, 09:00–20:30'),
+    description: `${usd ? `USD cash buying ${usd} baht. ` : ''}Ratchada Exchange (รัชดาเอ๊กซเชนจ์) rate today${count ? `: ${count} currencies` : ''}${stamp ? `, updated ${stamp} ICT` : ''}. Huai Khwang, Bangkok, open daily 09:00–20:30 at 78/13 Prachatbamphen Rd. Map and official site.`,
   };
 }

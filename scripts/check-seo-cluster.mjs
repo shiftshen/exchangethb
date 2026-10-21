@@ -61,6 +61,18 @@ const checks = [
     canonical: '/en/crypto',
   },
   {
+    path: '/en/money-changers/ratchada',
+    mustInclude: ['THB per USD', 'data-rate-provider'],
+    mustMatch: [/<title>[^<]*\d+\.\d{2} THB per USD/],
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
+    path: '/th/money-changers/superrich-thailand',
+    mustInclude: ['เรทรับซื้อ USD'],
+    mustMatch: [],
+    mustNotInclude: ['noindex, follow'],
+  },
+  {
     path: '/en/cash',
     // The profile strip is the internal link path into the money changer pages in every locale.
     mustInclude: ['Where to exchange your cash?', 'Currency', '/en/money-changers/ratchada', '/en/money-changers/superrich-thailand', '/en/money-changers/twelve-victory', 'Money changer profiles'],

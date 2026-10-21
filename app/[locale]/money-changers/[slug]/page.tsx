@@ -391,12 +391,23 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const seo = buildMoneyChangerSeo(slug, locale);
   if (!seo) return {};
   let { metaTitle: title, metaDescription: description } = seo.content;
+  // SEO-25: put the observed USD cash buying rate in the title/description of every public
+  // money changer profile — the number is what the query is about, and it changes hourly.
+  const table = await getRateTable(slug, true);
+  const stamp = formatBangkokStamp(table.latestObservedAt, rateLocale(locale));
+  const usd = table.rows.find((row) => row.currency === 'USD')?.buyRate ?? null;
   if (slug === 'ratchada') {
-    // SEO-24: the title/description carry the same quote stamp the first-screen table shows.
-    const table = await getRateTable(slug, true);
-    const meta = ratchadaMeta(rateLocale(locale), formatBangkokStamp(table.latestObservedAt, rateLocale(locale)), table.available);
+    const meta = ratchadaMeta(rateLocale(locale), stamp, table.available, usd);
     title = meta.title;
     description = meta.description;
+  } else if (usd) {
+    const rate = usd.toFixed(2);
+    const names = { en: 'USD cash rate', th: 'เรทรับซื้อ USD', zh: '美元买入价' } as const;
+    const label = names[(rateLocale(locale) === 'th' ? 'th' : rateLocale(locale) === 'zh' ? 'zh' : 'en')];
+    if (!title.includes(rate)) {
+      title = `${title} · ${label} ${rate}${stamp ? ` (${stamp})` : ''}`;
+      description = `${label} ${rate} THB. ${description}`;
+    }
   }
   const path = `/money-changers/${slug}`;
   return {
