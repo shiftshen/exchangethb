@@ -62,7 +62,7 @@ const checks = [
   },
   {
     path: '/en/money-changers/ratchada',
-    mustInclude: ['THB per USD', 'data-rate-provider'],
+    mustInclude: ['THB per USD', 'Rate Today'],
     mustMatch: [/<title>[^<]*\d+\.\d{2} THB per USD/],
     mustNotInclude: ['noindex, follow'],
   },

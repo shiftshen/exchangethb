@@ -60,7 +60,7 @@ export function ratchadaMeta(locale: RateLocale, stamp: string | null, count: nu
     };
   }
   return {
-    title: usd ? `Ratchada Exchange: ${usd} THB per USD${stamp ? ` · updated ${stamp}` : ''}` : (stamp ? `Ratchada Exchange Rate Today · Updated ${stamp}` : 'Ratchada Exchange Rate Today · Huai Khwang, 09:00–20:30'),
+    title: usd ? `Ratchada Exchange Rate Today: ${usd} THB per USD${stamp ? ` · updated ${stamp}` : ''}` : (stamp ? `Ratchada Exchange Rate Today · Updated ${stamp}` : 'Ratchada Exchange Rate Today · Huai Khwang, 09:00–20:30'),
     description: `${usd ? `USD cash buying ${usd} baht. ` : ''}Ratchada Exchange (รัชดาเอ๊กซเชนจ์) rate today${count ? `: ${count} currencies` : ''}${stamp ? `, updated ${stamp} ICT` : ''}. Huai Khwang, Bangkok, open daily 09:00–20:30 at 78/13 Prachatbamphen Rd. Map and official site.`,
   };
 }
