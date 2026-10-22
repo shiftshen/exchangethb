@@ -60,26 +60,24 @@ EXPOSE 3000
 CMD ["node", "server.js"]
 
 # ---------------------------------------------------------------------------
-# Worker runtime: production dependencies + tsx (the worker runs TypeScript
-# directly through tsconfig path aliases), no Next.js build output.
+# Worker runtime: the worker and its lib/ graph are bundled to one CJS file at
+# build time (esbuild resolves the @/* tsconfig paths), so the runtime image
+# needs only Node, the generated Prisma client and the health scripts.
+# Bundling avoids shipping a 594MB production node_modules for a 10-minute loop.
 # ---------------------------------------------------------------------------
-FROM ${NODE_IMAGE} AS worker-deps
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev && npm install --no-save --no-package-lock tsx@4
+FROM builder AS worker-build
+RUN ./node_modules/.bin/esbuild worker/index.ts \
+      --bundle --platform=node --target=node20 --format=cjs \
+      --external:@prisma/client --external:'@prisma/client/*' \
+      --outfile=worker-dist/index.js
 
 FROM ${NODE_IMAGE} AS worker
 WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1
-COPY --from=worker-deps /app/node_modules ./node_modules
+COPY --from=worker-build /app/worker-dist ./worker-dist
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
-COPY --from=worker-deps /app/package.json ./package.json
-COPY tsconfig.json ./tsconfig.json
-COPY worker ./worker
-COPY lib ./lib
-COPY prisma ./prisma
 COPY scripts ./scripts
 COPY content ./content
 CMD ["sh", "./scripts/docker-worker-entrypoint.sh"]

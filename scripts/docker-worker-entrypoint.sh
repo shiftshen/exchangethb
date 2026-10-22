@@ -8,4 +8,5 @@ if [ "${PRISMA_PUSH_ON_BOOT:-0}" = "1" ]; then
   exit 1
 fi
 
-exec npm run worker:daemon
+# The worker TypeScript graph is bundled to worker-dist/index.js at image build.
+exec env WORKER_LOOP=1 node worker-dist/index.js
