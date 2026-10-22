@@ -1,6 +1,8 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // Emit .next/standalone so the production image ships only the traced runtime.
+  output: 'standalone',
   typedRoutes: true,
   async redirects() {
     return [
