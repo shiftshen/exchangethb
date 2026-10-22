@@ -10,7 +10,7 @@
 # output (.next/standalone + .next/static + public); nothing from a previous
 # release image is reused as a build base.
 #
-#   web:    docker build -t exchangethb:<tag> .
+#   web:    docker build -t exchangethb:<tag> .            (web is the final stage)
 #   worker: docker build -t exchangethb:<tag>-worker --target worker .
 
 ARG NODE_IMAGE=node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
@@ -30,7 +30,30 @@ COPY . .
 RUN npm run prisma:generate && npm run build
 
 # ---------------------------------------------------------------------------
-# Web runtime: standalone only.
+# Worker runtime: the worker and its lib/ graph are bundled to one CJS file at
+# build time (esbuild resolves the @/* tsconfig paths), so the runtime image
+# needs only Node, the generated Prisma client and the health scripts.
+# Bundling avoids shipping a 594MB production node_modules for a 10-minute loop.
+# ---------------------------------------------------------------------------
+FROM builder AS worker-build
+RUN ./node_modules/.bin/esbuild worker/index.ts \
+      --bundle --platform=node --target=node20 --format=cjs \
+      --external:@prisma/client --external:'@prisma/client/*' \
+      --outfile=worker-dist/index.js
+
+FROM ${NODE_IMAGE} AS worker
+WORKDIR /app
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1
+COPY --from=worker-build /app/worker-dist ./worker-dist
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
+COPY scripts ./scripts
+COPY content ./content
+CMD ["sh", "./scripts/docker-worker-entrypoint.sh"]
+
+# ---------------------------------------------------------------------------
+# Web runtime (final stage): standalone only.
 # app/components/lib/data are copied for the sitemap's lastmod lookup, which
 # stats source files under process.cwd() at render time (~1.1MB total).
 # content/ holds the runtime JSON config/audit files. .prisma is copied because
@@ -58,26 +81,3 @@ COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/clie
 RUN chmod +x ./scripts/docker-web-entrypoint.sh
 EXPOSE 3000
 CMD ["node", "server.js"]
-
-# ---------------------------------------------------------------------------
-# Worker runtime: the worker and its lib/ graph are bundled to one CJS file at
-# build time (esbuild resolves the @/* tsconfig paths), so the runtime image
-# needs only Node, the generated Prisma client and the health scripts.
-# Bundling avoids shipping a 594MB production node_modules for a 10-minute loop.
-# ---------------------------------------------------------------------------
-FROM builder AS worker-build
-RUN ./node_modules/.bin/esbuild worker/index.ts \
-      --bundle --platform=node --target=node20 --format=cjs \
-      --external:@prisma/client --external:'@prisma/client/*' \
-      --outfile=worker-dist/index.js
-
-FROM ${NODE_IMAGE} AS worker
-WORKDIR /app
-ENV NODE_ENV=production \
-    NEXT_TELEMETRY_DISABLED=1
-COPY --from=worker-build /app/worker-dist ./worker-dist
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
-COPY scripts ./scripts
-COPY content ./content
-CMD ["sh", "./scripts/docker-worker-entrypoint.sh"]
