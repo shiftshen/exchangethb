@@ -1,0 +1,10 @@
+# public readback 2026-10-22T05:54:14Z (Asia/Bangkok 12:54)
+en 200 48527b ttfb=0.111299s
+th 200 64710b ttfb=0.074825s
+zh 200 46334b ttfb=0.086872s
+en/cash/usd 200 36078b ttfb=0.076413s
+en/rates 200 57068b ttfb=0.067599s
+en/money-changers/ratchada 200 87101b ttfb=0.087955s
+sitemap.xml 200 urls=110
+ga4_chunk=/_next/static/chunks/app/%5Blocale%5D/layout-68d4a29aad4b69a0.js
+canonical_en=<link rel="canonical" href="https://www.exchangethb.com/en"

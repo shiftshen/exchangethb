@@ -1,0 +1,33 @@
+container=1dc35ae00d295d0d63456bba3b877dcfcd217ba6e65cc8b864784e937f567c27
+health_ready=1 attempts=1
+GET /en -> 200 48527b
+GET /th -> 200 64710b
+GET /zh -> 200 46334b
+GET /ja -> 200 45065b
+GET /en/cash -> 200 68277b
+GET /en/cash/usd -> 200 36078b
+GET /en/rates -> 200 57068b
+GET /en/money-changers/ratchada -> 200 87105b
+GET /en/routes -> 200 75113b
+GET /en/exchanges -> 200 99642b
+GET /sitemap.xml -> 200 94634b
+GET /robots.txt -> 200 770b
+GET /api/health -> 200 1211b
+GET /en/this-page-does-not-exist -> 404 14186b
+sitemap_urls=110
+hreflang_tags=0
+cash_providers=data-rate-provider="ratchada" data-rate-provider="superrich-thailand" data-rate-provider="twelve-victory" 
+cash_quote=1
+rates_rows=30
+home_rates=data-home-rate="EUR" data-home-rate="JPY" data-home-rate="USD" 
+ratchada_table=data-rate-table="ratchada" 
+best_rate_present=1
+ga4_in_html=0
+ga4_in_js=2
+adsense_tag=2
+canonical_en=<link rel="canonical" href="https://www.exchangethb.com/en"
+noindex_hits=0
+isr_first=[] isr_second=[]
+container_status=running restarts=0
+error_log_lines=0
+container_removed=ok

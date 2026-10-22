@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-22",
+  "task": "replace overlay image builds with a clean standalone multi-stage build and release",
+  "directive": "lark-status.json 审核状态 (PM 11:5x): 禁止 FROM 现网镜像覆盖构建, Next.js output standalone, web <400MB, temp-container verify, keep v0.1.25 rollback, worker also clean",
+  "source": {
+    "base_commit": "e53b757",
+    "branch": "slim/standalone-image-20261022",
+    "head": "3b64f31",
+    "commits": [
+      "857bbb9 build: replace overlay image builds with a clean standalone multi-stage build",
+      "d2e9640 chore(deps): regenerate package-lock.json so npm ci matches package.json",
+      "7c36aca build: bundle the worker to one CJS file instead of shipping node_modules",
+      "3b64f31 build: make web the final Dockerfile stage so a plain build produces the web image"
+    ],
+    "build_dir_1_84": "/srv/data/build/exthb-slim-20261022"
+  },
+  "local_gates": {
+    "tsc": "exit 0",
+    "eslint": "exit 0",
+    "vitest": "56 files / 247 tests passed"
+  },
+  "images": {
+    "web_before": {
+      "tag": "exchangethb:v0.1.25-20261022-currency-titles",
+      "size": "7.1GB",
+      "layers": 127,
+      "id": "sha256:8e743b81cd095cab2a081048a58682c7b6c8fd4ffd828cbe09ed67481c852928"
+    },
+    "web_after": {
+      "tag": "exchangethb:v0.1.26-20261022-slim",
+      "size": "333MB",
+      "layers": 19,
+      "id": "sha256:91933a3518c0775b93538ec10919170a10a45d8dfa7b7e818dbf5d5d5321ea52",
+      "runtime": "node:20-alpine + .next/standalone + static + public + prisma client"
+    },
+    "worker_before": {
+      "tag": "exchangethb:v0.1.0-20261007-market-retry",
+      "size": "1.85GB",
+      "layers": 25,
+      "id": "sha256:09c65a45b98c526f848cce9fc6efc705244163db520c23be6762d2456a089414"
+    },
+    "worker_after": {
+      "tag": "exchangethb:v0.1.26-20261022-slim-worker",
+      "size": "190MB",
+      "layers": 10,
+      "id": "sha256:96902796e1e0f63fbd0ffdc51f278ed97b12b2e7f8dbe5050e5432e1dd76304c",
+      "runtime": "node:20-alpine + esbuild bundle (162KB) + prisma client"
+    }
+  },
+  "build_fixes_required": {
+    "stale_lockfile": "package-lock pinned next 15.5.20 while package.json wanted ^15.5.24, so npm ci had been broken since the caret bump; overlay builds never ran npm ci and hid it. Regenerated on node:20-alpine/npm 10.8.2 -> next 15.5.28, postcss 8.5.31, sharp 0.35.5.",
+    "dockerfile_default_stage": "plain docker build produces the final stage; web is now last so a plain build tags the web image."
+  },
+  "temp_container_verification": {
+    "method": "docker run --network m4-exchangethb --env-file env/web.env -p 127.0.0.1:18499:3000, then removed",
+    "pages": {
+      "/en": "200 48527b",
+      "/th": "200 64710b",
+      "/zh": "200 46334b",
+      "/ja": "200 45065b",
+      "/en/cash": "200 68277b",
+      "/en/cash/usd": "200 36078b",
+      "/en/rates": "200 57068b",
+      "/en/money-changers/ratchada": "200 87105b",
+      "/en/routes": "200 75113b",
+      "/en/exchanges": "200 99642b",
+      "/sitemap.xml": "200 94634b urls=110",
+      "/robots.txt": "200 770b",
+      "/api/health": "200 ok",
+      "/en/this-page-does-not-exist": "404 14186b"
+    },
+    "cash": "data-rate-provider = ratchada, superrich-thailand, twelve-victory (real DB data)",
+    "rates_matrix": "data-rates-row x30",
+    "home_rates": "USD/EUR/JPY present",
+    "ga4": "G-HHPM4E9QGY present in 2 built JS files (consent-gated; 0 hits in SSR HTML by design)",
+    "adsense": "ca-pub-8386341379958173 present x2",
+    "canonical": "https://www.exchangethb.com/en, no noindex",
+    "container_log_errors": 0
+  },
+  "parity_vs_prod": {
+    "sitemap_loc_list": "identical",
+    "cash_rate_numbers": "identical",
+    "rates_provider_labels": "identical",
+    "byte_sizes": "home 48527, cash/usd 36078, rates 57068, sitemap 94634 identical",
+    "cache_headers": "identical old vs new (pages no-store, sitemap x-nextjs-cache HIT)",
+    "health_dataStatus": "identical old vs new (degraded only because ratchada is reference / upbit USDT stale)"
+  },
+  "worker_verification": {
+    "temp_container": "heartbeat written, status degraded (ratchada reference), healthcheck script exit 0",
+    "production": "switched, heartbeat advances every 10 minutes, healthcheck healthy"
+  },
+  "release": {
+    "web": "docker compose up -d --no-deps web (only web recreated)",
+    "worker": "docker compose up -d --no-deps worker (only worker recreated)",
+    "compose_backups": [
+      "/srv/data/compose/exchangethb/docker-compose.yml.bak.20261022-pre-slim-image",
+      "/srv/data/compose/exchangethb/docker-compose.yml.bak.20261022-pre-slim-worker"
+    ],
+    "rollback": "web -> exchangethb:v0.1.25-20261022-currency-titles (kept); worker -> exchangethb:v0.1.0-20261007-market-retry (kept)"
+  },
+  "public_readback": {
+    "/en": "200 48527b ttfb 0.11s",
+    "/th": "200 64710b",
+    "/zh": "200 46334b",
+    "/en/cash/usd": "200 36078b",
+    "/en/rates": "200 57068b",
+    "/en/money-changers/ratchada": "200 87101b",
+    "/sitemap.xml": "200 urls=110",
+    "ga4": "G-HHPM4E9QGY served in layout chunk",
+    "adsense": "present",
+    "canonical": "https://www.exchangethb.com/en"
+  },
+  "not_done": [
+    "No GSC changes; sitemap content unchanged.",
+    "Old 7.1GB image kept as rollback asset (no prune)."
+  ]
+}

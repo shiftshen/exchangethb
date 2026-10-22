@@ -1,0 +1,56 @@
+[
+    {
+        "Architecture": "amd64",
+        "Config": {
+            "Cmd": [
+                "sh",
+                "./scripts/docker-worker-entrypoint.sh"
+            ],
+            "Entrypoint": [
+                "docker-entrypoint.sh"
+            ],
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NODE_VERSION=20.20.2",
+                "YARN_VERSION=1.22.22",
+                "NODE_ENV=production",
+                "NEXT_TELEMETRY_DISABLED=1"
+            ],
+            "WorkingDir": "/app"
+        },
+        "Created": "2026-10-22T12:25:16.268040649+07:00",
+        "Descriptor": {
+            "digest": "sha256:96902796e1e0f63fbd0ffdc51f278ed97b12b2e7f8dbe5050e5432e1dd76304c",
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "size": 2508
+        },
+        "Id": "sha256:96902796e1e0f63fbd0ffdc51f278ed97b12b2e7f8dbe5050e5432e1dd76304c",
+        "Metadata": {
+            "LastTagTime": "2026-10-22T05:25:17.427022137Z"
+        },
+        "Os": "linux",
+        "Parent": "sha256:86828c30dcb0cb2623d4e7728c1209cca484f8a9d20dafde514a638fa167fb4c",
+        "RepoDigests": [
+            "exchangethb@sha256:96902796e1e0f63fbd0ffdc51f278ed97b12b2e7f8dbe5050e5432e1dd76304c"
+        ],
+        "RepoTags": [
+            "exchangethb:v0.1.26-20261022-slim-worker"
+        ],
+        "RootFS": {
+            "Layers": [
+                "sha256:29df493baa13de438d6d2ece3a8333032e0b7b9b9d8cce4ee82194da255f61e1",
+                "sha256:4983b93ee7967564f02cbf6162b75010ce557404a539fba05ee19a0eae01acbc",
+                "sha256:e10358715ead9b47009dd04bcd77ac1c8e247f7249ab06517ff913c473a8e38e",
+                "sha256:afa543f85b4685a84338df3e2c429edca49bb372b0f49e0c5cc9724c820ad094",
+                "sha256:76490d859522ef594db37667424ab1e43dc12a4edbdd13fb2e2e1ddd9fa4c91a",
+                "sha256:28403f6f4b01054921a2400e18fb2b3fc98d8971208ed8ccacd9afa2fc9bd4fa",
+                "sha256:a9c388a5878138a93ba5fa92163ccd69c5f060cd8a899e1bf6261744e8ada35f",
+                "sha256:b74825d9dfb414f247a51448edd97939c6954f7fcf745f9b389db348d8652d7a",
+                "sha256:f354098062a174aa054e406e5927d30e58680cb9d7ba4e72590792febea1cbed",
+                "sha256:89f7a3b2ca3c291499756da901d33edc69f3a08218c76af2c66b36674b228df9"
+            ],
+            "Type": "layers"
+        },
+        "Size": 61633123
+    }
+]

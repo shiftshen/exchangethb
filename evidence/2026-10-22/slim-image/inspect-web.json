@@ -1,0 +1,70 @@
+[
+    {
+        "Architecture": "amd64",
+        "Config": {
+            "Cmd": [
+                "node",
+                "server.js"
+            ],
+            "Entrypoint": [
+                "docker-entrypoint.sh"
+            ],
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NODE_VERSION=20.20.2",
+                "YARN_VERSION=1.22.22",
+                "NODE_ENV=production",
+                "NEXT_TELEMETRY_DISABLED=1",
+                "PORT=3000",
+                "HOSTNAME=0.0.0.0"
+            ],
+            "ExposedPorts": {
+                "3000/tcp": {}
+            },
+            "WorkingDir": "/app"
+        },
+        "Created": "2026-10-22T12:36:14.822540972+07:00",
+        "Descriptor": {
+            "digest": "sha256:91933a3518c0775b93538ec10919170a10a45d8dfa7b7e818dbf5d5d5321ea52",
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "size": 4498
+        },
+        "Id": "sha256:91933a3518c0775b93538ec10919170a10a45d8dfa7b7e818dbf5d5d5321ea52",
+        "Metadata": {
+            "LastTagTime": "2026-10-22T05:36:15.065688492Z"
+        },
+        "Os": "linux",
+        "Parent": "sha256:6444d7189a36583f31880c3b83490bbc39abf44699210d668463bc2ee1b0f827",
+        "RepoDigests": [
+            "exchangethb@sha256:91933a3518c0775b93538ec10919170a10a45d8dfa7b7e818dbf5d5d5321ea52"
+        ],
+        "RepoTags": [
+            "exchangethb:v0.1.26-20261022-slim"
+        ],
+        "RootFS": {
+            "Layers": [
+                "sha256:29df493baa13de438d6d2ece3a8333032e0b7b9b9d8cce4ee82194da255f61e1",
+                "sha256:4983b93ee7967564f02cbf6162b75010ce557404a539fba05ee19a0eae01acbc",
+                "sha256:e10358715ead9b47009dd04bcd77ac1c8e247f7249ab06517ff913c473a8e38e",
+                "sha256:afa543f85b4685a84338df3e2c429edca49bb372b0f49e0c5cc9724c820ad094",
+                "sha256:76490d859522ef594db37667424ab1e43dc12a4edbdd13fb2e2e1ddd9fa4c91a",
+                "sha256:02e8431e9dbed8e22624341279bf9c1bc92c25531fe4071bd034971169aa8c2b",
+                "sha256:11a15b61659e3e0a2af12d0b0a2801c403a4a18cf7d38930e1f8330e3c47c081",
+                "sha256:f962c364835d3cc68db7fb2785e323f1c85e74410f3fb093d1fca28cada49b00",
+                "sha256:8890af6ab3432d4449447572a7235e375651e3c68bfb57dca0506caaaea6a359",
+                "sha256:b2ecacea8ca01e3527a4b9560cd503adbb82a2f9f6e0fdf0d3495e98fa0e6910",
+                "sha256:81c0b9c60aad7bc53082afe642587407efd320644c368a0642b90e032baf0fd5",
+                "sha256:ebf0aa638310b1229e48d9db1bca5389f0c06107ca7d8ace2d8da546c74bf890",
+                "sha256:9a89dd9547f35176178bee2ae096de70a01deceabfe47689f94f35d5b36504aa",
+                "sha256:33a2a1c2756260eae10dc90f4a4af2d42b98038f1d208334c570233b5c7c7cd9",
+                "sha256:b95457d8152d080db87444952f4d613f1d19bf683cf42973832da5960df6dc24",
+                "sha256:b6f56ef9ad1721f634aa48dc9c47ea968c9fa8f88da20538ff0e832b222ad43b",
+                "sha256:1eb8ea2aff6e23c2c5c588d05c7354c326aad65f41db0c6a06755f266f626470",
+                "sha256:24530afc64cd29ee8a943e81acc676997f4f11629330e654ea6ea5e5800e4999",
+                "sha256:6b646c0df596a94c5e43403a6225a6950555dd6d1a53a64f39664640b6bc7f45"
+            ],
+            "Type": "layers"
+        },
+        "Size": 95981445
+    }
+]

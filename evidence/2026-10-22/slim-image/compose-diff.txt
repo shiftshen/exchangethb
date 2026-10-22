@@ -1,0 +1,20 @@
+--- /srv/data/compose/exchangethb/docker-compose.yml.bak.20261022-pre-slim-image	2026-10-22 06:20:29.098657948 +0700
++++ /srv/data/compose/exchangethb/docker-compose.yml	2026-10-22 12:44:22.739083918 +0700
+@@ -1,7 +1,7 @@
+ name: m4-exchangethb
+ services:
+   web:
+-    image: exchangethb:v0.1.25-20261022-currency-titles
++    image: exchangethb:v0.1.26-20261022-slim
+     restart: unless-stopped
+     env_file: env/web.env
+     entrypoint: []
+@@ -14,7 +14,7 @@
+       retries: 3
+     networks: [exchangethb]
+   worker:
+-    image: exchangethb:v0.1.0-20261007-market-retry
++    image: exchangethb:v0.1.26-20261022-slim-worker
+     restart: unless-stopped
+     env_file: env/worker.env
+     command: ["sh", "./scripts/docker-worker-entrypoint.sh"]

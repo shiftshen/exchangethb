@@ -1,0 +1,4 @@
+exchangethb:v0.1.25-20261022-currency-titles|size=7.1GB|layers=127|id=sha256:8e743b81cd095cab2a081048a58682c7b6c8fd4ffd828cbe09ed67481c852928
+exchangethb:v0.1.26-20261022-slim|size=333MB|layers=19|id=sha256:91933a3518c0775b93538ec10919170a10a45d8dfa7b7e818dbf5d5d5321ea52
+exchangethb:v0.1.0-20261007-market-retry|size=1.85GB|layers=25|id=sha256:09c65a45b98c526f848cce9fc6efc705244163db520c23be6762d2456a089414
+exchangethb:v0.1.26-20261022-slim-worker|size=190MB|layers=10|id=sha256:96902796e1e0f63fbd0ffdc51f278ed97b12b2e7f8dbe5050e5432e1dd76304c
